@@ -9,6 +9,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
@@ -80,6 +81,21 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             />
 
                             <InputError className="mt-2" message={errors.email} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label>Roles</Label>
+                            <div className="flex flex-wrap gap-2">
+                                {auth.user?.roles?.length ? (
+                                    auth.user.roles.map((role) => (
+                                        <Badge key={role.name} variant="secondary">
+                                            {role.name}
+                                        </Badge>
+                                    ))
+                                ) : (
+                                    <span className="text-sm text-muted-foreground">No roles assigned</span>
+                                )}
+                            </div>
                         </div>
 
                         {mustVerifyEmail && auth.user.email_verified_at === null && (

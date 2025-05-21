@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
-
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 class RegisteredUserController extends Controller
 {
     /**
@@ -41,6 +42,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // If this is the first user, make them an admin
+        if (User::count() === 1) {
+            // Create admin role if it doesn't exist
+            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            $user->assignRole($adminRole);
+        }
 
         event(new Registered($user));
 
