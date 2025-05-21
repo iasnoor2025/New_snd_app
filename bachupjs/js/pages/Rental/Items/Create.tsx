@@ -1,0 +1,187 @@
+import { Head, useForm } from '@inertiajs/react';
+import { PageProps } from '@/types';
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+
+interface Props extends PageProps {
+    rentalId: number;
+    equipment: Array<{
+        id: number;
+        name: string;
+    }>
+    operators: Array<{
+        id: number;
+        name: string;
+    }>
+}
+
+export default function Create({ auth, rentalId, equipment, operators }: Props) {
+    const { data, setData, post, processing, errors } = useForm({
+        equipment_id: '',
+        operator_id: '',
+        rate: '',
+        rate_type: '',
+        days: '',
+        discount_percentage: '',
+        notes: '',
+    })
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(route('rentals.items.store', { rental: rentalId }));
+    };
+
+    return (
+        <AuthenticatedLayout
+            user={auth.user}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Add Rental Item</h2>}
+            <Head title="Add Rental Item" />
+
+            <div className="py-12">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Add Rental Item</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="equipment_id">Equipment</Label>
+                                        <Select
+                                            value={data.equipment_id}
+                                            onValueChange={(value) => setData('equipment_id', value)}
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select equipment" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {equipment.map((item) => (
+                                                    <SelectItem key={item.id} value={item.id.toString()}>
+                                                        {item.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.equipment_id && (
+                                            <p className="text-sm text-red-500">{errors.equipment_id}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="operator_id">Operator</Label>
+                                        <Select
+                                            value={data.operator_id}
+                                            onValueChange={(value) => setData('operator_id', value)}
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select operator" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {operators.map((operator) => (
+                                                    <SelectItem key={operator.id} value={operator.id.toString()}>
+                                                        {operator.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.operator_id && (
+                                            <p className="text-sm text-red-500">{errors.operator_id}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="rate">Rate</Label>
+                                        <Input
+                                            id="rate"
+                                            type="number"
+                                            step="0.01"
+                                            value={data.rate}
+                                            onChange={(e) => setData('rate', e.target.value)}
+                                        />
+                                        {errors.rate && (
+                                            <p className="text-sm text-red-500">{errors.rate}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="rate_type">Rate Type</Label>
+                                        <Select
+                                            value={data.rate_type}
+                                            onValueChange={(value) => setData('rate_type', value)}
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select rate type" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="daily">Daily</SelectItem>
+                                                <SelectItem value="weekly">Weekly</SelectItem>
+                                                <SelectItem value="monthly">Monthly</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.rate_type && (
+                                            <p className="text-sm text-red-500">{errors.rate_type}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="days">Days</Label>
+                                        <Input
+                                            id="days"
+                                            type="number"
+                                            value={data.days}
+                                            onChange={(e) => setData('days', e.target.value)}
+                                        />
+                                        {errors.days && (
+                                            <p className="text-sm text-red-500">{errors.days}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="discount_percentage">Discount Percentage</Label>
+                                        <Input
+                                            id="discount_percentage"
+                                            type="number"
+                                            step="0.01"
+                                            value={data.discount_percentage}
+                                            onChange={(e) => setData('discount_percentage', e.target.value)}
+                                        />
+                                        {errors.discount_percentage && (
+                                            <p className="text-sm text-red-500">{errors.discount_percentage}</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="notes">Notes</Label>
+                                    <Textarea
+                                        id="notes"
+                                        value={data.notes}
+                                        onChange={(e) => setData('notes', e.target.value)}
+                                    />
+                                    {errors.notes && (
+                                        <p className="text-sm text-red-500">{errors.notes}</p>
+                                    )}
+                                </div>
+
+                                <div className="flex justify-end space-x-4">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => window.history.back()}
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" disabled={processing}>
+                                        Create Rental Item
+                                    </Button>
+                                </div>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        </AuthenticatedLayout>
+    );
+}

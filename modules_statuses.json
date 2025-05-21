@@ -1,0 +1,18 @@
+{
+    "Core": true,
+    "EmployeeManagement": true,
+    "LeaveManagement": true,
+    "TimesheetManagement": true,
+    "Payroll": true,
+    "ProjectManagement": true,
+    "RentalManagement": true,
+    "EquipmentManagement": true,
+    "Settings": true,
+    "Notifications": true,
+    "Reporting": true,
+    "MobileBridge": true,
+    "Localization": true,
+    "CustomerManagement": true,
+    "AuditCompliance": true,
+    "API": true
+}
