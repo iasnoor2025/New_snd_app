@@ -21,7 +21,7 @@ class PositionController extends Controller
                 ->get();
 
             if (request()->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => true,
                     'data' => $positions
                 ]);
@@ -36,7 +36,7 @@ class PositionController extends Controller
             ]);
 
             if (request()->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Failed to fetch positions',
                     'error' => config('app.debug') ? $e->getMessage() : 'Server error'
@@ -170,7 +170,7 @@ class PositionController extends Controller
             ]);
 
             if (request()->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Validation failed',
                     'errors' => $e->errors()
                 ], 422);
@@ -185,7 +185,7 @@ class PositionController extends Controller
             ]);
 
             if (request()->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to update position',
                     'error' => $e->getMessage()
                 ], 500);
@@ -250,7 +250,7 @@ class PositionController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to fetch positions',
                 'error' => $e->getMessage()
             ], 500);
@@ -276,13 +276,13 @@ class PositionController extends Controller
 
             return response()->json($position, 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
         } catch (\Exception $e) {
             \Log::error('Error creating position: ' . $e->getMessage());
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to create position',
                 'error' => $e->getMessage()
             ], 500);
@@ -307,13 +307,13 @@ class PositionController extends Controller
 
             return response()->json($position);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
         } catch (\Exception $e) {
             \Log::error('Error updating position: ' . $e->getMessage());
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to update position',
                 'error' => $e->getMessage()
             ], 500);
@@ -331,7 +331,7 @@ class PositionController extends Controller
             return response()->json(null, 204);
         } catch (\Exception $e) {
             \Log::error('Error deleting position: ' . $e->getMessage());
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to delete position',
                 'error' => $e->getMessage()
             ], 500);

@@ -28,7 +28,7 @@ class ResignationController extends Controller
 
         $resignations = $query->latest()->paginate(10);
 
-        return Inertia::render('Resignations/Index', [;
+        return Inertia::render('Resignations/Index', [
             'resignations' => $resignations,
             'filters' => $request->only(['status', 'employee_id'])
         ]);
@@ -36,7 +36,7 @@ class ResignationController extends Controller
 
     public function create(Employee $employee)
     {
-        return Inertia::render('Resignations/Create', [;
+        return Inertia::render('Resignations/Create', [
             'employee' => $employee,
         ]);
     }
@@ -51,7 +51,7 @@ class ResignationController extends Controller
 
         $resignation = $employee->resignations()->create($validated);
 
-        return redirect();
+        return redirect()
             ->route('employees.show', $employee)
             ->with('success', 'Resignation request submitted successfully.');
     }
@@ -60,7 +60,7 @@ class ResignationController extends Controller
     {
         $resignation->load(['employee', 'approver']);
 
-        return Inertia::render('Resignations/Show', [;
+        return Inertia::render('Resignations/Show', [
             'resignation' => $resignation,
         ]);
     }

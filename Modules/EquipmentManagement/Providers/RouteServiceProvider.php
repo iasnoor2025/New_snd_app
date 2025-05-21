@@ -44,12 +44,12 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::middleware('web')
             ->namespace($this->moduleNamespace)
             ->prefix('equipment')
-            ->group(module_path('EquipmentManagement', '/routes/web.php'));
+            ->group(module_path('EquipmentManagement', '/Routes/web.php'));
     }
 
     /**
@@ -59,12 +59,12 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
         Route::prefix('api/equipment')
             ->middleware('api')
             ->namespace($this->moduleNamespace)
-            ->group(module_path('EquipmentManagement', '/routes/api.php'));
+            ->group(module_path('EquipmentManagement', '/Routes/api.php'));
     }
 }
 

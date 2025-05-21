@@ -12,7 +12,7 @@ abstract class BaseController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-use /**
+    /**
      * The module name.
      *
      * @var string
@@ -44,7 +44,7 @@ use /**
      */
     protected function successResponse($data, string $message = 'Success', int $statusCode = Response::HTTP_OK): JsonResponse
     {
-        return response()->json([;
+        return response()->json([
             'success' => true,
             'message' => $message,
             'data' => $data,

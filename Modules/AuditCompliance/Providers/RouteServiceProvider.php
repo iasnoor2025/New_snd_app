@@ -49,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->moduleNamespace)
             ->prefix('audit')
-            ->group(module_path('AuditCompliance', '/routes/web.php'));
+            ->group(module_path('AuditCompliance', '/Routes/web.php'));
     }
 
     /**
@@ -64,7 +64,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api/audit')
             ->middleware('api')
             ->namespace($this->moduleNamespace)
-            ->group(module_path('AuditCompliance', '/routes/api.php'));
+            ->group(module_path('AuditCompliance', '/Routes/api.php'));
     }
 }
 

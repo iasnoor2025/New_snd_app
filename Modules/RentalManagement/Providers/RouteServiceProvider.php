@@ -2,7 +2,7 @@
 
 namespace Modules\RentalManagement\Providers;
 
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
@@ -16,16 +16,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->routes(function () {
-            Route::middleware('web')
-                ->namespace($this->moduleNamespace)
-                ->group(module_path('Rental', 'routes/web.php'));
-
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->moduleNamespace)
-                ->group(module_path('Rental', 'routes/api.php'));
-        });
+        parent::boot();
     }
 
     /**
@@ -44,7 +35,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware('web')->group(module_path('Rental', '/routes/web.php'));
+        Route::middleware('web')->group(module_path('RentalManagement', '/Routes/web.php'));
     }
 
     /**
@@ -54,6 +45,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::middleware('api')->prefix('api')->name('api.')->group(module_path('Rental', '/routes/api.php'));
+        Route::middleware('api')->prefix('api')->name('api.')->group(module_path('RentalManagement', '/Routes/api.php'));
     }
 }

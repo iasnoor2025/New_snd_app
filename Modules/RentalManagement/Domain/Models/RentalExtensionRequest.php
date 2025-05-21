@@ -10,12 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RentalExtensionRequest extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'rental_id';
-use 'requested_days';
-use 'keep_operators',
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        'rental_id',
+        'requested_days',
+        'keep_operators',
         'status',
         'requested_by',
         'processed_by',
@@ -27,9 +26,9 @@ use 'keep_operators',
 
     protected $casts = [
         'keep_operators' => 'boolean',
-        'current_end_date' => 'date',;
-        'new_end_date' => 'date',;
-        'processed_at' => 'datetime',;
+        'current_end_date' => 'date',
+        'new_end_date' => 'date',
+        'processed_at' => 'datetime',
     ];
 
     public function rental(): BelongsTo

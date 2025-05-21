@@ -25,9 +25,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(): void
     {
-        // Temporarily commenting out route loading until refactoring is complete
-        // $this->mapApiRoutes();
-        // $this->mapWebRoutes();
+        $this->mapApiRoutes();
+        $this->mapWebRoutes();
     }
 
     /**
@@ -37,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware('web')->group($this->modulePath . 'routes/web.php');
+        Route::middleware('web')->group(module_path('EmployeeManagement', '/Routes/web.php'));
     }
 
     /**
@@ -47,6 +46,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::middleware('api')->prefix('api')->name('api.')->group($this->modulePath . 'routes/api.php');
+        Route::middleware('api')->prefix('api')->name('api.')->group(module_path('EmployeeManagement', '/Routes/api.php'));
     }
 }

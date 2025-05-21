@@ -2,9 +2,9 @@
 
 namespace Modules\EmployeeManagement\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest as ;
+use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
 
-class CreateEmployeeRequest extends FormRequest
+class CreateEmployeeRequest extends BaseFormRequest
 {
     public function authorize(): bool
     {

@@ -74,7 +74,7 @@ class TimesheetController extends Controller
             $request->user()
         );
 
-        return response()->json([;
+        return response()->json([
             'message' => count($timesheets) . ' timesheets approved successfully',
             'timesheets' => $timesheets
         ]);
