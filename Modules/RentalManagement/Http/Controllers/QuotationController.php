@@ -34,14 +34,9 @@ class QuotationController extends Controller
             if ($request->has('search') && !empty($request->input('search'))) {
                 $search = $request->input('search');
                 $query->where(function($q) use ($search) {
-                    $q->where('quotation_number';
-use 'like';
-use "%{$search}%")
-                      ->orWhereHas('customer';
-use function ($q) use ($search) {
-                          $q->where('company_name';
-use 'like';
-use "%{$search}%");
+                    $q->where('quotation_number', 'like', "%{$search}%")
+                      ->orWhereHas('customer', function ($q) use ($search) {
+                          $q->where('company_name', 'like', "%{$search}%");
                       });
                 });
             }
@@ -61,7 +56,7 @@ use "%{$search}%");
             $quotations = $query->latest()->paginate(10)
                 ->withQueryString();
 
-            return Inertia::render('Quotations/Index', [;
+            return Inertia::render('Quotations/Index', [
                 'quotations' => $quotations,
                 'filters' => $request->only(['search', 'status', 'start_date', 'end_date'])
             ]);
@@ -71,7 +66,7 @@ use "%{$search}%");
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while loading quotations. Please try again later.');
         }
     }
@@ -86,7 +81,7 @@ use "%{$search}%");
         $operators = Employee::where('is_operator', true)->orderBy('name')->get();
         $drivers = Employee::where('is_driver', true)->orderBy('name')->get();
 
-        return Inertia::render('Quotations/Create', [;
+        return Inertia::render('Quotations/Create', [
             'customers' => $customers,
             'equipment' => $equipment,
             'operators' => [
@@ -175,7 +170,7 @@ use "%{$search}%");
 
             DB::commit();
 
-            return redirect()->route('quotations.show', $quotation);
+            return redirect()->route('quotations.show', $quotation)
                 ->with('success', 'Quotation created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -184,7 +179,7 @@ use "%{$search}%");
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while creating the quotation: ' . $e->getMessage())
                 ->withInput();
         }
@@ -209,7 +204,7 @@ use "%{$search}%");
             'rental'
         ]);
 
-        return Inertia::render('Quotations/Show', [;
+        return Inertia::render('Quotations/Show', [
             'quotation' => $quotation,
             'quotationItems' => [
                 'data' => $quotation->quotationItems,
@@ -230,7 +225,7 @@ use "%{$search}%");
         try {
             // Prevent editing approved or rejected quotations
             if (in_array($quotation->status, ['approved', 'rejected'])) {
-                return redirect()->route('quotations.show', $quotation);
+                return redirect()->route('quotations.show', $quotation)
                     ->with('error', 'Approved or rejected quotations cannot be updated.');
             }
 
@@ -245,7 +240,7 @@ use "%{$search}%");
             $equipment = Equipment::orderBy('name')->get();
             $operators = Employee::where('is_operator', true)->orderBy('name')->get();
 
-            return Inertia::render('Quotations/Edit', [;
+            return Inertia::render('Quotations/Edit', [
                 'quotation' => $quotation,
                 'customers' => $customers,
                 'equipment' => $equipment,
@@ -258,7 +253,7 @@ use "%{$search}%");
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return redirect()->route('quotations.index');
+            return redirect()->route('quotations.index')
                 ->with('error', 'Failed to load quotation edit form: ' . $e->getMessage());
         }
     }
@@ -360,7 +355,7 @@ use "%{$search}%");
 
             DB::commit();
 
-            return redirect()->route('quotations.show', $quotation);
+            return redirect()->route('quotations.show', $quotation)
                 ->with('success', 'Quotation updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -370,7 +365,7 @@ use "%{$search}%");
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while updating the quotation: ' . $e->getMessage())
                 ->withInput();
         }
@@ -384,7 +379,7 @@ use "%{$search}%");
         try {
             // Check if the quotation is linked to a rental
             if ($quotation->rental_id) {
-                return redirect()->back();
+                return redirect()->back()
                     ->with('error', 'Cannot delete a quotation that is linked to a rental.');
             }
 
@@ -401,7 +396,7 @@ use "%{$search}%");
 
             DB::commit();
 
-            return redirect()->route('quotations.index');
+            return redirect()->route('quotations.index')
                 ->with('success', 'Quotation deleted successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -411,7 +406,7 @@ use "%{$search}%");
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while deleting the quotation: ' . $e->getMessage());
         }
     }
@@ -437,7 +432,7 @@ use "%{$search}%");
                 'approved_at' => now(),
             ]);
 
-            return redirect()->route('quotations.show', $quotation);
+            return redirect()->route('quotations.show', $quotation)
                 ->with('success', 'Quotation approved successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to approve quotation', [
@@ -445,7 +440,7 @@ use "%{$search}%");
                 'error' => $e->getMessage(),
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'Failed to approve quotation: ' . $e->getMessage());
         }
     }
@@ -470,7 +465,7 @@ use "%{$search}%");
                 'notes' => $request->notes,
             ]);
 
-            return redirect()->route('quotations.show', $quotation);
+            return redirect()->route('quotations.show', $quotation)
                 ->with('success', 'Quotation rejected successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to reject quotation', [
@@ -478,7 +473,7 @@ use "%{$search}%");
                 'error' => $e->getMessage(),
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'Failed to reject quotation: ' . $e->getMessage());
         }
     }

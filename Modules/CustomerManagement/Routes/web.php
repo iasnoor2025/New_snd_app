@@ -16,7 +16,7 @@ use Modules\CustomerManagement\Http\Controllers\CustomerController;
 use Modules\CustomerManagement\Http\Controllers\CustomerPortalController;
 use Modules\CustomerManagement\Http\Controllers\DashboardController;
 
-Route::middleware(['web', 'auth', 'verified'])->prefix('customers')->name('customers.')->group(function () {
+Route::prefix('customers')->name('customers.')->middleware(['web', 'auth'])->group(function () {
     // Customer management routes
     Route::get('/', [CustomerController::class, 'index'])->name('index');
     Route::get('/create', [CustomerController::class, 'create'])->name('create');

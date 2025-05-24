@@ -26,7 +26,15 @@ use Modules\EquipmentManagement\Http\Controllers\Api\DepreciationApiController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     // Equipment management
-    Route::apiResource('equipment', EquipmentApiController::class);
+    Route::apiResource('equipment', EquipmentApiController::class, [
+        'names' => [
+            'index' => 'api.equipment.index',
+            'store' => 'api.equipment.store',
+            'show' => 'api.equipment.show',
+            'update' => 'api.equipment.update',
+            'destroy' => 'api.equipment.destroy',
+        ]
+    ]);
     Route::get('equipment/{equipment}/history', [EquipmentApiController::class, 'history']);
     Route::get('equipment/{equipment}/documents', [EquipmentApiController::class, 'documents']);
     Route::post('equipment/{equipment}/documents', [EquipmentApiController::class, 'storeDocument']);

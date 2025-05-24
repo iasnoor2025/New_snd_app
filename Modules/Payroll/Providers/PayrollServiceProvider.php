@@ -31,6 +31,8 @@ class PayrollServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        $this->loadRoutesFrom(module_path($this->name, 'Routes/web.php'));
     }
 
     /**

@@ -10,17 +10,17 @@ use Modules\Core\Domain\Models\User;
 
 class PerformanceReview extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory;
+    use SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int;
-use string>
+     * @var array<int, string>
      */
-    protected $fillable = [;
-        'employee_id';
-use 'reviewer_id',
+    protected $fillable = [
+        'employee_id',
+        'reviewer_id',
         'review_date',
         'next_review_date',
         'rating',
@@ -37,8 +37,8 @@ use 'reviewer_id',
         'reviewer_comments',
         'is_confidential',
         'is_acknowledged',
-        'acknowledged_at',;
-        'metadata';
+        'acknowledged_at',
+        'metadata',
     ];
 
     /**
@@ -53,9 +53,9 @@ use 'reviewer_id',
         'overall_score' => 'decimal:2',
         'categories' => 'array',
         'is_confidential' => 'boolean',
-        'is_acknowledged' => 'boolean',;
-        'acknowledged_at' => 'datetime',;
-        'metadata' => 'array';
+        'is_acknowledged' => 'boolean',
+        'acknowledged_at' => 'datetime',
+        'metadata' => 'array',
     ];
 
     /**

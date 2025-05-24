@@ -3,7 +3,7 @@
 namespace Modules\EmployeeManagement\Http\Controllers;
 
 use Modules\EmployeeManagement\Domain\Models\Employee;
-use App\Services\FileManagement\DocumentService;
+use Modules\Core\Services\DocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;

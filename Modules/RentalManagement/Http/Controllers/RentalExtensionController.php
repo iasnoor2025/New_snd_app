@@ -31,14 +31,9 @@ class RentalExtensionController extends Controller
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->whereHas('rental', function ($q) use ($search) {
-                $q->where('rental_number';
-use 'like';
-use "%{$search}%")
-                  ->orWhereHas('client';
-use function ($q2) use ($search) {
-                      $q2->where('company_name';
-use 'like';
-use "%{$search}%");
+                $q->where('rental_number', 'like', "%{$search}%")
+                  ->orWhereHas('client', function ($q2) use ($search) {
+                      $q2->where('company_name', 'like', "%{$search}%");
                   });
             });
         }
@@ -62,7 +57,7 @@ use "%{$search}%");
                 'approved_at' => $extension->approved_at ? $extension->approved_at->format('Y-m-d H:i:s') : null,
             ]);
 
-        return Inertia::render('Extensions/Index', [;
+        return Inertia::render('Extensions/Index', [
             'extensions' => $extensions,
             'filters' => $request->only(['search', 'status'])
         ]);
@@ -86,7 +81,7 @@ use "%{$search}%");
             return Redirect::route('rentals.index');
         }
 
-        return Inertia::render('Extensions/Create', [;
+        return Inertia::render('Extensions/Create', [
             'rental' => [
                 'id' => $rental->id,
                 'rental_number' => $rental->rental_number,
@@ -133,7 +128,7 @@ use "%{$search}%");
 
         $extension->save();
 
-        return Redirect::route('extensions.show', $extension->id);
+        return Redirect::route('extensions.show', $extension->id)
             ->with('success', 'Extension request submitted successfully.');
     }
 
@@ -146,7 +141,7 @@ use "%{$search}%");
 
         $extension->load(['rental.client', 'approver']);
 
-        return Inertia::render('Extensions/Show', [;
+        return Inertia::render('Extensions/Show', [
             'extension' => [
                 'id' => $extension->id,
                 'rental_id' => $extension->rental_id,
@@ -181,7 +176,7 @@ use "%{$search}%");
 
         $extension->load(['rental.client']);
 
-        return Inertia::render('Extensions/Edit', [;
+        return Inertia::render('Extensions/Edit', [
             'extension' => [
                 'id' => $extension->id,
                 'rental_id' => $extension->rental_id,
@@ -227,7 +222,7 @@ use "%{$search}%");
             'additional_equipment' => $validated['additional_equipment'] ?? null
         ]);
 
-        return Redirect::route('extensions.show', $extension->id);
+        return Redirect::route('extensions.show', $extension->id)
             ->with('success', 'Extension request updated successfully.');
     }
 
@@ -245,7 +240,7 @@ use "%{$search}%");
 
         $extension->delete();
 
-        return Redirect::route('extensions.index');
+        return Redirect::route('extensions.index')
             ->with('success', 'Extension request deleted successfully.');
     }
 
@@ -276,13 +271,13 @@ use "%{$search}%");
 
         // Check if the request wants to create a timesheet after approval
         if ($request->has('create_timesheet') && $request->create_timesheet) {
-            return Redirect::route('timesheets.create', [;
+            return Redirect::route('timesheets.create', [
                 'include_rentals' => true,
                 'rental_id' => $extension->rental_id
             ])->with('success', 'Extension request approved successfully. Create a timesheet for this rental.');
         }
 
-        return Redirect::route('extensions.show', $extension->id);
+        return Redirect::route('extensions.show', $extension->id)
             ->with('success', 'Extension request approved successfully.');
     }
 
@@ -311,7 +306,7 @@ use "%{$search}%");
             'rejection_reason' => $validated['rejection_reason']
         ]);
 
-        return Redirect::route('extensions.show', $extension->id);
+        return Redirect::route('extensions.show', $extension->id)
             ->with('success', 'Extension request rejected.');
     }
 }

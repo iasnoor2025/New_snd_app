@@ -73,7 +73,7 @@ interface Props extends PageProps {
 }
 
 // List of countries for nationality dropdown
-const countries = [;
+const countries = [
   { value: 'Saudi Arabia', label: 'Saudi Arabia' },
   { value: 'Kuwait', label: 'Kuwait' },
   { value: 'Bahrain', label: 'Bahrain' },
@@ -88,7 +88,6 @@ const countries = [;
   { value: 'Sri Lanka', label: 'Sri Lanka' },
   { value: 'Nepal', label: 'Nepal' },
   { value: 'Sudan', label: 'Sudan' },
-
 ];
 
 const formSchema = z.object({
@@ -257,9 +256,9 @@ export default function Create({ auth, users, positions, employee, isEditing = f
         drivingLicenseCost,
         operatorLicenseCost,
         tuvCertificationCost,
-        spspLicenseCost,;
-        iqamaCost,;
-        customCertificationsCost;
+        spspLicenseCost,
+        iqamaCost,
+        customCertificationsCost
       ].reduce((sum, cost) => sum + cost, 0);
 
       setTotalCertificationCost(totalCost);
@@ -353,8 +352,8 @@ export default function Create({ auth, users, positions, employee, isEditing = f
       });
 
       // Check for missing required fields
-      const missingFields = Object.entries(requiredFields);
-        .filter(([key]) => !data[key as keyof typeof data]);
+      const missingFields = Object.entries(requiredFields)
+        .filter(([key]) => !data[key as keyof typeof data])
         .map(([_, label]) => label);
 
       if (missingFields.length > 0) {

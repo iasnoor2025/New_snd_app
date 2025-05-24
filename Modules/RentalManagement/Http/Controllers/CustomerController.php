@@ -27,11 +27,8 @@ class CustomerController extends Controller
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('company_name';
-use 'like';
-use "%{$search}%")
-                  ->orWhere('contact_person';
-use 'like', "%{$search}%")
+                $q->where('company_name', 'like', "%{$search}%")
+                  ->orWhere('contact_person', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%");
             });
@@ -45,7 +42,7 @@ use 'like', "%{$search}%")
         $customers = $query->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Customers/Index', [;
+        return Inertia::render('Customers/Index', [
             'customers' => $customers,
             'filters' => $request->only(['search', 'status'])
         ]);
@@ -58,7 +55,7 @@ use 'like', "%{$search}%")
     {
         $countries = $this->getCountriesList();
 
-        return Inertia::render('Customers/Create', [;
+        return Inertia::render('Customers/Create', [
             'countries' => $countries,
         ]);
     }
@@ -105,7 +102,7 @@ use 'like', "%{$search}%")
 
             DB::commit();
 
-            return redirect()->route('customers.show', $customer);
+            return redirect()->route('customers.show', $customer)
                 ->with('success', 'Customer created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -125,7 +122,7 @@ use 'like', "%{$search}%")
     {
         $customer->load(['rentals', 'invoices', 'payments']);
 
-        return Inertia::render('Customers/Show', [;
+        return Inertia::render('Customers/Show', [
             'customer' => $customer,
             'attachments' => $customer->getMedia('documents'),
             'rentals' => [
@@ -150,7 +147,7 @@ use 'like', "%{$search}%")
     {
         $countries = $this->getCountriesList();
 
-        return Inertia::render('Customers/Edit', [;
+        return Inertia::render('Customers/Edit', [
             'customer' => $customer,
             'attachments' => $customer->getMedia('documents'),
             'countries' => $countries,
@@ -199,7 +196,7 @@ use 'like', "%{$search}%")
 
             DB::commit();
 
-            return redirect()->route('customers.show', $customer);
+            return redirect()->route('customers.show', $customer)
                 ->with('success', 'Customer updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -234,7 +231,7 @@ use 'like', "%{$search}%")
 
             DB::commit();
 
-            return redirect()->route('customers.index');
+            return redirect()->route('customers.index')
                 ->with('success', 'Customer deleted successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -279,7 +276,7 @@ use 'like', "%{$search}%")
         $activeCustomers = $customers->where('is_active', true)->count();
         $inactiveCustomers = $customers->where('is_active', false)->count();
 
-        return Inertia::render('Customers/Report', [;
+        return Inertia::render('Customers/Report', [
             'customers' => $customers,
             'cities' => $cities,
             'statistics' => [
@@ -302,11 +299,8 @@ use 'like', "%{$search}%")
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('company_name';
-use 'like';
-use "%{$search}%")
-                  ->orWhere('contact_person';
-use 'like', "%{$search}%");
+                $q->where('company_name', 'like', "%{$search}%")
+                  ->orWhere('contact_person', 'like', "%{$search}%");
             });
         }
 

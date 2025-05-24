@@ -2,7 +2,7 @@
 
 namespace Modules\TimesheetManagement\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource as ;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class TimeEntryResource extends JsonResource
 {
@@ -10,7 +10,7 @@ class TimeEntryResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request
-     * @return array;
+     * @return array
      */
     public function toArray($request)
     {

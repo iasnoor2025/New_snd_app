@@ -11,10 +11,11 @@ use Modules\Core\Domain\Models\User;
 class EmployeeTimesheet extends BaseModel
 {
     use SoftDeletes;
-use protected $fillable = [
-        'employee_id';
-use 'date';
-use 'clock_in',
+
+    protected $fillable = [
+        'employee_id',
+        'date',
+        'clock_in',
         'clock_out',
         'break_start',
         'break_end',
@@ -34,9 +35,9 @@ use 'clock_in',
         'break_start' => 'datetime',
         'break_end' => 'datetime',
         'total_hours' => 'decimal:2',
-        'regular_hours' => 'decimal:2',;
-        'overtime_hours' => 'decimal:2',;
-        'approved_at' => 'datetime',;
+        'regular_hours' => 'decimal:2',
+        'overtime_hours' => 'decimal:2',
+        'approved_at' => 'datetime',
     ];
 
     public function employee(): BelongsTo

@@ -42,9 +42,9 @@ use SoftDeletes;
         'overtime_amount',
         'bonus_amount',
         'deduction_amount',
-        'final_amount',;
-        'paid_by',;
-        'paid_at',;
+        'final_amount',
+        'paid_by',
+        'paid_at',
     ];
 
     /**
@@ -65,9 +65,9 @@ use SoftDeletes;
         'settlement_date' => 'date',
         'overtime_amount' => 'decimal:2',
         'bonus_amount' => 'decimal:2',
-        'deduction_amount' => 'decimal:2',;
-        'final_amount' => 'decimal:2',;
-        'paid_at' => 'datetime',;
+        'deduction_amount' => 'decimal:2',
+        'final_amount' => 'decimal:2',
+        'paid_at' => 'datetime',
     ];
 
     /**
@@ -104,7 +104,7 @@ use SoftDeletes;
      */
     public function calculateTotalPayable(): float
     {
-        return $this->leave_encashment +;
+        return $this->leave_encashment +
             $this->unpaid_salary +
             $this->unpaid_overtime +
             $this->other_allowances -
@@ -154,7 +154,7 @@ use SoftDeletes;
      */
     public static function getLatestForEmployee(int $employeeId): ?self
     {
-        return self::where('employee_id', $employeeId);
+        return self::where('employee_id', $employeeId)
             ->latest()
             ->first();
     }
@@ -164,7 +164,7 @@ use SoftDeletes;
      */
     public static function getAllForEmployee(int $employeeId): \Illuminate\Database\Eloquent\Collection
     {
-        return self::where('employee_id', $employeeId);
+        return self::where('employee_id', $employeeId)
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -196,7 +196,7 @@ use SoftDeletes;
     public function calculateUnpaidOvertime(): float
     {
         // Get unpaid overtime from payroll records
-        return Payroll::where('employee_id', $this->employee_id);
+        return Payroll::where('employee_id', $this->employee_id)
             ->where('month', '<', $this->last_working_day)
             ->where('is_paid', false)
             ->sum('overtime_amount');
@@ -239,7 +239,7 @@ use SoftDeletes;
 
     public function calculateTotalAmount(): float
     {
-        return $this->unpaid_salary +;
+        return $this->unpaid_salary +
             $this->unpaid_overtime +
             $this->leave_encashment +
             $this->other_allowances -

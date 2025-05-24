@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection as ;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class EmployeeCollection extends ResourceCollection
 {

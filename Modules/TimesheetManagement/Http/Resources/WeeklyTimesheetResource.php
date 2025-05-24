@@ -2,7 +2,7 @@
 
 namespace Modules\TimesheetManagement\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource as ;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class WeeklyTimesheetResource extends JsonResource
 {

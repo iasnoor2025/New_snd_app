@@ -15,7 +15,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
 
     public function findByEmployee(int $employeeId): array
     {
-        return $this->model;
+        return $this->model
             ->where('employee_id', $employeeId)
             ->with(['employee', 'approver', 'rejecter'])
             ->get()
@@ -24,7 +24,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
 
     public function findPending(): array
     {
-        return $this->model;
+        return $this->model
             ->where('status', 'pending')
             ->with(['employee', 'approver', 'rejecter'])
             ->get()
@@ -33,7 +33,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
 
     public function findActive(): array
     {
-        return $this->model;
+        return $this->model
             ->where('status', 'approved')
             ->where('remaining_amount', '>', 0)
             ->with(['employee', 'approver', 'rejecter'])
@@ -46,7 +46,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
         $today = Carbon::now()->startOfDay();
         $nextWeek = Carbon::now()->addWeek()->endOfDay();
 
-        return $this->model;
+        return $this->model
             ->where('status', 'approved')
             ->where('remaining_amount', '>', 0)
             ->whereNotNull('deduction_start_date')
@@ -61,7 +61,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
     {
         $today = Carbon::now()->startOfDay();
 
-        return $this->model;
+        return $this->model
             ->where('status', 'approved')
             ->where('remaining_amount', '>', 0)
             ->whereNotNull('deduction_start_date')
@@ -73,7 +73,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
 
     public function findById(int $id): ?EmployeeAdvance
     {
-        return $this->model;
+        return $this->model
             ->with(['employee', 'approver', 'rejecter'])
             ->find($id);
     }

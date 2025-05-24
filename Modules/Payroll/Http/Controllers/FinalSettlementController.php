@@ -37,7 +37,7 @@ class FinalSettlementController extends Controller
 
         $settlements = $query->latest()->paginate(10);
 
-        return Inertia::render('FinalSettlements/Index', [;
+        return Inertia::render('FinalSettlements/Index', [
             'settlements' => $settlements,
             'filters' => $request->only(['status', 'employee_id'])
         ]);
@@ -50,7 +50,7 @@ class FinalSettlementController extends Controller
     {
         $employees = Employee::active()->get();
 
-        return Inertia::render('FinalSettlement/Create', [;
+        return Inertia::render('FinalSettlement/Create', [
             'employees' => $employees,
         ]);
     }
@@ -125,7 +125,7 @@ class FinalSettlementController extends Controller
 
             DB::commit();
 
-            return redirect()->route('final-settlements.show', $settlement);
+            return redirect()->route('final-settlements.show', $settlement)
                 ->with('success', 'Final settlement created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -142,7 +142,7 @@ class FinalSettlementController extends Controller
 
         $finalSettlement->load(['employee', 'approver', 'payer', 'items']);
 
-        return Inertia::render('FinalSettlement/Show', [;
+        return Inertia::render('FinalSettlement/Show', [
             'finalSettlement' => $finalSettlement,
         ]);
     }
@@ -153,7 +153,7 @@ class FinalSettlementController extends Controller
     public function approve(FinalSettlement $finalSettlement)
     {
         if (!$finalSettlement->isPending()) {
-            return back()->withErrors([;
+            return back()->withErrors([
                 'message' => 'Only pending settlements can be approved.',
             ]);
         }

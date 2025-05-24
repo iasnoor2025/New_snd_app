@@ -32,7 +32,7 @@ class WeeklyTimesheetRepository extends BaseRepository
      * @param int $employeeId
      * @param array $filters
      * @param int $perPage
-     * @return LengthAwarePaginator;
+     * @return LengthAwarePaginator
      */
     public function getEmployeeTimesheets(int $employeeId, array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -65,7 +65,7 @@ class WeeklyTimesheetRepository extends BaseRepository
      *
      * @param array $filters
      * @param int $perPage
-     * @return LengthAwarePaginator;
+     * @return LengthAwarePaginator
      */
     public function getPendingTimesheets(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -91,7 +91,7 @@ class WeeklyTimesheetRepository extends BaseRepository
      * Get current timesheet for an employee
      *
      * @param int $employeeId
-     * @return WeeklyTimesheet|null;
+     * @return WeeklyTimesheet|null
      */
     public function getCurrentTimesheet(int $employeeId): ?WeeklyTimesheet
     {
@@ -107,7 +107,7 @@ class WeeklyTimesheetRepository extends BaseRepository
      * Get or create current timesheet for an employee
      *
      * @param int $employeeId
-     * @return WeeklyTimesheet;
+     * @return WeeklyTimesheet
      */
     public function getOrCreateCurrentTimesheet(int $employeeId): WeeklyTimesheet
     {
@@ -160,7 +160,7 @@ class WeeklyTimesheetRepository extends BaseRepository
      * Count timesheets by status
      *
      * @param array $filters
-     * @return array;
+     * @return array
      */
     public function countTimesheetsByStatus(array $filters = []): array
     {
@@ -193,7 +193,7 @@ class WeeklyTimesheetRepository extends BaseRepository
      * @param int $employeeId
      * @param string $startDate
      * @param string $endDate
-     * @return array;
+     * @return array
      */
     public function getTotalHoursByDateRange(int $employeeId, string $startDate, string $endDate): array
     {

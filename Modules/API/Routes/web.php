@@ -16,36 +16,29 @@ use Modules\API\Http\Controllers\ApiDocsController;
 |
 */
 
-Route::middleware(['web', 'auth', 'verified'])->prefix('api')->name('api.')->group(function () {
-    // API Dashboard
-    Route::get('/', [APIController::class, 'index'])->name('dashboard');
+// ADD routes at the top level, with explicit names
+Route::get('/', [APIController::class, 'index'])->name('api.main-dashboard');
+Route::get('/documentation', [ApiDocsController::class, 'index'])->name('api.documentation');
+Route::get('/documentation/{version}', [ApiDocsController::class, 'showVersion'])->name('api.documentation.version');
+Route::get('/documentation/{version}/{endpoint}', [ApiDocsController::class, 'showEndpoint'])->name('api.documentation.endpoint');
 
-    // Documentation
-    Route::get('/documentation', [ApiDocsController::class, 'index'])->name('documentation');
-    Route::get('/documentation/{version}', [ApiDocsController::class, 'showVersion'])->name('documentation.version');
-    Route::get('/documentation/{version}/{endpoint}', [ApiDocsController::class, 'showEndpoint'])->name('documentation.endpoint');
+Route::get('/tokens', [ApiTokenController::class, 'index'])->name('api.tokens.index');
+Route::get('/tokens/create', [ApiTokenController::class, 'create'])->name('api.tokens.create');
+Route::post('/tokens', [ApiTokenController::class, 'store'])->name('api.tokens.store');
+Route::get('/tokens/{token}', [ApiTokenController::class, 'show'])->name('api.tokens.show');
+Route::put('/tokens/{token}', [ApiTokenController::class, 'update'])->name('api.tokens.update');
+Route::delete('/tokens/{token}', [ApiTokenController::class, 'destroy'])->name('api.tokens.destroy');
 
-    // API Token Management
-    Route::get('/tokens', [ApiTokenController::class, 'index'])->name('tokens.index');
-    Route::get('/tokens/create', [ApiTokenController::class, 'create'])->name('tokens.create');
-    Route::post('/tokens', [ApiTokenController::class, 'store'])->name('tokens.store');
-    Route::get('/tokens/{token}', [ApiTokenController::class, 'show'])->name('tokens.show');
-    Route::put('/tokens/{token}', [ApiTokenController::class, 'update'])->name('tokens.update');
-    Route::delete('/tokens/{token}', [ApiTokenController::class, 'destroy'])->name('tokens.destroy');
+Route::get('/stats', [APIController::class, 'stats'])->name('api.stats');
+Route::get('/stats/usage', [APIController::class, 'usageStats'])->name('api.stats.usage');
+Route::get('/stats/endpoints', [APIController::class, 'endpointStats'])->name('api.stats.endpoints');
+Route::get('/stats/export', [APIController::class, 'exportStats'])->name('api.stats.export');
 
-    // API Usage Statistics
-    Route::get('/stats', [APIController::class, 'stats'])->name('stats');
-    Route::get('/stats/usage', [APIController::class, 'usageStats'])->name('stats.usage');
-    Route::get('/stats/endpoints', [APIController::class, 'endpointStats'])->name('stats.endpoints');
-    Route::get('/stats/export', [APIController::class, 'exportStats'])->name('stats.export');
-
-    // API Configuration
-    Route::middleware(['can:manage api settings'])->group(function() {
-        Route::get('/settings', [APIController::class, 'settings'])->name('settings');
-        Route::post('/settings', [APIController::class, 'updateSettings'])->name('settings.update');
-        Route::get('/rate-limits', [APIController::class, 'rateLimits'])->name('rate-limits');
-        Route::post('/rate-limits', [APIController::class, 'updateRateLimits'])->name('rate-limits.update');
-    });
+Route::middleware(['can:manage api settings'])->group(function() {
+    Route::get('/settings', [APIController::class, 'settings'])->name('api.settings');
+    Route::post('/settings', [APIController::class, 'updateSettings'])->name('api.settings.update');
+    Route::get('/rate-limits', [APIController::class, 'rateLimits'])->name('api.rate-limits');
+    Route::post('/rate-limits', [APIController::class, 'updateRateLimits'])->name('api.rate-limits.update');
 });
 
 

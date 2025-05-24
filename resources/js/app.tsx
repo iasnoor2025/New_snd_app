@@ -7,12 +7,33 @@ import { initializeTheme } from './hooks/use-appearance';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+// Load all employee module pages using glob imports that Vite can analyze
+const employeePages = import.meta.glob('/Modules/EmployeeManagement/resources/js/pages/Employees/*.tsx');
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
+    resolve: async (name) => {
+        // First try to resolve from main app's pages
+        try {
+            return await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+        } catch (error) {
+            console.log(`Page not found in main app: ${name}, checking module pages...`);
+
+            // Try loading the page from a module
+            const modulePath = `/Modules/EmployeeManagement/resources/js/pages/${name}.tsx`;
+
+            if (modulePath in employeePages) {
+                return await employeePages[modulePath]();
+            }
+
+            console.error(`Module page not found: ${modulePath}`);
+            return {
+                default: () => null
+            };
+        }
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
-
         root.render(<App {...props} />);
     },
     progress: {

@@ -2,7 +2,7 @@
 
 namespace Modules\EquipmentManagement\Actions;
 
-use Modules\EquipmentManagement\Domain\Models\Equipment as ;
+use Modules\EquipmentManagement\Domain\Models\Equipment;
 
 class CreateEquipmentAction
 {
@@ -17,7 +17,7 @@ class CreateEquipmentAction
         // Validate the data or assume it's already validated
 
         // Create the equipment
-        return Equipment::create([;
+        return Equipment::create([
             'name' => $data['name'],
             'description' => $data['description'] ?? null,
             'category_id' => $data['category_id'] ?? null,

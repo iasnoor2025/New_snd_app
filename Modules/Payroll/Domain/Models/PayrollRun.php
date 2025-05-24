@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class PayrollRun extends Model
 {
     use HasFactory;
-use protected $fillable = [
-        'batch_id';
-use 'run_by';
-use 'status',
+
+    protected $fillable = [
+        'batch_id',
+        'run_by',
+        'status',
         'total_employees',
         'run_date',
         'notes',
@@ -22,9 +23,9 @@ use 'status',
     ];
 
     protected $casts = [
-        'run_date' => 'date',;
-        'completed_at' => 'datetime',;
-        'total_employees' => 'integer';
+        'run_date' => 'date',
+        'completed_at' => 'datetime',
+        'total_employees' => 'integer',
     ];
 
     public function runBy(): BelongsTo

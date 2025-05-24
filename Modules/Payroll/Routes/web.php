@@ -15,36 +15,25 @@ use Modules\Payroll\Http\Controllers\AdvancePaymentController;
 |
 */
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    // Payroll routes
-    Route::prefix('payroll')->name('payroll.')->group(function () {
-        // Payroll listing and management
-        Route::get('/', [PayrollController::class, 'index'])->name('index');
-        Route::get('/create', [PayrollController::class, 'create'])->name('create');
-        Route::post('/', [PayrollController::class, 'store'])->name('store');
-        Route::get('/{payroll}', [PayrollController::class, 'show'])->name('show');
-
-        // Payroll actions
-        Route::post('/{payroll}/approve', [PayrollController::class, 'approve'])->name('approve');
-        Route::post('/{payroll}/process-payment', [PayrollController::class, 'processPayment'])->name('process-payment');
-        Route::post('/{payroll}/cancel', [PayrollController::class, 'cancel'])->name('cancel');
-
-        // Bulk payroll operations
-        Route::post('/generate-monthly', [PayrollController::class, 'generateMonthlyPayroll'])->name('generate-monthly');
-
-        // Payroll runs
-        Route::prefix('runs')->name('runs.')->group(function () {
-            Route::get('/{payrollRun}', [PayrollController::class, 'showPayrollRun'])->name('show');
-            Route::post('/{payrollRun}/approve', [PayrollController::class, 'approvePayrollRun'])->name('approve');
-            Route::post('/{payrollRun}/reject', [PayrollController::class, 'rejectPayrollRun'])->name('reject');
-        });
+Route::prefix('hr/payroll')->name('payroll.')->middleware(['auth', 'verified'])->group(function () {
+    // Payroll listing and management
+    Route::get('/', [PayrollController::class, 'index'])->name('index');
+    Route::get('/create', [PayrollController::class, 'create'])->name('create');
+    Route::post('/', [PayrollController::class, 'store'])->name('store');
+    Route::get('/{payroll}', [PayrollController::class, 'show'])->name('show');
+    Route::post('/{payroll}/approve', [PayrollController::class, 'approve'])->name('approve');
+    Route::post('/{payroll}/process-payment', [PayrollController::class, 'processPayment'])->name('process-payment');
+    Route::post('/{payroll}/cancel', [PayrollController::class, 'cancel'])->name('cancel');
+    Route::post('/generate-monthly', [PayrollController::class, 'generateMonthlyPayroll'])->name('generate-monthly');
+    Route::prefix('runs')->name('runs.')->group(function () {
+        Route::get('/{payrollRun}', [PayrollController::class, 'showPayrollRun'])->name('show');
+        Route::post('/{payrollRun}/approve', [PayrollController::class, 'approvePayrollRun'])->name('approve');
+        Route::post('/{payrollRun}/reject', [PayrollController::class, 'rejectPayrollRun'])->name('reject');
     });
-
     // Salary Advance routes
     Route::resource('salary-advances', SalaryAdvanceController::class);
     Route::post('salary-advances/{salaryAdvance}/approve', [SalaryAdvanceController::class, 'approve'])->name('salary-advances.approve');
     Route::post('salary-advances/{salaryAdvance}/reject', [SalaryAdvanceController::class, 'reject'])->name('salary-advances.reject');
-
     // Final Settlement routes
     Route::prefix('final-settlements')->name('final-settlements.')->group(function () {
         Route::get('/', [FinalSettlementController::class, 'index'])->name('index');
@@ -56,54 +45,52 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{finalSettlement}/cancel', [FinalSettlementController::class, 'cancel'])->name('cancel');
         Route::get('/{finalSettlement}/report', [FinalSettlementController::class, 'generateReport'])->name('report');
     });
-
     // Advance Payment Routes
     Route::prefix('employees/{employee}/advances')->group(function () {
         Route::get('/', [AdvancePaymentController::class, 'index'])
-            ->name('payroll.employees.advances.index');
+            ->name('employees.advances.index');
         Route::post('/', [AdvancePaymentController::class, 'store'])
             ->middleware(['permission:advances.create'])
-            ->name('payroll.employees.advances.store');
+            ->name('employees.advances.store');
         Route::get('/create', [AdvancePaymentController::class, 'create'])
             ->middleware(['permission:advances.create'])
-            ->name('payroll.employees.advances.create');
+            ->name('employees.advances.create');
         Route::get('/history', [AdvancePaymentController::class, 'paymentHistory'])
-            ->name('payroll.employees.advances.payment-history');
+            ->name('employees.advances.payment-history');
         Route::get('/history/api', [AdvancePaymentController::class, 'apiPaymentHistory'])
-            ->name('payroll.employees.advances.payment-history.api');
+            ->name('employees.advances.payment-history.api');
         Route::delete('/history/{payment}', [AdvancePaymentController::class, 'deletePaymentHistory'])
             ->middleware(['permission:advances.delete'])
-            ->name('payroll.employees.advances.payment-history.delete');
+            ->name('employees.advances.payment-history.delete');
         Route::patch('/monthly-deduction', [AdvancePaymentController::class, 'updateMonthlyDeduction'])
             ->middleware(['permission:advances.edit'])
-            ->name('payroll.employees.advances.monthly-deduction');
+            ->name('employees.advances.monthly-deduction');
         Route::get('/{advance}', [AdvancePaymentController::class, 'show'])
-            ->name('payroll.employees.advances.show');
+            ->name('employees.advances.show');
         Route::get('/{advance}/edit', [AdvancePaymentController::class, 'edit'])
             ->middleware(['permission:advances.edit'])
-            ->name('payroll.employees.advances.edit');
+            ->name('employees.advances.edit');
         Route::patch('/{advance}', [AdvancePaymentController::class, 'update'])
             ->middleware(['permission:advances.edit'])
-            ->name('payroll.employees.advances.update');
+            ->name('employees.advances.update');
         Route::delete('/{advance}', [AdvancePaymentController::class, 'destroy'])
             ->middleware(['permission:advances.delete'])
-            ->name('payroll.employees.advances.destroy');
+            ->name('employees.advances.destroy');
         Route::post('/{advance}/repayment', [AdvancePaymentController::class, 'recordRepayment'])
             ->middleware(['permission:advances.edit'])
-            ->name('payroll.employees.advances.repayment');
+            ->name('employees.advances.repayment');
         Route::post('/{advance}/approve', [AdvancePaymentController::class, 'approve'])
             ->middleware(['permission:advances.approve'])
-            ->name('payroll.employees.advances.approve');
+            ->name('employees.advances.approve');
         Route::post('/{advance}/reject', [AdvancePaymentController::class, 'reject'])
             ->middleware(['permission:advances.approve'])
-            ->name('payroll.employees.advances.reject');
+            ->name('employees.advances.reject');
         Route::get('/payment/{payment}/receipt', [AdvancePaymentController::class, 'receipt'])
-            ->name('payroll.employees.advances.payment.receipt');
+            ->name('employees.advances.payment.receipt');
     });
-
     // All Advance Payments Route
     Route::get('/advance-payments', [AdvancePaymentController::class, 'allAdvances'])
-        ->name('payroll.advance-payments.index');
+        ->name('advance-payments.index');
 });
 
 

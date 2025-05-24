@@ -23,7 +23,7 @@ class RentalController extends Controller
     public function index()
     {
         $rentals = $this->rentalService->all();
-        return Inertia::render('Rental/Index', [;
+        return Inertia::render('Rental/Index', [
             'rentals' => $rentals
         ]);
     }
@@ -51,7 +51,7 @@ class RentalController extends Controller
 
         $this->rentalService->create($validated);
 
-        return redirect()->route('rentals.index');
+        return redirect()->route('rentals.index')
             ->with('success', 'Rental created successfully.');
     }
 
@@ -61,7 +61,7 @@ class RentalController extends Controller
     public function show($id)
     {
         $rental = $this->rentalService->findById($id);
-        return Inertia::render('Rental/Show', [;
+        return Inertia::render('Rental/Show', [
             'rental' => $rental
         ]);
     }
@@ -72,7 +72,7 @@ class RentalController extends Controller
     public function edit($id)
     {
         $rental = $this->rentalService->findById($id);
-        return Inertia::render('Rental/Edit', [;
+        return Inertia::render('Rental/Edit', [
             'rental' => $rental
         ]);
     }
@@ -92,7 +92,7 @@ class RentalController extends Controller
 
         $this->rentalService->update($id, $validated);
 
-        return redirect()->route('rentals.index');
+        return redirect()->route('rentals.index')
             ->with('success', 'Rental updated successfully.');
     }
 
@@ -102,7 +102,7 @@ class RentalController extends Controller
     public function destroy($id)
     {
         $this->rentalService->delete($id);
-        return redirect()->route('rentals.index');
+        return redirect()->route('rentals.index')
             ->with('success', 'Rental deleted successfully.');
     }
 }

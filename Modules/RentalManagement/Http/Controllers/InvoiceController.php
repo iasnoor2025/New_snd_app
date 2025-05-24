@@ -18,7 +18,7 @@ use Modules\EquipmentManagement\Traits\HandlesDocumentUploads;
 class InvoiceController extends Controller
 {
     use HandlesDocumentUploads;
-use protected $documentCollection = 'documents';
+    protected $documentCollection = 'documents';
 
     /**
      * Display a listing of the invoices.
@@ -45,7 +45,7 @@ use protected $documentCollection = 'documents';
             ['value' => 'cancelled', 'label' => 'Cancelled']
         ];
 
-        return Inertia::render('Invoices/Index', [;
+        return Inertia::render('Invoices/Index', [
             'invoices' => $invoices,
             'filters' => $filters,
             'customers' => $customers,
@@ -75,7 +75,7 @@ use protected $documentCollection = 'documents';
         $lastInvoice = Invoice::latest()->first();
         $invoiceNumber = $lastInvoice ? 'INV-' . str_pad((intval(substr($lastInvoice->invoice_number, 4)) + 1), 6, '0', STR_PAD_LEFT) : 'INV-000001';
 
-        return Inertia::render('Invoices/Create', [;
+        return Inertia::render('Invoices/Create', [
             'customers' => $customers,
             'rentals' => $rentals,
             'defaultInvoiceNumber' => $invoiceNumber,
@@ -138,11 +138,12 @@ use protected $documentCollection = 'documents';
 
             DB::commit();
 
-            return redirect()->route('invoices.show', $invoice);
-                ->with('success', 'Invoice created successfully');
+            return redirect()->route('invoices.show', $invoice)
+                ->with('success', 'Invoice created successfully')
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->with('error', 'Failed to create invoice: ' . $e->getMessage());
         }
@@ -157,7 +158,7 @@ use protected $documentCollection = 'documents';
 
         $invoice->load(['customer', 'items']);
 
-        return Inertia::render('Invoices/Show', [;
+        return Inertia::render('Invoices/Show', [
             'invoice' => $invoice,
             'documents' => $invoice->getMedia($this->documentCollection),
         ]);
@@ -310,7 +311,7 @@ use protected $documentCollection = 'documents';
             if (!is_numeric($documentId)) {
                 abort(404, 'Invalid ID provided');
             }
-            
+
             $document = $invoice->getMedia($this->documentCollection)->where('id', $documentId)->first();
 
             if ($document) {

@@ -31,6 +31,8 @@ class RentalManagementServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
+        $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/web.php'));
+
         // Register observers
         $this->registerObservers();
     }

@@ -11,21 +11,22 @@ use Modules\Core\Domain\Models\User;
 
 class AdvancePaymentHistory extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory;
+    use SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'advance_payment_id';
-use 'employee_id',
+    protected $fillable = [
+        'advance_payment_id',
+        'employee_id',
         'amount',
         'payment_date',
-        'notes',;
-        'recorded_by',;
+        'notes',
+        'recorded_by',
     ];
 
     /**
@@ -33,9 +34,9 @@ use 'employee_id',
      *
      * @var array<string, string>
      */
-    protected $casts = [;
-        'payment_date' => 'date',;
-        'amount' => 'decimal:2',;
+    protected $casts = [
+        'payment_date' => 'date',
+        'amount' => 'decimal:2',
     ];
 
     /**

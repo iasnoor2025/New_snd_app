@@ -15,7 +15,7 @@ class WeeklyTimesheetObserver
      * Handle the WeeklyTimesheet "created" event.
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     public function created(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -26,7 +26,7 @@ class WeeklyTimesheetObserver
      * Handle the WeeklyTimesheet "updated" event.
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     public function updated(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -55,7 +55,7 @@ class WeeklyTimesheetObserver
      * Handle the WeeklyTimesheet "deleted" event.
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     public function deleted(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -66,7 +66,7 @@ class WeeklyTimesheetObserver
      * Handle the WeeklyTimesheet "restored" event.
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     public function restored(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -77,7 +77,7 @@ class WeeklyTimesheetObserver
      * Handle the WeeklyTimesheet "force deleted" event.
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     public function forceDeleted(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -88,7 +88,7 @@ class WeeklyTimesheetObserver
      * Handle timesheet submission
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     protected function handleSubmitted(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -106,7 +106,7 @@ class WeeklyTimesheetObserver
      * Handle timesheet approval
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     protected function handleApproved(WeeklyTimesheet $weeklyTimesheet)
     {
@@ -124,7 +124,7 @@ class WeeklyTimesheetObserver
      * Handle timesheet rejection
      *
      * @param  \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet  $weeklyTimesheet
-     * @return void;
+     * @return void
      */
     protected function handleRejected(WeeklyTimesheet $weeklyTimesheet)
     {

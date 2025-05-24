@@ -38,7 +38,7 @@ class PaymentController extends Controller
     {
         $payments = $this->paymentService->getByRentalId($rentalId);
 
-        return Inertia::render('Rental/Payments/Index', [;
+        return Inertia::render('Rental/Payments/Index', [
             'payments' => $payments,
             'rentalId' => $rentalId
         ]);
@@ -52,7 +52,7 @@ class PaymentController extends Controller
      */
     public function create($rentalId)
     {
-        return Inertia::render('Rental/Payments/Create', [;
+        return Inertia::render('Rental/Payments/Create', [
             'rentalId' => $rentalId
         ]);
     }
@@ -69,7 +69,7 @@ class PaymentController extends Controller
         $data = array_merge($request->validated(), ['rental_id' => $rentalId]);
         $payment = $this->paymentService->create($data);
 
-        return redirect()->route('rentals.payments.index', $rentalId);
+        return redirect()->route('rentals.payments.index', $rentalId)
             ->with('success', 'Payment created successfully.');
     }
 
@@ -84,7 +84,7 @@ class PaymentController extends Controller
     {
         $payment = $this->paymentService->find($id);
 
-        return Inertia::render('Rental/Payments/Show', [;
+        return Inertia::render('Rental/Payments/Show', [
             'payment' => $payment,
             'rentalId' => $rentalId
         ]);
@@ -101,7 +101,7 @@ class PaymentController extends Controller
     {
         $payment = $this->paymentService->find($id);
 
-        return Inertia::render('Rental/Payments/Edit', [;
+        return Inertia::render('Rental/Payments/Edit', [
             'payment' => $payment,
             'rentalId' => $rentalId
         ]);
@@ -119,7 +119,7 @@ class PaymentController extends Controller
     {
         $this->paymentService->update($id, $request->validated());
 
-        return redirect()->route('rentals.payments.show', [$rentalId, $id]);
+        return redirect()->route('rentals.payments.show', [$rentalId, $id])
             ->with('success', 'Payment updated successfully.');
     }
 
@@ -134,7 +134,7 @@ class PaymentController extends Controller
     {
         $this->paymentService->delete($id);
 
-        return redirect()->route('rentals.payments.index', $rentalId);
+        return redirect()->route('rentals.payments.index', $rentalId)
             ->with('success', 'Payment deleted successfully.');
     }
 }

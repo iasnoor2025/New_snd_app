@@ -33,7 +33,7 @@ class PayrollController extends Controller
 
         $query = Payroll::with(['employee', 'approver', 'payer'])
             ->when($request->month, function ($query, $month) {
-                return $query->whereMonth('payroll_month', Carbon::parse($month)->month);
+                return $query->whereMonth('payroll_month', Carbon::parse($month)->month)
                     ->whereYear('payroll_month', Carbon::parse($month)->year);
             })
             ->when($request->status, function ($query, $status) {
@@ -46,7 +46,7 @@ class PayrollController extends Controller
         $payrolls = $query->latest()->paginate(10);
         $employees = Employee::where('status', 'active')->get(['id', 'name']);
 
-        return Inertia::render('Payroll/Index', [;
+        return Inertia::render('Payroll/Index', [
             'payrolls' => $payrolls,
             'employees' => $employees,
             'filters' => $request->only(['month', 'status', 'employee_id']),
@@ -64,7 +64,7 @@ class PayrollController extends Controller
         $employees = Employee::active()->get();
         $currentMonth = Carbon::now()->format('Y-m');
 
-        return Inertia::render('Payroll/Create', [;
+        return Inertia::render('Payroll/Create', [
             'employees' => $employees,
             'currentMonth' => $currentMonth,
         ]);
@@ -87,7 +87,7 @@ class PayrollController extends Controller
 
         $payroll = $this->payrollService->generatePayroll($month, $employee);
 
-        return redirect()->route('payroll.show', $payroll);
+        return redirect()->route('payroll.show', $payroll)
             ->with('success', 'Payroll generated successfully.');
     }
 
@@ -100,7 +100,7 @@ class PayrollController extends Controller
 
         $payroll->load(['employee', 'items', 'approver', 'payer']);
 
-        return Inertia::render('Payroll/Show', [;
+        return Inertia::render('Payroll/Show', [
             'payroll' => $payroll,
         ]);
     }
@@ -170,7 +170,7 @@ class PayrollController extends Controller
 
             DB::commit();
 
-            return redirect()->route('payroll.runs.show', $payrollRun);
+            return redirect()->route('payroll.runs.show', $payrollRun)
                 ->with('success', 'Payroll run initiated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -189,7 +189,7 @@ class PayrollController extends Controller
             ->with(['employee', 'items'])
             ->get();
 
-        return Inertia::render('Payroll/Run', [;
+        return Inertia::render('Payroll/Run', [
             'payrollRun' => $payrollRun,
             'payrolls' => $payrolls,
         ]);

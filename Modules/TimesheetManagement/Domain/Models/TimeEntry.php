@@ -25,9 +25,9 @@ use LogsActivity;
         'is_overtime',
         'is_billable',
         'start_time',
-        'end_time',;
-        'break_duration',;
-        'status',;
+        'end_time',
+        'break_duration',
+        'status',
     ];
 
     protected $casts = [
@@ -35,9 +35,9 @@ use LogsActivity;
         'hours' => 'decimal:2',
         'is_overtime' => 'boolean',
         'is_billable' => 'boolean',
-        'start_time' => 'datetime',;
-        'end_time' => 'datetime',;
-        'break_duration' => 'integer', // in minutes;
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'break_duration' => 'integer', // in minutes
     ];
 
     /**
@@ -45,7 +45,7 @@ use LogsActivity;
      */
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults();
+        return LogOptions::defaults()
             ->logFillable()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

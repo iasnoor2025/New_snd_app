@@ -25,7 +25,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Boot the application events.
      *
-     * @return void;
+     * @return void
      */
     public function boot()
     {
@@ -44,7 +44,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      *
-     * @return void;
+     * @return void
      */
     public function register()
     {
@@ -55,7 +55,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Register config.
      *
-     * @return void;
+     * @return void
      */
     protected function registerConfig()
     {
@@ -70,7 +70,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Register views.
      *
-     * @return void;
+     * @return void
      */
     protected function registerViews()
     {
@@ -90,7 +90,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Register translations.
      *
-     * @return void;
+     * @return void
      */
     protected function registerTranslations()
     {
@@ -106,7 +106,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Register model observers.
      *
-     * @return void;
+     * @return void
      */
     protected function registerObservers()
     {
@@ -116,7 +116,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Register policies.
      *
-     * @return void;
+     * @return void
      */
     protected function registerPolicies()
     {
@@ -126,7 +126,7 @@ class TimesheetManagementServiceProvider extends ServiceProvider
     /**
      * Get the services provided by the provider.
      *
-     * @return array;
+     * @return array
      */
     public function provides()
     {

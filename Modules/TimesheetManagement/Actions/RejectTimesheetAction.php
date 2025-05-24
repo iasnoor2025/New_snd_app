@@ -20,8 +20,7 @@ class RejectTimesheetAction
      */
     public function execute(int $timesheetId, string $rejectionReason): WeeklyTimesheet
     {
-        return DB::transaction(function () use ($timesheetId;
-use $rejectionReason) {
+        return DB::transaction(function () use ($timesheetId, $rejectionReason) {
             // Find the timesheet
             $timesheet = WeeklyTimesheet::findOrFail($timesheetId);
 

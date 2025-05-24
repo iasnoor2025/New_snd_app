@@ -468,7 +468,7 @@ export default function Show({
         selectedAdvance
       });
 
-      const response = await axios.post(;
+      const response = await axios.post(
         route('advance-payments.repay', {
           advance: selectedAdvance,
         }),
@@ -1337,7 +1337,7 @@ export default function Show({
                     <div className="space-y-2">
                       {(() => {
                         // Calculate document statistics
-                        const documents = [;
+                        const documents = [
                           { name: 'Iqama', expiry: employee.iqama_expiry, number: employee.iqama_number },
                           { name: 'Passport', expiry: employee.passport_expiry, number: employee.passport_number },
                           { name: 'Driving License', expiry: employee.driving_license_expiry, number: employee.driving_license_number },
@@ -1399,7 +1399,7 @@ export default function Show({
                     </div>
                     <div className="space-y-2">
                       {(() => {
-                        const documents = [;
+                        const documents = [
                           { name: 'Iqama', expiry: employee.iqama_expiry, number: employee.iqama_number },
                           { name: 'Passport', expiry: employee.passport_expiry, number: employee.passport_number },
                           { name: 'Driving License', expiry: employee.driving_license_expiry, number: employee.driving_license_number },
@@ -1418,11 +1418,11 @@ export default function Show({
 
                         // Find the next expiring document
                         const now = new Date();
-                        const nextExpiring = documents;
-                          .filter(doc => new Date(doc.expiry!) > now);
-                          .sort((a, b) => new Date(a.expiry!).getTime() - new Date(b.expiry!).getTime())[0];
+                        const nextExpiring = documents.filter(doc => new Date(doc.expiry!) > now);
+                        nextExpiring.sort((a, b) => new Date(a.expiry!).getTime() - new Date(b.expiry!).getTime());
+                        const nextExpiringDoc = nextExpiring[0];
 
-                        if (!nextExpiring) {
+                        if (!nextExpiringDoc) {
                           return (
                             <div className="text-center py-2">
                               <p className="text-sm text-muted-foreground">All documents expired</p>
@@ -1430,14 +1430,14 @@ export default function Show({
                           );
                         }
 
-                        const expiryDate = new Date(nextExpiring.expiry!);
+                        const expiryDate = new Date(nextExpiringDoc.expiry!);
                         const daysRemaining = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 
                         return (
                           <>
                             <div className="flex items-center justify-between">
                               <span className="text-sm text-muted-foreground">Document</span>
-                              <span className="text-sm font-medium">{nextExpiring.name}</span>
+                              <span className="text-sm font-medium">{nextExpiringDoc.name}</span>
                             </div>
                             <div className="flex items-center justify-between">
                               <span className="text-sm text-muted-foreground">Expiry Date</span>
@@ -1937,16 +1937,12 @@ export default function Show({
                           className="flex items-center gap-2"
                           onClick={() => {
                             // Get all active advances
-                            const activeAdvances = advances?.data?.filter(;
-                              (advance: Advance) => advance.status === 'approved' || advance.status === 'partially_repaid';
-                            );
+                            const activeAdvances = advances?.data?.filter(advance => advance.status === 'approved' || advance.status === 'partially_repaid');
 
                             if (activeAdvances && activeAdvances.length > 0) {
                               // Calculate total remaining balance and monthly deduction
                               const totalRemainingBalance = activeAdvances.reduce((total: number, advance: Advance) => {
-                                const remainingBalance = advance.remaining_balance !== undefined ?;
-                                  Number(advance.remaining_balance) :;
-                                  Number(advance.amount) - Number(advance.repaid_amount || 0);
+                                const remainingBalance = advance.remaining_balance !== undefined ? Number(advance.remaining_balance) : Number(advance.amount) - Number(advance.repaid_amount || 0);
                                 return total + remainingBalance;
                               }, 0);
 
@@ -1980,9 +1976,7 @@ export default function Show({
                           <div className="space-y-4">
                             {(() => {
                               // Get all active advances
-                              const activeAdvances = advances?.data?.filter(;
-                                (advance: Advance) => advance.status === 'approved' || advance.status === 'partially_repaid';
-                              );
+                              const activeAdvances = advances?.data?.filter(advance => advance.status === 'approved' || advance.status === 'partially_repaid');
 
                               if (!activeAdvances || activeAdvances.length === 0) {
                                 return (
@@ -2001,9 +1995,7 @@ export default function Show({
 
                               // Calculate total remaining balance and monthly deduction
                               const totalRemainingBalance = activeAdvances.reduce((total: number, advance: Advance) => {
-                                const remainingBalance = advance.remaining_balance !== undefined ?;
-                                  Number(advance.remaining_balance) :;
-                                  Number(advance.amount) - Number(advance.repaid_amount || 0);
+                                const remainingBalance = advance.remaining_balance !== undefined ? Number(advance.remaining_balance) : Number(advance.amount) - Number(advance.repaid_amount || 0);
                                 return total + remainingBalance;
                               }, 0);
 
@@ -2069,9 +2061,7 @@ export default function Show({
                                           totalMonthlyDeduction,
                                           activeAdvances: activeAdvances.map(advance => ({
                                             id: advance.id,
-                                            remainingBalance: advance.remaining_balance !== undefined ?
-                                              Number(advance.remaining_balance) :
-                                              Number(advance.amount) - Number(advance.repaid_amount || 0)
+                                            remainingBalance: advance.remaining_balance !== undefined ? Number(advance.remaining_balance) : Number(advance.amount) - Number(advance.repaid_amount || 0)
                                           }))
                                         });
 

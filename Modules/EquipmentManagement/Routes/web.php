@@ -18,7 +18,7 @@ use Modules\EquipmentManagement\Http\Controllers\MaintenanceRecordController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenancePartController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenanceScheduleController;
 
-Route::middleware(['web', 'auth'])->group(function () {
+Route::prefix('equipment')->name('equipment.')->middleware(['web', 'auth'])->group(function () {
     // Equipment routes
     Route::middleware(['permission:equipment.view'])->group(function () {
         Route::get('equipment', [EquipmentController::class, 'index'])->name('equipment.index');

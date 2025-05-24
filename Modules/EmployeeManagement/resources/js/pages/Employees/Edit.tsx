@@ -647,11 +647,3 @@ export default function Edit({ auth, employee, users, positions }: Props) {
   );
 }
 
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-

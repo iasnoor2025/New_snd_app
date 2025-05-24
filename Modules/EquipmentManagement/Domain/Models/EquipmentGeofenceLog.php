@@ -12,16 +12,16 @@ class EquipmentGeofenceLog extends Model
         'geofence_zone_id',
         'event_type',
         'latitude',
-        'longitude',;
-        'event_time',;
-        'metadata',;
+        'longitude',
+        'event_time',
+        'metadata',
     ];
 
     protected $casts = [
         'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',;
-        'event_time' => 'datetime',;
-        'metadata' => 'array',;
+        'longitude' => 'decimal:8',
+        'event_time' => 'datetime',
+        'metadata' => 'array',
     ];
 
     public function equipment(): BelongsTo

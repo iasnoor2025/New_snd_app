@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['web', 'auth', 'verified'])->prefix('notifications')->name('notifications.')->group(function () {
+Route::prefix('notifications')->name('notifications.')->middleware(['web', 'auth'])->group(function () {
     // User notifications management
     Route::get('/', 'NotificationsController@index')->name('index');
     Route::get('/unread', 'NotificationsController@unread')->name('unread');

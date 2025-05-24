@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
-import { Employee, Position } from '@/Modules/EmployeeManagement/Resources/js/types/models';
+import { PageProps, BreadcrumbItem } from '../../types/index';
+import AdminLayout from '../../layouts/AdminLayout';
+import { Employee, Position } from '../../types/models';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/badge';
-import { Input } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/input';
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/select';
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -27,16 +27,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/table';
+} from '@/components/ui/table';
 import { Search, Plus, LoaderCircle, BriefcaseBusiness, Banknote, MapPin, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
-import { usePermission } from '@/Modules/EmployeeManagement/Resources/js/hooks/usePermission';
+import { usePermission } from '@/hooks/usePermission';
 import { toast } from 'sonner';
-import CreateButton from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/shared/CreateButton';
-import CrudButtons from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/shared/CrudButtons';
-import Permission from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Permission';
+import CreateButton from '@/components/shared/CreateButton';
+import CrudButtons from '@/components/shared/CrudButtons';
+import Permission from '@/components/Permission';
 import { debounce } from 'lodash';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -75,20 +75,21 @@ interface Props extends PageProps {
   };
   departments: Array<{ id: number; name: string }>;
   positions: Array<{ id: number; name: string }>;
+  auth: any;
 }
 
 export default function Index({ auth, employees, filters, departments, positions }: Props) {
-  const [search, setSearch] = useState(filters.search);
-  const [status, setStatus] = useState(filters.status);
-  const [department, setDepartment] = useState(filters.department);
-  const [position, setPosition] = useState(filters.position);
+  const [search, setSearch] = useState(filters.search || '');
+  const [status, setStatus] = useState(filters.status || '');
+  const [department, setDepartment] = useState(filters.department || '');
+  const [position, setPosition] = useState(filters.position || '');
   const [isLoading, setIsLoading] = useState(false);
   const { hasPermission } = usePermission();
 
   const handleSearch = debounce((value: string) => {
     setSearch(value);
     router.get(
-      route('employees.index'),
+      '/employees',
       { search: value, status, department, position },
       { preserveState: true, preserveScroll: true }
     );
@@ -108,22 +109,22 @@ export default function Index({ auth, employees, filters, departments, positions
     }
 
     router.get(
-      route('employees.index'),
+      '/employees',
       { search, status: type === 'status' ? value : status, department: type === 'department' ? value : department, position: type === 'position' ? value : position },
       { preserveState: true, preserveScroll: true }
     );
   };
 
   const getStatusBadge = (status: string) => {
-    const variants = {
-      active: 'success',
+    const variants: Record<string, "default" | "destructive" | "outline" | "secondary"> = {
+      active: 'default',
       inactive: 'secondary',
-      on_leave: 'warning',
+      on_leave: 'outline',
       terminated: 'destructive',
     };
 
     return (
-      <Badge variant={variants[status as keyof typeof variants]}>
+      <Badge variant={variants[status] || 'default'}>
         {status.replace('_', ' ').toUpperCase()}
       </Badge>
     );
@@ -132,14 +133,14 @@ export default function Index({ auth, employees, filters, departments, positions
   const getAssignmentBadge = (assignment: Employee['current_assignment']) => {
     if (!assignment) return <Badge variant="outline">Unassigned</Badge>;
 
-    const variants = {
+    const variants: Record<string, "default" | "destructive" | "outline" | "secondary"> = {
       project: 'default',
-      rental: 'purple',
-      leave: 'warning',
+      rental: 'secondary',
+      leave: 'outline',
     };
 
     return (
-      <Badge variant={variants[assignment.type as keyof typeof variants]}>
+      <Badge variant={variants[assignment.type] || 'default'}>
         {assignment.type.toUpperCase()}
       </Badge>
     );
@@ -277,7 +278,7 @@ export default function Index({ auth, employees, filters, departments, positions
                             {typeof employee.position === 'string' ? employee.position : employee.position?.name || 'N/A'}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            Dept: {typeof employee.department === 'string' ? employee.department : 'N/A'}
+                            Dept: {typeof employee.department === 'string' ? employee.department : employee.department?.name || 'N/A'}
                           </div>
                         </div>
                       </TableCell>

@@ -24,7 +24,7 @@ use Modules\RentalManagement\Http\Controllers\RentalHistoryController;
 |
 */
 
-Route::middleware(['web', 'auth'])->group(function () {
+Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(function () {
     // Customer routes
     Route::resource('customers', CustomerController::class);
     Route::get('customers-report', [CustomerController::class, 'report'])->name('customers.report');
@@ -57,7 +57,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('rentals/{rental}/items/bulk', [RentalItemController::class, 'bulkStore'])->name('rentals.items.bulk-store');
 
     // Analytics routes
-    Route::get('rentals/analytics', [RentalAnalyticsController::class, 'index'])->name('rentals.analytics.index');
+    Route::get('rentals/analytics', [RentalAnalyticsController::class, 'index'])->name('analytics.index');
 
     // Routes from extensions.php
 
@@ -95,7 +95,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::middleware(['permission:rental-timesheets.view'])->group(function () {
         Route::get('rental-timesheets', [RentalTimesheetController::class, 'index'])->name('rental-timesheets.index');
         Route::get('rental-timesheets/{rentalTimesheet}', [RentalTimesheetController::class, 'show'])->name('rental-timesheets.show');
-        Route::get('rentals/{rental}/timesheets', [RentalTimesheetController::class, 'forRental'])->name('rentals.timesheets');
+        Route::get('rentals/{rental}/timesheets', [RentalTimesheetController::class, 'forRental'])->name('timesheets');
         Route::get('rentals/{rental}/check-missing-timesheets', [RentalTimesheetController::class, 'checkMissingTimesheets'])
             ->name('rental-timesheets.check-missing');
         Route::get('rentals/{rental}/check-operator-availability', [RentalTimesheetController::class, 'checkOperatorAvailability'])
@@ -106,89 +106,89 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     // Core CRUD routes
     Route::get('rentals', [RentalController::class, 'index'])
-        ->name('rentals.index')
+        ->name('index')
         ->middleware('permission:rentals.view');
 
     Route::get('rentals/create', [RentalController::class, 'create'])
-        ->name('rentals.create')
+        ->name('create')
         ->middleware('permission:rentals.create');
 
     Route::post('rentals', [RentalController::class, 'store'])
-        ->name('rentals.store')
+        ->name('store')
         ->middleware('permission:rentals.create');
 
     Route::get('rentals/{rental}', [RentalController::class, 'show'])
-        ->name('rentals.show')
+        ->name('show')
         ->middleware('permission:rentals.view');
 
     Route::get('rentals/{rental}/edit', [RentalController::class, 'edit'])
-        ->name('rentals.edit')
+        ->name('edit')
         ->middleware(['permission:rentals.edit|rentals.update']);
 
     Route::put('rentals/{rental}', [RentalController::class, 'update'])
-        ->name('rentals.update')
+        ->name('update')
         ->middleware(['permission:rentals.edit|rentals.update']);
 
     Route::delete('rentals/{rental}', [RentalController::class, 'destroy'])
-        ->name('rentals.destroy')
+        ->name('destroy')
         ->middleware('permission:rentals.delete');
 
     // Report and print routes
     Route::get('rentals-report', [RentalController::class, 'report'])
-        ->name('rentals.report')
+        ->name('report')
         ->middleware('permission:rentals.view');
 
     Route::get('rentals/{rental}/print', [RentalController::class, 'print'])
-        ->name('rentals.print')
+        ->name('print')
         ->middleware('permission:rentals.view');
 
     // Workflow action routes - using RentalWorkflowController
     Route::post('rentals/{rental}/generate-quotation', [RentalWorkflowController::class, 'generateQuotation'])
-        ->name('rentals.generate-quotation')
+        ->name('generate-quotation')
         ->middleware('permission:rentals.edit');
 
     Route::get('rentals/{rental}/direct-generate-quotation', [RentalWorkflowController::class, 'directGenerateQuotation'])
-        ->name('rentals.direct-generate-quotation')
+        ->name('direct-generate-quotation')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/approve-quotation', [RentalWorkflowController::class, 'approveQuotation'])
-        ->name('rentals.approve-quotation')
+        ->name('approve-quotation')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/start-mobilization', [RentalWorkflowController::class, 'startMobilization'])
-        ->name('rentals.start-mobilization')
+        ->name('start-mobilization')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/complete-mobilization', [RentalWorkflowController::class, 'completeMobilization'])
-        ->name('rentals.complete-mobilization')
+        ->name('complete-mobilization')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/start', [RentalWorkflowController::class, 'start'])
-        ->name('rentals.start')
+        ->name('start')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/complete', [RentalWorkflowController::class, 'complete'])
-        ->name('rentals.complete')
+        ->name('complete')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/create-invoice', [RentalWorkflowController::class, 'createInvoice'])
-        ->name('rentals.create-invoice')
+        ->name('create-invoice')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/mark-payment-pending', [RentalWorkflowController::class, 'markPaymentPending'])
-        ->name('rentals.mark-payment-pending')
+        ->name('mark-payment-pending')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/mark-closed', [RentalWorkflowController::class, 'markClosed'])
-        ->name('rentals.mark-closed')
+        ->name('mark-closed')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/check-overdue', [RentalWorkflowController::class, 'checkOverdue'])
-        ->name('rentals.check-overdue')
+        ->name('check-overdue')
         ->middleware('permission:rentals.edit');
 
     Route::post('rentals/{rental}/request-extension', [RentalWorkflowController::class, 'requestExtension'])
-        ->name('rentals.request-extension')
+        ->name('request-extension')
         ->middleware(['can:request-extension,rental']);
 
 });

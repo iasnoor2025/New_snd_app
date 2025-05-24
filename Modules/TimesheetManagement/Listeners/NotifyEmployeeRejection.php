@@ -11,7 +11,7 @@ use Modules\TimesheetManagement\Notifications\TimesheetRejectedNotification;
 class NotifyEmployeeRejection implements ShouldQueue
 {
     use InteractsWithQueue;
-use /**
+    /**
      * The number of times the job may be attempted.
      *
      * @var int

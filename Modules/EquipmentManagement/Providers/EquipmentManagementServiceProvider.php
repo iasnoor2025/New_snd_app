@@ -28,8 +28,7 @@ class EquipmentManagementServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
-        $this->registerRoutes();
+        $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         $this->registerObservers();
         $this->registerEvents();
     }
@@ -42,26 +41,10 @@ class EquipmentManagementServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
-    
+
         if (file_exists(module_path($this->moduleName, 'Providers/EventServiceProvider.php'))) {
             $this->app->register(EventServiceProvider::class);
         }
-    }
-
-    /**
-     * Register routes.
-     *
-     * @return void;
-     */
-    protected function registerRoutes()
-    {
-        Route::middleware('web')
-            ->prefix('equipment')
-            ->group(module_path($this->moduleName, 'routes/web.php'));
-
-        Route::middleware('api')
-            ->prefix('api/equipment')
-            ->group(module_path($this->moduleName, 'routes/api.php'));
     }
 
     /**

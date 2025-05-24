@@ -22,46 +22,46 @@ use Inertia\Inertia;
 |
 */
 
-Route::middleware(['web', 'auth'])->group(function() {
+Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group(function() {
     // Project routes
-    Route::get('/', [ProjectController::class, 'index'])->name('projects.index');
-    Route::get('/create', [ProjectController::class, 'create'])->name('projects.create');
-    Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
-    Route::get('/{project}', [ProjectController::class, 'show'])->name('projects.show')->where('project', '[0-9]+');
-    Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit')->where('project', '[0-9]+');
-    Route::put('/{project}', [ProjectController::class, 'update'])->name('projects.update')->where('project', '[0-9]+');
-    Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy')->where('project', '[0-9]+');
+    Route::get('/', [ProjectController::class, 'index'])->name('index');
+    Route::get('/create', [ProjectController::class, 'create'])->name('create');
+    Route::post('/', [ProjectController::class, 'store'])->name('store');
+    Route::get('/{project}', [ProjectController::class, 'show'])->name('show')->where('project', '[0-9]+');
+    Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit')->where('project', '[0-9]+');
+    Route::put('/{project}', [ProjectController::class, 'update'])->name('update')->where('project', '[0-9]+');
+    Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy')->where('project', '[0-9]+');
 
     // Project Progress Demo Route
     Route::get('/progress/demo', function() {
         return Inertia::render('ProjectProgressDemo');
-    })->name('projects.progress.demo');
+    })->name('progress.demo');
 
     // Project resources routes
     Route::get('/{project}/resources', [ProjectResourceController::class, 'index'])
-        ->name('projects.resources');
+        ->name('resources');
 
     // Generic resource destroy route to handle delete requests from the main Resources component
     Route::delete('/{project}/resources/{resource}', [ProjectResourceController::class, 'destroy'])
-        ->name('projects.resources.destroy');
+        ->name('resources.destroy');
 
     // Project tasks routes
     Route::get('/{project}/tasks', [TaskController::class, 'index'])
-        ->name('projects.tasks.index');
+        ->name('tasks.index');
     Route::post('/{project}/tasks', [TaskController::class, 'store'])
-        ->name('projects.tasks.store');
+        ->name('tasks.store');
     Route::put('/{project}/tasks/{task}', [TaskController::class, 'update'])
-        ->name('projects.tasks.update')
+        ->name('tasks.update')
         ->where('task', '[0-9]+');
     Route::put('/{project}/tasks/{task}/status', [TaskController::class, 'updateStatus'])
-        ->name('projects.tasks.status')
+        ->name('tasks.status')
         ->where('task', '[0-9]+');
     Route::delete('/{project}/tasks/{task}', [TaskController::class, 'destroy'])
-        ->name('projects.tasks.destroy')
+        ->name('tasks.destroy')
         ->where('task', '[0-9]+');
 
     // Project resource routes grouped by type
-    Route::prefix('{project}/resources')->name('projects.resources.')->group(function () {
+    Route::prefix('{project}/resources')->name('resources.')->group(function () {
         // Manpower routes
         Route::get('/manpower', [ManpowerController::class, 'index'])
             ->name('manpower.index');

@@ -18,9 +18,9 @@ class EquipmentMovementHistory extends Model
         'distance',
         'average_speed',
         'movement_type',
-        'rental_id',;
-        'notes',;
-        'metadata',;
+        'rental_id',
+        'notes',
+        'metadata',
     ];
 
     protected $casts = [
@@ -30,9 +30,9 @@ class EquipmentMovementHistory extends Model
         'end_longitude' => 'decimal:8',
         'distance' => 'decimal:2',
         'average_speed' => 'decimal:2',
-        'start_time' => 'datetime',;
-        'end_time' => 'datetime',;
-        'metadata' => 'array',;
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'metadata' => 'array',
     ];
 
     public function equipment(): BelongsTo

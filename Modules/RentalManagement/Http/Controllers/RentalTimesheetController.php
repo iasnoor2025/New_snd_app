@@ -48,7 +48,7 @@ class RentalTimesheetController extends Controller
         $timesheets = $query->latest()->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('RentalTimesheets/Index', [;
+        return Inertia::render('RentalTimesheets/Index', [
             'timesheets' => $timesheets,
             'filters' => $request->only(['rental_id', 'operator_id', 'status', 'start_date', 'end_date'])
         ]);
@@ -68,8 +68,7 @@ class RentalTimesheetController extends Controller
 
             // Get active rentals if no rental ID is specified
             $rentals = Rental::where(function($query) use ($rentalId) {
-                $query->where('status';
-use 'active');
+                $query->where('status', 'active');
                 if ($rentalId) {
                     $query->orWhere('id', $rentalId);
                 }
@@ -112,7 +111,7 @@ use 'active');
 
                 // Filter out any rental items that don't have valid equipment
                 $rentalItems = $rentalItems->filter(function($item) {
-                    return $item->equipment &&;
+                    return $item->equipment &&
                            $item->equipment->id &&
                            $item->equipment->status === 'active';
                 })->values(); // Reset array keys
@@ -140,7 +139,7 @@ use 'active');
                 'selected_rental_id' => $rentalId
             ]);
 
-            return Inertia::render('RentalTimesheets/Create', [;
+            return Inertia::render('RentalTimesheets/Create', [
                 'rentals' => $rentals,
                 'rentalItems' => $rentalItems,
                 'operators' => $operators,
@@ -155,7 +154,7 @@ use 'active');
                 'request_data' => $request->all()
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while loading the timesheet form: ' . $e->getMessage());
         }
     }
@@ -335,7 +334,7 @@ use 'active');
                     'user_id' => auth()->id()
                 ]);
 
-                return redirect()->route('rental-timesheets.show', $timesheet);
+                return redirect()->route('rental-timesheets.show', $timesheet)
                     ->with('success', 'Timesheet created successfully.');
 
             } catch (\Exception $e) {
@@ -423,7 +422,7 @@ use 'active');
                 }
             }
 
-            return Inertia::render('RentalTimesheets/Show', [;
+            return Inertia::render('RentalTimesheets/Show', [
                 'timesheet' => $rentalTimesheet,
                 'rental' => $rentalTimesheet->rental,
             ]);
@@ -434,7 +433,7 @@ use 'active');
                 'timesheet_id' => $rentalTimesheet->id
             ]);
 
-            return redirect()->route('rental-timesheets.index');
+            return redirect()->route('rental-timesheets.index')
                 ->with('error', 'An error occurred while viewing the timesheet: ' . $e->getMessage());
         }
     }
@@ -504,7 +503,7 @@ use 'active');
                 'total_amount' => $calculations['total_amount']
             ]);
 
-            return Inertia::render('RentalTimesheets/Edit', [;
+            return Inertia::render('RentalTimesheets/Edit', [
                 'timesheet' => $rentalTimesheet,
                 'rental' => $rentalTimesheet->rental,
                 'rentalItems' => $rentalItems,
@@ -518,7 +517,7 @@ use 'active');
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return redirect()->route('rental-timesheets.index');
+            return redirect()->route('rental-timesheets.index')
                 ->with('error', 'An error occurred while loading the timesheet edit form: ' . $e->getMessage());
         }
     }
@@ -629,7 +628,7 @@ use 'active');
                 'total_amount' => $calculations['total_amount']
             ]);
 
-            return redirect()->route('rental-timesheets.show', $rentalTimesheet);
+            return redirect()->route('rental-timesheets.show', $rentalTimesheet)
                 ->with('success', 'Timesheet updated successfully.');
         } catch (\Exception $e) {
             Log::error('Error updating timesheet:', [
@@ -638,7 +637,7 @@ use 'active');
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return back()->withErrors(['general' => 'An error occurred while updating the timesheet: ' . $e->getMessage()]);
+            return back()->withErrors(['general' => 'An error occurred while updating the timesheet: ' . $e->getMessage()])
                 ->withInput();
         }
     }
@@ -666,7 +665,7 @@ use 'active');
 
             $rentalTimesheet->delete();
 
-            return redirect()->route('rentals.timesheets', $rentalId);
+            return redirect()->route('rentals.timesheets', $rentalId)
                 ->with('success', 'Timesheet deleted successfully.');
         } catch (\Exception $e) {
             \Log::error('Error deleting timesheet:', [
@@ -715,7 +714,7 @@ use 'active');
             // First verify the rental exists and is accessible
             if (!$rental || !$rental->exists) {
                 \Log::error('Rental not found', ['rental_id' => $rental->id]);
-                return redirect()->route('rentals.index');
+                return redirect()->route('rentals.index')
                     ->with('error', 'Rental not found.');
             }
 
@@ -811,7 +810,7 @@ use 'active');
             // Load the rental with client relationship
             $rental->load('client');
 
-            return Inertia::render('RentalTimesheets/ForRental', [;
+            return Inertia::render('RentalTimesheets/ForRental', [
                 'rental' => $rental,
                 'timesheets' => $validTimesheets,
                 'debug' => [
@@ -831,7 +830,7 @@ use 'active');
             ]);
 
             // Redirect with error message
-            return redirect()->route('rentals.index');
+            return redirect()->route('rentals.index')
                 ->with('error', 'An error occurred while viewing timesheets: ' . $e->getMessage());
         }
     }
@@ -851,7 +850,7 @@ use 'active');
         RentalTimesheet::whereIn('id', $validated['timesheet_ids'])
             ->update(['status' => 'completed']);
 
-        return redirect()->back();
+        return redirect()->back()
             ->with('success', count($validated['timesheet_ids']) . ' timesheet entries marked as completed.');
     }
 
@@ -880,7 +879,7 @@ use 'active');
                 'timesheet_ids' => $validated['timesheet_ids']
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('success', $count . ' timesheet entries deleted successfully.');
         } catch (\Exception $e) {
             \Log::error('Error bulk deleting timesheets:', [
@@ -889,7 +888,7 @@ use 'active');
                 'timesheet_ids' => $validated['timesheet_ids']
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while deleting timesheets: ' . $e->getMessage());
         }
     }
@@ -959,7 +958,7 @@ use 'active');
 
             DB::commit();
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Timesheet status updated successfully',
                 'timesheet' => $rentalTimesheet
             ]);
@@ -970,7 +969,7 @@ use 'active');
                 'error' => $e->getMessage(),
             ]);
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to update timesheet status',
                 'error' => $e->getMessage()
             ], 500);

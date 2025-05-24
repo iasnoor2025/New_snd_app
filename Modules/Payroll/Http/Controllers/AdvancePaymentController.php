@@ -23,7 +23,7 @@ class AdvancePaymentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return Inertia::render('Payroll/Advances/Index', [;
+        return Inertia::render('Payroll/Advances/Index', [
             'advances' => [
                 'data' => $advancePayments->map(function ($payment) {
                     return [
@@ -62,7 +62,7 @@ class AdvancePaymentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return Inertia::render('Payroll/Advances/Index', [;
+        return Inertia::render('Payroll/Advances/Index', [
             'employee' => $employee,
             'advances' => [
                 'data' => $advancePayments->map(function ($payment) {
@@ -125,7 +125,7 @@ class AdvancePaymentController extends Controller
      */
     public function show(Employee $employee, AdvancePayment $advance)
     {
-        return Inertia::render('Payroll/Advances/Show', [;
+        return Inertia::render('Payroll/Advances/Show', [
             'employee' => $employee,
             'advance' => $advance->load(['approver', 'rejecter'])
         ]);
@@ -187,8 +187,7 @@ class AdvancePaymentController extends Controller
                 'amount' => [
                     'required',
                     'numeric',
-                    function ($attribute, $value, $fail) use ($totalRemainingBalance;
-use $totalMonthlyDeduction) {
+                    function ($attribute, $value, $fail) use ($totalRemainingBalance, $totalMonthlyDeduction) {
                         if ($value < $totalMonthlyDeduction) {
                             $fail("The repayment amount must be at least the total monthly deduction of SAR {$totalMonthlyDeduction}.");
                             return;
@@ -260,7 +259,7 @@ use $totalMonthlyDeduction) {
             DB::commit();
 
             // Return a success response
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Repayment recorded successfully',
                 'new_balance' => $employee->total_advance_balance
@@ -273,7 +272,7 @@ use $totalMonthlyDeduction) {
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to process repayment: ' . $e->getMessage()
             ], 500);
@@ -319,7 +318,7 @@ use $totalMonthlyDeduction) {
      */
     public function getEmployeeAdvances(Employee $employee)
     {
-        return response()->json([;
+        return response()->json([
             'advances' => $employee->advancePayments()
                 ->orderBy('created_at', 'desc')
                 ->get()
@@ -370,7 +369,7 @@ use $totalMonthlyDeduction) {
      */
     public function edit(Employee $employee, AdvancePayment $advance)
     {
-        return Inertia::render('Payroll/Advances/Edit', [;
+        return Inertia::render('Payroll/Advances/Edit', [
             'employee' => $employee,
             'advance' => $advance,
         ]);
@@ -395,7 +394,7 @@ use $totalMonthlyDeduction) {
 
         $advance->update($validated);
 
-        return redirect()->route('payroll.employees.advances.show', [$employee->id, $advance->id]);
+        return redirect()->route('payroll.employees.advances.show', [$employee->id, $advance->id])
             ->with('success', 'Advance payment updated successfully.');
     }
 
@@ -426,7 +425,7 @@ use $totalMonthlyDeduction) {
 
             DB::commit();
 
-            return redirect()->route('payroll.employees.advances.index', $employee->id);
+            return redirect()->route('payroll.employees.advances.index', $employee->id)
                 ->with('success', 'Advance payment deleted successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -466,7 +465,7 @@ use $totalMonthlyDeduction) {
     {
         $history = $this->getMonthlyHistory($employee);
 
-        return Inertia::render('Payroll/Advances/History', [;
+        return Inertia::render('Payroll/Advances/History', [
             'employee' => [
                 'id' => $employee->id,
                 'first_name' => $employee->first_name,
@@ -498,7 +497,7 @@ use $totalMonthlyDeduction) {
      */
     public function create(Employee $employee)
     {
-        return Inertia::render('Payroll/Advances/Create', [;
+        return Inertia::render('Payroll/Advances/Create', [
             'employee' => $employee
         ]);
     }
@@ -532,7 +531,7 @@ use $totalMonthlyDeduction) {
         $totalMonthlyDeduction = $activeAdvances->sum('monthly_deduction');
         $totalRemainingBalance = $activeAdvances->sum('balance');
 
-        return response()->json([;
+        return response()->json([
             'history' => $history,
             'active_advances' => $activeAdvances,
             'employee' => [

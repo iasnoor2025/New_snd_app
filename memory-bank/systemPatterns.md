@@ -30,6 +30,39 @@ Key architectural patterns include:
 
 The application is organized into a comprehensive modular structure following the Laravel Modules pattern. Each module is designed to be self-contained with its own controllers, models, services, and other components.
 
+## Module Routing Conventions (2024-06 Update)
+
+All major modules now use explicit URL prefixes and route name groups for their web routes. Each module's ServiceProvider must load its routes using:
+
+```php
+$this->loadRoutesFrom(module_path('<Module>', 'Routes/web.php'));
+```
+
+### Module Prefix & Route Name Mapping
+
+| Module               | URL Prefix         | Route Name Prefix   |
+|----------------------|-------------------|--------------------|
+| LeaveManagement      | /hr/leaves        | leaves.            |
+| TimesheetManagement  | /hr/timesheets    | timesheets.        |
+| Payroll              | /hr/payroll       | payroll.           |
+| ProjectManagement    | /projects         | projects.          |
+| RentalManagement     | /rentals          | rentals.           |
+| EquipmentManagement  | /equipment        | equipment.         |
+| Notifications        | /notifications    | notifications.     |
+| CustomerManagement   | /customers        | customers.         |
+| Localization         | /localization     | localization.      |
+| AuditCompliance      | /audit            | audit.             |
+
+All routes in each module's web.php are wrapped in:
+
+```php
+Route::prefix('<prefix>')->name('<name>.')->middleware([...])->group(function () {
+    // ... module routes ...
+});
+```
+
+This ensures all endpoints are consistently namespaced and accessible under the correct URL structure for Inertia.js and Ziggy integration.
+
 ```
 Modules/
 ├── Core/                         # Shared infrastructure, authentication, authorization, logging, i18n, settings

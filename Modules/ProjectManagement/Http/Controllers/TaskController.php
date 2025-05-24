@@ -33,7 +33,7 @@ class TaskController extends Controller
         }
 
         // Return a redirect to the resources page with tab parameter
-        return redirect()->route('projects.resources', [;
+        return redirect()->route('projects.resources', [
             'project' => $project->id,
             'tab' => 'tasks'
         ]);
@@ -78,14 +78,14 @@ class TaskController extends Controller
 
         // Return JSON response if requested
         if ($request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Task created successfully',
                 'task' => $task
             ], 201);
         }
 
         // Redirect to resources page with success message
-        return redirect()->route('projects.resources', [;
+        return redirect()->route('projects.resources', [
             'project' => $project->id,
             'tab' => 'tasks'
         ])->with('success', 'Task created successfully.');
@@ -131,14 +131,14 @@ class TaskController extends Controller
 
         // Return JSON response if requested
         if ($request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Task updated successfully',
                 'task' => $task
             ]);
         }
 
         // Redirect to resources page with success message
-        return redirect()->route('projects.resources', [;
+        return redirect()->route('projects.resources', [
             'project' => $project->id,
             'tab' => 'tasks'
         ])->with('success', 'Task updated successfully.');
@@ -162,13 +162,13 @@ class TaskController extends Controller
 
         // Return JSON response if requested
         if ($request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Task deleted successfully'
             ]);
         }
 
         // Redirect to resources page with success message
-        return redirect()->route('projects.resources', [;
+            return redirect()->route('projects.resources', [
             'project' => $project->id,
             'tab' => 'tasks'
         ])->with('success', 'Task deleted successfully.');
@@ -207,14 +207,14 @@ class TaskController extends Controller
 
         // Return JSON response if requested
         if ($request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Task status updated successfully',
                 'task' => $task
             ]);
         }
 
         // Redirect to resources page with success message
-        return redirect()->route('projects.resources', [;
+        return redirect()->route('projects.resources', [
             'project' => $project->id,
             'tab' => 'tasks'
         ])->with('success', 'Task status updated successfully.');

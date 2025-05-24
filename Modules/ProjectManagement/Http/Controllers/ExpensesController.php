@@ -41,12 +41,12 @@ class ExpensesController extends Controller
             ->paginate(10);
 
         if ($request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'data' => $expenses
             ]);
         }
 
-        return inertia('Projects/Resources/Tabs/ExpensesTab', [;
+        return inertia('Projects/Resources/Tabs/ExpensesTab', [
             'project' => $project,
             'expenses' => $expenses,
         ]);
@@ -63,23 +63,23 @@ class ExpensesController extends Controller
             $expense = $this->createExpense->execute($project, $request->all());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Expense resource created successfully',
                     'resource' => $expense
                 ], 201);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('success', 'Expense resource added successfully.');
         } catch (\Exception $e) {
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to create expense resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to create expense resource: ' . $e->getMessage()]);
         }
@@ -96,23 +96,23 @@ class ExpensesController extends Controller
             $updatedExpense = $this->updateExpense->execute($expense, $request->all());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Expense resource updated successfully',
                     'resource' => $updatedExpense
                 ]);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('success', 'Expense resource updated successfully.');
         } catch (\Exception $e) {
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to update expense resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to update expense resource: ' . $e->getMessage()]);
         }
@@ -129,22 +129,22 @@ class ExpensesController extends Controller
             $this->deleteExpense->execute($expense);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Expense resource deleted successfully'
                 ]);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('success', 'Expense resource deleted successfully.');
         } catch (\Exception $e) {
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to delete expense resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withErrors(['error' => 'Failed to delete expense resource: ' . $e->getMessage()]);
         }
     }

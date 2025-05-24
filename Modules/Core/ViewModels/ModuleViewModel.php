@@ -24,7 +24,7 @@ class ModuleViewModel
     /**
      * Convert the view model to an array.
      *
-     * @return array;
+     * @return array
      */
     public function toArray(): array
     {
@@ -41,7 +41,7 @@ class ModuleViewModel
      * Transform a single module's data.
      *
      * @param array $module
-     * @return array;
+     * @return array
      */
     protected function transformModule(array $module): array
     {

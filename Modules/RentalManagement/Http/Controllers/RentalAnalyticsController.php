@@ -27,7 +27,7 @@ class RentalAnalyticsController extends Controller
             'performance' => $this->analyticsService->getPerformanceIndicators(),
         ];
 
-        return Inertia::render('Rental/Analytics/Dashboard', [;
+        return Inertia::render('Rental/Analytics/Dashboard', [
             'analytics' => $analytics,
             'period' => $period,
         ]);

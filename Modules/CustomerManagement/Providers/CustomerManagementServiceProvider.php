@@ -29,6 +29,8 @@ class CustomerManagementServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
+        $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/web.php'));
+
         // Register observers
         $this->registerObservers();
     }
@@ -41,7 +43,7 @@ class CustomerManagementServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
-    
+
         if (file_exists(module_path($this->moduleName, 'Providers/EventServiceProvider.php'))) {
             $this->app->register(EventServiceProvider::class);
         }

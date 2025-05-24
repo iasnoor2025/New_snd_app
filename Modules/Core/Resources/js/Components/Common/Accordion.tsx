@@ -39,8 +39,8 @@ const sizeClasses = {
   lg: "text-lg",
 };
 
-const Accordion = forwardRef<HTMLDivElement, AccordionProps>(;
-  (;
+const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
+  (
     {
       className,
       items,
@@ -114,7 +114,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(;
       </ShadcnAccordion>
     );
   }
-);
+)
 
 Accordion.displayName = "Accordion";
 
@@ -122,5 +122,5 @@ export { Accordion };
 
 
 
-</div>
+
 

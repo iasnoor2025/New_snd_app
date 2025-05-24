@@ -2,16 +2,17 @@
 
 namespace Modules\EmployeeManagement\Repositories;
 
-use App\Modules\Core\Repositories\BaseRepositoryInterface;
+use Modules\Core\Repositories\BaseRepositoryInterface;
 use Carbon\Carbon;
 use Modules\EmployeeManagement\Domain\Models\EmployeeTimesheet;
-use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterface
+
+interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterface
 {
     /**
      * Find timesheets by employee ID
      *
      * @param int $employeeId
-     * @return array;
+     * @return array
      */
     public function findByEmployee(int $employeeId): array;
 
@@ -21,7 +22,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      * @param int $employeeId
      * @param Carbon $startDate
      * @param Carbon $endDate
-     * @return array;
+     * @return array
      */
     public function findByDateRange(int $employeeId, Carbon $startDate, Carbon $endDate): array;
 
@@ -29,14 +30,14 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      * Find timesheets by status
      *
      * @param string $status
-     * @return array;
+     * @return array
      */
     public function findByStatus(string $status): array;
 
     /**
      * Get pending timesheets for approval
      *
-     * @return array;
+     * @return array
      */
     public function getPendingApproval(): array;
 
@@ -45,7 +46,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      *
      * @param Carbon $startDate
      * @param Carbon $endDate
-     * @return array;
+     * @return array
      */
     public function getApprovedByDateRange(Carbon $startDate, Carbon $endDate): array;
 
@@ -54,7 +55,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      *
      * @param Carbon $startDate
      * @param Carbon $endDate
-     * @return array;
+     * @return array
      */
     public function getForPayrollCalculation(Carbon $startDate, Carbon $endDate): array;
 
@@ -64,7 +65,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      * @param int $employeeId
      * @param Carbon $startDate
      * @param Carbon $endDate
-     * @return float;
+     * @return float
      */
     public function getOvertimeHours(int $employeeId, Carbon $startDate, Carbon $endDate): float;
 
@@ -74,7 +75,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      * @param int $employeeId
      * @param Carbon $startDate
      * @param Carbon $endDate
-     * @return float;
+     * @return float
      */
     public function getRegularHours(int $employeeId, Carbon $startDate, Carbon $endDate): float;
 
@@ -83,7 +84,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      *
      * @param int $id
      * @param int $approverId
-     * @return EmployeeTimesheet;
+     * @return EmployeeTimesheet
      */
     public function approve(int $id, int $approverId): EmployeeTimesheet;
 
@@ -92,7 +93,7 @@ use interface EmployeeTimesheetRepositoryInterface extends BaseRepositoryInterfa
      *
      * @param int $id
      * @param string|null $reason
-     * @return EmployeeTimesheet;
+     * @return EmployeeTimesheet
      */
     public function reject(int $id, ?string $reason = null): EmployeeTimesheet;
 }

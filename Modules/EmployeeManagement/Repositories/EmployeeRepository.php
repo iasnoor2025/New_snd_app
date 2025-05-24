@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Repositories;
 
-use App\Modules\Core\Repositories\BaseRepository;
+use Modules\Core\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
 use Modules\EmployeeManagement\Domain\Models\Employee;
 
@@ -40,7 +40,7 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
 
     public function generateNextFileNumber(): string
     {
-        return DB::transaction(function () {;
+        return DB::transaction(function () {
             $lastEmployee = $this->model->lockForUpdate()
                 ->orderBy('file_number', 'desc')
                 ->first();
@@ -55,7 +55,7 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
 
     public function getWithCurrentSalary(): array
     {
-        return $this->model->with(['salaryHistory' => function ($query) {;
+        return $this->model->with(['salaryHistory' => function ($query) {
             $query->where('effective_from', '<=', now())
                 ->orderBy('effective_from', 'desc')
                 ->limit(1);
@@ -64,14 +64,14 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
 
     public function getWithRecentTimesheets(int $limit = 5): array
     {
-        return $this->model->with(['timesheets' => function ($query) use ($limit) {;
+        return $this->model->with(['timesheets' => function ($query) use ($limit) {
             $query->latest()->limit($limit);
         }])->get()->all();
     }
 
     public function getWithPendingAdvances(): array
     {
-        return $this->model->with(['advancePayments' => function ($query) {;
+        return $this->model->with(['advancePayments' => function ($query) {
             $query->where('status', 'pending');
         }])->get()->all();
     }

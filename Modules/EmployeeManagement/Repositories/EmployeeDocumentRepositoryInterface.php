@@ -3,7 +3,9 @@
 namespace Modules\EmployeeManagement\Repositories;
 
 use Modules\Core\Repositories\BaseRepositoryInterface;
-use Modules\EmployeeManagement\Domain\Models\EmployeeDocument; interface EmployeeDocumentRepositoryInterface extends BaseRepositoryInterface
+use Modules\EmployeeManagement\Domain\Models\EmployeeDocument;
+
+interface EmployeeDocumentRepositoryInterface extends BaseRepositoryInterface
 {
     public function findByEmployee(int $employeeId): array;
     public function findExpiring(int $daysThreshold = 30): array;

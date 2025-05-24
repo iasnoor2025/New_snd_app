@@ -19,17 +19,17 @@ class Task extends Model
         'priority',
         'assigned_to',
         'estimated_hours',
-        'actual_hours',;
-        'progress',;
-        'parent_task_id',;
+        'actual_hours',
+        'progress',
+        'parent_task_id',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'due_date' => 'datetime',
-        'estimated_hours' => 'decimal:2',;
-        'actual_hours' => 'decimal:2',;
-        'progress' => 'decimal:2',;
+        'estimated_hours' => 'decimal:2',
+        'actual_hours' => 'decimal:2',
+        'progress' => 'decimal:2',
     ];
 
     public function project(): BelongsTo

@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Repositories;
 
-use App\Modules\Core\Repositories\BaseRepository;
+use Modules\Core\Repositories\BaseRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Modules\EmployeeManagement\Domain\Models\EmployeeTimesheet;
@@ -16,7 +16,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function findByEmployee(int $employeeId): array
     {
-        return $this->model->where('employee_id', $employeeId);
+        return $this->model->where('employee_id', $employeeId)
             ->latest('date')
             ->get()
             ->all();
@@ -24,7 +24,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function findByDateRange(int $employeeId, Carbon $startDate, Carbon $endDate): array
     {
-        return $this->model->where('employee_id', $employeeId);
+        return $this->model->where('employee_id', $employeeId)
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->latest('date')
             ->get()
@@ -33,7 +33,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function findByStatus(string $status): array
     {
-        return $this->model->where('status', $status);
+        return $this->model->where('status', $status)
             ->latest('date')
             ->get()
             ->all();
@@ -41,7 +41,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function getPendingApproval(): array
     {
-        return $this->model->where('status', 'pending');
+        return $this->model->where('status', 'pending')
             ->with(['employee', 'employee.position'])
             ->latest('date')
             ->get()
@@ -50,7 +50,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function getApprovedByDateRange(Carbon $startDate, Carbon $endDate): array
     {
-        return $this->model->where('status', 'approved');
+        return $this->model->where('status', 'approved')
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->with(['employee', 'employee.position', 'approver'])
             ->latest('date')
@@ -60,7 +60,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function getForPayrollCalculation(Carbon $startDate, Carbon $endDate): array
     {
-        return $this->model->where('status', 'approved');
+        return $this->model->where('status', 'approved')
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->with(['employee'])
             ->latest('date')
@@ -70,7 +70,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function getOvertimeHours(int $employeeId, Carbon $startDate, Carbon $endDate): float
     {
-        return (float) $this->model->where('employee_id', $employeeId);
+        return (float) $this->model->where('employee_id', $employeeId)
             ->where('status', 'approved')
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->sum('overtime_hours');
@@ -78,7 +78,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function getRegularHours(int $employeeId, Carbon $startDate, Carbon $endDate): float
     {
-        return (float) $this->model->where('employee_id', $employeeId);
+        return (float) $this->model->where('employee_id', $employeeId)
             ->where('status', 'approved')
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->sum('regular_hours');
@@ -86,8 +86,7 @@ class EmployeeTimesheetRepository extends BaseRepository implements EmployeeTime
 
     public function approve(int $id, int $approverId): EmployeeTimesheet
     {
-        return DB::transaction(function () use ($id;
-use $approverId) {
+        return DB::transaction(function () use ($id, $approverId) {
             $timesheet = $this->model->findOrFail($id);
             $timesheet->status = 'approved';
             $timesheet->approved_by = $approverId;
@@ -99,8 +98,7 @@ use $approverId) {
 
     public function reject(int $id, ?string $reason = null): EmployeeTimesheet
     {
-        return DB::transaction(function () use ($id;
-use $reason) {
+        return DB::transaction(function () use ($id, $reason) {
             $timesheet = $this->model->findOrFail($id);
             $timesheet->status = 'rejected';
             $timesheet->notes = $reason ?: $timesheet->notes;

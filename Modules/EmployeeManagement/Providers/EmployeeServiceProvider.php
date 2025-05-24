@@ -29,9 +29,6 @@ class EmployeeServiceProvider extends ServiceProvider
      */
     protected $moduleName = 'EmployeeManagement';
 
-    protected string $moduleName = 'Employee';
-    protected string $moduleNameLower = 'employee';
-
     /**
      * Boot the application events.
      */
@@ -71,26 +68,26 @@ class EmployeeServiceProvider extends ServiceProvider
 
         // Register Services
         $this->app->bind(EmployeeService::class, function ($app) {
-            return new EmployeeService(;
+            return new EmployeeService(
                 $app->make(EmployeeRepositoryInterface::class)
             );
         });
 
         $this->app->bind(EmployeeDocumentService::class, function ($app) {
-            return new EmployeeDocumentService(;
+            return new EmployeeDocumentService(
                 $app->make(EmployeeDocumentRepositoryInterface::class),
                 $app->make(EmployeeRepositoryInterface::class)
             );
         });
 
         $this->app->bind(EmployeeAdvanceService::class, function ($app) {
-            return new EmployeeAdvanceService(;
+            return new EmployeeAdvanceService(
                 $app->make(EmployeeAdvanceRepositoryInterface::class)
             );
         });
 
         $this->app->bind(EmployeeTimesheetService::class, function ($app) {
-            return new EmployeeTimesheetService(;
+            return new EmployeeTimesheetService(
                 $app->make(EmployeeTimesheetRepositoryInterface::class),
                 $app->make(EmployeeRepositoryInterface::class),
                 $app->has('Modules\Project\Repositories\ProjectRepositoryInterface')

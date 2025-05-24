@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { router } from '@inertiajs/react';
 import { PerformanceReview } from '../../types/performance';
 import PerformanceReviewList from '../../components/employees/PerformanceReviewList';
 import PerformanceReviewForm from '../../components/employees/PerformanceReviewForm';
@@ -8,9 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/ta
 import { Button } from '../../components/ui/button';
 import { Plus, ArrowLeft } from 'lucide-react';
 
-export default function PerformanceManagement() {
-  const { employeeId } = useParams();
-  const navigate = useNavigate();
+export default function PerformanceManagement({ employeeId }: { employeeId?: string }) {
   const [activeTab, setActiveTab] = useState('list');
   const [currentReview, setCurrentReview] = useState<PerformanceReview | undefined>(undefined);
 
@@ -34,7 +32,7 @@ export default function PerformanceManagement() {
   };
 
   const renderBreadcrumbs = () => {
-    const crumbs = [;
+    const crumbs = [
       { title: 'Dashboard', href: '/' },
       { title: 'Employees', href: '/employees' }
     ];

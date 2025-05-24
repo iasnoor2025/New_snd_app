@@ -34,7 +34,7 @@ class SettingApiController extends Controller
     {
         $settings = $this->settingService->getAllSettings();
 
-        return response()->json([;
+        return response()->json([
             'data' => $settings,
         ]);
     }
@@ -49,7 +49,7 @@ class SettingApiController extends Controller
     {
         $settings = $this->settingService->getSettingsByGroup($group);
 
-        return response()->json([;
+        return response()->json([
             'data' => $settings,
         ]);
     }
@@ -68,7 +68,7 @@ class SettingApiController extends Controller
 
         $value = $this->settingService->get($key, $default, $group);
 
-        return response()->json([;
+        return response()->json([
             'data' => [
                 'key' => $key,
                 'value' => $value,
@@ -88,12 +88,12 @@ class SettingApiController extends Controller
         try {
             $setting = $this->createSettingAction->execute($request->all());
 
-            return response()->json([;
+            return response()->json([
                 'data' => $setting,
                 'message' => 'Setting created successfully',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -111,12 +111,12 @@ class SettingApiController extends Controller
         try {
             $setting = $this->updateSettingAction->execute($id, $request->all());
 
-            return response()->json([;
+            return response()->json([
                 'data' => $setting,
                 'message' => 'Setting updated successfully',
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -133,11 +133,11 @@ class SettingApiController extends Controller
         try {
             $this->settingService->deleteSetting($id);
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Setting deleted successfully',
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }

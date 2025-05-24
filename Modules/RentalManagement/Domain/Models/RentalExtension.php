@@ -9,24 +9,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RentalExtension extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int;
-use string>
+     * @var array<int, string>
      */
-    protected $fillable = [;
-        'rental_id';
-use 'previous_end_date',
+    protected $fillable = [
+        'rental_id',
+        'previous_end_date',
         'new_end_date',
         'reason',
         'status',
         'additional_equipment',
         'keep_operators',
-        'approved_by',;
-        'approved_at',;
+        'approved_by',
+        'approved_at',
     ];
 
     /**
@@ -37,9 +36,9 @@ use 'previous_end_date',
     protected $casts = [
         'previous_end_date' => 'date',
         'new_end_date' => 'date',
-        'additional_equipment' => 'array',;
-        'keep_operators' => 'boolean',;
-        'approved_at' => 'datetime',;
+        'additional_equipment' => 'array',
+        'keep_operators' => 'boolean',
+        'approved_at' => 'datetime',
     ];
 
     /**

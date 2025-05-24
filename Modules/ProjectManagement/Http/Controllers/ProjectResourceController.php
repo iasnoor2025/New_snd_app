@@ -65,7 +65,7 @@ class ProjectResourceController extends Controller
         $tasks = $project->tasks()->paginate(10, ['*'], 'tasks_page', $page);
 
         if ($request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'data' => [
                     'project' => [
                         'id' => $project->id,
@@ -82,7 +82,7 @@ class ProjectResourceController extends Controller
             ]);
         }
 
-        return Inertia::render('Projects/Resources', [;
+        return Inertia::render('Projects/Resources', [
             'project' => [
                 'id' => $project->id,
                 'name' => $project->name,
@@ -123,21 +123,21 @@ class ProjectResourceController extends Controller
             // Add a custom validation to ensure either employee_id or worker_name is provided
             $validator->after(function ($validator) use ($request) {
                 if (empty($request->employee_id) && empty($request->worker_name)) {
-                    $validator->errors()->add('worker_info';
-use 'Either an employee or a worker name must be provided.');
+                    $validator->errors()->add('worker_info',
+'Either an employee or a worker name must be provided.');
                 }
             });
 
             if ($validator->fails()) {
                 if ($request->wantsJson()) {
-                    return response()->json([;
+                        return response()->json([
                         'success' => false,
                         'message' => 'Validation failed',
                         'errors' => $validator->errors()
                     ], 422);
                 }
 
-                return redirect()->back();
+                return redirect()->back()
                     ->withErrors($validator)
                     ->withInput();
             }
@@ -145,7 +145,7 @@ use 'Either an employee or a worker name must be provided.');
             $manpower = $action->execute($project, $validator->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => true,
                     'message' => 'Manpower resource created successfully',
                     'data' => $manpower
@@ -157,14 +157,14 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to create manpower resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Failed to create manpower resource',
                     'error' => $e->getMessage()
                 ], 500);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to create manpower resource: ' . $e->getMessage()]);
         }
@@ -202,13 +202,13 @@ use 'Either an employee or a worker name must be provided.');
             // Clear cache without using tags
             Cache::forget('project_' . $project->id . '_equipment');
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Equipment resource created successfully',
                 'data' => $equipment
             ], 201);
         } catch (\Exception $e) {
             \Log::error('Failed to save equipment resource: ' . $e->getMessage());
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to save equipment resource',
                 'error' => $e->getMessage()
             ], 500);
@@ -224,25 +224,25 @@ use 'Either an employee or a worker name must be provided.');
             $material = $this->resourceService->storeMaterial($project, $request->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Material resource created successfully',
                     'resource' => $material
                 ], 201);
             }
 
-            return redirect()->route('projects.show', $project);
+            return redirect()->route('projects.show', $project)
                 ->with('success', 'Material resource added successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to save material resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to save material resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to save material resource: ' . $e->getMessage()]);
         }
@@ -257,25 +257,25 @@ use 'Either an employee or a worker name must be provided.');
             $fuel = $this->resourceService->storeFuel($project, $request->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Fuel resource created successfully',
                     'resource' => $fuel
                 ], 201);
             }
 
-            return redirect()->route('projects.show', $project);
+            return redirect()->route('projects.show', $project)
                 ->with('success', 'Fuel resource added successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to save fuel resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to save fuel resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to save fuel resource: ' . $e->getMessage()]);
         }
@@ -290,25 +290,25 @@ use 'Either an employee or a worker name must be provided.');
             $expense = $this->resourceService->storeExpense($project, $request->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Expense resource created successfully',
                     'resource' => $expense
                 ], 201);
             }
 
-            return redirect()->route('projects.show', $project);
+            return redirect()->route('projects.show', $project)
                 ->with('success', 'Expense resource added successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to save expense resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to save expense resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to save expense resource: ' . $e->getMessage()]);
         }
@@ -336,7 +336,7 @@ use 'Either an employee or a worker name must be provided.');
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -346,7 +346,7 @@ use 'Either an employee or a worker name must be provided.');
             $manpower = $action->execute($manpower, $validator->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => true,
                     'message' => 'Manpower resource updated successfully',
                     'data' => $manpower
@@ -358,14 +358,14 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to update manpower resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Failed to update manpower resource',
                     'error' => $e->getMessage()
                 ], 500);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to update manpower resource: ' . $e->getMessage()]);
         }
@@ -404,7 +404,7 @@ use 'Either an employee or a worker name must be provided.');
             Cache::forget('project_' . $project->id . '_equipment');
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Equipment resource updated successfully',
                     'data' => $equipment->load('equipment')
                 ]);
@@ -415,13 +415,13 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to update equipment resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to update equipment resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to update equipment resource: ' . $e->getMessage()]);
         }
@@ -436,7 +436,7 @@ use 'Either an employee or a worker name must be provided.');
             $material = $this->resourceService->updateMaterial($material, $request->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Material resource updated successfully',
                     'resource' => $material
                 ]);
@@ -447,13 +447,13 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to update material resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to update material resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to update material resource: ' . $e->getMessage()]);
         }
@@ -468,7 +468,7 @@ use 'Either an employee or a worker name must be provided.');
             $fuel = $this->resourceService->updateFuel($fuel, $request->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Fuel resource updated successfully',
                     'resource' => $fuel
                 ]);
@@ -479,13 +479,13 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to update fuel resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to update fuel resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to update fuel resource: ' . $e->getMessage()]);
         }
@@ -500,7 +500,7 @@ use 'Either an employee or a worker name must be provided.');
             $expense = $this->resourceService->updateExpense($expense, $request->validated());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Expense resource updated successfully',
                     'resource' => $expense
                 ]);
@@ -511,13 +511,13 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to update expense resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to update expense resource',
                     'error' => $e->getMessage()
                 ], 422);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to update expense resource: ' . $e->getMessage()]);
         }
@@ -536,7 +536,7 @@ use 'Either an employee or a worker name must be provided.');
             $action->execute($manpower);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => true,
                     'message' => 'Manpower resource deleted successfully'
                 ]);
@@ -547,14 +547,14 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to delete manpower resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Failed to delete manpower resource',
                     'error' => $e->getMessage()
                 ], 500);
             }
 
-            return redirect()->back();
+            return redirect()->back()
                 ->withErrors(['error' => 'Failed to delete manpower resource: ' . $e->getMessage()]);
         }
     }
@@ -568,7 +568,7 @@ use 'Either an employee or a worker name must be provided.');
             $this->resourceService->deleteResource($equipment);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Equipment resource deleted successfully.'
                 ]);
             }
@@ -578,7 +578,7 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to delete equipment resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to delete equipment resource',
                     'error' => $e->getMessage()
                 ], 422);
@@ -597,7 +597,7 @@ use 'Either an employee or a worker name must be provided.');
             $this->resourceService->deleteResource($material);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Material resource deleted successfully.'
                 ]);
             }
@@ -607,7 +607,7 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to delete material resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to delete material resource',
                     'error' => $e->getMessage()
                 ], 422);
@@ -626,7 +626,7 @@ use 'Either an employee or a worker name must be provided.');
             $this->resourceService->deleteResource($fuel);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Fuel resource deleted successfully.'
                 ]);
             }
@@ -636,7 +636,7 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to delete fuel resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to delete fuel resource',
                     'error' => $e->getMessage()
                 ], 422);
@@ -655,7 +655,7 @@ use 'Either an employee or a worker name must be provided.');
             $this->resourceService->deleteResource($expense);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Expense resource deleted successfully.'
                 ]);
             }
@@ -665,7 +665,7 @@ use 'Either an employee or a worker name must be provided.');
             Log::error('Failed to delete expense resource: ' . $e->getMessage());
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to delete expense resource',
                     'error' => $e->getMessage()
                 ], 422);
@@ -703,7 +703,7 @@ use 'Either an employee or a worker name must be provided.');
                     $action = app(\App\Actions\ProjectResources\DeleteExpense::class);
                     break;
                 default:
-                    return response()->json([;
+                    return response()->json([
                         'success' => false,
                         'message' => 'Invalid resource type'
                     ], 400);
@@ -711,7 +711,7 @@ use 'Either an employee or a worker name must be provided.');
 
             // Check if resource belongs to the project
             if ($resource->project_id != $project->id) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Resource does not belong to this project'
                 ], 403);
@@ -719,14 +719,14 @@ use 'Either an employee or a worker name must be provided.');
 
             $action->execute($resource);
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => ucfirst($type) . ' resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error("Failed to delete {$type} resource: " . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => "Failed to delete {$type} resource",
                 'error' => $e->getMessage()
@@ -744,7 +744,7 @@ use 'Either an employee or a worker name must be provided.');
 
         if (!$type) {
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Resource type is required for deletion.'
                 ], 400);
             }
@@ -774,7 +774,7 @@ use 'Either an employee or a worker name must be provided.');
                     break;
                 default:
                     if ($request->wantsJson()) {
-                        return response()->json([;
+                        return response()->json([
                             'message' => 'Invalid resource type.'
                         ], 400);
                     }
@@ -784,7 +784,7 @@ use 'Either an employee or a worker name must be provided.');
             $this->resourceService->deleteResource($resourceModel);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => ucfirst($type) . ' resource deleted successfully.'
                 ]);
             }
@@ -798,7 +798,7 @@ use 'Either an employee or a worker name must be provided.');
             ]);
 
             if ($request->wantsJson()) {
-                return response()->json([;
+                return response()->json([
                     'message' => 'Failed to delete resource: ' . $e->getMessage()
                 ], 500);
             }

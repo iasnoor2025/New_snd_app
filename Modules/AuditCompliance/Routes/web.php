@@ -14,7 +14,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\AuditCompliance\Http\Controllers\AuditLogController;
 
-Route::middleware(['web', 'auth', 'verified'])->prefix('audit')->name('audit.')->group(function () {
+Route::prefix('audit')->name('audit.')->middleware(['web', 'auth'])->group(function () {
     // Main dashboards
     Route::get('/', [AuditLogController::class, 'index'])->name('index');
     Route::get('/dashboard', [AuditLogController::class, 'dashboard'])->name('dashboard');

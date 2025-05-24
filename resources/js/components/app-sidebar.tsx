@@ -81,7 +81,7 @@ export function AppSidebar() {
     useEffect(() => {
         const fetchModules = async () => {
             try {
-                let items: NavItem[] = [];
+                const items: NavItem[] = [];
                 // Add Dashboard as first item
                 items.push({
                     title: 'Dashboard',

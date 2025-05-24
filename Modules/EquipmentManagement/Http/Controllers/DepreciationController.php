@@ -45,7 +45,7 @@ class DepreciationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
@@ -55,12 +55,12 @@ class DepreciationController extends Controller
             $userId = auth()->id();
             $depreciation = $this->depreciationService->setupDepreciation($equipmentId, $request->all(), $userId);
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Depreciation setup successfully',
                 'depreciation' => $depreciation,
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to setup depreciation',
                 'error' => $e->getMessage(),
             ], 500);
@@ -85,7 +85,7 @@ class DepreciationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
@@ -95,12 +95,12 @@ class DepreciationController extends Controller
             $userId = auth()->id();
             $depreciation = $this->depreciationService->updateDepreciation($depreciationId, $request->all(), $userId);
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Depreciation updated successfully',
                 'depreciation' => $depreciation,
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to update depreciation',
                 'error' => $e->getMessage(),
             ], 500);
@@ -122,7 +122,7 @@ class DepreciationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
@@ -134,7 +134,7 @@ class DepreciationController extends Controller
 
             return response()->json($result);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to calculate current value',
                 'error' => $e->getMessage(),
             ], 500);
@@ -161,7 +161,7 @@ class DepreciationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
@@ -171,12 +171,12 @@ class DepreciationController extends Controller
             $userId = auth()->id();
             $valuation = $this->depreciationService->recordValuation($equipmentId, $request->all(), $userId);
 
-            return response()->json([;
+            return response()->json([
                 'message' => 'Valuation recorded successfully',
                 'valuation' => $valuation,
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to record valuation',
                 'error' => $e->getMessage(),
             ], 500);
@@ -196,7 +196,7 @@ class DepreciationController extends Controller
 
             return response()->json($report);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to generate depreciation report',
                 'error' => $e->getMessage(),
             ], 500);
@@ -219,7 +219,7 @@ class DepreciationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
@@ -231,7 +231,7 @@ class DepreciationController extends Controller
 
             return response()->json($summary);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to generate fleet depreciation summary',
                 'error' => $e->getMessage(),
             ], 500);
@@ -251,7 +251,7 @@ class DepreciationController extends Controller
                 $query->orderBy('valuation_date', 'desc');
             }])->findOrFail($equipmentId);
 
-            return response()->json([;
+            return response()->json([
                 'equipment' => [
                     'id' => $equipment->id,
                     'name' => $equipment->name,
@@ -270,7 +270,7 @@ class DepreciationController extends Controller
                 }),
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to get valuation history',
                 'error' => $e->getMessage(),
             ], 500);
@@ -292,7 +292,7 @@ class DepreciationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
@@ -333,12 +333,12 @@ class DepreciationController extends Controller
                 }
             }
 
-            return response()->json([;
+            return response()->json([
                 'count' => count($needingReplacement),
                 'equipment' => $needingReplacement,
             ]);
         } catch (\Exception $e) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to get equipment needing replacement',
                 'error' => $e->getMessage(),
             ], 500);

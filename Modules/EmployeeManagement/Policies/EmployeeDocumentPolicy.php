@@ -9,14 +9,15 @@ use Modules\EmployeeManagement\Domain\Models\EmployeeDocument;
 class EmployeeDocumentPolicy
 {
     use HandlesAuthorization;
-use public function viewAny(User $user): bool
+
+    public function viewAny(User $user): bool
     {
         return $user->hasPermissionTo('view employee documents');
     }
 
     public function view(User $user, EmployeeDocument $document): bool
     {
-        return $user->hasPermissionTo('view employee documents') &&;
+        return $user->hasPermissionTo('view employee documents') &&
             ($user->id === $document->employee->user_id || $user->hasRole('admin'));
     }
 
@@ -27,25 +28,25 @@ use public function viewAny(User $user): bool
 
     public function update(User $user, EmployeeDocument $document): bool
     {
-        return $user->hasPermissionTo('update employee documents') &&;
+        return $user->hasPermissionTo('update employee documents') &&
             ($user->id === $document->employee->user_id || $user->hasRole('admin'));
     }
 
     public function delete(User $user, EmployeeDocument $document): bool
     {
-        return $user->hasPermissionTo('delete employee documents') &&;
+        return $user->hasPermissionTo('delete employee documents') &&
             ($user->id === $document->employee->user_id || $user->hasRole('admin'));
     }
 
     public function verify(User $user, EmployeeDocument $document): bool
     {
-        return $user->hasPermissionTo('verify employee documents') &&;
+        return $user->hasPermissionTo('verify employee documents') &&
             $document->status === 'pending';
     }
 
     public function reject(User $user, EmployeeDocument $document): bool
     {
-        return $user->hasPermissionTo('verify employee documents') &&;
+        return $user->hasPermissionTo('verify employee documents') &&
             $document->status === 'pending';
     }
 

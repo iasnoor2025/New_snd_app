@@ -8,7 +8,7 @@ use Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet;
 class TimesheetSubmitted
 {
     use SerializesModels;
-use /**
+    /**
      * The timesheet instance.
      *
      * @var \Modules\TimesheetManagement\Domain\Models\WeeklyTimesheet

@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EquipmentCostRecord extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use // Cost type constants
+    use HasFactory;
+    use SoftDeletes;
+
+    // Cost type constants
     const TYPE_OPERATING = 'operating';
     const TYPE_MAINTENANCE = 'maintenance';
     const TYPE_REPAIR = 'repair';
@@ -38,9 +39,9 @@ use // Cost type constants
         'operating_hours',
         'mileage',
         'maintenance_task_id',
-        'description',;
-        'created_by',;
-        'updated_by',;
+        'description',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -50,9 +51,9 @@ use // Cost type constants
      */
     protected $casts = [
         'amount' => 'decimal:2',
-        'operating_hours' => 'decimal:2',;
-        'mileage' => 'decimal:2',;
-        'date' => 'date',;
+        'operating_hours' => 'decimal:2',
+        'mileage' => 'decimal:2',
+        'date' => 'date',
     ];
 
     /**

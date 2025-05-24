@@ -41,6 +41,7 @@
     37 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     38 => 'Tighten\\Ziggy\\ZiggyServiceProvider',
     39 => 'App\\Providers\\AppServiceProvider',
+    40 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
   ),
   'eager' => 
   array (
@@ -69,6 +70,7 @@
     22 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     23 => 'Tighten\\Ziggy\\ZiggyServiceProvider',
     24 => 'App\\Providers\\AppServiceProvider',
+    25 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
   ),
   'deferred' => 
   array (

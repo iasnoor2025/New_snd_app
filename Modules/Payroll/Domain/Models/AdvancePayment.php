@@ -12,17 +12,18 @@ use Modules\Core\Domain\Models\User;
 
 class AdvancePayment extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory;
+    use SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'employee_id';
-use 'amount',
+        protected $fillable = [
+        'employee_id',
+        'amount',
         'reason',
         'status',
         'payment_date',
@@ -33,8 +34,8 @@ use 'amount',
         'rejection_reason',
         'approved_by',
         'approved_at',
-        'rejected_by',;
-        'rejected_at',;
+        'rejected_by',
+        'rejected_at',
     ];
 
     /**
@@ -47,9 +48,9 @@ use 'amount',
         'repaid_amount' => 'decimal:2',
         'monthly_deduction' => 'decimal:2',
         'payment_date' => 'date',
-        'repayment_date' => 'date',;
-        'approved_at' => 'datetime',;
-        'rejected_at' => 'datetime',;
+        'repayment_date' => 'date',
+        'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
     ];
 
     /**

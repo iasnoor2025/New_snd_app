@@ -30,7 +30,7 @@ class SalaryAdvanceController extends Controller
 
         $salaryAdvances = $query->latest()->paginate(10);
 
-        return Inertia::render('SalaryAdvance/Index', [;
+        return Inertia::render('SalaryAdvance/Index', [
             'salaryAdvances' => $salaryAdvances,
             'filters' => $request->only(['status', 'employee_id'])
         ]);
@@ -45,7 +45,7 @@ class SalaryAdvanceController extends Controller
             ? Employee::active()->get()
             : collect([auth()->user()->employee]);
 
-        return Inertia::render('SalaryAdvance/Create', [;
+        return Inertia::render('SalaryAdvance/Create', [
             'employees' => $employees,
         ]);
     }
@@ -78,7 +78,7 @@ class SalaryAdvanceController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('salary-advances.show', $salaryAdvance);
+        return redirect()->route('salary-advances.show', $salaryAdvance)
             ->with('success', 'Salary advance request submitted successfully.');
     }
 
@@ -95,7 +95,7 @@ class SalaryAdvanceController extends Controller
 
         $salaryAdvance->load(['employee', 'approver']);
 
-        return Inertia::render('SalaryAdvance/Show', [;
+        return Inertia::render('SalaryAdvance/Show', [
             'salaryAdvance' => $salaryAdvance,
         ]);
     }

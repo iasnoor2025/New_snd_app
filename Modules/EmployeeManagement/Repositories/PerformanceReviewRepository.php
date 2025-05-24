@@ -3,7 +3,7 @@
 namespace Modules\EmployeeManagement\Repositories;
 
 use Modules\EmployeeManagement\Domain\Models\EmployeePerformanceReview;
-use interface PerformanceReviewRepository
+interface PerformanceReviewRepository
 {
     public function create(array $data): EmployeePerformanceReview;
     public function update(int $id, array $data): EmployeePerformanceReview;

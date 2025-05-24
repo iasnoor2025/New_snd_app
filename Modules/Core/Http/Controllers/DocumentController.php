@@ -12,7 +12,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Services\FileManagement\DocumentService;
+use Modules\Core\Services\DocumentService;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

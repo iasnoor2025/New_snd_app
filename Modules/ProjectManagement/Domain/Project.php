@@ -18,16 +18,16 @@ class Project extends Model
         'budget',
         'manager_id',
         'client_name',
-        'client_contact',;
-        'priority',;
-        'progress',;
+        'client_contact',
+        'priority',
+        'progress',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
-        'end_date' => 'datetime',;
-        'budget' => 'decimal:2',;
-        'progress' => 'decimal:2',;
+        'end_date' => 'datetime',
+        'budget' => 'decimal:2',
+        'progress' => 'decimal:2',
     ];
 
     public function manager(): BelongsTo

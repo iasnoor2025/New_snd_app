@@ -32,9 +32,9 @@ use SoftDeletes;
         'start_date',
         'end_date',
         'daily_rate',
-        'total_days',;
-        'total_cost',;
-        'notes',;
+        'total_days',
+        'total_cost',
+        'notes',
     ];
 
     /**
@@ -45,9 +45,9 @@ use SoftDeletes;
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'daily_rate' => 'decimal:2',;
-        'total_days' => 'decimal:2',;
-        'total_cost' => 'decimal:2',;
+        'daily_rate' => 'decimal:2',
+        'total_days' => 'decimal:2',
+        'total_cost' => 'decimal:2',
     ];
 
     /**

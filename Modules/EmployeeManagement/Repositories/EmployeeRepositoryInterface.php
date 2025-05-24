@@ -2,8 +2,10 @@
 
 namespace Modules\EmployeeManagement\Repositories;
 
-use App\Modules\Core\Repositories\BaseRepositoryInterface;
-use Modules\EmployeeManagement\Domain\Models\Employee; interface EmployeeRepositoryInterface extends BaseRepositoryInterface
+use Modules\Core\Repositories\BaseRepositoryInterface;
+use Modules\EmployeeManagement\Domain\Models\Employee;
+
+interface EmployeeRepositoryInterface extends BaseRepositoryInterface
 {
     /**
      * Find an employee by their file number

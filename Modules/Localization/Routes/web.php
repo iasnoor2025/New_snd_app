@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['web', 'auth', 'verified'])->prefix('localization')->name('localization.')->group(function () {
+Route::prefix('localization')->name('localization.')->middleware(['web', 'auth'])->group(function () {
     // Main localization routes
     Route::get('/', 'LocalizationController@index')->name('index');
 

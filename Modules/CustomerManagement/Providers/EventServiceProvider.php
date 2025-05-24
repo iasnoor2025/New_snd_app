@@ -21,9 +21,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         // Register your events and listeners here
         // Example:
-        // 'Modules\CustomerManagement\Events\SomeEvent' => [;
-        //     'Modules\CustomerManagement\Listeners\SomeEventListener',;
-        // ],;
+        // 'Modules\CustomerManagement\Events\SomeEvent' => [
+        //     'Modules\CustomerManagement\Listeners\SomeEventListener',
+        // ],
     ];
 
     /**

@@ -12,7 +12,8 @@ use Modules\Core\Domain\Models\User;
 class NotifyManager implements ShouldQueue
 {
     use InteractsWithQueue;
-use /**
+
+    /**
      * The number of times the job may be attempted.
      *
      * @var int
@@ -22,7 +23,7 @@ use /**
     /**
      * Create the event listener.
      *
-     * @return void;
+     * @return void
      */
     public function __construct()
     {
@@ -33,7 +34,7 @@ use /**
      * Handle the event.
      *
      * @param  TimesheetSubmitted  $event
-     * @return void;
+     * @return void
      */
     public function handle(TimesheetSubmitted $event)
     {
@@ -63,7 +64,7 @@ use /**
      *
      * @param  TimesheetSubmitted  $event
      * @param  \Throwable  $exception
-     * @return void;
+     * @return void
      */
     public function failed(TimesheetSubmitted $event, \Throwable $exception)
     {

@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Department extends Model
 {
     use HasFactory;
-use protected $fillable = [
-        'name';
-use 'description';
-use 'status',
+    protected $fillable = [
+        'name',
+        'description',
+        'status',
     ];
 
     public function employees(): HasMany

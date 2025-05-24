@@ -23,7 +23,7 @@ class EmployeeNumberController extends Controller
             ]);
 
             if (empty($fileNumber)) {
-                return response()->json([;
+                return response()->json([
                     'exists' => false,
                     'message' => 'No file number provided'
                 ]);
@@ -31,7 +31,7 @@ class EmployeeNumberController extends Controller
 
             $exists = Employee::where('employee_file_number', $fileNumber)->exists();
 
-            return response()->json([;
+            return response()->json([
                 'exists' => $exists,
                 'message' => $exists ? 'Employee file number already exists' : 'Employee file number is available'
             ]);
@@ -42,7 +42,7 @@ class EmployeeNumberController extends Controller
                 'line' => $e->getLine()
             ]);
 
-            return response()->json([;
+            return response()->json([
                 'error' => 'An error occurred while checking the employee file number',
                 'message' => config('app.debug') ? $e->getMessage() : 'Server error'
             ], 500);
@@ -99,7 +99,7 @@ class EmployeeNumberController extends Controller
 
             if ($attempt > $maxAttempts) {
                 Log::error('Failed to generate unique file number after max attempts');
-                return response()->json([;
+                return response()->json([
                     'error' => 'Failed to generate a unique file number after multiple attempts',
                 ], 500);
             }
@@ -109,7 +109,7 @@ class EmployeeNumberController extends Controller
                 'number' => $nextNumber
             ]);
 
-            return response()->json([;
+            return response()->json([
                 'file_number' => $newFileNumber,
                 'lastFileNumber' => $nextNumber - 1 // Return last number for compatibility
             ]);
@@ -121,7 +121,7 @@ class EmployeeNumberController extends Controller
                 'line' => $e->getLine()
             ]);
 
-            return response()->json([;
+            return response()->json([
                 'error' => 'An error occurred while generating the employee file number',
                 'message' => config('app.debug') ? $e->getMessage() : 'Server error'
             ], 500);

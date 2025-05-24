@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Services;
 
-use App\Modules\Core\Services\BaseService;
+use Modules\Core\Services\BaseService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -148,7 +148,7 @@ class EmployeeDocumentService extends BaseService
     {
         $cutoffDate = now()->addDays($daysThreshold)->toDateString();
 
-        return Media::query();
+        return Media::query()
             ->where('collection_name', 'documents')
             ->whereJsonContains('custom_properties->document_type', ['passport', 'iqama', 'driving_license'])
             ->whereNotNull('custom_properties->expiry_date')
@@ -160,7 +160,7 @@ class EmployeeDocumentService extends BaseService
 
     public function getExpiredDocuments(): Collection
     {
-        return Media::query();
+        return Media::query()
             ->where('collection_name', 'documents')
             ->whereJsonContains('custom_properties->document_type', ['passport', 'iqama', 'driving_license'])
             ->whereNotNull('custom_properties->expiry_date')
@@ -170,7 +170,7 @@ class EmployeeDocumentService extends BaseService
 
     public function getPendingVerificationDocuments(): Collection
     {
-        return Media::query();
+        return Media::query()
             ->where('collection_name', 'documents')
             ->where('custom_properties->status', 'pending')
             ->get();

@@ -10,7 +10,8 @@ use Carbon\Carbon;
 class EquipmentDepreciation extends Model
 {
     use HasFactory;
-use /**
+
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -43,9 +44,9 @@ use /**
         'annual_depreciation_rate',
         'annual_depreciation_amount',
         'depreciation_schedule',
-        'depreciation_factors',;
-        'created_by',;
-        'updated_by',;
+        'depreciation_factors',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -61,9 +62,9 @@ use /**
         'last_depreciation_date' => 'date',
         'fully_depreciated_date' => 'date',
         'annual_depreciation_rate' => 'decimal:4',
-        'annual_depreciation_amount' => 'decimal:2',;
-        'depreciation_schedule' => 'array',;
-        'depreciation_factors' => 'array',;
+        'annual_depreciation_amount' => 'decimal:2',
+        'depreciation_schedule' => 'array',
+        'depreciation_factors' => 'array',
     ];
 
     /**
@@ -128,16 +129,12 @@ use /**
         switch ($this->depreciation_method) {
             case self::METHOD_STRAIGHT_LINE:
                 return $this->calculateStraightLineValue($yearsElapsed);
-;
             case self::METHOD_DOUBLE_DECLINING:
                 return $this->calculateDoubleDecliningValue($yearsElapsed);
-;
             case self::METHOD_SUM_OF_YEARS:
                 return $this->calculateSumOfYearsValue($yearsElapsed);
-;
             case self::METHOD_UNITS_OF_PRODUCTION:
                 return $this->calculateUnitOfProductionValue();
-;
             default:
                 return $this->current_value;
         }

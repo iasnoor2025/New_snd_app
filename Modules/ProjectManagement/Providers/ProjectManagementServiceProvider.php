@@ -33,9 +33,9 @@ class ProjectManagementServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->register(RouteServiceProvider::class);
         // Temporarily comment out due to class loading issues
         // $this->app->register(EventServiceProvider::class);
-        // $this->app->register(RouteServiceProvider::class);
     }
 
     /**

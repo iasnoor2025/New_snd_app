@@ -13,16 +13,16 @@ class ProjectTeamMember extends Model
         'employee_id',
         'role',
         'start_date',
-        'end_date',;
-        'allocation_percentage',;
-        'is_active',;
+        'end_date',
+        'allocation_percentage',
+        'is_active',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
-        'end_date' => 'datetime',;
-        'allocation_percentage' => 'decimal:2',;
-        'is_active' => 'boolean',;
+        'end_date' => 'datetime',
+        'allocation_percentage' => 'decimal:2',
+        'is_active' => 'boolean',
     ];
 
     public function project(): BelongsTo

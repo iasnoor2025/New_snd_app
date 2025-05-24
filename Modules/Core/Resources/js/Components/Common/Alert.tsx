@@ -103,8 +103,8 @@ const defaultIcons = {
   info: Info,
 };
 
-const Alert = forwardRef<HTMLDivElement, AlertProps>(;
-  (;
+const Alert = forwardRef<HTMLDivElement, AlertProps>(
+  (
     {
       title,
       description,

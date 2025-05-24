@@ -12,7 +12,8 @@ use Carbon\Carbon;
 class FinalSettlementTest extends TestCase
 {
     use RefreshDatabase;
-use protected $employee;
+
+    protected $employee;
     protected $resignation;
 
     public function setUp(): void

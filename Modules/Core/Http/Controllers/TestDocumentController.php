@@ -2,7 +2,7 @@
 namespace Modules\Core\Http\Controllers;
 
 use Modules\RentalManagement\Domain\Models\Customer;
-use App\Services\FileManagement\DocumentService;
+use Modules\Core\Services\DocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +27,7 @@ class TestDocumentController extends Controller
             ->orderBy('company_name')
             ->get();
 
-        return Inertia::render('Test/DocumentUpload', [;
+        return Inertia::render('Test/DocumentUpload', [
             'customers' => $customers,
         ]);
     }
@@ -73,7 +73,7 @@ class TestDocumentController extends Controller
     {
         $customer = Customer::findOrFail($customerId);
 
-        return Inertia::render('Test/CustomerDocuments', [;
+        return Inertia::render('Test/CustomerDocuments', [
             'customer' => [
                 'id' => $customer->id,
                 'company_name' => $customer->company_name,
@@ -134,7 +134,7 @@ class TestDocumentController extends Controller
             ]);
 
             if ($request->expectsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => true,
                     'message' => 'Document updated successfully'
                 ]);
@@ -149,7 +149,7 @@ class TestDocumentController extends Controller
             ]);
 
             if ($request->expectsJson()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Error updating document: ' . $e->getMessage()
                 ], 500);

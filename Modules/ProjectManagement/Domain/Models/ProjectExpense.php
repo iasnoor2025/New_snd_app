@@ -12,8 +12,8 @@ use App\Traits\HasProjectResource;
 class ProjectExpense extends Model
 {
     use HasFactory;
-use SoftDeletes;
-use HasProjectResource;
+    use SoftDeletes;
+    use HasProjectResource;
 
     /**
      * The table associated with the model.
@@ -32,9 +32,9 @@ use HasProjectResource;
         'category',
         'amount',
         'description',
-        'date',;
-        'notes',;
-        'status',;
+        'date',
+        'notes',
+        'status',
     ];
 
     /**
@@ -43,9 +43,9 @@ use HasProjectResource;
      * @var array<string, string>
      */
     protected $casts = [
-        'date' => 'date',;
-        'amount' => 'decimal:2',;
-        'status' => 'string',;
+        'date' => 'date',
+        'amount' => 'decimal:2',
+        'status' => 'string',
     ];
 
     /**

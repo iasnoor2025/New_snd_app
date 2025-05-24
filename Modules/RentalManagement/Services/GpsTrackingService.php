@@ -63,14 +63,14 @@ class GpsTrackingService
 
     private function getActiveTrackingCount(Collection $rentals): int
     {
-        return $rentals->filter(fn($rental) =>;
+        return $rentals->filter(fn($rental) =>
             $rental->rentalItems->some(fn($item) => $item->has_gps_tracking)
         )->count();
     }
 
     private function getLocationHistory(Collection $rentals): array
     {
-        return $rentals->flatMap(fn($rental) =>;
+        return $rentals->flatMap(fn($rental) =>
             $rental->rentalItems->flatMap(fn($item) =>
                 $item->gpsLocations->map(fn($location) => [
                     'equipment_id' => $item->equipment_id,
@@ -84,7 +84,7 @@ class GpsTrackingService
 
     private function getMovementAlerts(Collection $rentals): array
     {
-        return $rentals->flatMap(fn($rental) =>;
+        return $rentals->flatMap(fn($rental) =>
             $rental->rentalItems->flatMap(fn($item) =>
                 $item->movementAlerts->map(fn($alert) => [
                     'equipment_id' => $item->equipment_id,
@@ -98,7 +98,7 @@ class GpsTrackingService
 
     private function getGeofenceViolations(Collection $rentals): array
     {
-        return $rentals->flatMap(fn($rental) =>;
+        return $rentals->flatMap(fn($rental) =>
             $rental->rentalItems->flatMap(fn($item) =>
                 $item->geofenceViolations->map(fn($violation) => [
                     'equipment_id' => $item->equipment_id,
@@ -117,7 +117,7 @@ class GpsTrackingService
             ->sortByDesc('timestamp')
             ->first();
 
-        return $latestLocation ? [;
+        return $latestLocation ? [
             'latitude' => $latestLocation->latitude,
             'longitude' => $latestLocation->longitude,
             'timestamp' => $latestLocation->timestamp,
@@ -126,7 +126,7 @@ class GpsTrackingService
 
     private function getMovementHistory($rental): array
     {
-        return $rental->rentalItems;
+        return $rental->rentalItems
             ->flatMap(fn($item) => $item->gpsLocations)
             ->sortBy('timestamp')
             ->map(fn($location) => [
@@ -139,7 +139,7 @@ class GpsTrackingService
 
     private function getGeofenceStatus($rental): array
     {
-        return $rental->rentalItems;
+        return $rental->rentalItems
             ->flatMap(fn($item) => $item->geofences)
             ->map(fn($geofence) => [
                 'id' => $geofence->id,
@@ -152,7 +152,7 @@ class GpsTrackingService
 
     private function getRentalAlerts($rental): array
     {
-        return $rental->rentalItems;
+        return $rental->rentalItems
             ->flatMap(fn($item) => $item->alerts)
             ->sortByDesc('timestamp')
             ->map(fn($alert) => [
@@ -166,7 +166,7 @@ class GpsTrackingService
 
     private function getActiveEquipmentLocations(Collection $rentals): array
     {
-        return $rentals->flatMap(fn($rental) =>;
+        return $rentals->flatMap(fn($rental) =>
             $rental->rentalItems->map(fn($item) => [
                 'equipment_id' => $item->equipment_id,
                 'name' => $item->equipment->name,
@@ -179,7 +179,7 @@ class GpsTrackingService
 
     private function getRecentMovements(Collection $rentals): array
     {
-        return $rentals->flatMap(fn($rental) =>;
+        return $rentals->flatMap(fn($rental) =>
             $rental->rentalItems->flatMap(fn($item) =>
                 $item->recentMovements->map(fn($movement) => [
                     'equipment_id' => $item->equipment_id,
@@ -202,7 +202,7 @@ class GpsTrackingService
 
     private function getActiveAlerts(Collection $rentals): array
     {
-        return $rentals->flatMap(fn($rental) =>;
+        return $rentals->flatMap(fn($rental) =>
             $rental->rentalItems->flatMap(fn($item) =>
                 $item->activeAlerts->map(fn($alert) => [
                     'equipment_id' => $item->equipment_id,

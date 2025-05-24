@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class UpdateWorkSummary implements ShouldQueue
 {
     use InteractsWithQueue;
-use /**
+    /**
      * The number of times the job may be attempted.
      *
      * @var int
@@ -48,13 +48,11 @@ use /**
         $yearMonth = $timesheet->week_start_date->format('Y-m');
 
         try {
-            DB::transaction(function () use ($timesheet;
-use $employeeId;
-use $yearMonth) {
+            DB::transaction(function () use ($timesheet, $employeeId, $yearMonth) {
                 // Find or create work summary for this month
                 $workSummary = EmployeeWorkSummary::firstOrNew([
-                    'employee_id' => $employeeId;
-use 'year_month' => $yearMonth,
+                    'employee_id' => $employeeId,
+                    'year_month' => $yearMonth,
                 ]);
 
                 // Initialize if new

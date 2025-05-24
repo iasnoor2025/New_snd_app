@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Services;
 
-use App\Modules\Core\Services\BaseService;
+use Modules\Core\Services\BaseService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +94,7 @@ class EmployeeService extends BaseService
 
     public function getEmployeeWithDetails(int $id): Employee
     {
-        return $this->employeeRepository->findWith([;
+        return $this->employeeRepository->findWith([
             'user',
             'position',
             'salaryHistory',
@@ -218,7 +218,7 @@ class EmployeeService extends BaseService
 
     private function createUserForEmployee(Employee $employee, array $data): \Modules\Core\Domain\Models\User
     {
-        return \Modules\Core\Domain\Models\User::create([;
+        return \Modules\Core\Domain\Models\User::create([
             'name' => $employee->first_name . ' ' . $employee->last_name,
             'email' => $employee->email,
             'password' => bcrypt($data['password'] ?? 'password'),

@@ -8,7 +8,7 @@ use Modules\EmployeeManagement\Domain\Models\EmployeeDocument;
 use Modules\EmployeeManagement\Policies\EmployeeAdvancePolicy;
 use Modules\EmployeeManagement\Policies\EmployeeDocumentPolicy;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthServiceProvider
 {
     /**
      * The module name.
@@ -22,9 +22,9 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array<class-string, class-string>
      */
-    protected $policies = [;
-        EmployeeDocument::class => EmployeeDocumentPolicy::class,;
-        EmployeeAdvance::class => EmployeeAdvancePolicy::class,;
+    protected $policies = [
+        EmployeeDocument::class => EmployeeDocumentPolicy::class,
+        EmployeeAdvance::class => EmployeeAdvancePolicy::class,
     ];
 
     /**

@@ -184,8 +184,8 @@ class LegacyCodeHandler
      * Get namespace from file.
      *
      * @param  string  $file
-     * @return string|null;
-     *\
+     * @return string|null
+     */
     protected function getNamespaceFromFile($file)
     {
         $content = File::get($file);
@@ -199,7 +199,7 @@ class LegacyCodeHandler
      * Get migration timestamp.
      *
      * @param  string  $filename
-     * @return string|null;
+     * @return string|null
      */
     protected function getMigrationTimestamp($filename)
     {

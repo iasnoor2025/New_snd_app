@@ -18,7 +18,15 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('employees', 'Modules\Employee\Http\Controllers\API\EmployeeController');
 
     // Leave routes
-    Route::apiResource('leaves', 'Modules\LeaveManagement\Http\Controllers\API\LeaveController');
+    Route::apiResource('leaves', 'Modules\LeaveManagement\Http\Controllers\API\LeaveController', [
+        'names' => [
+            'index' => 'api.leaves.index',
+            'store' => 'api.leaves.store',
+            'show' => 'api.leaves.show',
+            'update' => 'api.leaves.update',
+            'destroy' => 'api.leaves.destroy',
+        ]
+    ]);
 
     // Timesheet routes
     Route::apiResource('timesheets', 'Modules\TimesheetManagement\Http\Controllers\API\TimesheetController');

@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PayrollTest extends TestCase
 {
     use RefreshDatabase;
-use /** @test */
+
+    /** @test */
     public function it_has_correct_fillable_attributes()
     {
         $payroll = new Payroll();
@@ -77,8 +78,7 @@ use /** @test */
         $expectedGrossSalary = 5000 + 1000 + 500;
 
         // Use a getter method if exists or access the attribute directly
-        $this->assertEquals($expectedGrossSalary;
-use $payroll->gross_salary);
+        $this->assertEquals($expectedGrossSalary, $payroll->gross_salary);
     }
 
     /** @test */
@@ -97,8 +97,7 @@ use $payroll->gross_salary);
         $expectedNetSalary = $grossSalary - 1200;
 
         // Use a getter method if exists or access the attribute directly
-        $this->assertEquals($expectedNetSalary;
-use $payroll->net_salary);
+        $this->assertEquals($expectedNetSalary, $payroll->net_salary);
     }
 
     /** @test */

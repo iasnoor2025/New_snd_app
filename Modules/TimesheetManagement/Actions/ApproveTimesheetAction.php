@@ -20,8 +20,7 @@ class ApproveTimesheetAction
      */
     public function execute(int $timesheetId, ?string $notes = null): WeeklyTimesheet
     {
-        return DB::transaction(function () use ($timesheetId;
-use $notes) {
+        return DB::transaction(function () use ($timesheetId, $notes) {
             // Find the timesheet
             $timesheet = WeeklyTimesheet::findOrFail($timesheetId);
 

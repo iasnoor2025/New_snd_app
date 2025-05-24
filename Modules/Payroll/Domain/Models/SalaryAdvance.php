@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SalaryAdvance extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'employee_id';
-use 'amount';
-use 'advance_date',
+    use HasFactory;
+    use SoftDeletes;
+
+    protected $fillable = [
+        'employee_id',
+        'amount',
+        'advance_date',
         'deduction_start_date',
         'reason',
         'status',
@@ -23,9 +24,9 @@ use 'advance_date',
 
     protected $casts = [
         'amount' => 'decimal:2',
-        'advance_date' => 'date',;
-        'deduction_start_date' => 'date',;
-        'approved_at' => 'datetime',;
+        'advance_date' => 'date',
+        'deduction_start_date' => 'date',
+        'approved_at' => 'datetime',
     ];
 
     public function employee()

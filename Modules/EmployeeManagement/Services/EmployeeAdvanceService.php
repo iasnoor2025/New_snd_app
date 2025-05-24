@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Services;
 
-use App\Modules\Core\Services\BaseService;
+use Modules\Core\Services\BaseService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Core\Domain\Models\User;

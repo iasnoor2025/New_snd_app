@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Repositories;
 
-use Modules\EmployeeManagement\Domain\Models\EmployeePerformanceReview as ;
+use Modules\EmployeeManagement\Domain\Models\EmployeePerformanceReview;
 
 class EloquentPerformanceReviewRepository implements PerformanceReviewRepository
 {
@@ -35,7 +35,7 @@ class EloquentPerformanceReviewRepository implements PerformanceReviewRepository
 
     public function getEmployeeReviews(int $employeeId): array
     {
-        return EmployeePerformanceReview::with(['reviewer', 'approver']);
+        return EmployeePerformanceReview::with(['reviewer', 'approver'])
             ->where('employee_id', $employeeId)
             ->orderBy('review_date', 'desc')
             ->get()
@@ -44,7 +44,7 @@ class EloquentPerformanceReviewRepository implements PerformanceReviewRepository
 
     public function getPendingReviews(): array
     {
-        return EmployeePerformanceReview::with(['employee', 'reviewer']);
+        return EmployeePerformanceReview::with(['employee', 'reviewer'])
             ->where('status', 'pending')
             ->orderBy('review_date', 'desc')
             ->get()
@@ -53,7 +53,7 @@ class EloquentPerformanceReviewRepository implements PerformanceReviewRepository
 
     public function getReviewsByReviewer(int $reviewerId): array
     {
-        return EmployeePerformanceReview::with(['employee', 'approver']);
+        return EmployeePerformanceReview::with(['employee', 'approver'])
             ->where('reviewer_id', $reviewerId)
             ->orderBy('review_date', 'desc')
             ->get()
@@ -62,7 +62,7 @@ class EloquentPerformanceReviewRepository implements PerformanceReviewRepository
 
     public function getReviewsByStatus(string $status): array
     {
-        return EmployeePerformanceReview::with(['employee', 'reviewer', 'approver']);
+        return EmployeePerformanceReview::with(['employee', 'reviewer', 'approver'])
             ->where('status', $status)
             ->orderBy('review_date', 'desc')
             ->get()
@@ -71,7 +71,7 @@ class EloquentPerformanceReviewRepository implements PerformanceReviewRepository
 
     public function getEmployeeReviewsByPeriod(int $employeeId, string $startDate, string $endDate): array
     {
-        return EmployeePerformanceReview::with(['reviewer', 'approver']);
+        return EmployeePerformanceReview::with(['reviewer', 'approver'])
             ->where('employee_id', $employeeId)
             ->whereBetween('review_date', [$startDate, $endDate])
             ->orderBy('review_date', 'desc')

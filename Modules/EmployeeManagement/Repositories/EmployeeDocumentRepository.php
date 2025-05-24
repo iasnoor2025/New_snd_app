@@ -15,7 +15,7 @@ class EmployeeDocumentRepository extends BaseRepository implements EmployeeDocum
 
     public function findByEmployee(int $employeeId): array
     {
-        return $this->model;
+        return $this->model
             ->where('employee_id', $employeeId)
             ->with(['employee', 'verifier'])
             ->get()
@@ -26,7 +26,7 @@ class EmployeeDocumentRepository extends BaseRepository implements EmployeeDocum
     {
         $thresholdDate = Carbon::now()->addDays($daysThreshold);
 
-        return $this->model;
+        return $this->model
             ->whereNotNull('expiry_date')
             ->where('expiry_date', '<=', $thresholdDate)
             ->where('expiry_date', '>', Carbon::now())
@@ -38,7 +38,7 @@ class EmployeeDocumentRepository extends BaseRepository implements EmployeeDocum
 
     public function findExpired(): array
     {
-        return $this->model;
+        return $this->model
             ->whereNotNull('expiry_date')
             ->where('expiry_date', '<', Carbon::now())
             ->where('status', '!=', 'expired')
@@ -49,7 +49,7 @@ class EmployeeDocumentRepository extends BaseRepository implements EmployeeDocum
 
     public function findPendingVerification(): array
     {
-        return $this->model;
+        return $this->model
             ->where('status', 'pending')
             ->with(['employee', 'verifier'])
             ->get()
@@ -58,7 +58,7 @@ class EmployeeDocumentRepository extends BaseRepository implements EmployeeDocum
 
     public function findById(int $id): ?EmployeeDocument
     {
-        return $this->model;
+        return $this->model
             ->with(['employee', 'verifier'])
             ->find($id);
     }

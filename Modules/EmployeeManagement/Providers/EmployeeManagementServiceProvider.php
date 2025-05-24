@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
 
 class EmployeeManagementServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,11 @@ class EmployeeManagementServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        // Make all module JavaScript files properly discoverable
+        $this->publishes([
+            module_path($this->name, 'resources/js') => public_path("modules/{$this->nameLower}/js"),
+        ], 'public');
     }
 
     /**
@@ -36,6 +43,42 @@ class EmployeeManagementServiceProvider extends ServiceProvider
         // Temporarily commenting out due to class loading issues
         // $this->app->register(EmployeeManagementEventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        // Repository bindings
+        $this->app->bind(
+            \Modules\EmployeeManagement\Repositories\EmployeeRepositoryInterface::class,
+            \Modules\EmployeeManagement\Repositories\EmployeeRepository::class
+        );
+        $this->app->bind(
+            \Modules\EmployeeManagement\Repositories\EmployeeTimesheetRepositoryInterface::class,
+            \Modules\EmployeeManagement\Repositories\EmployeeTimesheetRepository::class
+        );
+        $this->app->bind(
+            \Modules\EmployeeManagement\Repositories\EmployeeAdvanceRepositoryInterface::class,
+            \Modules\EmployeeManagement\Repositories\EmployeeAdvanceRepository::class
+        );
+        $this->app->bind(
+            \Modules\EmployeeManagement\Repositories\EmployeeDocumentRepositoryInterface::class,
+            \Modules\EmployeeManagement\Repositories\EmployeeDocumentRepository::class
+        );
+    }
+
+    /**
+     * Register Inertia components for this module.
+     */
+    protected function registerInertiaComponents(): void
+    {
+        // Add this module's pages to Inertia's component resolver
+        $modulePath = module_path($this->name, 'resources/js/pages');
+
+        // Register a custom resolver for the Employees pages
+        Inertia::addRootComponentPath(function ($page) use ($modulePath) {
+            if (str_starts_with($page, 'Employees/')) {
+                return $modulePath . '/' . $page . '.tsx';
+            }
+
+            return null;
+        });
     }
 
     /**

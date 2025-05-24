@@ -30,7 +30,6 @@ class LeaveManagementServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-
         // Register observers
         $this->registerObservers();
     }

@@ -2,7 +2,7 @@
 
 namespace Modules\EmployeeManagement\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource as ;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeResource extends JsonResource
 {
@@ -104,83 +104,71 @@ class EmployeeResource extends JsonResource
                     'effective_to' => $this->current_salary->effective_to?->format('Y-m-d'),
                 ];
             }),
-            'salary_history' => $this->whenLoaded('salaryHistory', function () {
-                return $this->salaryHistory->map(function ($salary) {;
-                    return [
-                        'base_salary' => $salary->base_salary,
-                        'food_allowance' => $salary->food_allowance,
-                        'housing_allowance' => $salary->housing_allowance,
-                        'transport_allowance' => $salary->transport_allowance,
-                        'total_allowances' => $salary->total_allowances,
-                        'total_salary' => $salary->total_salary,
-                        'effective_from' => $salary->effective_from->format('Y-m-d'),
-                        'effective_to' => $salary->effective_to?->format('Y-m-d'),
-                        'reason' => $salary->reason,
-                        'status' => $salary->status,
-                        'approved_by' => $salary->approved_by,
-                        'approved_at' => $salary->approved_at?->format('Y-m-d H:i:s'),
-                    ];
-                });
+            'salary_history' => $this->whenLoaded('salaryHistory', function ($salary) {
+                return [
+                    'base_salary' => $salary->base_salary,
+                    'food_allowance' => $salary->food_allowance,
+                    'housing_allowance' => $salary->housing_allowance,
+                    'transport_allowance' => $salary->transport_allowance,
+                    'total_allowances' => $salary->total_allowances,
+                    'total_salary' => $salary->total_salary,
+                    'effective_from' => $salary->effective_from->format('Y-m-d'),
+                    'effective_to' => $salary->effective_to?->format('Y-m-d'),
+                    'reason' => $salary->reason,
+                    'status' => $salary->status,
+                    'approved_by' => $salary->approved_by,
+                    'approved_at' => $salary->approved_at?->format('Y-m-d H:i:s'),
+                ];
             }),
             'pending_advances' => $this->pending_advances,
-            'advance_history' => $this->whenLoaded('advancePaymentHistories', function () {
-                return $this->advancePaymentHistories->map(function ($advance) {;
-                    return [
-                        'id' => $advance->id,
-                        'amount' => $advance->amount,
-                        'status' => $advance->status,
-                        'created_at' => $advance->created_at->format('Y-m-d H:i:s'),
-                        'approved_at' => $advance->approved_at?->format('Y-m-d H:i:s'),
-                    ];
-                });
+            'advance_history' => $this->whenLoaded('advancePaymentHistories', function ($advance) {
+                return [
+                    'id' => $advance->id,
+                    'amount' => $advance->amount,
+                    'status' => $advance->status,
+                    'created_at' => $advance->created_at->format('Y-m-d H:i:s'),
+                    'approved_at' => $advance->approved_at?->format('Y-m-d H:i:s'),
+                ];
             }),
-            'timesheets' => $this->whenLoaded('timesheets', function () {
-                return $this->timesheets->map(function ($timesheet) {;
-                    return [
-                        'id' => $timesheet->id,
-                        'date' => $timesheet->date->format('Y-m-d'),
-                        'hours' => $timesheet->hours,
-                        'overtime_hours' => $timesheet->overtime_hours,
-                        'status' => $timesheet->status,
-                    ];
-                });
+            'timesheets' => $this->whenLoaded('timesheets', function ($timesheet) {
+                return [
+                    'id' => $timesheet->id,
+                    'date' => $timesheet->date->format('Y-m-d'),
+                    'hours' => $timesheet->hours,
+                    'overtime_hours' => $timesheet->overtime_hours,
+                    'status' => $timesheet->status,
+                ];
             }),
-            'leave_requests' => $this->whenLoaded('leaveRequests', function () {
-                return $this->leaveRequests->map(function ($leave) {;
-                    return [
-                        'id' => $leave->id,
-                        'type' => $leave->type,
-                        'start_date' => $leave->start_date->format('Y-m-d'),
-                        'end_date' => $leave->end_date->format('Y-m-d'),
-                        'days' => $leave->days,
-                        'status' => $leave->status,
-                        'reason' => $leave->reason,
-                    ];
-                });
+            'leave_requests' => $this->whenLoaded('leaveRequests', function ($leave) {
+                return [
+                    'id' => $leave->id,
+                    'type' => $leave->type,
+                    'start_date' => $leave->start_date->format('Y-m-d'),
+                    'end_date' => $leave->end_date->format('Y-m-d'),
+                    'days' => $leave->days,
+                    'status' => $leave->status,
+                    'reason' => $leave->reason,
+                ];
             }),
-            'performance_reviews' => $this->whenLoaded('performanceReviews', function () {
-                return $this->performanceReviews->map(function ($review) {;
-                    return [
-                        'id' => $review->id,
-                        'date' => $review->date->format('Y-m-d'),
-                        'rating' => $review->rating,
-                        'comments' => $review->comments,
-                        'reviewer' => $review->reviewer,
-                    ];
-                });
+            'performance_reviews' => $this->whenLoaded('performanceReviews', function ($review) {
+                return [
+                    'id' => $review->id,
+                    'date' => $review->date->format('Y-m-d'),
+                    'rating' => $review->rating,
+                    'comments' => $review->comments,
+                    'reviewer' => $review->reviewer,
+                ];
             }),
-            'documents' => $this->whenLoaded('media', function () {
-                return $this->getMedia('documents')->map(function ($media) {;
-                    return [
-                        'id' => $media->id,
-                        'name' => $media->name,
-                        'file_name' => $media->file_name,
-                        'mime_type' => $media->mime_type,
-                        'size' => $media->size,
-                        'url' => $media->getUrl(),
-                        'created_at' => $media->created_at->format('Y-m-d H:i:s'),
-                    ];
-                });
+            'documents' => $this->whenLoaded('media', function ($media) {
+                return [
+                    'id' => $media->id,
+                    'name' => $media->name,
+                    'file_name' => $media->file_name,
+                    'mime_type' => $media->mime_type,
+                    'size' => $media->size,
+                    'url' => $media->getUrl(),
+                    'created_at' => $media->created_at->format('Y-m-d H:i:s'),
+                ];
             }),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),

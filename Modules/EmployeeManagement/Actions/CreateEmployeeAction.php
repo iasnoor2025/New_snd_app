@@ -8,7 +8,7 @@ use App\Jobs\ProcessEmployeeDocuments;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-use App\Services\FileManagement\DocumentService;
+use Modules\Core\Services\DocumentService;
 
 class CreateEmployeeAction
 {

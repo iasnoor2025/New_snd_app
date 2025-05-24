@@ -30,9 +30,9 @@ use SoftDeletes;
         'unit',
         'quantity',
         'unit_price',
-        'total_cost',;
-        'date_used',;
-        'notes',;
+        'total_cost',
+        'date_used',
+        'notes',
     ];
 
     /**
@@ -42,9 +42,9 @@ use SoftDeletes;
      */
     protected $casts = [
         'date_used' => 'date',
-        'quantity' => 'decimal:2',;
-        'unit_price' => 'decimal:2',;
-        'total_cost' => 'decimal:2',;
+        'quantity' => 'decimal:2',
+        'unit_price' => 'decimal:2',
+        'total_cost' => 'decimal:2',
     ];
 
     /**

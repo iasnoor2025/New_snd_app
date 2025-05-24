@@ -12,8 +12,8 @@ use Modules\EquipmentManagement\Traits\HasMediaAttachments;
 class Part extends Model implements HasMedia
 {
     use HasFactory;
-use SoftDeletes;
-use HasMediaAttachments;
+    use SoftDeletes;
+    use HasMediaAttachments;
 
     /**
      * The attributes that are mass assignable.
@@ -33,9 +33,9 @@ use HasMediaAttachments;
         'location',
         'is_active',
         'notes',
-        'warranty_period',;
-        'last_ordered_at',;
-        'lead_time_days',;
+        'warranty_period',
+        'last_ordered_at',
+        'lead_time_days',
     ];
 
     /**
@@ -47,9 +47,9 @@ use HasMediaAttachments;
         'unit_cost' => 'decimal:2',
         'reorder_level' => 'integer',
         'quantity_in_stock' => 'decimal:2',
-        'is_active' => 'boolean',;
-        'last_ordered_at' => 'datetime',;
-        'lead_time_days' => 'integer',;
+        'is_active' => 'boolean',
+        'last_ordered_at' => 'datetime',
+        'lead_time_days' => 'integer',
     ];
 
     /**

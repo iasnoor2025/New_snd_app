@@ -34,7 +34,7 @@ class EmployeeTimesheetController extends Controller
             $timesheets = $this->timesheetService->getEmployeeTimesheets($employeeId);
         }
 
-        return response()->json([;
+        return response()->json([
             'timesheets' => $timesheets
         ]);
     }
@@ -50,7 +50,7 @@ class EmployeeTimesheetController extends Controller
 
         $timesheet = $this->timesheetService->createTimesheet($data);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Timesheet created successfully',
             'timesheet' => $timesheet
         ], 201);
@@ -64,12 +64,12 @@ class EmployeeTimesheetController extends Controller
         $timesheet = $this->timesheetService->timesheetRepository->find($id);
 
         if (!$timesheet || $timesheet->employee_id !== $employeeId) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Timesheet not found'
             ], 404);
         }
 
-        return response()->json([;
+        return response()->json([
             'timesheet' => $timesheet
         ]);
     }
@@ -82,14 +82,14 @@ class EmployeeTimesheetController extends Controller
         $timesheet = $this->timesheetService->timesheetRepository->find($id);
 
         if (!$timesheet || $timesheet->employee_id !== $employeeId) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Timesheet not found'
             ], 404);
         }
 
         $timesheet = $this->timesheetService->updateTimesheet($id, $request->validated());
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Timesheet updated successfully',
             'timesheet' => $timesheet
         ]);
@@ -103,14 +103,14 @@ class EmployeeTimesheetController extends Controller
         $timesheet = $this->timesheetService->timesheetRepository->find($id);
 
         if (!$timesheet || $timesheet->employee_id !== $employeeId) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Timesheet not found'
             ], 404);
         }
 
         $this->timesheetService->deleteTimesheet($id);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Timesheet deleted successfully'
         ]);
     }
@@ -123,14 +123,14 @@ class EmployeeTimesheetController extends Controller
         $timesheet = $this->timesheetService->timesheetRepository->find($id);
 
         if (!$timesheet || $timesheet->employee_id !== $employeeId) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Timesheet not found'
             ], 404);
         }
 
         $timesheet = $this->timesheetService->approveTimesheet($id, $request->user());
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Timesheet approved successfully',
             'timesheet' => $timesheet
         ]);
@@ -144,14 +144,14 @@ class EmployeeTimesheetController extends Controller
         $timesheet = $this->timesheetService->timesheetRepository->find($id);
 
         if (!$timesheet || $timesheet->employee_id !== $employeeId) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Timesheet not found'
             ], 404);
         }
 
         $timesheet = $this->timesheetService->rejectTimesheet($id, $request->input('reason'));
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Timesheet rejected successfully',
             'timesheet' => $timesheet
         ]);
@@ -164,7 +164,7 @@ class EmployeeTimesheetController extends Controller
     {
         $timesheets = $this->timesheetService->getPendingTimesheets();
 
-        return response()->json([;
+        return response()->json([
             'timesheets' => $timesheets
         ]);
     }
@@ -184,7 +184,7 @@ class EmployeeTimesheetController extends Controller
 
         $timesheets = $this->timesheetService->getApprovedTimesheets($startDate, $endDate);
 
-        return response()->json([;
+        return response()->json([
             'timesheets' => $timesheets
         ]);
     }
@@ -199,7 +199,7 @@ class EmployeeTimesheetController extends Controller
             $request->user()
         );
 
-        return response()->json([;
+        return response()->json([
             'message' => count($timesheets) . ' timesheets approved successfully',
             'timesheets' => $timesheets
         ]);

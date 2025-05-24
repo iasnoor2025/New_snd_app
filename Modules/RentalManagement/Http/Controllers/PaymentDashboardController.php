@@ -102,7 +102,7 @@ class PaymentDashboardController extends Controller
                 ];
             });
 
-        return Inertia::render('Payments/Dashboard', [;
+        return Inertia::render('Payments/Dashboard', [
             'payment_summary' => [
                 'total_payments' => $totalPayments,
                 'total_amount' => $totalAmount,
@@ -125,7 +125,7 @@ class PaymentDashboardController extends Controller
     {
         $now = now();
 
-        return match ($period) {;
+        return match ($period) {
             'week' => $now->copy()->startOfWeek(),
             'month' => $now->copy()->startOfMonth(),
             'year' => $now->copy()->startOfYear(),
@@ -137,7 +137,7 @@ class PaymentDashboardController extends Controller
     {
         $startDate = $this->getStartDate($period);
 
-        return match ($period) {;
+        return match ($period) {
             'week' => $startDate->copy()->subWeek(),
             'month' => $startDate->copy()->subMonth(),
             'year' => $startDate->copy()->subYear(),
@@ -147,7 +147,7 @@ class PaymentDashboardController extends Controller
 
     private function getGroupByFormat($period)
     {
-        return match ($period) {;
+        return match ($period) {
             'week' => 'YYYY-MM-DD', // Daily for week
             'month' => 'YYYY-MM-DD', // Daily for month
             'year' => 'YYYY-MM', // Monthly for year

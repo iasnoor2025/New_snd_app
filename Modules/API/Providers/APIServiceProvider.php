@@ -54,27 +54,8 @@ class APIServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path('API', 'Database/Migrations'));
 
-        // Register routes
-        $this->registerRoutes();
-
         // Register observers
         $this->registerObservers();
-    }
-
-    /**
-     * Register routes.
-     *
-     * @return void;
-     */
-    protected function registerRoutes()
-    {
-        Route::middleware('web')
-            ->prefix('api')
-            ->group(module_path('API', 'Routes/web.php'));
-
-        Route::middleware('api')
-            ->prefix('api')
-            ->group(module_path('API', 'Routes/api.php'));
     }
 
     /**

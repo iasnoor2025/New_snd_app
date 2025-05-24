@@ -34,7 +34,7 @@ class RentalHistoryController extends Controller
                     ];
                 });
 
-            return Inertia::render('RentalHistory', [;
+            return Inertia::render('RentalHistory', [
                 'rentals' => $rentals,
             ]);
         } catch (\Exception $e) {
@@ -43,7 +43,7 @@ class RentalHistoryController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'An error occurred while loading rental history. Please try again later.');
         }
     }

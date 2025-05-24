@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProjectResource extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'project_id';
-use 'type';
-use 'name',
+    use HasFactory;
+    use SoftDeletes;
+    protected $fillable = [
+        'project_id',
+        'type',
+        'name',
         'description',
         'quantity',
         'unit_cost',
@@ -51,9 +51,9 @@ use 'name',
         'maintenance_cost' => 'decimal:2',
         'daily_rate' => 'decimal:2',
         'liters' => 'decimal:2',
-        'price_per_liter' => 'decimal:2',;
-        'metadata' => 'array',;
-        'date' => 'date',;
+        'price_per_liter' => 'decimal:2',
+        'metadata' => 'array',
+        'date' => 'date',
     ];
 
     /**

@@ -309,3 +309,10 @@ After these core components are in place, we can implement the advance salary, f
    - Implement responsive layouts
    - Create form validation schema
    - Design dashboard views
+
+## Recent Change: Unified Module Routing
+
+- All module web routes are now wrapped in the correct `Route::prefix()` and `->name()` group as per the new convention (see systemPatterns.md for mapping).
+- Each module's ServiceProvider loads its web.php using `$this->loadRoutesFrom(...)`.
+- Ziggy manifest regenerated, route/config/view caches cleared and rebuilt.
+- This resolves the 404/403/500 errors for module endpoints and brings all modules into routing alignment for Inertia.js and Ziggy.
