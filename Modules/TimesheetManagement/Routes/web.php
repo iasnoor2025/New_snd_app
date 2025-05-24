@@ -40,15 +40,6 @@ Route::prefix('hr/timesheets')->name('timesheets.')->middleware(['auth', 'verifi
     Route::get('/monthly', [TimesheetController::class, 'monthly'])->name('monthly');
     Route::get('/summary', [TimesheetController::class, 'summary'])->name('summary');
 
-    // Weekly timesheet
-    Route::get('/weekly', [WeeklyTimesheetController::class, 'index'])->name('weekly.index');
-    Route::get('/weekly/create', [WeeklyTimesheetController::class, 'create'])->name('weekly.create');
-    Route::post('/weekly', [WeeklyTimesheetController::class, 'store'])->name('weekly.store');
-    Route::get('/weekly/{weekId}', [WeeklyTimesheetController::class, 'show'])->name('weekly.show');
-    Route::get('/weekly/{weekId}/edit', [WeeklyTimesheetController::class, 'edit'])->name('weekly.edit');
-    Route::put('/weekly/{weekId}', [WeeklyTimesheetController::class, 'update'])->name('weekly.update');
-    Route::post('/weekly/{weekId}/submit', [WeeklyTimesheetController::class, 'submit'])->name('weekly.submit');
-
     // Daily timesheet entries
     Route::get('/entries', [TimeEntryController::class, 'index'])->name('entries.index');
     Route::get('/entries/create', [TimeEntryController::class, 'create'])->name('entries.create');

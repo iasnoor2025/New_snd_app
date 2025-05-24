@@ -19,8 +19,7 @@ class ApproveLeaveAction
      */
     public function execute(int $leaveId, ?array $additionalData = null): Leave
     {
-        return DB::transaction(function () use ($leaveId;
-use $additionalData) {
+        return DB::transaction(function () use ($leaveId, $additionalData) {
             // Find the leave request
             $leave = Leave::findOrFail($leaveId);
 

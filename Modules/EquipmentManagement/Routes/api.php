@@ -24,46 +24,48 @@ use Modules\EquipmentManagement\Http\Controllers\Api\DepreciationApiController;
 |
 */
 
+// TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API
+
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     // Equipment management
-    Route::apiResource('equipment', EquipmentApiController::class, [
-        'names' => [
-            'index' => 'api.equipment.index',
-            'store' => 'api.equipment.store',
-            'show' => 'api.equipment.show',
-            'update' => 'api.equipment.update',
-            'destroy' => 'api.equipment.destroy',
-        ]
-    ]);
-    Route::get('equipment/{equipment}/history', [EquipmentApiController::class, 'history']);
-    Route::get('equipment/{equipment}/documents', [EquipmentApiController::class, 'documents']);
-    Route::post('equipment/{equipment}/documents', [EquipmentApiController::class, 'storeDocument']);
-    Route::put('equipment/{equipment}/status', [EquipmentApiController::class, 'updateStatus']);
+    // Route::apiResource('equipment', EquipmentApiController::class, [
+    //     'names' => [
+    //         'index' => 'api.equipment.index',
+    //         'store' => 'api.equipment.store',
+    //         'show' => 'api.equipment.show',
+    //         'update' => 'api.equipment.update',
+    //         'destroy' => 'api.equipment.destroy',
+    //     ]
+    // ]);
+    // Route::get('equipment/{equipment}/history', [EquipmentApiController::class, 'history']);
+    // Route::get('equipment/{equipment}/documents', [EquipmentApiController::class, 'documents']);
+    // Route::post('equipment/{equipment}/documents', [EquipmentApiController::class, 'storeDocument']);
+    // Route::put('equipment/{equipment}/status', [EquipmentApiController::class, 'updateStatus']);
 
     // Equipment costs and depreciation
-    Route::get('equipment/{equipment}/costs', [EquipmentCostApiController::class, 'index']);
-    Route::post('equipment/{equipment}/costs', [EquipmentCostApiController::class, 'store']);
-    Route::get('equipment/{equipment}/depreciation', [DepreciationApiController::class, 'show']);
-    Route::get('depreciation/dashboard', [DepreciationApiController::class, 'dashboard']);
+    // Route::get('equipment/{equipment}/costs', [EquipmentCostApiController::class, 'index']);
+    // Route::post('equipment/{equipment}/costs', [EquipmentCostApiController::class, 'store']);
+    // Route::get('equipment/{equipment}/depreciation', [DepreciationApiController::class, 'show']);
+    // Route::get('depreciation/dashboard', [DepreciationApiController::class, 'dashboard']);
 
     // Equipment utilization and tracking
-    Route::get('equipment/{equipment}/utilization', [EquipmentUtilizationApiController::class, 'show']);
-    Route::get('equipment/utilization/report', [EquipmentUtilizationApiController::class, 'report']);
-    Route::get('equipment/{equipment}/tracking', [EquipmentTrackingApiController::class, 'show']);
-    Route::post('equipment/{equipment}/tracking', [EquipmentTrackingApiController::class, 'update']);
+    // Route::get('equipment/{equipment}/utilization', [EquipmentUtilizationApiController::class, 'show']);
+    // Route::get('equipment/utilization/report', [EquipmentUtilizationApiController::class, 'report']);
+    // Route::get('equipment/{equipment}/tracking', [EquipmentTrackingApiController::class, 'show']);
+    // Route::post('equipment/{equipment}/tracking', [EquipmentTrackingApiController::class, 'update']);
 
     // Maintenance management
-    Route::apiResource('maintenance', MaintenanceApiController::class);
-    Route::apiResource('maintenance-schedules', MaintenanceScheduleApiController::class);
-    Route::apiResource('maintenance-tasks', MaintenanceTaskApiController::class);
-    Route::apiResource('maintenance-records', MaintenanceRecordApiController::class);
-    Route::post('equipment/{equipment}/maintenance', [EquipmentMaintenanceApiController::class, 'schedule']);
-    Route::get('equipment/{equipment}/maintenance', [EquipmentMaintenanceApiController::class, 'history']);
-    Route::put('maintenance/{maintenance}/complete', [MaintenanceApiController::class, 'markComplete']);
+    // Route::apiResource('maintenance', MaintenanceApiController::class);
+    // Route::apiResource('maintenance-schedules', MaintenanceScheduleApiController::class);
+    // Route::apiResource('maintenance-tasks', MaintenanceTaskApiController::class);
+    // Route::apiResource('maintenance-records', MaintenanceRecordApiController::class);
+    // Route::post('equipment/{equipment}/maintenance', [EquipmentMaintenanceApiController::class, 'schedule']);
+    // Route::get('equipment/{equipment}/maintenance', [EquipmentMaintenanceApiController::class, 'history']);
+    // Route::put('maintenance/{maintenance}/complete', [MaintenanceApiController::class, 'markComplete']);
 
     // Technicians
-    Route::apiResource('technicians', TechnicianApiController::class);
-    Route::get('technicians/{technician}/workload', [TechnicianApiController::class, 'workload']);
-    Route::post('maintenance/{maintenance}/assign', [MaintenanceApiController::class, 'assignTechnician']);
+    // Route::apiResource('technicians', TechnicianApiController::class);
+    // Route::get('technicians/{technician}/workload', [TechnicianApiController::class, 'workload']);
+    // Route::post('maintenance/{maintenance}/assign', [MaintenanceApiController::class, 'assignTechnician']);
 });
 

@@ -15,6 +15,8 @@ use Modules\Payroll\Http\Controllers\AdvancePaymentController;
 |
 */
 
+// TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API
+
 Route::middleware(['auth:sanctum'])->group(function () {
     // Payroll Routes
     Route::prefix('api/payroll')->name('api.payroll.')->group(function () {

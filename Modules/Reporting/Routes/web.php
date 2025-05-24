@@ -15,9 +15,12 @@ Route::middleware(['web', 'auth', 'verified', 'permission:reports.view'])->prefi
     Route::get('/revenue', [ReportController::class, 'revenue'])->name('revenue');
 
     // Show individual report
+    /*
     Route::get('/{report}', [ReportBuilderController::class, 'show'])->name('show');
+    */
 
     // Report Builder
+    /*
     Route::middleware(['permission:reports.build'])->group(function () {
         Route::get('/builder', [ReportBuilderController::class, 'index'])->name('builder');
         Route::post('/builder/generate', [ReportBuilderController::class, 'generate'])->name('builder.generate');
@@ -33,6 +36,7 @@ Route::middleware(['web', 'auth', 'verified', 'permission:reports.view'])->prefi
         Route::get('/scheduled', [ReportBuilderController::class, 'scheduledReports'])->name('scheduled');
         Route::delete('/{report}', [ReportBuilderController::class, 'destroyReport'])->name('destroy');
     });
+    */
 });
 
 

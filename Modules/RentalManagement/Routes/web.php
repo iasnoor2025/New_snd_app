@@ -143,53 +143,20 @@ Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(f
         ->middleware('permission:rentals.view');
 
     // Workflow action routes - using RentalWorkflowController
-    Route::post('rentals/{rental}/generate-quotation', [RentalWorkflowController::class, 'generateQuotation'])
-        ->name('generate-quotation')
-        ->middleware('permission:rentals.edit');
-
-    Route::get('rentals/{rental}/direct-generate-quotation', [RentalWorkflowController::class, 'directGenerateQuotation'])
-        ->name('direct-generate-quotation')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/approve-quotation', [RentalWorkflowController::class, 'approveQuotation'])
-        ->name('approve-quotation')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/start-mobilization', [RentalWorkflowController::class, 'startMobilization'])
-        ->name('start-mobilization')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/complete-mobilization', [RentalWorkflowController::class, 'completeMobilization'])
-        ->name('complete-mobilization')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/start', [RentalWorkflowController::class, 'start'])
-        ->name('start')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/complete', [RentalWorkflowController::class, 'complete'])
-        ->name('complete')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/create-invoice', [RentalWorkflowController::class, 'createInvoice'])
-        ->name('create-invoice')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/mark-payment-pending', [RentalWorkflowController::class, 'markPaymentPending'])
-        ->name('mark-payment-pending')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/mark-closed', [RentalWorkflowController::class, 'markClosed'])
-        ->name('mark-closed')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/check-overdue', [RentalWorkflowController::class, 'checkOverdue'])
-        ->name('check-overdue')
-        ->middleware('permission:rentals.edit');
-
-    Route::post('rentals/{rental}/request-extension', [RentalWorkflowController::class, 'requestExtension'])
-        ->name('request-extension')
-        ->middleware(['can:request-extension,rental']);
+    /*
+    Route::post('rentals/{rental}/generate-quotation', [RentalWorkflowController::class, 'generateQuotation']);
+    Route::get('rentals/{rental}/direct-generate-quotation', [RentalWorkflowController::class, 'directGenerateQuotation']);
+    Route::post('rentals/{rental}/approve-quotation', [RentalWorkflowController::class, 'approveQuotation']);
+    Route::post('rentals/{rental}/start-mobilization', [RentalWorkflowController::class, 'startMobilization']);
+    Route::post('rentals/{rental}/complete-mobilization', [RentalWorkflowController::class, 'completeMobilization']);
+    Route::post('rentals/{rental}/start', [RentalWorkflowController::class, 'start']);
+    Route::post('rentals/{rental}/complete', [RentalWorkflowController::class, 'complete']);
+    Route::post('rentals/{rental}/create-invoice', [RentalWorkflowController::class, 'createInvoice']);
+    Route::post('rentals/{rental}/mark-payment-pending', [RentalWorkflowController::class, 'markPaymentPending']);
+    Route::post('rentals/{rental}/mark-closed', [RentalWorkflowController::class, 'markClosed']);
+    Route::post('rentals/{rental}/check-overdue', [RentalWorkflowController::class, 'checkOverdue']);
+    Route::post('rentals/{rental}/request-extension', [RentalWorkflowController::class, 'requestExtension']);
+    */
 
 });
 

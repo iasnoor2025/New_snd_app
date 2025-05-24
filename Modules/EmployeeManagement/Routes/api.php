@@ -9,6 +9,12 @@ use Modules\EmployeeManagement\Http\Controllers\EmployeeDocumentController;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeAdvanceController;
 use Modules\EmployeeManagement\Http\Controllers\ResignationController;
 
+// Public route for last-file-number (no auth middleware)
+Route::prefix('v1')->group(function () {
+    Route::get('employees/last-file-number', [EmployeeController::class, 'getNextFileNumber']);
+    Route::apiResource('positions', PositionController::class);
+});
+
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     // Employee core routes
     Route::apiResource('employees', EmployeeController::class);

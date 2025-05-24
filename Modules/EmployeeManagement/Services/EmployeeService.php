@@ -249,6 +249,15 @@ class EmployeeService extends BaseService
             $user->delete();
         }
     }
+
+    /**
+     * Clear any employee-related caches that might contain position data.
+     * For now, this is a no-op (placeholder).
+     */
+    public function clearEmployeeCaches(): void
+    {
+        \Log::info('clearEmployeeCaches called (no-op)');
+    }
 }
 
 

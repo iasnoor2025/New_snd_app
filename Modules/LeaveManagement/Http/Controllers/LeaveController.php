@@ -13,7 +13,7 @@ use Modules\LeaveManagement\Http\Requests\LeaveRequest;
 use Modules\LeaveManagement\Actions\CreateLeaveAction;
 use Modules\LeaveManagement\Actions\UpdateLeaveAction;
 use Modules\LeaveManagement\Actions\DeleteLeaveAction;
-use Modules\Employee\Repositories\EmployeeRepository;
+use Modules\EmployeeManagement\Repositories\EmployeeRepository;
 
 class LeaveController extends Controller
 {

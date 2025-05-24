@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class PositionController extends Controller
 {
+    // Ensure no auth middleware is applied
+    // public function __construct() {}
+    // (If you have a __construct with $this->middleware('auth'), remove or comment it out)
+
     public function index()
     {
         try {
@@ -21,10 +25,7 @@ class PositionController extends Controller
                 ->get();
 
             if (request()->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'data' => $positions
-                ]);
+                return response()->json($positions);
             }
 
             return back()->with('positions', $positions);
@@ -76,8 +77,10 @@ class PositionController extends Controller
         Cache::forget('active_positions');
 
         // Clear any employee-related caches that might contain position data
-        $employeeService = app(\App\Services\EmployeeService::class);
-        $employeeService->clearEmployeeCaches();
+        $employeeService = app(\Modules\EmployeeManagement\Services\EmployeeService::class);
+        if (method_exists($employeeService, 'clearEmployeeCaches')) {
+            $employeeService->clearEmployeeCaches();
+        }
     }
 
     public function store(Request $request)

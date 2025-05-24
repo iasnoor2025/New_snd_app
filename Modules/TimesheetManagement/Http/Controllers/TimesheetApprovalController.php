@@ -10,9 +10,7 @@ use Inertia\Inertia;
 use Modules\TimesheetManagement\Repositories\WeeklyTimesheetRepository;
 use Modules\TimesheetManagement\Actions\ApproveTimesheetAction;
 use Modules\TimesheetManagement\Actions\RejectTimesheetAction;
-use Modules\TimesheetManagement\Http\Requests\TimesheetApprovalRequest;
-use Modules\TimesheetManagement\Http\Requests\TimesheetRejectionRequest;
-use Modules\Employee\Repositories\EmployeeRepository;
+use Modules\EmployeeManagement\Repositories\EmployeeRepository;
 
 class TimesheetApprovalController extends Controller
 {

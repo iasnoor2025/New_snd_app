@@ -1,74 +1,46 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
-import { User, Position, Employee } from '@/Modules/EmployeeManagement/Resources/js/types/models';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/Components/ui/card';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/button';
-import { Input } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/input';
+import AdminLayout from '../../layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
-} from '@/Modules/EmployeeManagement/Resources/js/Components/ui/form';
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EmployeeManagement/Resources/js/Components/ui/select';
-import { Textarea } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/textarea';
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
 import { format, differenceInDays, isBefore } from 'date-fns';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Label } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/label';
-import { cn } from '@/Modules/EmployeeManagement/Resources/js/lib/utils';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import { SubmitHandler } from 'react-hook-form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/tabs';
-import PersonalInfoTab from '@/Modules/EmployeeManagement/Resources/js/Components/employees/create/tabs/PersonalInfoTab';
-import EmploymentDetailsTab from '@/Modules/EmployeeManagement/Resources/js/Components/employees/create/tabs/EmploymentDetailsTab';
-import SalaryInfoTab from '@/Modules/EmployeeManagement/Resources/js/Components/employees/create/tabs/SalaryInfoTab';
-import DocumentsTab from '@/Modules/EmployeeManagement/Resources/js/Components/employees/create/tabs/DocumentsTab';
-import CertificationsTab from '@/Modules/EmployeeManagement/Resources/js/Components/employees/create/tabs/CertificationsTab';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import PersonalInfoTab from '../../components/employees/create/tabs/PersonalInfoTab';
+import EmploymentDetailsTab from '../../components/employees/create/tabs/EmploymentDetailsTab';
+import SalaryInfoTab from '../../components/employees/create/tabs/SalaryInfoTab';
+import DocumentsTab from '../../components/employees/create/tabs/DocumentsTab';
+import CertificationsTab from '../../components/employees/create/tabs/CertificationsTab';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-const breadcrumbs: BreadcrumbItem[] = [
-  {
-    title: 'Dashboard',
-    href: '/dashboard',
-  },
-  {
-    title: 'Employees',
-    href: '/employees',
-  },
-  {
-    title: 'Create Employee',
-    href: '/employees/create',
-  },
-];
-
-// Add FileRecord type
-type FileRecord = Record<string, File | null>;
-
-interface Props extends PageProps {
-  users: User[];
-  positions: Position[];
-  employee?: Employee;
+interface Props {
+  users: any[];
+  positions: any[];
+  employee?: any;
   isEditing?: boolean;
 }
 
@@ -158,7 +130,9 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function Create({ auth, users, positions, employee, isEditing = false }: Props) {
+type FileRecord = Record<string, File | null>;
+
+export default function Create({ users, positions, employee, isEditing = false }: Props) {
   const [activeTab, setActiveTab] = useState('personal');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalCertificationCost, setTotalCertificationCost] = useState(0);
@@ -173,7 +147,7 @@ export default function Create({ auth, users, positions, employee, isEditing = f
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       first_name: employee?.first_name || '',
       last_name: employee?.last_name || '',
@@ -181,7 +155,7 @@ export default function Create({ auth, users, positions, employee, isEditing = f
       phone: employee?.phone || '',
       nationality: employee?.nationality || '',
       file_number: employee?.file_number || '',
-      position_id: employee?.position_id ? Number(employee.position_id) : undefined,
+      position_id: employee?.position_id ? Number(employee.position_id) : 1,
       hourly_rate: employee?.hourly_rate || 0,
       basic_salary: employee?.basic_salary || 0,
       overtime_rate_multiplier: employee?.overtime_rate_multiplier || 1.5,
@@ -215,7 +189,7 @@ export default function Create({ auth, users, positions, employee, isEditing = f
       },
       custom_certifications: employee?.custom_certifications || [],
       notes: employee?.notes || '',
-      hire_date: employee?.join_date || '',
+      hire_date: employee?.hire_date || '',
       status: employee?.status || 'active',
       food_allowance: employee?.food_allowance || 0,
       housing_allowance: employee?.housing_allowance || 0,
@@ -408,7 +382,19 @@ export default function Create({ auth, users, positions, employee, isEditing = f
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      if (error.response?.data?.errors) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'response' in error &&
+        error.response &&
+        typeof error.response === 'object' &&
+        'data' in error.response &&
+        error.response.data &&
+        typeof error.response.data === 'object' &&
+        'errors' in error.response.data &&
+        error.response.data.errors &&
+        typeof error.response.data.errors === 'object'
+      ) {
         // Display the first validation error
         const firstError = Object.values(error.response.data.errors)[0];
         toast.error(Array.isArray(firstError) ? firstError[0] : firstError);
@@ -423,21 +409,6 @@ export default function Create({ auth, users, positions, employee, isEditing = f
   return (
     <AdminLayout
       title={isEditing ? "Edit Employee" : "Create Employee"}
-      breadcrumbs={[
-        {
-          label: 'Dashboard',
-          href: '/'
-        },
-        {
-          label: 'Employees',
-          href: '/employees'
-        },
-        {
-          label: isEditing ? 'Edit' : 'Create',
-          href: isEditing ? `/employees/${employee?.id}/edit` : '/employees/create',
-          active: true
-        }
-      ]}
     >
       <Head title={isEditing ? "Edit Employee" : "Create Employee"} />
 
@@ -447,7 +418,7 @@ export default function Create({ auth, users, positions, employee, isEditing = f
             <CardTitle className="text-2xl font-bold">{isEditing ? "Edit Employee" : "Create Employee"}</CardTitle>
             <div className="flex items-center space-x-2">
               <Button variant="outline" asChild>
-                <Link href={route('employees.index')}>
+                <Link href="/employees">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Employees
                 </Link>
@@ -455,71 +426,69 @@ export default function Create({ auth, users, positions, employee, isEditing = f
             </div>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
-                  <TabsList className="grid w-full grid-cols-5">
-                    <TabsTrigger value="personal">Personal Info</TabsTrigger>
-                    <TabsTrigger value="employment">Employment</TabsTrigger>
-                    <TabsTrigger value="salary">Salary</TabsTrigger>
-                    <TabsTrigger value="documents">Documents</TabsTrigger>
-                    <TabsTrigger value="certifications">Certifications</TabsTrigger>
-                  </TabsList>
+            <Form onSubmit={handleSubmit} className="space-y-8">
+              <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
+                <TabsList className="grid w-full grid-cols-5">
+                  <TabsTrigger value="personal">Personal Info</TabsTrigger>
+                  <TabsTrigger value="employment">Employment</TabsTrigger>
+                  <TabsTrigger value="salary">Salary</TabsTrigger>
+                  <TabsTrigger value="documents">Documents</TabsTrigger>
+                  <TabsTrigger value="certifications">Certifications</TabsTrigger>
+                </TabsList>
 
-                  {/* Cost Summary */}
-                  <div className="p-4 border rounded-lg bg-muted">
-                    <h3 className="text-lg font-medium mb-4">Cost Summary</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Total Certification Costs</p>
-                        <p className="text-2xl font-bold">SAR {totalCertificationCost.toFixed(2)}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Calculated Hourly Rate</p>
-                        <p className="text-2xl font-bold">SAR {hourlyRate.toFixed(2)}</p>
-                      </div>
+                {/* Cost Summary */}
+                <div className="p-4 border rounded-lg bg-muted">
+                  <h3 className="text-lg font-medium mb-4">Cost Summary</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Certification Costs</p>
+                      <p className="text-2xl font-bold">SAR {totalCertificationCost.toFixed(2)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Calculated Hourly Rate</p>
+                      <p className="text-2xl font-bold">SAR {hourlyRate.toFixed(2)}</p>
                     </div>
                   </div>
-
-                  <TabsContent value="personal">
-                    <PersonalInfoTab form={form} />
-                  </TabsContent>
-
-                  <TabsContent value="employment">
-                    <EmploymentDetailsTab form={form} positions={positions} users={users} />
-                  </TabsContent>
-
-                  <TabsContent value="salary">
-                    <SalaryInfoTab form={form} />
-                  </TabsContent>
-
-                  <TabsContent value="documents">
-                    <DocumentsTab form={form} files={files} setFiles={setFiles} />
-                  </TabsContent>
-
-                  <TabsContent value="certifications">
-                    <CertificationsTab
-                      form={form}
-                      files={files}
-                      setFiles={setFiles}
-                      onTotalCostChange={setTotalCertificationCost}
-                    />
-                  </TabsContent>
-                </Tabs>
-
-                <div className="flex justify-end">
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creating...
-                      </>
-                    ) : (
-                      'Create Employee'
-                    )}
-                  </Button>
                 </div>
-              </form>
+
+                <TabsContent value="personal">
+                  <PersonalInfoTab form={form} />
+                </TabsContent>
+
+                <TabsContent value="employment">
+                  <EmploymentDetailsTab form={form} positions={positions} users={users} />
+                </TabsContent>
+
+                <TabsContent value="salary">
+                  <SalaryInfoTab form={form} />
+                </TabsContent>
+
+                <TabsContent value="documents">
+                  <DocumentsTab form={form} files={files} setFiles={setFiles} />
+                </TabsContent>
+
+                <TabsContent value="certifications">
+                  <CertificationsTab
+                    form={form}
+                    files={files}
+                    setFiles={setFiles}
+                    onTotalCostChange={setTotalCertificationCost}
+                  />
+                </TabsContent>
+              </Tabs>
+
+              <div className="flex justify-end">
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    'Create Employee'
+                  )}
+                </Button>
+              </div>
             </Form>
           </CardContent>
         </Card>

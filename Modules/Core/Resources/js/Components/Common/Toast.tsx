@@ -112,137 +112,131 @@ const positionClasses = {
   "bottom-center": "bottom-0 left-1/2 -translate-x-1/2",
 };
 
-const Toast = forwardRef<HTMLDivElement, ToastProps>(;
-  (;
-    {
-      title,
-      description,
-      variant = "default",
-      duration = 5000,
-      icon,
-      onClose,
-      className,
-      showIcon = true,
-      animate = true,
-      actions,
-      isLoading = false,
-      useSpinner = false,
-      position = "bottom-right",
-      showProgress = true,
-      pauseOnHover = true,
-      pauseOnWindowBlur = true,
-      compact = false,
-      ...props
-    },
-    ref
-  ) => {
-    const Icon = icon || defaultIcons[variant];
-    const [progress, setProgress] = React.useState(100);
-    const [isPaused, setIsPaused] = React.useState(false);
+const Toast = forwardRef<HTMLDivElement, ToastProps>((
+  {
+    title,
+    description,
+    variant = "default",
+    duration = 5000,
+    icon,
+    onClose,
+    className,
+    showIcon = true,
+    animate = true,
+    actions,
+    isLoading = false,
+    useSpinner = false,
+    position = "bottom-right",
+    showProgress = true,
+    pauseOnHover = true,
+    pauseOnWindowBlur = true,
+    compact = false,
+    ...props
+  },
+  ref
+) => {
+  const Icon = icon || defaultIcons[variant];
+  const [progress, setProgress] = React.useState(100);
+  const [isPaused, setIsPaused] = React.useState(false);
 
-    React.useEffect(() => {
-      if (duration && showProgress && !isPaused) {
-        const startTime = Date.now();
-        const timer = setInterval(() => {
-          const elapsedTime = Date.now() - startTime;
-          const remainingProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
-          setProgress(remainingProgress);
-          if (remainingProgress === 0) {
-            clearInterval(timer);
-            onClose?.();
-          }
-        }, 10);
-        return () => clearInterval(timer);
-      }
-    }, [duration, showProgress, isPaused, onClose]);
+  React.useEffect(() => {
+    if (duration && showProgress && !isPaused) {
+      const startTime = Date.now();
+      const timer = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const remainingProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
+        setProgress(remainingProgress);
+        if (remainingProgress === 0) {
+          clearInterval(timer);
+          onClose?.();
+        }
+      }, 10);
+      return () => clearInterval(timer);
+    }
+  }, [duration, showProgress, isPaused, onClose]);
 
-    return (
-      <ShadcnToast
-        ref={ref}
-        duration={duration}
-        className={cn(
-          variantClasses[variant],
-          positionClasses[position],
-          animate && "animate-in fade-in-0 slide-in-from-right-full duration-300",
-          compact && "p-2",
-          "relative",
-          className
-        )}
-        onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-        onMouseLeave={() => pauseOnHover && setIsPaused(false)}
-        onBlur={() => pauseOnWindowBlur && setIsPaused(true)}
-        onFocus={() => pauseOnWindowBlur && setIsPaused(false)}
-        role="alert"
-        aria-live="polite"
-        {...props}
-      >
-        <div className="flex items-start gap-3">
-          {showIcon && (isLoading ? (
-            useSpinner ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-            )
-          ) : Icon && (
-            <span className="mt-0.5 flex-shrink-0">
-              <Icon className="h-4 w-4" aria-hidden="true" />
-            </span>
-          ))}
-          <div className="flex-1 space-y-1">
-            {title && (
-              <ToastTitle className={cn(
-                "font-medium leading-none tracking-tight",
-                compact && "text-sm"
-              )}>
-                {title}
-              </ToastTitle>
-            )}
-            {description && (
-              <ToastDescription className={cn(
-                "text-sm opacity-90",
-                compact && "text-xs"
-              )}>
-                {description}
-              </ToastDescription>
-            )}
-            {actions && (
-              <div className={cn(
-                "mt-2 flex items-center gap-2",
-                compact && "mt-1 gap-1"
-              )}>
-                {actions}
-              </div>
-            )}
-          </div>
-          <ToastClose
-            onClick={onClose}
-            className={cn(
-              "opacity-70 transition-opacity hover:opacity-100",
-              compact && "h-4 w-4"
-            )}
-            aria-label="Close toast"
-          />
+  return (
+    <ShadcnToast
+      ref={ref}
+      duration={duration}
+      className={cn(
+        variantClasses[variant],
+        positionClasses[position],
+        animate && "animate-in fade-in-0 slide-in-from-right-full duration-300",
+        compact && "p-2",
+        "relative",
+        className
+      )}
+      onMouseEnter={() => pauseOnHover && setIsPaused(true)}
+      onMouseLeave={() => pauseOnHover && setIsPaused(false)}
+      onBlur={() => pauseOnWindowBlur && setIsPaused(true)}
+      onFocus={() => pauseOnWindowBlur && setIsPaused(false)}
+      role="alert"
+      aria-live="polite"
+      {...props}
+    >
+      <div className="flex items-start gap-3">
+        {showIcon && (isLoading ? (
+          useSpinner ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          )
+        ) : Icon && (
+          <span className="mt-0.5 flex-shrink-0">
+            <Icon className="h-4 w-4" aria-hidden="true" />
+          </span>
+        ))}
+        <div className="flex-1 space-y-1">
+          {title && (
+            <ToastTitle className={cn(
+              "font-medium leading-none tracking-tight",
+              compact && "text-sm"
+            )}>
+              {title}
+            </ToastTitle>
+          )}
+          {description && (
+            <ToastDescription className={cn(
+              "text-sm opacity-90",
+              compact && "text-xs"
+            )}>
+              {description}
+            </ToastDescription>
+          )}
+          {actions && (
+            <div className={cn(
+              "mt-2 flex items-center gap-2",
+              compact && "mt-1 gap-1"
+            )}>
+              {actions}
+            </div>
+          )}
         </div>
-        {showProgress && duration > 0 && (
-          <div
-            className="absolute bottom-0 left-0 h-1 bg-white bg-opacity-20"
-            style={{ width: `${progress}%`, transition: "width 10ms linear" }}
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={progress}
-          />
-        )}
-      </ShadcnToast>
-    );
-  }
-);
+        <ToastClose
+          onClick={onClose}
+          className={cn(
+            "opacity-70 transition-opacity hover:opacity-100",
+            compact && "h-4 w-4"
+          )}
+          aria-label="Close toast"
+        />
+      </div>
+      {showProgress && duration > 0 && (
+        <div
+          className="absolute bottom-0 left-0 h-1 bg-white bg-opacity-20"
+          style={{ width: `${progress}%`, transition: "width 10ms linear" }}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={progress}
+        />
+      )}
+    </ShadcnToast>
+  );
+});
 
 Toast.displayName = "Toast";
 
 export { Toast, ToastProvider, ToastViewport };
-
-
-
-</div>
 

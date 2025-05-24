@@ -80,7 +80,16 @@ class EmployeeController extends Controller
     public function getNextFileNumber(): JsonResponse
     {
         $fileNumber = $this->employeeService->generateNextFileNumber();
-        return response()->json(['file_number' => $fileNumber]);
+        // Extract the last number from the generated file number
+        $matches = [];
+        $lastFileNumber = 0;
+        if (preg_match('/^EMP-(\d{4})$/', $fileNumber, $matches)) {
+            $lastFileNumber = (int)$matches[1] - 1;
+        }
+        return response()->json([
+            'file_number' => $fileNumber,
+            'lastFileNumber' => $lastFileNumber
+        ]);
     }
 
     public function getSalaryHistory(int $id): JsonResponse

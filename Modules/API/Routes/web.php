@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Modules\API\Http\Controllers\APIController;
 use Modules\API\Http\Controllers\ApiTokenController;
-use Modules\API\Http\Controllers\ApiDocsController;
+// TODO: Uncomment when ApiDocsController exists
+// use Modules\API\Http\Controllers\ApiDocsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,10 @@ use Modules\API\Http\Controllers\ApiDocsController;
 
 // ADD routes at the top level, with explicit names
 Route::get('/', [APIController::class, 'index'])->name('api.main-dashboard');
-Route::get('/documentation', [ApiDocsController::class, 'index'])->name('api.documentation');
-Route::get('/documentation/{version}', [ApiDocsController::class, 'showVersion'])->name('api.documentation.version');
-Route::get('/documentation/{version}/{endpoint}', [ApiDocsController::class, 'showEndpoint'])->name('api.documentation.endpoint');
+// TODO: Uncomment when ApiDocsController exists
+// Route::get('/documentation', [ApiDocsController::class, 'index'])->name('api.documentation');
+// Route::get('/documentation/{version}', [ApiDocsController::class, 'showVersion'])->name('api.documentation.version');
+// Route::get('/documentation/{version}/{endpoint}', [ApiDocsController::class, 'showEndpoint'])->name('api.documentation.endpoint');
 
 Route::get('/tokens', [ApiTokenController::class, 'index'])->name('api.tokens.index');
 Route::get('/tokens/create', [ApiTokenController::class, 'create'])->name('api.tokens.create');

@@ -15,13 +15,14 @@ use Modules\ProjectManagement\Http\Controllers\Api\ProjectApiController;
 |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1/projects')->group(function () {
-    Route::get('/', [ProjectApiController::class, 'index']);
-    Route::post('/', [ProjectApiController::class, 'store']);
-    Route::get('/{project}', [ProjectApiController::class, 'show']);
-    Route::put('/{project}', [ProjectApiController::class, 'update']);
-    Route::delete('/{project}', [ProjectApiController::class, 'destroy']);
-});
+// TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API
+// Route::middleware(['auth:sanctum'])->prefix('v1/projects')->group(function () {
+//     Route::get('/', [ProjectApiController::class, 'index']);
+//     Route::post('/', [ProjectApiController::class, 'store']);
+//     Route::get('/{project}', [ProjectApiController::class, 'show']);
+//     Route::put('/{project}', [ProjectApiController::class, 'update']);
+//     Route::delete('/{project}', [ProjectApiController::class, 'destroy']);
+// });
 
 
 

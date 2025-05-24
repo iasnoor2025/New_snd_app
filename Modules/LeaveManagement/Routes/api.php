@@ -14,27 +14,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API
+
 Route::middleware('auth:sanctum')->group(function () {
     // Leave Requests API
-    Route::get('/requests', 'Api\LeaveRequestController@index');
-    Route::post('/requests', 'Api\LeaveRequestController@store');
-    Route::get('/requests/{id}', 'Api\LeaveRequestController@show');
-    Route::put('/requests/{id}', 'Api\LeaveRequestController@update');
-    Route::delete('/requests/{id}', 'Api\LeaveRequestController@destroy');
+    // Route::get('/requests', 'Api\LeaveRequestController@index');
+    // Route::post('/requests', 'Api\LeaveRequestController@store');
+    // Route::get('/requests/{id}', 'Api\LeaveRequestController@show');
+    // Route::put('/requests/{id}', 'Api\LeaveRequestController@update');
+    // Route::delete('/requests/{id}', 'Api\LeaveRequestController@destroy');
 
     // Leave Approval API
-    Route::put('/requests/{id}/approve', 'Api\LeaveApprovalController@approve');
-    Route::put('/requests/{id}/reject', 'Api\LeaveApprovalController@reject');
+    // Route::put('/requests/{id}/approve', 'Api\LeaveApprovalController@approve');
+    // Route::put('/requests/{id}/reject', 'Api\LeaveApprovalController@reject');
 
     // Leave Balances API
-    Route::get('/balances', 'Api\LeaveBalanceController@index');
-    Route::get('/balances/{employeeId}', 'Api\LeaveBalanceController@show');
+    // Route::get('/balances', 'Api\LeaveBalanceController@index');
+    // Route::get('/balances/{employeeId}', 'Api\LeaveBalanceController@show');
 
     // Leave Types API
-    Route::get('/types', 'Api\LeaveTypeController@index');
+    // Route::get('/types', 'Api\LeaveTypeController@index');
 
     // Leave Calendar API
-    Route::get('/calendar', 'Api\LeaveCalendarController@index');
-    Route::get('/calendar/{year}/{month}', 'Api\LeaveCalendarController@month');
+    // Route::get('/calendar', 'Api\LeaveCalendarController@index');
+    // Route::get('/calendar/{year}/{month}', 'Api\LeaveCalendarController@month');
 });
 
