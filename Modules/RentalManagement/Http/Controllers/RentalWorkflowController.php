@@ -43,7 +43,7 @@ class RentalWorkflowController extends Controller
         try {
             $quotation = $action->execute($rental);
 
-            return redirect()->route('quotations.show', $quotation);
+            return redirect()->route('quotations.show', $quotation)
                 ->with('success', 'Quotation generated successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to generate quotation', [
@@ -64,7 +64,7 @@ class RentalWorkflowController extends Controller
         try {
             // Verify that the rental has items
             if ($rental->rentalItems->count() === 0) {
-                return redirect()->route('rentals.show', $rental->id);
+                return redirect()->route('rentals.show', $rental->id)
                     ->with('error', 'Cannot generate quotation: Rental has no items. Please add items first.');
             }
 
@@ -76,7 +76,7 @@ class RentalWorkflowController extends Controller
                 $rental->update(['status' => RentalStatus::QUOTATION->value]);
             }
 
-            return redirect()->route('quotations.show', $quotation);
+            return redirect()->route('quotations.show', $quotation)
                 ->with('success', 'Quotation generated successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to generate quotation', [
@@ -85,7 +85,7 @@ class RentalWorkflowController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return redirect()->route('rentals.show', $rental->id);
+            return redirect()->route('rentals.show', $rental->id)
                 ->with('error', 'Failed to generate quotation: ' . $e->getMessage());
         }
     }
@@ -98,7 +98,7 @@ class RentalWorkflowController extends Controller
         try {
             $rental = $action->execute($rental, auth()->id());
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', 'Quotation approved successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to approve quotation', [
@@ -123,7 +123,7 @@ class RentalWorkflowController extends Controller
                 auth()->id()
             );
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', 'Mobilization started successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to start mobilization', [
@@ -148,7 +148,7 @@ class RentalWorkflowController extends Controller
                 auth()->id()
             );
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', 'Mobilization completed successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to complete mobilization', [
@@ -169,7 +169,7 @@ class RentalWorkflowController extends Controller
         try {
             $rental = $action->execute($rental, auth()->id());
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', 'Rental started successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to start rental', [
@@ -190,7 +190,7 @@ class RentalWorkflowController extends Controller
         try {
             $rental = $action->execute($rental, auth()->id());
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', 'Rental completed successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to complete rental', [
@@ -211,7 +211,7 @@ class RentalWorkflowController extends Controller
         try {
             $invoice = $action->execute($rental);
 
-            return redirect()->route('invoices.show', $invoice);
+            return redirect()->route('invoices.show', $invoice)
                 ->with('success', 'Invoice created successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to create invoice', [
@@ -232,7 +232,7 @@ class RentalWorkflowController extends Controller
         try {
             $extensionRequest = $action->execute($rental, $request->validated(), auth()->id());
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', 'Extension request submitted successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to request extension', [
@@ -259,7 +259,7 @@ class RentalWorkflowController extends Controller
                 default => 'Overdue status is unchanged.',
             };
 
-            return redirect()->route('rentals.show', $rental);
+            return redirect()->route('rentals.show', $rental)
                 ->with('success', $message);
         } catch (\Exception $e) {
             Log::error('Failed to check overdue status', [

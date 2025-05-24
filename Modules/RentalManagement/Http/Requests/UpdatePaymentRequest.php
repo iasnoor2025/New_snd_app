@@ -2,7 +2,7 @@
 
 namespace Modules\RentalManagement\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest as ;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePaymentRequest extends FormRequest
 {

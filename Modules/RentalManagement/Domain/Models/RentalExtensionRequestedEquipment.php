@@ -13,14 +13,14 @@ class RentalExtensionRequestedEquipment extends Model
         'rental_extension_request_id',
         'equipment_id',
         'quantity',
-        'needs_operator',;
-        'operator_id',;
-        'daily_rate',;
+        'needs_operator',
+        'operator_id',
+        'daily_rate',
     ];
 
-    protected $casts = [;
-        'needs_operator' => 'boolean',;
-        'daily_rate' => 'decimal:2',;
+    protected $casts = [
+        'needs_operator' => 'boolean',
+        'daily_rate' => 'decimal:2',
     ];
 
     public function extensionRequest(): BelongsTo

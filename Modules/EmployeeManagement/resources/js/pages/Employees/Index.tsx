@@ -80,9 +80,9 @@ interface Props extends PageProps {
 
 export default function Index({ auth, employees, filters, departments, positions }: Props) {
   const [search, setSearch] = useState(filters.search || '');
-  const [status, setStatus] = useState(filters.status || '');
-  const [department, setDepartment] = useState(filters.department || '');
-  const [position, setPosition] = useState(filters.position || '');
+  const [status, setStatus] = useState(filters.status || 'all');
+  const [department, setDepartment] = useState(filters.department || 'all');
+  const [position, setPosition] = useState(filters.position || 'all');
   const [isLoading, setIsLoading] = useState(false);
   const { hasPermission } = usePermission();
 
@@ -96,6 +96,7 @@ export default function Index({ auth, employees, filters, departments, positions
   }, 300);
 
   const handleFilter = (type: string, value: string) => {
+    const normalizedValue = value === 'all' ? '' : value;
     switch (type) {
       case 'status':
         setStatus(value);
@@ -107,10 +108,14 @@ export default function Index({ auth, employees, filters, departments, positions
         setPosition(value);
         break;
     }
-
     router.get(
       '/employees',
-      { search, status: type === 'status' ? value : status, department: type === 'department' ? value : department, position: type === 'position' ? value : position },
+      {
+        search,
+        status: type === 'status' ? normalizedValue : (status === 'all' ? '' : status),
+        department: type === 'department' ? normalizedValue : (department === 'all' ? '' : department),
+        position: type === 'position' ? normalizedValue : (position === 'all' ? '' : position),
+      },
       { preserveState: true, preserveScroll: true }
     );
   };
@@ -198,7 +203,7 @@ export default function Index({ auth, employees, filters, departments, positions
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Statuses</SelectItem>
+                  <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="active">Active</SelectItem>
                   <SelectItem value="inactive">Inactive</SelectItem>
                   <SelectItem value="on_leave">On Leave</SelectItem>
@@ -213,7 +218,7 @@ export default function Index({ auth, employees, filters, departments, positions
                   <SelectValue placeholder="Filter by department" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Departments</SelectItem>
+                  <SelectItem value="all">All Departments</SelectItem>
                   {departments.map((dept) => (
                     <SelectItem key={dept.id} value={dept.id.toString()}>
                       {dept.name}
@@ -229,7 +234,7 @@ export default function Index({ auth, employees, filters, departments, positions
                   <SelectValue placeholder="Filter by position" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Positions</SelectItem>
+                  <SelectItem value="all">All Positions</SelectItem>
                   {positions.map((pos) => (
                     <SelectItem key={pos.id} value={pos.id.toString()}>
                       {pos.name}

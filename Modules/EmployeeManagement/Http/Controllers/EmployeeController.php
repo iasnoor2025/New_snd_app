@@ -81,7 +81,16 @@ class EmployeeController extends Controller
             'employees' => $employees,
             'filters' => $request->only(['search', 'status', 'department', 'position']),
             'departments' => Department::orderBy('name')->get(['id', 'name']),
-            'positions' => Position::orderBy('name')->get(['id', 'name'])
+            'positions' => Position::orderBy('name')->get(['id', 'name']),
+            'auth' => [
+                'user' => auth()->user() ? [
+                    'id' => auth()->id(),
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                    'roles' => auth()->user()->getRoleNames(),
+                    'permissions' => auth()->user()->getAllPermissions()->pluck('name'),
+                ] : null,
+            ],
         ]);
     }
 

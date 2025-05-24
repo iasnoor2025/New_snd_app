@@ -139,7 +139,7 @@ class InvoiceController extends Controller
             DB::commit();
 
             return redirect()->route('invoices.show', $invoice)
-                ->with('success', 'Invoice created successfully')
+                ->with('success', 'Invoice created successfully');
         } catch (\Exception $e) {
             dd($e);
             DB::rollBack();
@@ -178,7 +178,7 @@ class InvoiceController extends Controller
             ->orderBy('start_date', 'desc')
             ->get();
 
-        return Inertia::render('Invoices/Edit', [;
+        return Inertia::render('Invoices/Edit', [
             'invoice' => $invoice,
             'customers' => $customers,
             'rentals' => $rentals,
@@ -260,11 +260,11 @@ class InvoiceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('invoices.show', $invoice);
+            return redirect()->route('invoices.show', $invoice)
                 ->with('success', 'Invoice updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back();
+            return redirect()->back()
                 ->withInput()
                 ->with('error', 'Failed to update invoice: ' . $e->getMessage());
         }
@@ -290,11 +290,11 @@ class InvoiceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('invoices.index');
+            return redirect()->route('invoices.index')
                 ->with('success', 'Invoice deleted successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back();
+            return redirect()->back()
                 ->with('error', 'Failed to delete invoice: ' . $e->getMessage());
         }
     }

@@ -10,18 +10,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class RentalStatusLog extends Model
 {
     use HasFactory;
-use /**
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int;
-use string>
+     * @var array<int, string>
      */
-    protected $fillable = [;
-        'rental_id';
-use 'from_status',
+    protected $fillable = [
+        'rental_id',
+        'from_status',
         'to_status',
-        'changed_by',;
-        'notes',;
+        'changed_by',
+        'notes',
     ];
 
     /**
@@ -29,9 +29,9 @@ use 'from_status',
      *
      * @var array<string, string>
      */
-    protected $casts = [;
-        'from_status' => RentalStatus::class,;
-        'to_status' => RentalStatus::class,;
+    protected $casts = [
+        'from_status' => RentalStatus::class,
+        'to_status' => RentalStatus::class,
     ];
 
     /**

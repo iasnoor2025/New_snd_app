@@ -26,9 +26,9 @@ use AutoLoadsRelations;
         'status',
         'operator_id',
         'notes',
-        'total_amount',;
-        'discount_percentage',;
-        'days',;
+        'total_amount',
+        'discount_percentage',
+        'days',
     ];
 
     /**
@@ -37,9 +37,9 @@ use AutoLoadsRelations;
      * @var array<string, string>
      */
     protected $casts = [
-        'rate' => 'decimal:2',;
-        'total_amount' => 'decimal:2',;
-        'days' => 'integer',;
+        'rate' => 'decimal:2',
+        'total_amount' => 'decimal:2',
+        'days' => 'integer',
     ];
 
     /**

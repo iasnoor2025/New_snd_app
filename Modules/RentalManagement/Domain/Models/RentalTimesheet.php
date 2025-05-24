@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RentalTimesheet extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'rental_id';
-use 'rental_item_id',
+    protected $fillable = [
+        'rental_id',
+        'rental_item_id',
         'equipment_id',
         'operator_id',
         'operator_absent',
@@ -34,8 +34,8 @@ use 'rental_item_id',
         'created_by',
         'approved_by',
         'approved_at',
-        'rate',;
-        'total_amount',;
+        'rate',
+        'total_amount',
     ];
 
     /**
@@ -50,9 +50,9 @@ use 'rental_item_id',
         'hours_used' => 'decimal:2',
         'rate' => 'decimal:2',
         'total_amount' => 'decimal:2',
-        'approved_at' => 'datetime',;
-        'status_updated_at' => 'datetime',;
-        'operator_absent' => 'boolean',;
+        'approved_at' => 'datetime',
+        'status_updated_at' => 'datetime',
+        'operator_absent' => 'boolean',
     ];
 
     /**
@@ -129,12 +129,12 @@ use 'rental_item_id',
             $start = new \DateTime($this->start_time);
             $end = new \DateTime($this->end_time);
             $diff = $start->diff($end);
-            
+
             // Convert to decimal hours
             $hours = $diff->h + ($diff->i / 60);
             return round($hours, 2);
         }
-        
+
         return $this->hours_used ?? 0;
     }
 

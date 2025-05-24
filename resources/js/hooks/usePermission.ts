@@ -1,61 +1,48 @@
 import { usePage } from '@inertiajs/react';
-import { PageProps } from '@/types';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  permissions: string[];
+  roles: string[];
+}
+
+interface Auth {
+  user: User;
+}
 
 /**
  * Custom hook for checking user permissions and roles
  */
 export function usePermission() {
-  // Safely access page props with fallback defaults
-  const { props } = usePage<PageProps>();
-  const auth = props?.auth || { user: null, permissions: [], hasPermission: [], hasRole: [] };
-
-  // Extract permissions and roles, ensuring they're arrays
-  const permissions = auth?.permissions || [];
-  const userPermissions = Array.isArray(auth?.hasPermission) ? auth.hasPermission : [];
-  const userRoles = Array.isArray(auth?.hasRole) ? auth.hasRole : [];
-
-  // Check if user has admin role directly
-  const isAdmin = userRoles.includes('admin');
+  const props = usePage().props as unknown;
+  const auth = (props && typeof props === 'object' && 'auth' in props) ? (props as any).auth as Auth : undefined;
 
   const hasPermission = (permission: string): boolean => {
-    if (!permission) return false;
+    if (!auth?.user) return false;
 
-    // Admin should have all permissions
-    if (isAdmin) return true;
+    // If user has a specific permission
+    if (auth.user.permissions?.includes(permission)) {
+      return true;
+    }
 
-    // Check for direct permission
-    return userPermissions.includes(permission);
-  };
+    // If user has super admin or admin role
+    if (auth.user.roles?.includes('super-admin') || auth.user.roles?.includes('admin')) {
+      return true;
+    }
 
-  const hasAnyPermission = (permissionsToCheck: string[]): boolean => {
-    // Admin should have all permissions
-    if (isAdmin) return true;
-    return permissionsToCheck.some(permission => hasPermission(permission));
-  };
-
-  const hasAllPermissions = (permissionsToCheck: string[]): boolean => {
-    // Admin should have all permissions
-    if (isAdmin) return true;
-    return permissionsToCheck.every(permission => hasPermission(permission));
+    return false;
   };
 
   const hasRole = (role: string): boolean => {
-    if (!role) return false;
-    return userRoles.includes(role);
-  };
-
-  const hasAnyRole = (rolesToCheck: string[]): boolean => {
-    return rolesToCheck.some(role => hasRole(role));
+    if (!auth?.user) return false;
+    return auth.user.roles?.includes(role) || false;
   };
 
   return {
     hasPermission,
-    hasAnyPermission,
-    hasAllPermissions,
     hasRole,
-    hasAnyRole,
-    isAdmin,
-    permissions,
-    userRoles
+    user: auth?.user,
   };
 }

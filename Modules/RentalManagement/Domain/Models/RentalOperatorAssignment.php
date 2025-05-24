@@ -9,25 +9,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RentalOperatorAssignment extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int;
-use string>
+     * @var array<int, string>
      */
-    protected $fillable = [;
-        'employee_id';
-use 'rental_id',
+    protected $fillable = [
+        'employee_id',
+        'rental_id',
         'equipment_id',
         'status',
         'assignment_date',
         'end_date',
         'daily_rate',
         'hourly_rate',
-        'notes',;
-        'assigned_by_id';
+        'notes',
+        'assigned_by_id',
     ];
 
     /**
@@ -37,9 +36,9 @@ use 'rental_id',
      */
     protected $casts = [
         'assignment_date' => 'datetime',
-        'end_date' => 'datetime',;
-        'daily_rate' => 'decimal:2',;
-        'hourly_rate' => 'decimal:2';
+        'end_date' => 'datetime',
+        'daily_rate' => 'decimal:2',
+        'hourly_rate' => 'decimal:2',
     ];
 
     /**
