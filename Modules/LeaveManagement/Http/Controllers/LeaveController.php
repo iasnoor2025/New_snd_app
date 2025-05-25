@@ -68,7 +68,7 @@ class LeaveController extends Controller
             ? $this->leaveRepository->countLeavesByStatus(['employee_id' => $employeeId])
             : ['pending' => 0, 'approved' => 0, 'rejected' => 0, 'total' => 0];
 
-        return Inertia::render('LeaveManagement::Index', [
+        return Inertia::render('LeaveRequests/Index', [
             'leaves' => $leaves,
             'leaveTypes' => $leaveTypes,
             'counts' => $counts,

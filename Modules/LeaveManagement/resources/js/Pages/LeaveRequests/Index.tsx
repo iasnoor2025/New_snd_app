@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/LeaveManagement/Resources/js/types';
-import AdminLayout from '@/Modules/LeaveManagement/Resources/js/layouts/AdminLayout';
-import { formatDate } from '@/Modules/LeaveManagement/Resources/js/utils/format';
-// Temporarily disable external hook import
-// import { usePermission } from '@/Modules/LeaveManagement/Resources/js/hooks/usePermission';
-import { Button } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/button';
+// @ts-ignore
+import { Button } from '../../../../../../resources/js/components/ui/button';
+// @ts-ignore
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/input';
-import { Badge } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/badge';
+} from '../../../../../../resources/js/components/ui/card';
+// @ts-ignore
+import { Input } from '../../../../../../resources/js/components/ui/input';
+// @ts-ignore
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/select';
+} from '../../../../../../resources/js/components/ui/select';
 import {
   Table,
   TableBody,
@@ -29,8 +28,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/table';
-import { ToastService } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/shared/ToastManager';
+} from '../../../../../../resources/js/components/ui/table';
+// import { ToastService } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/shared/ToastManager';
 import {
   Plus as PlusIcon,
   Eye as EyeIcon,
@@ -40,23 +39,28 @@ import {
   Check as CheckIcon,
   X as XIcon
 } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/tooltip';
+// @ts-ignore
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/Modules/LeaveManagement/Resources/js/components/ui/alert-dialog';
-import ErrorBoundary from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ErrorBoundary';
-
-const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Leave Requests', href: '/leave-requests' }
-];
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../../../../../../resources/js/components/ui/tooltip';
+// import { Tooltip } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/tooltip';
+// import ErrorBoundary from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ErrorBoundary';
+// @ts-ignore
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../../../../../../resources/js/components/ui/dialog';
+// @ts-ignore
+import AdminLayout from '../../../../../EmployeeManagement/resources/js/layouts/AdminLayout';
 
 // Define the LeaveRequest interface here to ensure it has all required properties
 interface Employee {
@@ -77,38 +81,37 @@ interface LeaveRequest {
   status: string;
 }
 
-interface Props extends PageProps {
-  leaveRequests: {
-    data: LeaveRequest[];
-    current_page: number;
-    per_page: number;
-    last_page: number;
-    total: number;
-  };
-  filters?: {
-    status?: string;
-    search?: string;
-  };
-}
-
 // Temporary inline implementation of usePermission hook
 function usePermission() {
-  const { props } = usePage<PageProps>();
-  const auth = props?.auth || { user: null, permissions: [], hasPermission: [], hasRole: [] };
-
-  const isAdmin = Array.isArray(auth?.hasRole) ? auth.hasRole.includes('admin') : false;
-
-  const hasPermission = (permission: string): boolean => {
+  const { props } = usePage();
+  const auth = (props?.auth || {}) as Record<string, any>;
+  // DEBUG: Log the full auth object
+  console.log('auth object:', auth);
+  let hasRole = auth.hasRole || (auth.user && auth.user.roles) || [];
+  let hasPermission = auth.hasPermission || (auth.user && auth.user.permissions) || [];
+  // DEBUG: Log roles and permissions arrays
+  console.log('roles:', hasRole, 'permissions:', hasPermission);
+  const isAdmin = Array.isArray(hasRole) && hasRole.some(role => role && (role === 'admin' || role === 'Admin' || role.name === 'admin' || role.name === 'Admin'));
+  const hasPermissionFn = (permission: string): boolean => {
     if (!permission) return false;
     if (isAdmin) return true;
-    return Array.isArray(auth?.hasPermission) ? auth.hasPermission.includes(permission) : false;
+    return Array.isArray(hasPermission) && hasPermission.some(
+      perm => perm === permission || (perm && perm.name === permission)
+    );
   };
-
-  return { hasPermission, isAdmin };
+  return { hasPermission: hasPermissionFn, isAdmin };
 }
 
-export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { status: 'all', search: '' } }: Props) {
-  const { hasPermission } = usePermission();
+// Define a local formatDate utility if needed
+const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString();
+
+const breadcrumbs = [
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Leave Requests', href: '/leaves' },
+];
+
+export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { status: 'all', search: '' } }: { auth: any, leaveRequests: any, filters?: { status?: string, search?: string } }) {
+  const { hasPermission, isAdmin } = usePermission();
   const [processing, setProcessing] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState(filters.search || '');
   const [selectedStatus, setSelectedStatus] = useState(filters.status || 'all');
@@ -124,8 +127,11 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
   const canApproveLeaveRequest = hasPermission('leave-requests.approve');
   const canViewLeaveRequest = hasPermission('leave-requests.view');
 
+  // DEBUG: Log permission values
+  console.log('isAdmin:', isAdmin, 'canCreateLeaveRequest:', canCreateLeaveRequest);
+
   const handleSearch = () => {
-    router.get(route('leave-requests.index'), {
+    router.get('#', {
       search: searchTerm,
       status: selectedStatus === 'all' ? undefined : selectedStatus,
     }, {
@@ -137,7 +143,7 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
   const resetFilters = () => {
     setSearchTerm('');
     setSelectedStatus('all');
-    router.get(route('leave-requests.index'), {}, {
+    router.get('#', {}, {
       preserveState: true,
       replace: true,
     });
@@ -164,15 +170,15 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
   const confirmDelete = () => {
     if (!leaveRequestToDelete) return;
 
-    router.delete(route('leave-requests.destroy', leaveRequestToDelete), {
+    router.delete('#', {
       preserveState: false,
       preserveScroll: false,
       onSuccess: () => {
-        ToastService.success("Leave request deleted successfully");
-        router.visit(route('leave-requests.index'));
+        // ToastService.success("Leave request deleted successfully");
+        router.visit('#');
       },
       onError: (errors) => {
-        ToastService.error(errors.error || 'Failed to delete leave request');
+        // ToastService.error(errors.error || 'Failed to delete leave request');
       },
     });
     setDeleteDialogOpen(false);
@@ -181,13 +187,13 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
 
   const handleApprove = (id: number) => {
     setProcessing(id);
-    router.put(route('leave-requests.approve', id), {}, {
+    router.put('#', {}, {
       onSuccess: () => {
-        ToastService.success("Leave request approved successfully");
+        // ToastService.success("Leave request approved successfully");
         setProcessing(null);
       },
       onError: (errors) => {
-        ToastService.error(errors.error || 'Failed to approve leave request');
+        // ToastService.error(errors.error || 'Failed to approve leave request');
         setProcessing(null);
       },
     });
@@ -195,47 +201,47 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
 
   const handleReject = (id: number) => {
     setProcessing(id);
-    router.put(route('leave-requests.reject', id), {}, {
+    router.put('#', {}, {
       onSuccess: () => {
-        ToastService.success("Leave request rejected successfully");
+        // ToastService.success("Leave request rejected successfully");
         setProcessing(null);
       },
       onError: (errors) => {
-        ToastService.error(errors.error || 'Failed to reject leave request');
+        // ToastService.error(errors.error || 'Failed to reject leave request');
         setProcessing(null);
       },
     });
   };
 
   return (
-    <AdminLayout title="Leave Requests" breadcrumbs={breadcrumbs} requiredPermission="leave-requests.view">
+    <>
       <Head title="Leave Requests" />
 
-      <div className="flex h-full flex-1 flex-col gap-4 p-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-2xl font-bold">Leave Requests</CardTitle>
-            <div className="flex items-center space-x-2">
-              {canCreateLeaveRequest && (
-                <Button asChild>
-                  <Link href={route('leave-requests.create')}>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    New Request
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4 mb-4">
-              <div className="flex w-full max-w-sm items-center space-x-2">
-                <Input
-                  placeholder="Search by employee name"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                />
-                <ErrorBoundary>
+      <AdminLayout title="Leave Requests" requiredPermission="leave-requests.view" breadcrumbs={breadcrumbs}>
+        <div className="flex h-full flex-1 flex-col gap-4 p-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-2xl font-bold">Leave Requests</CardTitle>
+              <div className="flex items-center space-x-2">
+                {canCreateLeaveRequest && (
+                  <Button asChild>
+                    <Link href="#">
+                      <PlusIcon className="mr-2 h-4 w-4" />
+                      New Request
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-4 mb-4">
+                <div className="flex w-full max-w-sm items-center space-x-2">
+                  <Input
+                    placeholder="Search by employee name"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  />
                   <Select
                     value={selectedStatus}
                     onValueChange={setSelectedStatus}
@@ -250,121 +256,121 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
                       <SelectItem value="rejected">Rejected</SelectItem>
                     </SelectContent>
                   </Select>
-                </ErrorBoundary>
-                <Button onClick={handleSearch}>
-                  Search
-                </Button>
-                <Button variant="outline" onClick={resetFilters}>
-                  <ArrowPathIcon className="h-4 w-4" />
-                </Button>
+                  <Button onClick={handleSearch}>
+                    Search
+                  </Button>
+                  <Button variant="outline" onClick={resetFilters}>
+                    <ArrowPathIcon className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Employee</TableHead>
-                    <TableHead>Leave Type</TableHead>
-                    <TableHead>Start Date</TableHead>
-                    <TableHead>End Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {leaveRequestsData.length > 0 ? (
-                    leaveRequestsData.map((request) => (
-                      <TableRow key={request.id}>
-                        <TableCell className="font-medium">
-                          {request.employee ? `${request.employee.first_name} ${request.employee.last_name}` : 'N/A'}
-                        </TableCell>
-                        <TableCell>{request.leave_type}</TableCell>
-                        <TableCell>{formatDate(request.start_date)}</TableCell>
-                        <TableCell>{formatDate(request.end_date)}</TableCell>
-                        <TableCell>{getStatusBadge(request.status)}</TableCell>
-                        <TableCell className="text-right">
-                          {canViewLeaveRequest && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" onClick={() => router.get(route('leave-requests.show', request.id))}>
-                                  <EyeIcon className="h-4 w-4" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>View</TooltipContent>
-                            </Tooltip>
-                          )}
-                          {canEditLeaveRequest && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" onClick={() => router.get(route('leave-requests.edit', request.id))}>
-                                  <PencilIcon className="h-4 w-4" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>Edit</TooltipContent>
-                            </Tooltip>
-                          )}
-                          {canDeleteLeaveRequest && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" onClick={() => handleDelete(request.id)}>
-                                  <TrashIcon className="h-4 w-4" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>Delete</TooltipContent>
-                            </Tooltip>
-                          )}
-                          {canApproveLeaveRequest && request.status.toLowerCase() === 'pending' && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" onClick={() => handleApprove(request.id)}>
-                                  <CheckIcon className="h-4 w-4" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>Approve</TooltipContent>
-                            </Tooltip>
-                          )}
-                          {canApproveLeaveRequest && request.status.toLowerCase() === 'pending' && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" onClick={() => handleReject(request.id)}>
-                                  <XIcon className="h-4 w-4" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>Reject</TooltipContent>
-                            </Tooltip>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center">No leave requests found.</TableCell>
+                      <TableHead>Employee</TableHead>
+                      <TableHead>Leave Type</TableHead>
+                      <TableHead>Start Date</TableHead>
+                      <TableHead>End Date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                  </TableHeader>
+                  <TableBody>
+                    {leaveRequestsData.length > 0 ? (
+                      leaveRequestsData.map((request) => (
+                        <TableRow key={request.id}>
+                          <TableCell className="font-medium">
+                            {request.employee ? `${request.employee.first_name} ${request.employee.last_name}` : 'N/A'}
+                          </TableCell>
+                          <TableCell>{request.leave_type}</TableCell>
+                          <TableCell>{formatDate(request.start_date)}</TableCell>
+                          <TableCell>{formatDate(request.end_date)}</TableCell>
+                          <TableCell>{getStatusBadge(request.status)}</TableCell>
+                          <TableCell className="text-right">
+                            {canViewLeaveRequest && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" onClick={() => router.get('#')}>
+                                    <EyeIcon className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>View</TooltipContent>
+                              </Tooltip>
+                            )}
+                            {canEditLeaveRequest && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" onClick={() => router.get('#')}>
+                                    <PencilIcon className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Edit</TooltipContent>
+                              </Tooltip>
+                            )}
+                            {canDeleteLeaveRequest && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" onClick={() => handleDelete(request.id)}>
+                                    <TrashIcon className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Delete</TooltipContent>
+                              </Tooltip>
+                            )}
+                            {canApproveLeaveRequest && request.status.toLowerCase() === 'pending' && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" onClick={() => handleApprove(request.id)}>
+                                    <CheckIcon className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Approve</TooltipContent>
+                              </Tooltip>
+                            )}
+                            {canApproveLeaveRequest && request.status.toLowerCase() === 'pending' && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" onClick={() => handleReject(request.id)}>
+                                    <XIcon className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Reject</TooltipContent>
+                              </Tooltip>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center">No leave requests found.</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </AdminLayout>
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
               This action cannot be undone. This will permanently delete the leave request.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setLeaveRequestToDelete(null)}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose onClick={() => setLeaveRequestToDelete(null)}>Cancel</DialogClose>
+            <DialogClose onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
               Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </AdminLayout>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

@@ -69,3 +69,15 @@ Route::middleware(['auth', 'verified'])->prefix('audit')->group(function () {
         return redirect()->route('audit.index');
     });
 });
+
+// Direct routes for leaves
+Route::middleware(['auth', 'verified'])->prefix('leaves')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('leaves.index');
+    });
+});
+
+// Direct route for leave
+Route::middleware(['auth', 'verified'])->get('/leave', function () {
+    return redirect()->route('leaves.index');
+});

@@ -19,7 +19,9 @@ if (typeof window !== 'undefined') {
 // Dynamically import all module pages (both pages and Pages, all modules)
 const modulePages: Record<string, () => Promise<any>> = {
   ...import.meta.glob('/Modules/*/resources/js/pages/**/*.tsx'),
+  ...import.meta.glob('/Modules/*/resources/js/pages/**/*.jsx'),
   ...import.meta.glob('/Modules/*/resources/js/Pages/**/*.tsx'),
+  ...import.meta.glob('/Modules/*/resources/js/Pages/**/*.jsx'),
 };
 
 // Helper function to find module pages by pattern
@@ -119,6 +121,28 @@ createInertiaApp({
         } catch (error) {
             console.log(`Page not found in main app: ${name}, checking module pages...`);
 
+            // Handle Laravel's Inertia::render('Module::Page') pattern (like Employee module)
+            if (name.includes('::')) {
+                const [module, page] = name.split('::');
+                // Try both Pages and pages directories, and both .tsx and .jsx
+                const possiblePaths = [
+                    `/Modules/${module}/resources/js/Pages/${page}.tsx`,
+                    `/Modules/${module}/resources/js/Pages/${page}.jsx`,
+                    `/Modules/${module}/resources/js/pages/${page}.tsx`,
+                    `/Modules/${module}/resources/js/pages/${page}.jsx`,
+                    `/Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
+                    `/Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
+                    `/Modules/${module}/resources/js/pages/${page}/Index.tsx`,
+                    `/Modules/${module}/resources/js/pages/${page}/Index.jsx`,
+                ];
+                for (const path of possiblePaths) {
+                    if (path in modulePages) {
+                        console.log(`Resolved ${name} to ${path}`);
+                        return await modulePages[path]();
+                    }
+                }
+            }
+
             // First check in our combined page mappings
             if (name in allPageMappings && allPageMappings[name] in modulePages) {
                 try {
@@ -154,7 +178,7 @@ createInertiaApp({
 
             // Try each potential module
             for (const module of potentialModules) {
-                const possiblePaths = [
+            const possiblePaths = [
                     `/Modules/${module}/resources/js/pages/${name}.tsx`,
                     `/Modules/${module}/resources/js/Pages/${name}.tsx`,
                     // For exact module page match (like Employees/Index in EmployeeManagement)
@@ -191,17 +215,17 @@ createInertiaApp({
                 if (specificPaths.length > 0) {
                     console.log(`Found specific page at ${specificPaths[0]}`);
                     return await modulePages[specificPaths[0]]();
-                }
+              }
             }
 
             // Try generic match for any module as a last resort
             const normalizedName = name.replace(/\\/g, '/');
             for (const key in modulePages) {
-                const keyNoExt = key.replace(/\.tsx$/, '').replace(/\\/g, '/');
+              const keyNoExt = key.replace(/\.tsx$/, '').replace(/\\/g, '/');
                 if (keyNoExt.endsWith(`/${normalizedName}`) ||
                     keyNoExt.toLowerCase().endsWith(`/${normalizedName.toLowerCase()}`)) {
-                    return await modulePages[key]();
-                }
+                return await modulePages[key]();
+              }
             }
 
             // Try to infer pattern for common page types (Create, Edit, Show)

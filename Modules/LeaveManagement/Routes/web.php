@@ -20,7 +20,7 @@ use Modules\LeaveManagement\Http\Controllers\LeaveTypeController;
 use Modules\LeaveManagement\Http\Controllers\LeaveReportController;
 use Modules\LeaveManagement\Http\Controllers\LeaveSettingController;
 
-Route::prefix('hr/leaves')->name('leaves.')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('leaves')->name('leaves.')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard
     Route::get('/', [LeaveController::class, 'index'])->name('index');
 
