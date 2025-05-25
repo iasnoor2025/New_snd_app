@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # Handle modules_statuses.json directly
+    RewriteRule ^modules_statuses\.json$ modules_statuses.json [L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

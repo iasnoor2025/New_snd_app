@@ -14,9 +14,7 @@ use App\Traits\AutoLoadsRelations;
 
 class Equipment extends Model implements HasMedia
 {
-    use HasFactory;
-use HasMediaAttachments;
-use AutoLoadsRelations;
+    use HasFactory, HasMediaAttachments, AutoLoadsRelations;
 
     /**
      * The table associated with the model.

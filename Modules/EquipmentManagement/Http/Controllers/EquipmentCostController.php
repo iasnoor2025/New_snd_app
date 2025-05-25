@@ -23,7 +23,7 @@ class EquipmentCostController extends Controller
      * Create a new controller instance.
      *
      * @param PerformanceTrackingService $performanceService
-     * @return void;
+     * @return void
      */
     public function __construct(PerformanceTrackingService $performanceService)
     {
@@ -35,7 +35,7 @@ class EquipmentCostController extends Controller
      *
      * @param Request $request
      * @param Equipment $equipment
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request, Equipment $equipment)
     {
@@ -63,7 +63,7 @@ class EquipmentCostController extends Controller
         $limit = $request->input('limit', 50);
         $costs = $query->paginate($limit);
 
-        return response()->json([;
+        return response()->json([
             'equipment' => $equipment,
             'costs' => $costs,
             'cost_types' => EquipmentCostRecord::getAvailableTypes(),
@@ -75,7 +75,7 @@ class EquipmentCostController extends Controller
      *
      * @param EquipmentCostRequest $request
      * @param Equipment $equipment
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(EquipmentCostRequest $request, Equipment $equipment)
     {
@@ -84,7 +84,7 @@ class EquipmentCostController extends Controller
 
         $cost = $this->performanceService->recordCost($equipment, $data, auth()->id());
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Cost recorded successfully',
             'cost' => $cost,
             'equipment' => $equipment->fresh(),
@@ -96,17 +96,17 @@ class EquipmentCostController extends Controller
      *
      * @param Equipment $equipment
      * @param EquipmentCostRecord $cost
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Equipment $equipment, EquipmentCostRecord $cost)
     {
         if ($cost->equipment_id !== $equipment->id) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'The specified cost record does not belong to this equipment',
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        return response()->json([;
+        return response()->json([
             'equipment' => $equipment,
             'cost' => $cost,
         ]);
@@ -118,12 +118,12 @@ class EquipmentCostController extends Controller
      * @param EquipmentCostRequest $request
      * @param Equipment $equipment
      * @param EquipmentCostRecord $cost
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(EquipmentCostRequest $request, Equipment $equipment, EquipmentCostRecord $cost)
     {
         if ($cost->equipment_id !== $equipment->id) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'The specified cost record does not belong to this equipment',
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -144,7 +144,7 @@ class EquipmentCostController extends Controller
             $equipment->updateOperatingCosts();
         }
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Cost record updated successfully',
             'cost' => $cost->fresh(),
             'equipment' => $equipment->fresh(),
@@ -156,12 +156,12 @@ class EquipmentCostController extends Controller
      *
      * @param Equipment $equipment
      * @param EquipmentCostRecord $cost
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Equipment $equipment, EquipmentCostRecord $cost)
     {
         if ($cost->equipment_id !== $equipment->id) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'The specified cost record does not belong to this equipment',
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -173,7 +173,7 @@ class EquipmentCostController extends Controller
         $equipment->updateLifetimeMaintenanceCost();
         $equipment->updateOperatingCosts();
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Cost record deleted successfully',
             'equipment' => $equipment->fresh(),
         ]);
@@ -184,7 +184,7 @@ class EquipmentCostController extends Controller
      *
      * @param Request $request
      * @param Equipment $equipment
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function summary(Request $request, Equipment $equipment)
     {
@@ -231,7 +231,7 @@ class EquipmentCostController extends Controller
             $perMileCost = $totalCost / $equipment->current_mileage;
         }
 
-        return response()->json([;
+        return response()->json([
             'equipment' => $equipment,
             'total_cost' => $totalCost,
             'cost_summary' => $summary,

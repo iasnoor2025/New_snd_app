@@ -28,7 +28,7 @@ class EquipmentPerformanceController extends Controller
         $metrics = $this->performanceService->getPerformanceMetrics($equipment, $startDate, $endDate);
         $trends = $this->performanceService->getPerformanceTrends($equipment);
 
-        return Inertia::render('Equipment/Performance/Index', [;
+        return Inertia::render('Equipment/Performance/Index', [
             'equipment' => $equipment->load('category'),
             'metrics' => $metrics,
             'trends' => $trends,
@@ -47,7 +47,7 @@ class EquipmentPerformanceController extends Controller
 
         $utilizationRate = $this->performanceService->calculateUtilizationRate($equipment, $startDate, $endDate);
 
-        return response()->json([;
+        return response()->json([
             'utilization_rate' => $utilizationRate
         ]);
     }
@@ -107,7 +107,7 @@ class EquipmentPerformanceController extends Controller
             ];
         }
 
-        return response()->json([;
+        return response()->json([
             'summary' => $summary,
             'average_utilization' => collect($summary)->avg('utilization_rate'),
             'average_performance' => collect($summary)->avg('overall_performance'),

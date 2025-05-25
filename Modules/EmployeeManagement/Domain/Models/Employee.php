@@ -189,6 +189,39 @@ use AutoLoadsRelations, SoftDeletes;
             if (!isset($employee->file_number) || empty($employee->file_number)) {
                 $employee->file_number = self::generateNextFileNumber();
             }
+            \Log::info('Employee creating event', [
+                'file_number' => $employee->file_number,
+                'name' => $employee->first_name . ' ' . $employee->last_name,
+                'timestamp' => now()->toDateTimeString()
+            ]);
+        });
+
+        static::created(function ($employee) {
+            \Log::info('Employee created event', [
+                'id' => $employee->id,
+                'file_number' => $employee->file_number,
+                'name' => $employee->first_name . ' ' . $employee->last_name,
+                'timestamp' => now()->toDateTimeString()
+            ]);
+        });
+
+        static::saving(function ($employee) {
+            \Log::info('Employee saving event', [
+                'id' => $employee->id,
+                'file_number' => $employee->file_number,
+                'name' => $employee->first_name . ' ' . $employee->last_name,
+                'timestamp' => now()->toDateTimeString()
+            ]);
+            return true; // Allow the save to proceed
+        });
+
+        static::saved(function ($employee) {
+            \Log::info('Employee saved event', [
+                'id' => $employee->id,
+                'file_number' => $employee->file_number,
+                'name' => $employee->first_name . ' ' . $employee->last_name,
+                'timestamp' => now()->toDateTimeString()
+            ]);
         });
     }
 

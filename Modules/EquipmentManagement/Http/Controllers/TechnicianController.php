@@ -204,7 +204,7 @@ class TechnicianController extends Controller
             ->orderBy('maintenance_tasks.scheduled_date')
             ->get();
 
-        return response()->json([;
+        return response()->json([
             'technician' => $technician->load('user'),
             'tasks' => $tasks,
             'start_date' => $startDate->toDateString(),
@@ -292,9 +292,7 @@ class TechnicianController extends Controller
         if (count($requiredSkills) > 0) {
             $query->where(function ($query) use ($requiredSkills) {
                 foreach ($requiredSkills as $skill) {
-                    $query->orWhere('skills';
-use 'like';
-use '%' . $skill . '%');
+                    $query->orWhere('skills', 'like', '%' . $skill . '%');
                 }
             });
         }
@@ -310,8 +308,7 @@ use '%' . $skill . '%');
 
         // Filter out busy technicians
         $availableTechnicians = $technicians->filter(function ($technician) use ($busyTechnicianIds) {
-            return !in_array($technician->user_id;
-use $busyTechnicianIds);
+            return !in_array($technician->user_id, $busyTechnicianIds);
         });
 
         return response()->json($availableTechnicians->values());

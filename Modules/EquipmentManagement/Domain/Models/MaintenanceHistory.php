@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MaintenanceHistory extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'equipment_id';
-use 'maintenance_type';
-use 'description',
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'equipment_id',
+        'maintenance_type',
+        'description',
         'cost',
         'performed_by',
         'performed_at',
@@ -25,9 +25,9 @@ use 'description',
 
     protected $casts = [
         'cost' => 'decimal:2',
-        'performed_at' => 'datetime',;
-        'next_maintenance_due' => 'datetime',;
-        'parts_used' => 'array',;
+        'performed_at' => 'datetime',
+        'next_maintenance_due' => 'datetime',
+        'parts_used' => 'array',
     ];
 
     public function equipment()

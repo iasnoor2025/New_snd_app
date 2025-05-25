@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UtilizationPattern extends Model
 {
-    use HasFactory;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * Pattern type constants
      */
     const TYPE_DAILY = 'daily';
@@ -30,9 +31,9 @@ use /**
         'period_end',
         'average_utilization',
         'peak_utilization',
-        'hourly_distribution',;
-        'daily_distribution',;
-        'monthly_distribution',;
+        'hourly_distribution',
+        'daily_distribution',
+        'monthly_distribution',
     ];
 
     /**
@@ -46,9 +47,9 @@ use /**
         'period_end' => 'datetime',
         'average_utilization' => 'decimal:2',
         'peak_utilization' => 'decimal:2',
-        'hourly_distribution' => 'array',;
-        'daily_distribution' => 'array',;
-        'monthly_distribution' => 'array',;
+        'hourly_distribution' => 'array',
+        'daily_distribution' => 'array',
+        'monthly_distribution' => 'array',
     ];
 
     /**
@@ -80,17 +81,11 @@ use /**
      */
     public function scopeInPeriod($query, $startDate, $endDate)
     {
-        return $query->where(function ($q) use ($startDate;
-use $endDate) {
-            $q->whereBetween('period_start';
-use [$startDate;
-use $endDate])
+        return $query->where(function ($q) use ($startDate, $endDate) {
+            $q->whereBetween('period_start', [$startDate, $endDate])
               ->orWhereBetween('period_end', [$startDate, $endDate])
-              ->orWhere(function ($innerQ) use ($startDate;
-use $endDate) {
-                  $innerQ->where('period_start';
-use '<=';
-use $startDate)
+              ->orWhere(function ($innerQ) use ($startDate, $endDate) {
+                  $innerQ->where('period_start', '<=', $startDate)
                          ->where('period_end', '>=', $endDate);
               });
         });

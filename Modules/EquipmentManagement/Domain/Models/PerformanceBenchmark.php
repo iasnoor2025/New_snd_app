@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PerformanceBenchmark extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'equipment_type';
-use 'model',
+    protected $fillable = [
+        'equipment_type',
+        'model',
         'manufacturer',
         'metric_name',
         'expected_min_value',
@@ -28,8 +28,8 @@ use 'model',
         'unit_of_measure',
         'description',
         'is_active',
-        'created_by',;
-        'updated_by',;
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -39,9 +39,9 @@ use 'model',
      */
     protected $casts = [
         'expected_min_value' => 'decimal:4',
-        'expected_max_value' => 'decimal:4',;
-        'optimal_value' => 'decimal:4',;
-        'is_active' => 'boolean',;
+        'expected_max_value' => 'decimal:4',
+        'optimal_value' => 'decimal:4',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -186,7 +186,7 @@ use 'model',
         }
 
         // Try with just type
-        return self::active();
+        return self::active()
             ->forEquipmentType($equipment->type)
             ->forMetric($metricName)
             ->first();

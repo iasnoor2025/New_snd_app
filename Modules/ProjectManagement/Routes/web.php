@@ -22,7 +22,7 @@ use Inertia\Inertia;
 |
 */
 
-/*
+// Web routes uncommented
 Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group(function() {
     // Project routes
     Route::get('/', [ProjectController::class, 'index'])->name('index');
@@ -39,14 +39,12 @@ Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group
     })->name('progress.demo');
 
     // Project resources routes
-    // TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API and missing ProjectResourceService
-    // Route::get('/{project}/resources', [ProjectResourceController::class, 'index'])
-    //     ->name('resources');
+    Route::get('/{project}/resources', [ProjectResourceController::class, 'index'])
+        ->name('resources');
 
     // Generic resource destroy route to handle delete requests from the main Resources component
-    // TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API and missing ProjectResourceService
-    // Route::delete('/{project}/resources/{resource}', [ProjectResourceController::class, 'destroy'])
-    //     ->name('resources.destroy');
+    Route::delete('/{project}/resources/{resource}', [ProjectResourceController::class, 'destroy'])
+        ->name('resources.destroy');
 
     // Project tasks routes
     Route::get('/{project}/tasks', [TaskController::class, 'index'])
@@ -120,5 +118,4 @@ Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group
             ->name('resource.destroy');
     });
 });
-*/
 

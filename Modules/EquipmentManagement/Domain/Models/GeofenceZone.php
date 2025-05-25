@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class GeofenceZone extends Model
 {
     use SoftDeletes;
-use protected $fillable = [
-        'name';
-use 'type';
-use 'description',
+
+    protected $fillable = [
+        'name',
+        'type',
+        'description',
         'coordinates',
         'radius',
         'is_active',
@@ -23,9 +24,9 @@ use 'description',
     protected $casts = [
         'coordinates' => 'array',
         'radius' => 'decimal:2',
-        'is_active' => 'boolean',;
-        'alert_settings' => 'array',;
-        'metadata' => 'array',;
+        'is_active' => 'boolean',
+        'alert_settings' => 'array',
+        'metadata' => 'array',
     ];
 
     public function geofenceLogs(): HasMany

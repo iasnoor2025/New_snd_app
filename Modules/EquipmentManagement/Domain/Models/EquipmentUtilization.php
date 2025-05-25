@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EquipmentUtilization extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'equipment_id';
-use 'date';
-use 'total_hours',
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'equipment_id',
+        'date',
+        'total_hours',
         'active_hours',
         'utilization_rate',
         'rental_count',
@@ -24,9 +24,9 @@ use 'total_hours',
 
     protected $casts = [
         'date' => 'date',
-        'utilization_rate' => 'decimal:2',;
-        'revenue_per_hour' => 'decimal:2',;
-        'usage_patterns' => 'array',;
+        'utilization_rate' => 'decimal:2',
+        'revenue_per_hour' => 'decimal:2',
+        'usage_patterns' => 'array',
     ];
 
     public function equipment(): BelongsTo

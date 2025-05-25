@@ -23,6 +23,7 @@ class EmployeeService extends BaseService
     public function createEmployee(array $data): Employee
     {
         try {
+            \Log::info('EmployeeService::createEmployee - Start', ['data' => $data]);
             DB::beginTransaction();
 
             // Generate file number if not provided
@@ -30,20 +31,74 @@ class EmployeeService extends BaseService
                 $data['file_number'] = $this->employeeRepository->generateNextFileNumber();
             }
 
+            // Try to create employee using repository
             $employee = $this->employeeRepository->create($data);
+            \Log::info('EmployeeService::createEmployee - After repository create', ['employee' => $employee]);
+
+            // If repository create doesn't produce a valid employee with ID, try direct model creation
+            if (!$employee || !$employee->exists || !$employee->id) {
+                \Log::warning('EmployeeService::createEmployee - Repository create failed, trying direct model creation');
+
+                // Direct model creation
+                $employee = new Employee();
+                foreach ($data as $key => $value) {
+                    if (in_array($key, $employee->getFillable())) {
+                        $employee->{$key} = $value;
+                    }
+                }
+                $saveResult = $employee->save();
+
+                \Log::info('EmployeeService::createEmployee - Direct model save result', [
+                    'success' => $saveResult,
+                    'employee_id' => $employee->id,
+                    'employee_exists' => $employee->exists
+                ]);
+
+                if (!$saveResult || !$employee->id) {
+                    \Log::error('EmployeeService::createEmployee - Direct model save failed', [
+                        'data' => $data,
+                        'model_errors' => $employee->getErrors() ?? 'No errors available'
+                    ]);
+                    throw new \Exception('Failed to save employee using direct model creation');
+                }
+            }
 
             // Create associated user if needed
             if (isset($data['create_user']) && $data['create_user']) {
                 $user = $this->createUserForEmployee($employee, $data);
                 $employee->user_id = $user->id;
                 $employee->save();
+                \Log::info('EmployeeService::createEmployee - User created and linked', ['user_id' => $user->id]);
+            }
+
+            // Attempt a refresh to verify the employee was actually saved
+            try {
+                $refreshed = Employee::find($employee->id);
+                \Log::info('EmployeeService::createEmployee - Verify employee exists in DB', [
+                    'found' => $refreshed ? true : false,
+                    'id' => $employee->id
+                ]);
+
+                if (!$refreshed) {
+                    throw new \Exception('Employee created but cannot be found in database after creation');
+                }
+            } catch (\Exception $e) {
+                \Log::error('EmployeeService::createEmployee - Verification failed', [
+                    'error' => $e->getMessage()
+                ]);
+                throw $e;
             }
 
             DB::commit();
+            \Log::info('EmployeeService::createEmployee - Success', ['employee_id' => $employee->id]);
             return $employee;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to create employee: ' . $e->getMessage());
+            \Log::error('EmployeeService::createEmployee - Exception', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'data' => $data
+            ]);
             throw $e;
         }
     }

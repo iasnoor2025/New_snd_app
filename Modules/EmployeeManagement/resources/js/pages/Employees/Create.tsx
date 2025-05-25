@@ -377,8 +377,19 @@ export default function Create({ users, positions, employee, isEditing = false }
           },
         });
 
-        toast.success('Employee created successfully');
-        router.visit('/employees');
+        // Check for redirect URL in response
+        if (response.data && response.data.redirect) {
+          // Show success toast
+          toast.success('Employee created successfully');
+
+          // Use complete URL for redirection including protocol and host
+          const url = new URL(response.data.redirect, window.location.origin);
+          window.location.href = url.toString();
+        } else {
+          // Fallback to hardcoded URL if no redirect in response
+          toast.success('Employee created successfully');
+          window.location.href = `${window.location.origin}/employees`;
+        }
       }
     } catch (error) {
       console.error('Error submitting form:', error);

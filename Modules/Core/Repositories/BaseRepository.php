@@ -56,7 +56,37 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function create(array $data)
     {
-        return $this->model->create($data);
+        \Log::info('BaseRepository::create - Start', [
+            'model_class' => get_class($this->model),
+            'data_keys' => array_keys($data)
+        ]);
+
+        try {
+            $model = $this->model->create($data);
+
+            // Check if the model was actually created with an ID
+            \Log::info('BaseRepository::create - After create', [
+                'model_class' => get_class($this->model),
+                'model_id' => $model->id ?? 'null',
+                'model_exists' => $model->exists ?? false
+            ]);
+
+            if (!$model || !$model->exists || !$model->id) {
+                \Log::warning('BaseRepository::create - Model creation failed', [
+                    'model_class' => get_class($this->model),
+                    'data' => $data
+                ]);
+            }
+
+            return $model;
+        } catch (\Exception $e) {
+            \Log::error('BaseRepository::create - Exception', [
+                'model_class' => get_class($this->model),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
+        }
     }
 
     /**

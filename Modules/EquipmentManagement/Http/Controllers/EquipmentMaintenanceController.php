@@ -28,7 +28,7 @@ class EquipmentMaintenanceController extends Controller
         $performance = $this->maintenanceService->getMaintenancePerformance($equipment);
         $schedule = $this->maintenanceService->getMaintenanceSchedule($equipment);
 
-        return Inertia::render('Equipment/Maintenance/Index', [;
+        return Inertia::render('Equipment/Maintenance/Index', [
             'equipment' => $equipment->load('category'),
             'history' => $history,
             'costs' => $costs,
@@ -42,7 +42,7 @@ class EquipmentMaintenanceController extends Controller
      */
     public function create(Equipment $equipment)
     {
-        return Inertia::render('Equipment/Maintenance/Create', [;
+        return Inertia::render('Equipment/Maintenance/Create', [
             'equipment' => $equipment->load('category'),
         ]);
     }
@@ -71,7 +71,7 @@ class EquipmentMaintenanceController extends Controller
                 $request->notes
             );
 
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('success', 'Maintenance record created successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -88,7 +88,7 @@ class EquipmentMaintenanceController extends Controller
             abort(404);
         }
 
-        return Inertia::render('Equipment/Maintenance/Show', [;
+        return Inertia::render('Equipment/Maintenance/Show', [
             'equipment' => $equipment->load('category'),
             'maintenance' => $maintenance->load(['performedBy', 'approvedBy', 'equipment'])
         ]);
@@ -106,11 +106,11 @@ class EquipmentMaintenanceController extends Controller
 
         // Don't allow editing completed or cancelled maintenance
         if (in_array($maintenance->status, ['completed', 'cancelled'])) {
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('error', 'Cannot edit a completed or cancelled maintenance record.');
         }
 
-        return Inertia::render('Equipment/Maintenance/Edit', [;
+        return Inertia::render('Equipment/Maintenance/Edit', [
             'equipment' => $equipment->load('category'),
             'maintenance' => $maintenance
         ]);
@@ -128,7 +128,7 @@ class EquipmentMaintenanceController extends Controller
 
         // Don't allow updating completed or cancelled maintenance
         if (in_array($maintenance->status, ['completed', 'cancelled'])) {
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('error', 'Cannot update a completed or cancelled maintenance record.');
         }
 
@@ -148,7 +148,7 @@ class EquipmentMaintenanceController extends Controller
             $maintenance->notes = $request->notes;
             $maintenance->save();
 
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('success', 'Maintenance record updated successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -167,7 +167,7 @@ class EquipmentMaintenanceController extends Controller
 
         // Don't allow completing already completed or cancelled maintenance
         if (in_array($maintenance->status, ['completed', 'cancelled'])) {
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('error', 'Cannot complete a record that is already completed or cancelled.');
         }
 
@@ -179,7 +179,7 @@ class EquipmentMaintenanceController extends Controller
                 $maintenance->notes
             );
 
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('success', 'Maintenance completed successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -198,7 +198,7 @@ class EquipmentMaintenanceController extends Controller
 
         // Don't allow cancelling already completed or cancelled maintenance
         if (in_array($maintenance->status, ['completed', 'cancelled'])) {
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('error', 'Cannot cancel a record that is already completed or cancelled.');
         }
 
@@ -206,7 +206,7 @@ class EquipmentMaintenanceController extends Controller
             $maintenance->status = 'cancelled';
             $maintenance->save();
 
-            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id]);
+            return redirect()->route('equipment.maintenance.show', [$equipment->id, $maintenance->id])
                 ->with('success', 'Maintenance cancelled successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -221,7 +221,7 @@ class EquipmentMaintenanceController extends Controller
         $days = $request->input('days', 7);
         $upcoming = $this->maintenanceService->getUpcomingMaintenance($days);
 
-        return Inertia::render('Equipment/Maintenance/Upcoming', [;
+        return Inertia::render('Equipment/Maintenance/Upcoming', [
             'upcoming' => $upcoming,
             'days' => $days
         ]);
@@ -270,7 +270,7 @@ class EquipmentMaintenanceController extends Controller
             ->where('scheduled_date', '<', now())
             ->count();
 
-        return response()->json([;
+        return response()->json([
             'upcoming_count' => $upcoming->count(),
             'overdue_count' => $overdue,
             'next_maintenance' => $upcoming->first()

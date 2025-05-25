@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EquipmentTracking extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'equipment_id';
-use 'status';
-use 'latitude',
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'equipment_id',
+        'status',
+        'latitude',
         'longitude',
         'location_name',
         'current_rental_id',
@@ -23,9 +23,9 @@ use 'latitude',
 
     protected $casts = [
         'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',;
-        'last_updated_at' => 'datetime',;
-        'metadata' => 'array',;
+        'longitude' => 'decimal:8',
+        'last_updated_at' => 'datetime',
+        'metadata' => 'array',
     ];
 
     public function equipment()

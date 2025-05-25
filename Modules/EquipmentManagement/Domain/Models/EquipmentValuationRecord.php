@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EquipmentValuationRecord extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * Valuation type constants.
      */
     const TYPE_APPRAISAL = 'appraisal';
@@ -38,9 +38,9 @@ use /**
         'valuation_amount',
         'valuation_method',
         'valuation_type',
-        'appraiser_name',;
-        'notes',;
-        'created_by',;
+        'appraiser_name',
+        'notes',
+        'created_by',
     ];
 
     /**
@@ -48,9 +48,9 @@ use /**
      *
      * @var array<string, string>
      */
-    protected $casts = [;
-        'valuation_date' => 'date',;
-        'valuation_amount' => 'decimal:2',;
+    protected $casts = [
+        'valuation_date' => 'date',
+        'valuation_amount' => 'decimal:2',
     ];
 
     /**

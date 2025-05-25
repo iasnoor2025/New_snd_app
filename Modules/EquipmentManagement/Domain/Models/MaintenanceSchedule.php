@@ -11,17 +11,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MaintenanceSchedule extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'title';
-use 'description',
+    protected $fillable = [
+        'title',
+        'description',
         'equipment_id',
         'frequency_type',
         'frequency_value',
@@ -32,8 +32,8 @@ use 'description',
         'next_due_date',
         'priority',
         'is_active',
-        'created_by',;
-        'updated_by',;
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -44,9 +44,9 @@ use 'description',
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'last_generated' => 'datetime',;
-        'next_due_date' => 'datetime',;
-        'is_active' => 'boolean',;
+        'last_generated' => 'datetime',
+        'next_due_date' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     // Priority constants
@@ -148,7 +148,7 @@ use 'description',
      */
     public function scopeDueForGeneration($query)
     {
-        return $query->active();
+        return $query->active()
             ->where(function ($q) {
                 $q->whereNull('last_generated')
                   ->orWhere('next_due_date', '<=', Carbon::now());

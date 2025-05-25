@@ -2,6 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\LeaveManagement\Http\Controllers\LeaveRequestController;
+use Modules\LeaveManagement\Http\Controllers\LeaveApprovalController;
+use Modules\LeaveManagement\Http\Controllers\LeaveBalanceController;
+use Modules\LeaveManagement\Http\Controllers\LeaveTypeController;
+use Modules\LeaveManagement\Http\Controllers\LeaveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,29 +19,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API
+// API routes uncommented
 
 Route::middleware('auth:sanctum')->group(function () {
     // Leave Requests API
-    // Route::get('/requests', 'Api\LeaveRequestController@index');
-    // Route::post('/requests', 'Api\LeaveRequestController@store');
-    // Route::get('/requests/{id}', 'Api\LeaveRequestController@show');
-    // Route::put('/requests/{id}', 'Api\LeaveRequestController@update');
-    // Route::delete('/requests/{id}', 'Api\LeaveRequestController@destroy');
+    Route::get('/requests', [LeaveRequestController::class, 'apiIndex']);
+    Route::post('/requests', [LeaveRequestController::class, 'apiStore']);
+    Route::get('/requests/{id}', [LeaveRequestController::class, 'apiShow']);
+    Route::put('/requests/{id}', [LeaveRequestController::class, 'apiUpdate']);
+    Route::delete('/requests/{id}', [LeaveRequestController::class, 'apiDestroy']);
 
     // Leave Approval API
-    // Route::put('/requests/{id}/approve', 'Api\LeaveApprovalController@approve');
-    // Route::put('/requests/{id}/reject', 'Api\LeaveApprovalController@reject');
+    Route::put('/requests/{id}/approve', [LeaveApprovalController::class, 'apiApprove']);
+    Route::put('/requests/{id}/reject', [LeaveApprovalController::class, 'apiReject']);
 
     // Leave Balances API
-    // Route::get('/balances', 'Api\LeaveBalanceController@index');
-    // Route::get('/balances/{employeeId}', 'Api\LeaveBalanceController@show');
+    Route::get('/balances', [LeaveBalanceController::class, 'apiIndex']);
+    Route::get('/balances/{employeeId}', [LeaveBalanceController::class, 'apiShow']);
 
     // Leave Types API
-    // Route::get('/types', 'Api\LeaveTypeController@index');
+    Route::get('/types', [LeaveTypeController::class, 'apiIndex']);
 
     // Leave Calendar API
-    // Route::get('/calendar', 'Api\LeaveCalendarController@index');
-    // Route::get('/calendar/{year}/{month}', 'Api\LeaveCalendarController@month');
+    Route::get('/calendar', [LeaveController::class, 'apiCalendar']);
+    Route::get('/calendar/{year}/{month}', [LeaveController::class, 'apiCalendarMonth']);
 });
 

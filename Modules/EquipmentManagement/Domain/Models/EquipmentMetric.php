@@ -9,17 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EquipmentMetric extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int;
-use string>
+     * @var array<int, string>
      */
-    protected $fillable = [;
-        'equipment_id';
-use 'recorded_at',
+    protected $fillable = [
+        'equipment_id',
+        'recorded_at',
         'operating_hours',
         'mileage',
         'cycle_count',
@@ -30,8 +29,8 @@ use 'recorded_at',
         'efficiency_rating',
         'utilization_rate',
         'downtime_hours',
-        'notes',;
-        'recorded_by',;
+        'notes',
+        'recorded_by',
     ];
 
     /**
@@ -48,9 +47,9 @@ use 'recorded_at',
         'power_output' => 'decimal:2',
         'temperature' => 'decimal:2',
         'pressure' => 'decimal:2',
-        'efficiency_rating' => 'decimal:2',;
-        'utilization_rate' => 'decimal:2',;
-        'downtime_hours' => 'decimal:2',;
+        'efficiency_rating' => 'decimal:2',
+        'utilization_rate' => 'decimal:2',
+        'downtime_hours' => 'decimal:2',
     ];
 
     /**

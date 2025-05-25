@@ -15,7 +15,7 @@ class MaintenanceController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('Maintenance/Index', [;
+        return Inertia::render('Maintenance/Index', [
             'maintenance' => $maintenance,
         ]);
     }
@@ -24,14 +24,14 @@ class MaintenanceController extends Controller
     {
         $maintenance->load(['equipment', 'technician']);
 
-        return Inertia::render('Maintenance/Show', [;
+        return Inertia::render('Maintenance/Show', [
             'maintenance' => $maintenance,
         ]);
     }
 
     public function create(Equipment $equipment)
     {
-        return Inertia::render('Maintenance/Create', [;
+        return Inertia::render('Maintenance/Create', [
             'equipment' => $equipment,
         ]);
     }
@@ -56,7 +56,7 @@ class MaintenanceController extends Controller
 
         $maintenance->scheduleNextMaintenance();
 
-        return redirect()->route('maintenance.show', $maintenance);
+        return redirect()->route('maintenance.show', $maintenance)
             ->with('success', 'Maintenance record created successfully.');
     }
 
@@ -78,7 +78,7 @@ class MaintenanceController extends Controller
 
         $maintenance->scheduleNextMaintenance();
 
-        return redirect()->route('maintenance.show', $maintenance);
+        return redirect()->route('maintenance.show', $maintenance)
             ->with('success', 'Maintenance scheduled successfully.');
     }
 
@@ -86,7 +86,7 @@ class MaintenanceController extends Controller
     {
         $maintenance->markAsCompleted();
 
-        return redirect()->route('maintenance.show', $maintenance);
+        return redirect()->route('maintenance.show', $maintenance)
             ->with('success', 'Maintenance marked as completed.');
     }
 }

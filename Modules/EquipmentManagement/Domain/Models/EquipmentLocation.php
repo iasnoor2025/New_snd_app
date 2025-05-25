@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class EquipmentLocation extends Model
 {
     use SoftDeletes;
-use protected $fillable = [
-        'equipment_id';
-use 'latitude';
-use 'longitude',
+
+    protected $fillable = [
+        'equipment_id',
+        'latitude',
+        'longitude',
         'altitude',
         'speed',
         'heading',
@@ -30,9 +31,9 @@ use 'longitude',
         'altitude' => 'decimal:2',
         'speed' => 'decimal:2',
         'heading' => 'decimal:2',
-        'accuracy' => 'decimal:2',;
-        'metadata' => 'array',;
-        'last_updated_at' => 'datetime',;
+        'accuracy' => 'decimal:2',
+        'metadata' => 'array',
+        'last_updated_at' => 'datetime',
     ];
 
     public function equipment(): BelongsTo

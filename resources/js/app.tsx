@@ -5,86 +5,288 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import { Toaster } from 'sonner';
+// Import Ziggy configuration
+import { Ziggy } from './ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+// Ensure Ziggy is properly set on the window object
+if (typeof window !== 'undefined') {
+  // @ts-ignore - Bypassing TypeScript checking here for global Ziggy
+  window.Ziggy = Ziggy;
+}
+
 // Dynamically import all module pages (both pages and Pages, all modules)
-const modulePages = {
+const modulePages: Record<string, () => Promise<any>> = {
   ...import.meta.glob('/Modules/*/resources/js/pages/**/*.tsx'),
   ...import.meta.glob('/Modules/*/resources/js/Pages/**/*.tsx'),
+};
+
+// Helper function to find module pages by pattern
+function findModulePagesByPattern(moduleNamePattern: string, pageNamePattern: string): string[] {
+  return Object.keys(modulePages).filter(path =>
+    path.includes(moduleNamePattern) &&
+    (path.includes(pageNamePattern) || path.toLowerCase().includes(pageNamePattern.toLowerCase()))
+  );
+}
+
+// Add explicit mapping for critical pages to ensure they're available
+const employeePages: Record<string, string> = {
+  'Employees/Index': '/Modules/EmployeeManagement/resources/js/pages/Employees/Index.tsx',
+  'Employees/Create': '/Modules/EmployeeManagement/resources/js/pages/Employees/Create.tsx',
+  'Employees/Edit': '/Modules/EmployeeManagement/resources/js/pages/Employees/Edit.tsx',
+  'Employees/Show': '/Modules/EmployeeManagement/resources/js/pages/Employees/Show.tsx',
+  'Employees/Documents': '/Modules/EmployeeManagement/resources/js/pages/Employees/Documents.tsx',
+  'Employees/LeaveHistory': '/Modules/EmployeeManagement/resources/js/pages/Employees/LeaveHistory.tsx',
+  'Employees/PerformanceManagement': '/Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceManagement.tsx',
+  'Employees/PerformanceReviews': '/Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceReviews.tsx',
+  'Employees/SalaryHistory': '/Modules/EmployeeManagement/resources/js/pages/Employees/SalaryHistory.tsx',
+  'Employees/TimesheetHistory': '/Modules/EmployeeManagement/resources/js/pages/Employees/TimesheetHistory.tsx',
+};
+
+// Project Management module pages
+const projectPages: Record<string, string> = {
+  'Projects/Index': '/Modules/ProjectManagement/resources/js/pages/Index.tsx',
+  'Projects/Create': '/Modules/ProjectManagement/resources/js/pages/Create.tsx',
+  'Projects/Edit': '/Modules/ProjectManagement/resources/js/pages/Edit.tsx',
+  'Projects/Show': '/Modules/ProjectManagement/resources/js/pages/Show.tsx',
+  'Projects/Resources': '/Modules/ProjectManagement/resources/js/pages/Resources.tsx',
+  'Projects/Projects': '/Modules/ProjectManagement/resources/js/pages/Projects.tsx',
+};
+
+// Rental Management module pages
+const rentalPages: Record<string, string> = {
+  'Rentals/Index': '/Modules/RentalManagement/resources/js/pages/Rentals/Index.tsx',
+  'Rentals/Create': '/Modules/RentalManagement/resources/js/pages/Rentals/Create.tsx',
+  'Rentals/Edit': '/Modules/RentalManagement/resources/js/pages/Rentals/Edit.tsx',
+  'Rentals/Show': '/Modules/RentalManagement/resources/js/pages/Rentals/Show.tsx',
+  'Rentals/Print': '/Modules/RentalManagement/resources/js/pages/Rentals/Print.tsx',
+  'Rentals/Report': '/Modules/RentalManagement/resources/js/pages/Rentals/Report.tsx',
+  'Rentals/QuotationTest': '/Modules/RentalManagement/resources/js/pages/Rentals/QuotationTest.tsx',
+};
+
+// Timesheet Management module pages
+const timesheetPages: Record<string, string> = {
+  'Timesheets/Index': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Index.tsx',
+  'Timesheets/Create': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Create.tsx',
+  'Timesheets/Edit': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Edit.tsx',
+  'Timesheets/Show': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Show.tsx',
+  'Timesheets/Monthly': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Monthly.tsx',
+  'Timesheets/PaySlip': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/PaySlip.tsx',
+  'Timesheets/PaySlipTest': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/PaySlipTest.tsx',
+  'Timesheets/Summary': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Summary.tsx',
+  'Timesheets/TimesheetManagement': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/TimesheetManagement.tsx',
+};
+
+// Combine all page mappings
+const allPageMappings: Record<string, string> = {
+  ...employeePages,
+  ...projectPages,
+  ...rentalPages,
+  ...timesheetPages,
+};
+
+// Map from page name prefixes to module names
+const moduleMap: Record<string, string[]> = {
+  'Employees': ['EmployeeManagement'],
+  'Projects': ['ProjectManagement'],
+  'Timesheets': ['TimesheetManagement'],
+  'Settings': ['Settings'],
+  'Reports': ['Reporting'],
+  'Rentals': ['RentalManagement'],
+  'Payrolls': ['Payroll'],
+  'Notifications': ['Notifications'],
+  'Mobile': ['MobileBridge'],
+  'Localization': ['Localization'],
+  'LeaveRequests': ['LeaveManagement'],
+  'Equipment': ['EquipmentManagement'],
+  'Customers': ['CustomerManagement'],
+  'Core': ['Core'],
+  'Audit': ['AuditCompliance'],
+  'API': ['API']
 };
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
+        console.log(`Attempting to resolve page: ${name}`);
+
         // First try to resolve from main app's pages
         try {
-            return await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+            const component = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+            console.log(`Successfully loaded ${name} from main app`);
+            return component;
         } catch (error) {
             console.log(`Page not found in main app: ${name}, checking module pages...`);
 
+            // First check in our combined page mappings
+            if (name in allPageMappings && allPageMappings[name] in modulePages) {
+                try {
+                    const pagePath = allPageMappings[name];
+                    console.log(`Loading page from mappings: ${pagePath}`);
+                    const module = await modulePages[pagePath]();
+                    console.log(`Successfully loaded ${name} from explicit mappings`);
+                    return module;
+                } catch (e) {
+                    console.error(`Failed to import ${name} page from mappings:`, e);
+                }
+            }
+
+            // Direct lookup for Employee pages that we know about (legacy approach)
+            if (name in employeePages && employeePages[name] in modulePages) {
+                try {
+                    const pagePath = employeePages[name];
+                    console.log(`Loading employee page from: ${pagePath}`);
+                    const module = await modulePages[pagePath]();
+                    console.log(`Successfully loaded ${name} from employee pages`);
+                    return module;
+                } catch (e) {
+                    console.error(`Failed to import ${name} page directly:`, e);
+                }
+            }
+
             // Try loading the page from any module
-            // Try both pages and Pages, and both with and without subfolders
-            const possiblePaths = [
-              `/Modules/EmployeeManagement/resources/js/pages/${name}.tsx`,
-              `/Modules/EmployeeManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/ProjectManagement/Pages/${name}.tsx`,
-              `/Modules/ProjectManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/ProjectManagement/resources/js/pages/${name}.tsx`,
-              // Add more patterns as needed
-              `/Modules/TimesheetManagement/resources/js/pages/${name}.tsx`,
-              `/Modules/TimesheetManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/Settings/resources/js/pages/${name}.tsx`,
-              `/Modules/Settings/resources/js/Pages/${name}.tsx`,
-              `/Modules/Reporting/resources/js/pages/${name}.tsx`,
-              `/Modules/Reporting/resources/js/Pages/${name}.tsx`,
-              `/Modules/RentalManagement/resources/js/pages/${name}.tsx`,
-              `/Modules/RentalManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/Payroll/Resources/js/pages/${name}.tsx`,
-              `/Modules/Payroll/Resources/js/Pages/${name}.tsx`,
-              `/Modules/Notifications/resources/js/pages/${name}.tsx`,
-              `/Modules/Notifications/resources/js/Pages/${name}.tsx`,
-              `/Modules/MobileBridge/resources/js/pages/${name}.tsx`,
-              `/Modules/MobileBridge/resources/js/Pages/${name}.tsx`,
-              `/Modules/Localization/resources/js/pages/${name}.tsx`,
-              `/Modules/Localization/resources/js/Pages/${name}.tsx`,
-              `/Modules/LeaveManagement/resources/js/pages/${name}.tsx`,
-              `/Modules/LeaveManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/EquipmentManagement/resources/js/pages/${name}.tsx`,
-              `/Modules/EquipmentManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/CustomerManagement/resources/js/pages/${name}.tsx`,
-              `/Modules/CustomerManagement/resources/js/Pages/${name}.tsx`,
-              `/Modules/Core/resources/js/pages/${name}.tsx`,
-              `/Modules/Core/resources/js/Pages/${name}.tsx`,
-              `/Modules/AuditCompliance/resources/js/pages/${name}.tsx`,
-              `/Modules/AuditCompliance/resources/js/Pages/${name}.tsx`,
-              `/Modules/API/resources/js/pages/${name}.tsx`,
-              `/Modules/API/resources/js/Pages/${name}.tsx`,
-            ];
+            const moduleName = name.split('/')[0]; // Extract module name, like 'Employees' from 'Employees/Index'
+            const pagePath = name.split('/').slice(1).join('/'); // Extract page path, like 'Index' from 'Employees/Index'
 
-            for (const modulePath of possiblePaths) {
-              if (modulePath in modulePages) {
-                return await modulePages[modulePath]();
-              }
+            // Get potential modules for this page
+            const potentialModules = moduleMap[moduleName] || Object.values(moduleMap).flat();
+
+            // Try each potential module
+            for (const module of potentialModules) {
+                const possiblePaths = [
+                    `/Modules/${module}/resources/js/pages/${name}.tsx`,
+                    `/Modules/${module}/resources/js/Pages/${name}.tsx`,
+                    // For exact module page match (like Employees/Index in EmployeeManagement)
+                    `/Modules/${module}/resources/js/pages/${pagePath}.tsx`,
+                    `/Modules/${module}/resources/js/Pages/${pagePath}.tsx`,
+                    // Common pattern: Module/pages/PagePrefix/PageName
+                    `/Modules/${module}/resources/js/pages/${moduleName}/${pagePath}.tsx`,
+                    `/Modules/${module}/resources/js/Pages/${moduleName}/${pagePath}.tsx`,
+                ];
+
+                for (const path of possiblePaths) {
+                    if (path in modulePages) {
+                        console.log(`Found page at ${path}`);
+                        return await modulePages[path]();
+                    }
+                }
             }
 
-            // Try generic match for any module (robust)
+            // Try more specific patterns for known module pages using our helper
+            const modulePatternMap: Record<string, [string, string]> = {
+                'Employees/Index': ['EmployeeManagement', 'Index.tsx'],
+                'Projects/Index': ['ProjectManagement', 'Index.tsx'],
+                'Rentals/Index': ['RentalManagement/Rentals', 'Index.tsx'],
+                'Timesheets/Index': ['TimesheetManagement/Timesheets', 'Index.tsx'],
+                'Equipment/Index': ['EquipmentManagement', 'Index.tsx'],
+                'Settings/Index': ['Settings', 'Index.tsx'],
+                'Payrolls/Index': ['Payroll', 'Index.tsx']
+            };
+
+            if (name in modulePatternMap) {
+                const [modulePattern, pagePattern] = modulePatternMap[name];
+                const specificPaths = findModulePagesByPattern(modulePattern, pagePattern);
+
+                if (specificPaths.length > 0) {
+                    console.log(`Found specific page at ${specificPaths[0]}`);
+                    return await modulePages[specificPaths[0]]();
+                }
+            }
+
+            // Try generic match for any module as a last resort
             const normalizedName = name.replace(/\\/g, '/');
-            console.log('Normalized name:', normalizedName);
-            console.log('Module page keys:', Object.keys(modulePages));
             for (const key in modulePages) {
-              // Remove extension and leading path
-              const keyNoExt = key.replace(/\.tsx$/, '').replace(/\\/g, '/');
-              if (keyNoExt.endsWith(`/${normalizedName}`)) {
-                return await modulePages[key]();
-              }
+                const keyNoExt = key.replace(/\.tsx$/, '').replace(/\\/g, '/');
+                if (keyNoExt.endsWith(`/${normalizedName}`) ||
+                    keyNoExt.toLowerCase().endsWith(`/${normalizedName.toLowerCase()}`)) {
+                    return await modulePages[key]();
+                }
             }
 
-            // Log available keys for debugging
+            // Try to infer pattern for common page types (Create, Edit, Show)
+            if (name.includes('/')) {
+                const [modulePart, pagePart] = name.split('/', 2);
+                if (['Create', 'Edit', 'Show', 'Index'].includes(pagePart) && modulePart in moduleMap) {
+                    const possibleModules = moduleMap[modulePart];
+
+                    for (const moduleType of possibleModules) {
+                        // First try direct path in the module
+                        const directPath = `/Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`;
+                        if (directPath in modulePages) {
+                            console.log(`Found ${pagePart} page at ${directPath}`);
+                            return await modulePages[directPath]();
+                        }
+
+                        // Then try module part as directory
+                        const subDirPath = `/Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`;
+                        if (subDirPath in modulePages) {
+                            console.log(`Found ${pagePart} page at ${subDirPath}`);
+                            return await modulePages[subDirPath]();
+                        }
+                    }
+                }
+            }
+
             console.error(`Module page not found: ${name}`);
-            console.error('Available module page keys:', Object.keys(modulePages));
+            console.error('Available module page keys:', Object.keys(modulePages).length);
+
+            // Print diagnostic information about what we tried
+            if (name.includes('/')) {
+                const [modulePart, pagePart] = name.split('/', 2);
+                console.log(`Diagnostic info for ${name}:`);
+                console.log(`- Module part: ${modulePart}`);
+                console.log(`- Page part: ${pagePart}`);
+                console.log(`- In moduleMap: ${modulePart in moduleMap}`);
+                if (modulePart in moduleMap) {
+                    console.log(`- Possible modules: ${moduleMap[modulePart].join(', ')}`);
+
+                    // List some paths we tried
+                    for (const moduleType of moduleMap[modulePart]) {
+                        const paths = [
+                            `/Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`,
+                            `/Modules/${moduleType}/resources/js/Pages/${pagePart}.tsx`,
+                            `/Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`,
+                            `/Modules/${moduleType}/resources/js/Pages/${modulePart}/${pagePart}.tsx`,
+                        ];
+
+                        console.log(`- Paths for ${moduleType}:`);
+                        paths.forEach(path => {
+                            console.log(`  - ${path}: ${path in modulePages ? 'FOUND' : 'not found'}`);
+                        });
+                    }
+                }
+
+                // List some similar paths that do exist
+                const similarPaths = Object.keys(modulePages).filter(path =>
+                    (path.includes(modulePart) || path.includes(modulePart.toLowerCase())) &&
+                    (path.includes(pagePart) || path.includes(pagePart.toLowerCase()))
+                );
+
+                if (similarPaths.length > 0) {
+                    console.log(`- Similar paths that exist:`);
+                    similarPaths.slice(0, 5).forEach(path => {
+                        console.log(`  - ${path}`);
+                    });
+                    if (similarPaths.length > 5) {
+                        console.log(`  - ... and ${similarPaths.length - 5} more`);
+                    }
+                }
+            }
+
+            // Return a default component that shows an error
             return {
-                default: () => null
+                default: () => ({
+                    props: {
+                        error: new Error(`Page not found: ${name}`)
+                    },
+                    render() {
+                        return <div className="p-6">
+                            <h1 className="text-2xl text-red-600">Page Not Found</h1>
+                            <p className="mt-2">The page "{name}" could not be found.</p>
+                        </div>;
+                    }
+                })
             };
         }
     },

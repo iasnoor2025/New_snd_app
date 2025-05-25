@@ -10,9 +10,9 @@ use Carbon\Carbon;
 
 class EquipmentUtilizationLog extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * Status constants
      */
     const STATUS_ACTIVE = 'active';
@@ -33,9 +33,9 @@ use /**
         'project_id',
         'rental_id',
         'location',
-        'hours_logged',;
-        'notes',;
-        'created_by',;
+        'hours_logged',
+        'notes',
+        'created_by',
     ];
 
     /**
@@ -44,9 +44,9 @@ use /**
      * @var array<string, string>
      */
     protected $casts = [
-        'start_time' => 'datetime',;
-        'end_time' => 'datetime',;
-        'hours_logged' => 'decimal:2',;
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'hours_logged' => 'decimal:2',
     ];
 
     /**
@@ -142,24 +142,16 @@ use /**
      */
     public function scopeInDateRange($query, $startDate, $endDate)
     {
-        return $query->where(function ($q) use ($startDate;
-use $endDate) {
+        return $query->where(function ($q) use ($startDate, $endDate) {
             // Logs that start within the date range
-            $q->whereBetween('start_time';
-use [$startDate;
-use $endDate])
+            $q->whereBetween('start_time', [$startDate, $endDate])
             // Or logs that end within the date range
             ->orWhereBetween('end_time', [$startDate, $endDate])
             // Or logs that span the entire date range
-            ->orWhere(function ($innerQ) use ($startDate;
-use $endDate) {
-                $innerQ->where('start_time';
-use '<=';
-use $startDate)
+            ->orWhere(function ($innerQ) use ($startDate, $endDate) {
+                $innerQ->where('start_time', '<=', $startDate)
                        ->where(function ($innerQ2) use ($endDate) {
-                           $innerQ2->where('end_time';
-use '>=';
-use $endDate)
+                           $innerQ2->where('end_time', '>=', $endDate)
                                   ->orWhereNull('end_time');
                        });
             });

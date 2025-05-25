@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MaintenancePart extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'maintenance_task_id';
-use 'inventory_item_id',
+    protected $fillable = [
+        'maintenance_task_id',
+        'inventory_item_id',
         'part_number',
         'quantity_required',
         'quantity_used',
@@ -28,8 +28,8 @@ use 'inventory_item_id',
         'reservation_date',
         'reservation_expiry',
         'notes',
-        'created_by',;
-        'updated_by',;
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -41,9 +41,9 @@ use 'inventory_item_id',
         'quantity_required' => 'integer',
         'quantity_used' => 'integer',
         'cost_per_unit' => 'decimal:2',
-        'is_reserved' => 'boolean',;
-        'reservation_date' => 'datetime',;
-        'reservation_expiry' => 'datetime',;
+        'is_reserved' => 'boolean',
+        'reservation_date' => 'datetime',
+        'reservation_expiry' => 'datetime',
     ];
 
     /**

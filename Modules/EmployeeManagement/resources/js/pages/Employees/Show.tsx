@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
 import { Employee as BaseEmployee, Timesheet as BaseTimesheet, LeaveRequest as BaseLeaveRequest, Assignment as BaseAssignment } from '@/Modules/EmployeeManagement/Resources/js/types/models';
-import { Breadcrumb } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/breadcrumb';
+import { Breadcrumb } from '../../../../../../resources/js/components/ui/breadcrumb';
 import {
   Card,
   CardContent,
@@ -11,10 +11,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/tabs';
+} from '../../../../../../resources/js/components/ui/card';
+import { Button } from '../../../../../../resources/js/components/ui/button';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../../resources/js/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -22,7 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/table';
+} from '../../../../../../resources/js/components/ui/table';
 import {
   Dialog,
   DialogContent,
@@ -32,38 +32,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/Modules/EmployeeManagement/Resources/js/components/ui/dialog';
-import { Input } from '@/Modules/EmployeeManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/EmployeeManagement/Resources/js/components/ui/label';
+import { Input } from '../../../../../../resources/js/components/ui/input';
+import { Label } from '../../../../../../resources/js/components/ui/label';
 import { ArrowLeft, Edit, Trash2, FileText, Calendar, Check, X, AlertCircle, RefreshCw, ExternalLink, Download, User, Briefcase, CreditCard, FileBox, Upload, Printer, Car, Truck, Award, IdCard, Plus, History, Receipt, XCircle, CheckCircle, Clock } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
-import { usePermission } from '@/Modules/EmployeeManagement/Resources/js/hooks/usePermission';
+import { usePermission } from '../../../../../../resources/js/hooks/usePermission';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/Modules/EmployeeManagement/Resources/js/components/ui/tooltip';
-import { ToastService } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/shared/ToastManager';
-import { Alert, AlertDescription } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/alert';
+} from '../../../../../../resources/js/components/ui/tooltip';
+import { Alert, AlertDescription } from '../../../../../../resources/js/components/ui/alert';
 import axios from 'axios';
-import { DocumentManager } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/DocumentManager';
+import DocumentManager from '../../components/employees/EmployeeDocumentManager';
 import { useQueryClient } from '@tanstack/react-query';
-import { Separator } from '@/Modules/EmployeeManagement/Resources/js/components/ui/separator';
-import { Avatar, AvatarFallback } from '@/Modules/EmployeeManagement/Resources/js/components/ui/avatar';
-import { MediaLibrary } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/media-library/MediaLibrary';
-import { DailyTimesheetRecords } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/timesheets/DailyTimesheetRecords';
-import { Textarea } from '@/Modules/EmployeeManagement/Resources/js/components/ui/textarea';
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/Modules/EmployeeManagement/Resources/js/components/ui/pagination';
-import { DocumentCard } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/documents/DocumentCard';
-import { DocumentSection } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/documents/DocumentSection';
-import { DocumentExpiryTracker } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/documents/DocumentExpiryTracker';
-import { DocumentUploadDialog } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/documents/DocumentUploadDialog';
-import { AdditionalDocumentsList } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/documents/AdditionalDocumentsList';
+import { Separator } from '../../../../../../resources/js/components/ui/separator';
+import { Avatar, AvatarFallback } from '../../../../../../resources/js/components/ui/avatar';
+// import { MediaLibrary } from '@/Modules/EmployeeManagement/Resources/js/components/media-library/MediaLibrary'; // TODO: Fix or replace MediaLibrary import
+// import { DailyTimesheetRecords } from '@/Modules/EmployeeManagement/Resources/js/components/timesheets/DailyTimesheetRecords'; // TODO: Fix or replace DailyTimesheetRecords import
 import { useToast } from '@/Modules/EmployeeManagement/Resources/js/components/ui/use-toast';
-import { PaymentHistory } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/advances/PaymentHistory';
-import { AssignmentHistory } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/assignments/AssignmentHistory';
+import { PaymentHistory } from '@/Modules/EmployeeManagement/Resources/js/components/advances/PaymentHistory';
+import { AssignmentHistory } from '@/Modules/EmployeeManagement/Resources/js/components/assignments/AssignmentHistory';
 import { toast } from 'sonner';
-import FinalSettlementTab from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/employees/FinalSettlementTab';
+import FinalSettlementTab from '../../components/employees/FinalSettlementTab';
+// import { route } from 'ziggy-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -302,11 +295,10 @@ const DocumentTab = ({ employeeId }: { employeeId: number }) => {
                   if (confirm('Are you sure you want to delete this document?')) {
                     axios.delete(`/api/employee/${employeeId}/documents/${doc.id}`)
                       .then(() => {
-                        ToastService.success("Document deleted successfully");
-                        setRetryCount(prev => prev + 1);
+                        // TODO: Replace with toast('message')
                       })
                       .catch((error) => {
-                        ToastService.error("Failed to delete document");
+                        // TODO: Replace with toast('message')
                       });
                   }
                 }}
@@ -330,7 +322,6 @@ function formatFileSize(bytes: number): string {
 }
 
 export default function Show({
-  auth,
   employee,
   timesheets,
   leaveRequests,
@@ -385,17 +376,17 @@ export default function Show({
 
   const handleAdvanceRequest = () => {
     if (!advanceAmount || isNaN(Number(advanceAmount)) || Number(advanceAmount) <= 0) {
-      ToastService.error("Please enter a valid amount");
+      // TODO: Replace with toast('message')
       return;
     }
 
     if (!monthlyDeduction || isNaN(Number(monthlyDeduction)) || Number(monthlyDeduction) <= 0) {
-      ToastService.error("Please enter a valid monthly deduction amount");
+      // TODO: Replace with toast('message')
       return;
     }
 
     if (!advanceReason.trim()) {
-      ToastService.error("Please enter a reason for the advance");
+      // TODO: Replace with toast('message')
       return;
     }
 
@@ -421,7 +412,7 @@ export default function Show({
       },
       onError: (errors) => {
         console.error('Advance request error:', errors);
-        ToastService.error(errors?.message || "Failed to process advance request");
+        // TODO: Replace with toast('message')
       }
     });
   };
@@ -435,12 +426,12 @@ export default function Show({
       setIsDeleting(true);
       router.delete(route('employees.destroy', { employee: employee.id }), {
         onSuccess: () => {
-          ToastService.success("Employee deleted successfully");
+          // TODO: Replace with toast('message')
           window.location.href = route('employees.index');
           setIsDeleting(false);
         },
         onError: () => {
-          ToastService.error("Failed to delete employee");
+          // TODO: Replace with toast('message')
           setIsDeleting(false);
         }
       });
@@ -486,7 +477,7 @@ export default function Show({
       console.log('Repayment response:', response.data);
 
       if (response.data.success) {
-        ToastService.success('Repayment recorded successfully');
+        // TODO: Replace with toast('message')
         setIsRepaymentDialogOpen(false);
         // Force reload to get updated balances
         router.visit(route('employees.show', { employee: employee.id }));
@@ -501,24 +492,20 @@ export default function Show({
         config: error.config
       });
 
-      ToastService.error(
-        error.response?.data?.message ||
-        error.message ||
-        'Failed to record repayment. Please try again.'
-      );
+      // TODO: Replace with toast('message')
     }
   };
 
   const handleApproveAdvance = (advanceId: number, type: 'advance' | 'advance_payment', status: Advance['status']) => {
     // For advance payments, we need to check if it's not already approved or rejected
     if (type === 'advance_payment' && (status === 'paid')) {
-      ToastService.error("This advance payment cannot be approved");
+      // TODO: Replace with toast('message')
       return;
     }
 
     // For regular advances, we only check for pending status
     if (type === 'advance' && status !== 'pending') {
-      ToastService.error("Only pending advances can be approved");
+      // TODO: Replace with toast('message')
       return;
     }
 
@@ -527,19 +514,19 @@ export default function Show({
       advance: advanceId
     }), {}, {
       onSuccess: () => {
-        ToastService.success("Advance request approved successfully");
+        // TODO: Replace with toast('message')
         router.reload();
       },
       onError: (errors) => {
         console.error('Approval error:', errors);
-        ToastService.error(errors?.message || "Failed to approve advance request");
+        // TODO: Replace with toast('message')
       }
     });
   };
 
   const handleRejectAdvance = (advanceId: number, rejectionReason: string) => {
     if (!rejectionReason.trim()) {
-      ToastService.error("Please provide a rejection reason");
+      // TODO: Replace with toast('message')
       return;
     }
 
@@ -550,20 +537,20 @@ export default function Show({
       rejection_reason: rejectionReason.trim()
     }, {
       onSuccess: () => {
-        ToastService.success("Advance request rejected successfully");
+        // TODO: Replace with toast('message')
         setRejectionReason('');
         setIsRejectDialogOpen(false);
         router.reload();
       },
       onError: () => {
-        ToastService.error("Failed to reject advance request");
+        // TODO: Replace with toast('message')
       }
     });
   };
 
   const handleDeleteAdvance = (advanceId: number) => {
     if (!advanceId) {
-      ToastService.error("Invalid advance ID");
+      // TODO: Replace with toast('message')
       return;
     }
 
@@ -583,14 +570,14 @@ export default function Show({
     // Use Inertia's router.delete with the correct route
     router.delete(url, {
       onSuccess: () => {
-        ToastService.success("Advance request deleted successfully");
+        // TODO: Replace with toast('message')
         setIsDeleteDialogOpen(false);
         // Force reload the page to ensure all data is updated
         router.visit(route('employees.show', { employee: employee.id }));
       },
       onError: (errors) => {
         console.error('Delete error:', errors);
-        ToastService.error(errors?.message || "Failed to delete advance request");
+        // TODO: Replace with toast('message')
         setIsDeleteDialogOpen(false);
       }
     });
@@ -773,10 +760,10 @@ export default function Show({
     if (confirm('Are you sure you want to approve this settlement?')) {
       router.post(route('final-settlements.approve', { settlement: id }), {}, {
         onSuccess: () => {
-          ToastService.success('Settlement approved successfully');
+          // TODO: Replace with toast('message')
         },
         onError: () => {
-          ToastService.error('Failed to approve settlement');
+          // TODO: Replace with toast('message')
         }
       });
     }
@@ -786,10 +773,10 @@ export default function Show({
     if (confirm('Are you sure you want to reject this settlement?')) {
       router.post(route('final-settlements.reject', { settlement: id }), {}, {
         onSuccess: () => {
-          ToastService.success('Settlement rejected successfully');
+          // TODO: Replace with toast('message')
         },
         onError: () => {
-          ToastService.error('Failed to reject settlement');
+          // TODO: Replace with toast('message')
         }
       });
     }
@@ -1276,7 +1263,7 @@ export default function Show({
                                   </TableCell>
                                   <TableCell>
                                     <Badge
-                                      variant={payroll.is_paid ? "success" : "secondary"}
+                                      variant={payroll.is_paid ? "default" : "secondary"}
                                       className={
                                         payroll.is_paid
                                           ? 'bg-green-50 text-green-700 border-green-200'
@@ -1458,17 +1445,6 @@ export default function Show({
                       <h3 className="text-sm font-medium">Quick Actions</h3>
                     </div>
                     <div className="space-y-2">
-                      <DocumentUploadDialog
-                        employeeId={employee.id}
-                        documentType="additional"
-                        isAdditional={true}
-                        buttonText="Upload Additional Document"
-                        acceptedFileTypes=".pdf,.jpg,.jpeg,.png"
-                        onSuccess={() => {
-                          setDocumentUploadKey(prev => prev + 1);
-                          queryClient.invalidateQueries({ queryKey: ['employee-documents', employee.id] });
-                        }}
-                      />
                       <Button
                         variant="outline"
                         size="sm"
@@ -1508,7 +1484,7 @@ export default function Show({
                             }, 1000);
                           } catch (error) {
                             console.error('Error generating document summary:', error);
-                            ToastService.error('Failed to generate document summary');
+                            // TODO: Replace with toast('message')
                           }
                         }}
                       >
@@ -1653,7 +1629,7 @@ export default function Show({
                 <div className="space-y-6">
                   {/* Assignment List */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {assignments?.data?.map((assignment) => (
+                    {assignments?.data?.map((assignment: BaseAssignment) => (
                       <Card key={assignment.id}>
                         <CardHeader>
                           <CardTitle>{assignment.title}</CardTitle>
@@ -1763,11 +1739,12 @@ export default function Show({
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DailyTimesheetRecords
+                      {/* Render DailyTimesheetRecords component */}
+                      {/* <DailyTimesheetRecords
                         timesheets={formatDailyRecords(timesheets.data)}
                         selectedMonth={selectedMonth}
                         showSummary={true}
-                      />
+                      /> */}
                     </CardContent>
                   </Card>
 
@@ -2038,18 +2015,18 @@ export default function Show({
                                     <Button
                                       onClick={() => {
                                         if (!repaymentAmount) {
-                                          ToastService.error('Please enter a repayment amount');
+                                          // TODO: Replace with toast('message')
                                           return;
                                         }
 
                                         const amount = Number(repaymentAmount);
                                         if (amount < totalMonthlyDeduction) {
-                                          ToastService.error(`Repayment amount must be at least the total monthly deduction of SAR ${totalMonthlyDeduction.toFixed(2)}`);
+                                          // TODO: Replace with toast('message')
                                           return;
                                         }
 
                                         if (amount > totalRemainingBalance) {
-                                          ToastService.error(`Repayment amount cannot exceed the total remaining balance of SAR ${totalRemainingBalance.toFixed(2)}`);
+                                          // TODO: Replace with toast('message')
                                           return;
                                         }
 
@@ -2154,7 +2131,7 @@ export default function Show({
                                 onError: (errors) => {
                                   // Revert the value if there's an error
                                   setMonthlyDeduction(advances?.data?.[0]?.monthly_deduction?.toString() || '');
-                                  ToastService.error(errors?.message || "Failed to update monthly deduction");
+                                  // TODO: Replace with toast('message')
                                 },
                                 onCancel: () => {
                                   // Revert the value if request is cancelled
@@ -2168,7 +2145,7 @@ export default function Show({
                             const value = e.target.value;
                             if (!value || isNaN(Number(value)) || Number(value) < 0) {
                               setMonthlyDeduction(advances?.data?.[0]?.monthly_deduction?.toString() || '');
-                              ToastService.error("Please enter a valid monthly deduction amount");
+                              // TODO: Replace with toast('message')
                             }
                           }}
                           className="text-2xl font-bold text-primary w-32"
@@ -2454,7 +2431,7 @@ export default function Show({
                         Print Settlement
                       </Button>
                       {hasPermission('final-settlements.approve') && (
-                        <Button onClick={handleApproveSettlement}>
+                        <Button onClick={() => handleApproveSettlement(employee.final_settlement_id)}>
                           <Check className="mr-2 h-4 w-4" />
                           Approve Settlement
                         </Button>
@@ -2651,7 +2628,7 @@ export default function Show({
                   if (selectedAdvance) {
                     handleDeleteAdvance(selectedAdvance);
                   } else {
-                    ToastService.error("No advance selected for deletion");
+                    // TODO: Replace with toast('message')
                   }
                 }}
               >

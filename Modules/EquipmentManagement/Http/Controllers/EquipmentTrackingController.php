@@ -13,7 +13,7 @@ class EquipmentTrackingController extends Controller
     {
         $equipment = Equipment::with('tracking')->get();
 
-        return Inertia::render('Equipment/Tracking/Index', [;
+        return Inertia::render('Equipment/Tracking/Index', [
             'equipment' => $equipment,
         ]);
     }
@@ -22,7 +22,7 @@ class EquipmentTrackingController extends Controller
     {
         $tracking = $equipment->tracking()->with('currentRental')->first();
 
-        return Inertia::render('Equipment/Tracking/Show', [;
+        return Inertia::render('Equipment/Tracking/Show', [
             'equipment' => $equipment,
             'tracking' => $tracking,
         ]);
@@ -40,7 +40,7 @@ class EquipmentTrackingController extends Controller
         $tracking = $equipment->tracking()->firstOrCreate();
         $tracking->updateLocation($validated, $request->status);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Location updated successfully',
             'tracking' => $tracking,
         ]);
@@ -50,7 +50,7 @@ class EquipmentTrackingController extends Controller
     {
         $tracking = $equipment->tracking()->first();
 
-        return response()->json([;
+        return response()->json([
             'tracking' => $tracking,
         ]);
     }

@@ -58,7 +58,7 @@ class EquipmentMetricController extends Controller
         $limit = $request->input('limit', 50);
         $metrics = $query->paginate($limit);
 
-        return response()->json([;
+        return response()->json([
             'equipment' => $equipment,
             'metrics' => $metrics,
         ]);
@@ -78,7 +78,7 @@ class EquipmentMetricController extends Controller
 
         $metric = $this->performanceService->recordMetrics($equipment, $data, auth()->id());
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Metric recorded successfully',
             'metric' => $metric,
             'equipment' => $equipment->fresh(),
@@ -95,12 +95,12 @@ class EquipmentMetricController extends Controller
     public function show(Equipment $equipment, EquipmentMetric $metric)
     {
         if ($metric->equipment_id !== $equipment->id) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'The specified metric does not belong to this equipment',
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        return response()->json([;
+        return response()->json([
             'equipment' => $equipment,
             'metric' => $metric,
         ]);
@@ -117,7 +117,7 @@ class EquipmentMetricController extends Controller
     public function update(EquipmentMetricRequest $request, Equipment $equipment, EquipmentMetric $metric)
     {
         if ($metric->equipment_id !== $equipment->id) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'The specified metric does not belong to this equipment',
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -133,7 +133,7 @@ class EquipmentMetricController extends Controller
             $equipment->calculateEfficiencyRating();
         }
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Metric updated successfully',
             'metric' => $metric->fresh(),
             'equipment' => $equipment->fresh(),
@@ -150,7 +150,7 @@ class EquipmentMetricController extends Controller
     public function destroy(Equipment $equipment, EquipmentMetric $metric)
     {
         if ($metric->equipment_id !== $equipment->id) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'The specified metric does not belong to this equipment',
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -165,7 +165,7 @@ class EquipmentMetricController extends Controller
             $equipment->calculateEfficiencyRating();
         }
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Metric deleted successfully',
             'equipment' => $equipment->fresh(),
         ]);
@@ -248,7 +248,7 @@ class EquipmentMetricController extends Controller
         $reviewDate = Carbon::parse($request->review_date);
         $this->performanceService->schedulePerformanceReview($equipment, $reviewDate);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Performance review scheduled successfully',
             'equipment' => $equipment->fresh(),
         ]);

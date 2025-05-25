@@ -13,17 +13,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MaintenanceTask extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'title';
-use 'description',
+    protected $fillable = [
+        'title',
+        'description',
         'maintenance_schedule_id',
         'equipment_id',
         'status',
@@ -37,8 +37,8 @@ use 'description',
         'created_by',
         'updated_by',
         'cancellation_reason',
-        'parts_cost',;
-        'labor_cost',;
+        'parts_cost',
+        'labor_cost',
     ];
 
     /**
@@ -48,9 +48,9 @@ use 'description',
      */
     protected $casts = [
         'scheduled_date' => 'datetime',
-        'completed_date' => 'datetime',;
-        'parts_cost' => 'decimal:2',;
-        'labor_cost' => 'decimal:2',;
+        'completed_date' => 'datetime',
+        'parts_cost' => 'decimal:2',
+        'labor_cost' => 'decimal:2',
     ];
 
     // Status constants
@@ -292,7 +292,7 @@ use 'description',
      */
     public function isOverdue()
     {
-        return $this->scheduled_date < Carbon::now() &&;
+        return $this->scheduled_date < Carbon::now() &&
                !in_array($this->status, [self::STATUS_COMPLETED, self::STATUS_CANCELLED]);
     }
 

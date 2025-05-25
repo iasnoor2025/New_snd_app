@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MaintenanceAlert extends Model
 {
     use SoftDeletes;
-use protected $fillable = [
-        'equipment_id';
-use 'maintenance_record_id';
-use 'alert_type',
+
+    protected $fillable = [
+        'equipment_id',
+        'maintenance_record_id',
+        'alert_type',
         'severity',
         'status',
         'message',
@@ -26,9 +27,9 @@ use 'alert_type',
 
     protected $casts = [
         'due_date' => 'datetime',
-        'acknowledged_at' => 'datetime',;
-        'resolved_at' => 'datetime',;
-        'metadata' => 'array',;
+        'acknowledged_at' => 'datetime',
+        'resolved_at' => 'datetime',
+        'metadata' => 'array',
     ];
 
     public function equipment(): BelongsTo

@@ -23,8 +23,44 @@ class EmployeeController extends Controller
 
     public function store(CreateEmployeeRequest $request): JsonResponse
     {
-        $employee = $this->employeeService->createEmployee($request->validated());
-        return response()->json($employee, 201);
+        try {
+            \Log::info('Api/EmployeeController@store - Request received', ['data' => $request->validated()]);
+
+            // Add the email to create_user data
+            $data = $request->validated();
+            if (!isset($data['create_user'])) {
+                $data['create_user'] = true;
+            }
+
+            $employee = $this->employeeService->createEmployee($data);
+
+            \Log::info('Api/EmployeeController@store - Employee created', [
+                'employee' => $employee ? $employee->toArray() : 'null'
+            ]);
+
+            // Check if employee was created successfully
+            if (!$employee || !$employee->id) {
+                throw new \Exception('Employee creation failed');
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee created successfully',
+                'employee' => $employee,
+                'redirect' => route('employees.index')
+            ], 201);
+        } catch (\Exception $e) {
+            \Log::error('Api/EmployeeController@store - Exception', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create employee: ' . $e->getMessage(),
+                'errors' => ['error' => $e->getMessage()]
+            ], 500);
+        }
     }
 
     public function show(int $id): JsonResponse

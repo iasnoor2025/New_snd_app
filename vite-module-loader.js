@@ -48,4 +48,21 @@ async function collectModuleAssetsPaths(paths, modulesPath) {
   return paths;
 }
 
-export default collectModuleAssetsPaths;
+// Plugin for direct module loading
+function moduleLoader() {
+  return {
+    name: 'vite-plugin-module-loader',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        // Handle direct access to module pages for development
+        if (req.url && req.url.includes('/Modules/') && req.url.endsWith('.tsx')) {
+          console.log('Module page requested:', req.url);
+        }
+        next();
+      });
+    }
+  };
+}
+
+export { collectModuleAssetsPaths };
+export default moduleLoader;

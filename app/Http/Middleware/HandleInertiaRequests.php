@@ -44,6 +44,9 @@ class HandleInertiaRequests extends Middleware
             $user->load('roles');
         }
 
+        $ziggy = new Ziggy;
+        $ziggyArray = $ziggy->toArray();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -51,8 +54,8 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $user,
             ],
-            'ziggy' => fn (): array => [
-                ...(new Ziggy)->toArray(),
+            'ziggy' => [
+                ...$ziggyArray,
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

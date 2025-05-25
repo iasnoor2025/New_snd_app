@@ -20,7 +20,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param UtilizationTrackingService $trackingService
      * @param UtilizationAnalyticsService $analyticsService
-     * @return void;
+     * @return void
      */
     public function __construct(
         UtilizationTrackingService $trackingService,
@@ -35,7 +35,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function getLogs(Request $request, int $equipmentId): JsonResponse
     {
@@ -74,7 +74,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param EquipmentUtilizationRequest $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function startUtilization(EquipmentUtilizationRequest $request, int $equipmentId): JsonResponse
     {
@@ -84,7 +84,7 @@ class EquipmentUtilizationController extends Controller
         // Start utilization
         $utilizationLog = $this->trackingService->startUtilization($equipmentId, $validatedData, $userId);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Equipment utilization started successfully',
             'utilization_log' => $utilizationLog,
         ], 201);
@@ -95,7 +95,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $logId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function endUtilization(Request $request, int $logId): JsonResponse
     {
@@ -112,12 +112,12 @@ class EquipmentUtilizationController extends Controller
         $utilizationLog = $this->trackingService->endUtilization($logId, $validatedData, $userId);
 
         if (!$utilizationLog) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Utilization log not found or already ended',
             ], 404);
         }
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Equipment utilization ended successfully',
             'utilization_log' => $utilizationLog,
         ]);
@@ -128,7 +128,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $logId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function updateStatus(Request $request, int $logId): JsonResponse
     {
@@ -145,7 +145,7 @@ class EquipmentUtilizationController extends Controller
             $validatedData['notes'] ?? null
         );
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Utilization status updated successfully',
             'utilization_log' => $utilizationLog,
         ]);
@@ -156,7 +156,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function getUtilizationData(Request $request, int $equipmentId): JsonResponse
     {
@@ -181,7 +181,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function getUtilizationPatterns(Request $request, int $equipmentId): JsonResponse
     {
@@ -212,7 +212,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function generatePatterns(Request $request, int $equipmentId): JsonResponse
     {
@@ -248,7 +248,7 @@ class EquipmentUtilizationController extends Controller
         $equipment = Equipment::findOrFail($equipmentId);
         $equipment->updateUtilizationStatistics();
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Utilization patterns generated successfully',
             'patterns' => $patterns,
         ]);
@@ -259,7 +259,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function analyzeUtilizationTrends(Request $request, int $equipmentId): JsonResponse
     {
@@ -281,7 +281,7 @@ class EquipmentUtilizationController extends Controller
      *
      * @param Request $request
      * @param int $equipmentId
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function identifyIdlePeriods(Request $request, int $equipmentId): JsonResponse
     {
@@ -298,7 +298,7 @@ class EquipmentUtilizationController extends Controller
         // Identify idle periods
         $idlePeriods = $equipment->identifyIdlePeriods($days);
 
-        return response()->json([;
+        return response()->json([
             'equipment_id' => $equipmentId,
             'days_analyzed' => $days,
             'idle_periods' => $idlePeriods,
@@ -310,7 +310,7 @@ class EquipmentUtilizationController extends Controller
     /**
      * Get active utilization logs.
      *
-     * @return JsonResponse;
+     * @return JsonResponse
      */
     public function getActiveUtilizationLogs(): JsonResponse
     {

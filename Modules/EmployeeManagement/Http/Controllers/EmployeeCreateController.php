@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Modules\EmployeeManagement\Domain\Models\Position;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeCreateController extends Controller
 {
@@ -125,63 +126,164 @@ class EmployeeCreateController extends Controller
             $request->merge(['driving_license_number' => $request->iqama_number]);
 
             // Create employee record
-            $employeeData = [
-                'user_id' => $user->id,
-                'employee_id' => $employeeId,
-                'file_number' => $request->file_number,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'phone' => $request->phone,
-                'address' => $request->address ?? '',
-                'city' => $request->city ?? '',
-                'nationality' => $request->nationality,
-                'position_id' => $request->position_id,
-                'hourly_rate' => $request->hourly_rate,
-                'basic_salary' => $request->basic_salary,
-                'food_allowance' => $request->food_allowance ?? 0,
-                'housing_allowance' => $request->housing_allowance ?? 0,
-                'transport_allowance' => $request->transport_allowance ?? 0,
-                'absent_deduction_rate' => $request->absent_deduction_rate ?? 0,
-                'advance_payment' => $request->advance_payment ?? 0,
-                'overtime_rate_multiplier' => $request->overtime_rate_multiplier ?? 1.5,
-                'bank_name' => $request->bank_name ?? '',
-                'bank_account_number' => $request->bank_account_number ?? '',
-                'bank_iban' => $request->bank_iban ?? '',
-                'contract_hours_per_day' => $request->contract_hours_per_day ?? 8,
-                'contract_days_per_month' => $request->contract_days_per_month ?? 22,
-                'hire_date' => $request->hire_date ? date('Y-m-d', strtotime($request->hire_date)) : date('Y-m-d'),
-                'status' => $request->status,
-                'emergency_contact_name' => $request->emergency_contact_name ?? '',
-                'emergency_contact_phone' => $request->emergency_contact_phone ?? '',
-                'notes' => $request->notes ?? '',
-                // Legal Documents
-                'passport_number' => $request->passport_number ?? '',
-                'passport_expiry' => $request->passport_expiry ? date('Y-m-d', strtotime($request->passport_expiry)) : null,
-                'iqama_number' => $request->iqama_number ?? '',
-                'iqama_expiry' => $request->iqama_expiry ? date('Y-m-d', strtotime($request->iqama_expiry)) : null,
-                'iqama_cost' => $request->iqama_cost ?? 0,
-                'driving_license_number' => $request->iqama_number ?? '', // Set equal to iqama number
-                'driving_license_expiry' => $request->driving_license_expiry ? date('Y-m-d', strtotime($request->driving_license_expiry)) : null,
-                'driving_license_cost' => $request->driving_license_cost ?? 0,
-                'operator_license_number' => $request->operator_license_number ?? '',
-                'operator_license_expiry' => $request->operator_license_expiry ? date('Y-m-d', strtotime($request->operator_license_expiry)) : null,
-                'operator_license_cost' => $request->operator_license_cost ?? 0,
-                'tuv_certification_number' => $request->tuv_certification_number ?? '',
-                'tuv_certification_expiry' => $request->tuv_certification_expiry ? date('Y-m-d', strtotime($request->tuv_certification_expiry)) : null,
-                'tuv_certification_cost' => $request->tuv_certification_cost ?? 0,
-                'spsp_license_number' => $request->spsp_license_number ?? '',
-                'spsp_license_expiry' => $request->spsp_license_expiry ? date('Y-m-d', strtotime($request->spsp_license_expiry)) : null,
-                'spsp_license_cost' => $request->spsp_license_cost ?? 0,
-            ];
+            try {
+                // Wrap in an explicit transaction
+                $employee = DB::transaction(function() use ($user, $employeeId, $request) {
+                    // Add email to employee data - this is critical!
+                    $employeeData = [
+                        'user_id' => $user->id,
+                        'employee_id' => $employeeId,
+                        'file_number' => $request->file_number,
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'email' => $request->email, // Email is required
+                        'phone' => $request->phone,
+                        'address' => $request->address ?? '',
+                        'city' => $request->city ?? '',
+                        'nationality' => $request->nationality,
+                        'position_id' => $request->position_id,
+                        'hourly_rate' => $request->hourly_rate,
+                        'basic_salary' => $request->basic_salary,
+                        'food_allowance' => $request->food_allowance ?? 0,
+                        'housing_allowance' => $request->housing_allowance ?? 0,
+                        'transport_allowance' => $request->transport_allowance ?? 0,
+                        'absent_deduction_rate' => $request->absent_deduction_rate ?? 0,
+                        'advance_payment' => $request->advance_payment ?? 0,
+                        'overtime_rate_multiplier' => $request->overtime_rate_multiplier ?? 1.5,
+                        'bank_name' => $request->bank_name ?? '',
+                        'bank_account_number' => $request->bank_account_number ?? '',
+                        'bank_iban' => $request->bank_iban ?? '',
+                        'contract_hours_per_day' => $request->contract_hours_per_day ?? 8,
+                        'contract_days_per_month' => $request->contract_days_per_month ?? 22,
+                        'hire_date' => $request->hire_date ? date('Y-m-d', strtotime($request->hire_date)) : date('Y-m-d'),
+                        'status' => $request->status,
+                        'emergency_contact_name' => $request->emergency_contact_name ?? '',
+                        'emergency_contact_phone' => $request->emergency_contact_phone ?? '',
+                        'notes' => $request->notes ?? '',
+                        // Legal Documents
+                        'passport_number' => $request->passport_number ?? '',
+                        'passport_expiry' => $request->passport_expiry ? date('Y-m-d', strtotime($request->passport_expiry)) : null,
+                        'iqama_number' => $request->iqama_number ?? '',
+                        'iqama_expiry' => $request->iqama_expiry ? date('Y-m-d', strtotime($request->iqama_expiry)) : null,
+                        'iqama_cost' => $request->iqama_cost ?? 0,
+                        'driving_license_number' => $request->iqama_number ?? '', // Set equal to iqama number
+                        'driving_license_expiry' => $request->driving_license_expiry ? date('Y-m-d', strtotime($request->driving_license_expiry)) : null,
+                        'driving_license_cost' => $request->driving_license_cost ?? 0,
+                        'operator_license_number' => $request->operator_license_number ?? '',
+                        'operator_license_expiry' => $request->operator_license_expiry ? date('Y-m-d', strtotime($request->operator_license_expiry)) : null,
+                        'operator_license_cost' => $request->operator_license_cost ?? 0,
+                        'tuv_certification_number' => $request->tuv_certification_number ?? '',
+                        'tuv_certification_expiry' => $request->tuv_certification_expiry ? date('Y-m-d', strtotime($request->tuv_certification_expiry)) : null,
+                        'tuv_certification_cost' => $request->tuv_certification_cost ?? 0,
+                        'spsp_license_number' => $request->spsp_license_number ?? '',
+                        'spsp_license_expiry' => $request->spsp_license_expiry ? date('Y-m-d', strtotime($request->spsp_license_expiry)) : null,
+                        'spsp_license_cost' => $request->spsp_license_cost ?? 0,
+                        'date_of_birth' => $request->date_of_birth ? date('Y-m-d', strtotime($request->date_of_birth)) : null,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
 
-            \Log::info('Attempting to create employee with data', ['employee_data' => $employeeData]);
+                    \Log::info('Creating employee with transaction - data prepared', ['employeeData' => $employeeData]);
 
-            $employee = Employee::create($employeeData);
+                    // Force direct insert with query builder and NO ELOQUENT
+                    try {
+                        // Get the database schema for the employees table to check required columns
+                        $tableColumns = \DB::getSchemaBuilder()->getColumnListing('employees');
+                        \Log::info('Employee table columns', ['columns' => $tableColumns]);
+
+                        // Remove any potential null values that would violate NOT NULL constraints
+                        $employeeData = array_filter($employeeData, function ($value) {
+                            return $value !== null;
+                        });
+
+                        // Ensure all required columns have values
+                        $requiredColumns = ['user_id', 'first_name', 'last_name', 'email', 'file_number',
+                                           'nationality', 'position_id', 'date_of_birth'];
+
+                        foreach ($requiredColumns as $column) {
+                            if (empty($employeeData[$column])) {
+                                \Log::error("Required column '{$column}' is missing or empty");
+                                throw new \Exception("Required column '{$column}' is missing or empty");
+                            }
+                        }
+
+                        // Insert using raw query to bypass Eloquent completely
+                        $id = \DB::table('employees')->insertGetId($employeeData);
+                        \Log::info('Employee inserted with direct DB query', ['id' => $id]);
+
+                        // Then retrieve the created employee to verify it exists
+                        $rawEmployee = \DB::table('employees')->where('id', $id)->first();
+
+                        if (!$rawEmployee) {
+                            \Log::error('Created employee not found after insert', ['id' => $id]);
+                            throw new \Exception('Employee was inserted but could not be retrieved');
+                        }
+
+                        \Log::info('Raw employee data retrieved', [
+                            'id' => $id,
+                            'employee' => $rawEmployee
+                        ]);
+
+                        // Convert to model instance
+                        $createdEmployee = \Modules\EmployeeManagement\Domain\Models\Employee::find($id);
+                        \Log::info('Employee model retrieved from database', [
+                            'id' => $id,
+                            'found' => $createdEmployee ? true : false
+                        ]);
+
+                        if (!$createdEmployee) {
+                            // Something is wrong with the model retrieval - try to manually create
+                            $createdEmployee = new \Modules\EmployeeManagement\Domain\Models\Employee();
+                            $createdEmployee->setRawAttributes((array)$rawEmployee);
+                            $createdEmployee->exists = true;
+
+                            \Log::info('Created employee model manually', [
+                                'id' => $id
+                            ]);
+                        }
+
+                        return $createdEmployee;
+                    } catch (\PDOException $e) {
+                        \Log::error('Database error during insert', [
+                            'error' => $e->getMessage(),
+                            'code' => $e->getCode(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+
+                        if ($e->getCode() == 23000) {
+                            // Duplicate key
+                            throw new \Exception('An employee with this file number or email already exists.');
+                        } else if ($e->getCode() == 23502) {
+                            // Not null constraint
+                            throw new \Exception('Required fields are missing: ' . $e->getMessage());
+                        } else {
+                            throw $e;
+                        }
+                    } catch (\Exception $e) {
+                        \Log::error('Direct DB insert failed', [
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                        throw $e;
+                    }
+                }, 5); // 5 retries
+            } catch (\Exception $e) {
+                \Log::error('Error in employee creation', [
+                    'error' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]);
+                throw $e;
+            }
 
             \Log::info('Employee created successfully', ['employee_id' => $employee->id]);
 
-            return redirect()->route('employees.index')
-                ->with('success', 'Employee created successfully.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee created successfully',
+                'employee' => $employee,
+                'redirect' => route('employees.index'),
+            ], 201)->header('X-Inertia-Location', route('employees.index'));
         } catch (\Exception $e) {
             \Log::error('Error creating employee', [
                 'error' => $e->getMessage(),
@@ -192,15 +294,19 @@ class EmployeeCreateController extends Controller
 
             // Check if it's a database error
             if (str_contains($e->getMessage(), '23502')) {
-                return back()->withErrors([
-                    'error' => 'Required fields are missing. Please check all required fields and try again.'
-                ])->withInput();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Required fields are missing. Please check all required fields and try again.',
+                    'errors' => ['error' => 'Required fields are missing']
+                ], 422);
             }
 
             // For other errors
-            return back()->withErrors([
-                'error' => 'Failed to create employee: ' . $e->getMessage()
-            ])->withInput();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create employee: ' . $e->getMessage(),
+                'errors' => ['error' => $e->getMessage()]
+            ], 500);
         }
     }
 

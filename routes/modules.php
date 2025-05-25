@@ -1,0 +1,71 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+/*
+|--------------------------------------------------------------------------
+| Module Direct Routes
+|--------------------------------------------------------------------------
+|
+| This file contains routes that map directly to module routes but with
+| cleaner URL paths for frontend usage. These redirect to the appropriate
+| module routes.
+|
+*/
+
+// Direct routes for leave requests
+Route::middleware(['auth', 'verified'])->prefix('leave-requests')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('leaves.index');
+    });
+});
+
+// Direct routes for timesheets
+Route::middleware(['auth', 'verified'])->prefix('timesheets')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('timesheets.index');
+    });
+});
+
+// Direct routes for projects
+Route::middleware(['auth', 'verified'])->prefix('projects')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('projects.index');
+    });
+});
+
+// Direct routes for rentals
+Route::middleware(['auth', 'verified'])->prefix('rentals')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('rentals.index');
+    });
+});
+
+// Direct routes for equipment
+Route::middleware(['auth', 'verified'])->prefix('equipment')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('equipment.equipment.index');
+    });
+});
+
+// Direct routes for payrolls
+Route::middleware(['auth', 'verified'])->prefix('payrolls')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('payroll.index');
+    });
+});
+
+// Direct routes for localization
+Route::middleware(['auth', 'verified'])->prefix('localization')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Localization/Index');
+    });
+});
+
+// Direct routes for audit
+Route::middleware(['auth', 'verified'])->prefix('audit')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('audit.index');
+    });
+});

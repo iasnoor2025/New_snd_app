@@ -184,7 +184,7 @@ class MaintenanceTaskController extends Controller
         $technician = $this->taskService->findBestTechnicianForTask($task);
 
         if (!$technician) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'No suitable technicians found.'
             ], 404);
         }
@@ -372,7 +372,7 @@ class MaintenanceTaskController extends Controller
     {
         list($success, $failure) = $this->taskService->reservePartsForTask($task, Auth::id());
 
-        return response()->json([;
+        return response()->json([
             'success_count' => $success,
             'failure_count' => $failure,
             'total_parts' => $success + $failure,

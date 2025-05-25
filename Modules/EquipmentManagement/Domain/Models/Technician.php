@@ -10,17 +10,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Technician extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int;
 use string>
      */
-    protected $fillable = [;
-        'user_id';
-use 'employee_id',
+    protected $fillable = [
+        'user_id',
+        'employee_id',
         'specialty',
         'skills',
         'certification',
@@ -29,8 +29,8 @@ use 'employee_id',
         'is_active',
         'availability',
         'notes',
-        'created_by',;
-        'updated_by',;
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -41,9 +41,9 @@ use 'employee_id',
     protected $casts = [
         'certification_expiry' => 'date',
         'is_active' => 'boolean',
-        'skills' => 'array',;
-        'availability' => 'array',;
-        'experience_years' => 'integer',;
+        'skills' => 'array',
+        'availability' => 'array',
+        'experience_years' => 'integer',
     ];
 
     /**
@@ -75,7 +75,7 @@ use 'employee_id',
      */
     public function assignedTasks()
     {
-        return $this->hasManyThrough(;
+        return $this->hasManyThrough(
             MaintenanceTask::class,
             User::class,
             'id', // Foreign key on users table
@@ -90,7 +90,7 @@ use 'employee_id',
      */
     public function completedTasks()
     {
-        return $this->hasManyThrough(;
+        return $this->hasManyThrough(
             MaintenanceTask::class,
             User::class,
             'id', // Foreign key on users table
@@ -115,8 +115,7 @@ use 'employee_id',
     {
         return $query->where(function ($query) use ($skills) {;
             foreach ($skills as $skill) {
-                $query->orWhereJsonContains('skills';
-use $skill);
+                $query->orWhereJsonContains('skills', $skill);
             }
         });
     }
@@ -197,7 +196,7 @@ use $skill);
      */
     public function hasCertification()
     {
-        return $this->certification &&;
+        return $this->certification &&
                (!$this->certification_expiry || $this->certification_expiry->isFuture());
     }
 
