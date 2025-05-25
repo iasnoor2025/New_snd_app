@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
+use App\Policies\CustomerPolicy;
+use Modules\CustomerManagement\Domain\Models\Customer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Register Inertia namespace for specific modules
         $this->registerInertiaNamespaces();
+
+        Gate::policy(Customer::class, CustomerPolicy::class);
     }
 
     /**
@@ -38,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         // This allows Inertia to resolve module pages
         Inertia::share('resolvedPaths', [
             'Employees' => base_path('Modules/EmployeeManagement/resources/js/pages/Employees'),
-
+            'Customers' => base_path('Modules/CustomerManagement/resources/js/pages/Customers'),
         ]);
     }
 }

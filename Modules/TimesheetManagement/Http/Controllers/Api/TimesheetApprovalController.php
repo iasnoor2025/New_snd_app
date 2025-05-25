@@ -36,10 +36,9 @@ class TimesheetApprovalController extends BaseApiController
 
     /**
      * Display a listing of the timesheets pending approval.
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse;
      */
-    public function index(Request $request)
+    public function index()
     {
         $user = Auth::user();
 

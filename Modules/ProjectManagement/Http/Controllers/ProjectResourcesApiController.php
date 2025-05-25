@@ -32,9 +32,9 @@ class ProjectResourcesApiController extends Controller
 {
     protected $resourceService;
 
-    public function __construct(ProjectResourceService $resourceService)
+    public function __construct(/* ProjectResourceService $resourceService */)
     {
-        $this->resourceService = $resourceService;
+        // $this->resourceService = $resourceService;
     }
 
     /**
@@ -55,7 +55,7 @@ class ProjectResourcesApiController extends Controller
             // Get assignable users (all users or those with specific role)
             $assignableUsers = \Modules\Core\Domain\Models\User::select('id', 'name')->get();
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'data' => [
                     'project' => [
@@ -74,7 +74,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to retrieve project resources: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve project resources',
                 'error' => $e->getMessage()
@@ -100,7 +100,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -109,7 +109,7 @@ class ProjectResourcesApiController extends Controller
 
             $manpower = $action->execute($project, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Manpower resource created successfully',
                 'data' => $manpower
@@ -117,7 +117,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to save manpower resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to save manpower resource',
                 'error' => $e->getMessage()
@@ -143,7 +143,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -152,7 +152,7 @@ class ProjectResourcesApiController extends Controller
 
             $manpower = $action->execute($manpower, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Manpower resource updated successfully',
                 'data' => $manpower
@@ -160,7 +160,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to update manpower resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to update manpower resource',
                 'error' => $e->getMessage()
@@ -176,14 +176,14 @@ class ProjectResourcesApiController extends Controller
         try {
             $action->execute($manpower);
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Manpower resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to delete manpower resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete manpower resource',
                 'error' => $e->getMessage()
@@ -228,7 +228,7 @@ class ProjectResourcesApiController extends Controller
                     'content_type' => $request->header('Content-Type')
                 ]);
 
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors(),
@@ -239,7 +239,7 @@ class ProjectResourcesApiController extends Controller
 
             $equipment = $action->execute($project, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Equipment resource created successfully',
                 'data' => $equipment
@@ -250,7 +250,7 @@ class ProjectResourcesApiController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to save equipment resource',
                 'error' => $e->getMessage()
@@ -274,7 +274,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -283,7 +283,7 @@ class ProjectResourcesApiController extends Controller
 
             $equipment = $action->execute($equipment, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Equipment resource updated successfully',
                 'data' => $equipment
@@ -291,7 +291,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to update equipment resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to update equipment resource',
                 'error' => $e->getMessage()
@@ -307,14 +307,14 @@ class ProjectResourcesApiController extends Controller
         try {
             $action->execute($equipment);
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Equipment resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to delete equipment resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete equipment resource',
                 'error' => $e->getMessage()
@@ -338,7 +338,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -347,7 +347,7 @@ class ProjectResourcesApiController extends Controller
 
             $material = $action->execute($project, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Material resource created successfully',
                 'data' => $material
@@ -355,7 +355,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to save material resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to save material resource',
                 'error' => $e->getMessage()
@@ -379,7 +379,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -388,7 +388,7 @@ class ProjectResourcesApiController extends Controller
 
             $material = $action->execute($material, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Material resource updated successfully',
                 'data' => $material
@@ -396,7 +396,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to update material resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to update material resource',
                 'error' => $e->getMessage()
@@ -412,14 +412,14 @@ class ProjectResourcesApiController extends Controller
         try {
             $action->execute($material);
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Material resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to delete material resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete material resource',
                 'error' => $e->getMessage()
@@ -444,7 +444,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -453,7 +453,7 @@ class ProjectResourcesApiController extends Controller
 
             $fuel = $action->execute($project, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Fuel resource created successfully',
                 'data' => $fuel
@@ -461,7 +461,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to save fuel resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to save fuel resource',
                 'error' => $e->getMessage()
@@ -486,7 +486,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -495,7 +495,7 @@ class ProjectResourcesApiController extends Controller
 
             $fuel = $action->execute($fuel, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Fuel resource updated successfully',
                 'data' => $fuel
@@ -503,7 +503,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to update fuel resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to update fuel resource',
                 'error' => $e->getMessage()
@@ -519,14 +519,14 @@ class ProjectResourcesApiController extends Controller
         try {
             $action->execute($fuel);
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Fuel resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to delete fuel resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete fuel resource',
                 'error' => $e->getMessage()
@@ -549,7 +549,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -558,7 +558,7 @@ class ProjectResourcesApiController extends Controller
 
             $expense = $action->execute($project, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Expense resource created successfully',
                 'data' => $expense
@@ -566,7 +566,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to save expense resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to save expense resource',
                 'error' => $e->getMessage()
@@ -589,7 +589,7 @@ class ProjectResourcesApiController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([;
+                return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
@@ -598,7 +598,7 @@ class ProjectResourcesApiController extends Controller
 
             $expense = $action->execute($expense, $validator->validated());
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Expense resource updated successfully',
                 'data' => $expense
@@ -606,7 +606,7 @@ class ProjectResourcesApiController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to update expense resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to update expense resource',
                 'error' => $e->getMessage()
@@ -622,14 +622,14 @@ class ProjectResourcesApiController extends Controller
         try {
             $action->execute($expense);
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => 'Expense resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to delete expense resource: ' . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete expense resource',
                 'error' => $e->getMessage()
@@ -665,20 +665,20 @@ class ProjectResourcesApiController extends Controller
                     app(DeleteExpense::class)->execute($resource);
                     break;
                 default:
-                    return response()->json([;
+                    return response()->json([
                         'success' => false,
                         'message' => 'Invalid resource type specified'
                     ], 400);
             }
 
-            return response()->json([;
+            return response()->json([
                 'success' => true,
                 'message' => ucfirst($type) . ' resource deleted successfully'
             ]);
         } catch (\Exception $e) {
             Log::error("Failed to delete {$type} resource: " . $e->getMessage());
 
-            return response()->json([;
+            return response()->json([
                 'success' => false,
                 'message' => "Failed to delete {$type} resource",
                 'error' => $e->getMessage()

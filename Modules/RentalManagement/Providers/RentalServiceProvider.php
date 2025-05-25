@@ -7,15 +7,15 @@ use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Modules\RentalManagement\App\Repositories\Interfaces\RentalRepositoryInterface;
-use Modules\RentalManagement\App\Repositories\RentalRepository;
-use Modules\RentalManagement\App\Services\RentalService;
+use Modules\RentalManagement\Repositories\Interfaces\RentalRepositoryInterface;
+use Modules\RentalManagement\Repositories\RentalRepository;
+use Modules\RentalManagement\Services\RentalService;
 use Modules\RentalManagement\Domain\Models\Rental;
 
 class RentalServiceProvider extends ServiceProvider
 {
     use PathNamespace;
-use protected string $name = 'Rental';
+    protected string $name = 'Rental';  // This is the name of the module
 
     protected string $nameLower = 'rental';
 
@@ -45,7 +45,7 @@ use protected string $name = 'Rental';
         });
 
         $this->app->singleton(RentalService::class, function ($app) {
-            return new RentalService(;
+            return new RentalService(
                 $app->make(RentalRepositoryInterface::class)
             );
         });

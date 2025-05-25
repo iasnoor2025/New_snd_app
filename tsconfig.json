@@ -111,7 +111,7 @@
         "paths": {
             "@/*": ["./resources/js/*"],
             "@/resources/js/components/ui/*": ["./resources/js/components/ui/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
+            "ziggy-js": ["./vendor/tightenco/ziggy/dist/index.esm.js"]
         },
         "jsx": "react-jsx"
     },

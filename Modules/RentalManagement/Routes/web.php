@@ -34,7 +34,7 @@ Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(f
     Route::resource('rentals', RentalController::class);
 
     // Extension routes
-    Route::resource('extensions', RentalExtensionController::class);
+    // Route::resource('extensions', RentalExtensionController::class);
     Route::post('extensions/{extension}/approve', [RentalExtensionController::class, 'approve'])->name('extensions.approve');
     Route::post('extensions/{extension}/reject', [RentalExtensionController::class, 'reject'])->name('extensions.reject');
 

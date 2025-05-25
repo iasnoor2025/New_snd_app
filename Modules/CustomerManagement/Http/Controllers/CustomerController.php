@@ -49,7 +49,7 @@ class CustomerController extends Controller
         $customers = $query->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Customers/Index', [
+        return Inertia::render('Customers/Index ', [
             'customers' => $customers,
             'filters' => $request->only(['search', 'status'])
         ]);
@@ -217,12 +217,7 @@ class CustomerController extends Controller
     private function getCountriesList(): array
     {
         return [
-            'UAE' => 'United Arab Emirates',
             'KSA' => 'Saudi Arabia',
-            'QAT' => 'Qatar',
-            'OMN' => 'Oman',
-            'BHR' => 'Bahrain',
-            'KWT' => 'Kuwait',
         ];
     }
 }

@@ -19,30 +19,31 @@ export function usePermission() {
   const props = usePage().props as unknown;
   const auth = (props && typeof props === 'object' && 'auth' in props) ? (props as any).auth as Auth : undefined;
 
-  const hasPermission = (permission: string): boolean => {
-    if (!auth?.user) return false;
-
-    // If user has a specific permission
-    if (auth.user.permissions?.includes(permission)) {
-      return true;
-    }
-
-    // If user has super admin or admin role
-    if (auth.user.roles?.includes('super-admin') || auth.user.roles?.includes('admin')) {
-      return true;
-    }
-
-    return false;
-  };
+  // Support both string and object arrays for roles/permissions
+  const roles = auth?.user?.roles || [];
+  const permissions = auth?.user?.permissions || [];
 
   const hasRole = (role: string): boolean => {
-    if (!auth?.user) return false;
-    return auth.user.roles?.includes(role) || false;
+    if (!roles) return false;
+    return Array.isArray(roles) && roles.some(
+      r => r === role || (r && typeof r === 'object' && r.name === role)
+    );
+  };
+
+  const isAdmin = hasRole('admin') || hasRole('Admin') || hasRole('super-admin') || hasRole('Super Admin');
+
+  const hasPermission = (permission: string): boolean => {
+    if (!permissions) return false;
+    if (isAdmin) return true;
+    return Array.isArray(permissions) && permissions.some(
+      p => p === permission || (p && typeof p === 'object' && p.name === permission)
+    );
   };
 
   return {
     hasPermission,
     hasRole,
     user: auth?.user,
+    isAdmin,
   };
 }

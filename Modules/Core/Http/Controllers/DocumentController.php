@@ -377,30 +377,37 @@ class DocumentController extends Controller
     public function downloadSingle(Request $request, string $modelType, int $modelId, int $mediaId)
     {
         try {
-            // Check if model type is supported
             if (!array_key_exists($modelType, $this->modelMap)) {
                 abort(400, 'Unsupported model type: ' . $modelType);
             }
-
-            // Get model class
             $modelClass = $this->modelMap[$modelType];
-
-            // Find the model instance
             $model = $modelClass::findOrFail($modelId);
-
-            // Check permissions
             if ($request->user()->cannot('view', $model)) {
                 abort(403, 'You do not have permission to download documents for this ' . $modelType);
             }
-
-            // Find the media
-            $media = $model->media()->findOrFail($mediaId);
-
-            // Download the file
-            return response()->download(
-                $media->getPath(),
-                $media->file_name
-            );
+            $mediaIdInt = (int) $mediaId;
+            $media = $model->media()->find($mediaIdInt);
+            if (!$media || !method_exists($media, 'getPath')) {
+                \Log::error('Media not found or invalid in DocumentController@downloadSingle', [
+                    'model_type' => $modelType,
+                    'model_id' => $modelId,
+                    'media_id' => $mediaId,
+                    'media' => $media,
+                    'all_media_ids' => $model->media()->pluck('id')->all(),
+                ]);
+                abort(404, 'Media not found');
+            }
+            $path = $media->getPath();
+            if (!$path || !file_exists($path)) {
+                \Log::error('Media file does not exist on disk in DocumentController@downloadSingle', [
+                    'model_type' => $modelType,
+                    'model_id' => $modelId,
+                    'media_id' => $mediaId,
+                    'path' => $path,
+                ]);
+                abort(404, 'File not found on disk');
+            }
+            return response()->download($path, $media->file_name);
         } catch (\Exception $e) {
             Log::error('Document download failed', [
                 'model_type' => $modelType,
@@ -409,7 +416,6 @@ class DocumentController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
             abort(500, 'Document download failed: ' . $e->getMessage());
         }
     }
@@ -480,20 +486,39 @@ class DocumentController extends Controller
     public function showMedia(int $mediaId, string $conversionName = null)
     {
         try {
-            $media = Media::findOrFail($mediaId);
-
-            // If no conversion specified, return the original file;
-            if ($conversionName === null) {
-                return response()->file($media->getPath());
+            $mediaIdInt = (int) $mediaId;
+            $media = Media::find($mediaIdInt);
+            if (!$media || !method_exists($media, 'getPath')) {
+                \Log::error('Media not found or invalid in DocumentController@showMedia', [
+                    'media_id' => $mediaId,
+                    'media' => $media
+                ]);
+                abort(404, 'Media not found');
             }
-
-            // Check if the requested conversion exists
+            if ($conversionName === null) {
+                $path = $media->getPath();
+                if (!$path || !file_exists($path)) {
+                    \Log::error('Media file does not exist on disk in DocumentController@showMedia', [
+                        'media_id' => $mediaId,
+                        'path' => $path,
+                    ]);
+                    abort(404, 'File not found on disk');
+                }
+                return response()->file($path);
+            }
             if (!$media->hasGeneratedConversion($conversionName)) {
                 abort(404, 'Conversion not found');
             }
-
-            // Return the conversion
-            return response()->file($media->getPath($conversionName));
+            $path = $media->getPath($conversionName);
+            if (!$path || !file_exists($path)) {
+                \Log::error('Media conversion file does not exist on disk in DocumentController@showMedia', [
+                    'media_id' => $mediaId,
+                    'conversion' => $conversionName,
+                    'path' => $path,
+                ]);
+                abort(404, 'Conversion file not found on disk');
+            }
+            return response()->file($path);
         } catch (ModelNotFoundException $e) {
             abort(404, 'Media not found');
         } catch (\Exception $e) {
@@ -502,7 +527,6 @@ class DocumentController extends Controller
                 'conversionName' => $conversionName,
                 'error' => $e->getMessage()
             ]);
-
             abort(500, 'Error serving media file');
         }
     }
@@ -603,7 +627,10 @@ class DocumentController extends Controller
     {
         try {
             // Find the media item
-            $media = $equipment->media()->findOrFail($document);
+            $media = $equipment->media()->find($document);
+            if (!$media) {
+                abort(404, 'Media not found');
+            }
 
             // Delete the media
             $media->delete();
@@ -635,14 +662,28 @@ class DocumentController extends Controller
     public function downloadEquipmentDocument(Equipment $equipment, $document)
     {
         try {
-            // Find the media item
-            $media = $equipment->media()->findOrFail($document);
-
-            // Download the file
-            return response()->download(
-                $media->getPath(),
-                $media->file_name
-            );
+            $mediaId = (int) $document;
+            $media = $equipment->media()->find($mediaId);
+            if (!$media || !method_exists($media, 'getPath')) {
+                \Log::error('Media not found or invalid in DocumentController@downloadEquipmentDocument', [
+                    'equipment_id' => $equipment->id,
+                    'document_id' => $document,
+                    'media' => $media,
+                    'all_media_ids' => $equipment->media()->pluck('id')->all(),
+                ]);
+                abort(404, 'Media not found');
+            }
+            $path = $media->getPath();
+            if (!$path || !file_exists($path)) {
+                \Log::error('Media file does not exist on disk in DocumentController@downloadEquipmentDocument', [
+                    'equipment_id' => $equipment->id,
+                    'document_id' => $document,
+                    'media_id' => $media->id,
+                    'path' => $path,
+                ]);
+                abort(404, 'File not found on disk');
+            }
+            return response()->download($path, $media->file_name);
         } catch (\Exception $e) {
             Log::error('Error downloading equipment document', [
                 'equipment_id' => $equipment->id,
@@ -650,7 +691,6 @@ class DocumentController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
             abort(500, 'Failed to download document: ' . $e->getMessage());
         }
     }
@@ -694,8 +734,8 @@ class DocumentController extends Controller
 
             // Create paths array for all PDFs
             $pdfPaths = $mediaItems->map(function ($media) {
-                return $media->getPath();
-            })->toArray();
+                return $media ? $media->getPath() : null;
+            })->filter()->toArray();
 
             // Use PDF merge service
             $mergedPdfPath = $this->pdfMergeService->mergeFiles(
@@ -751,7 +791,10 @@ class DocumentController extends Controller
             ]);
 
             // Find the media item
-            $media = $equipment->media()->findOrFail($document);
+            $media = $equipment->media()->find($document);
+            if (!$media) {
+                abort(404, 'Media not found');
+            }
 
             // Update media name
             $media->name = $request->name;
@@ -969,8 +1012,8 @@ class DocumentController extends Controller
 
             // Add each document to the zip file
             foreach ($documents as $document) {
-                $filePath = $document->getPath();
-                if (file_exists($filePath)) {
+                $filePath = $document ? $document->getPath() : null;
+                if ($filePath && file_exists($filePath)) {
                     $zip->addFile($filePath, $document->file_name);
                 }
             }

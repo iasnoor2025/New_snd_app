@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\RentalManagement\App\DTOs\RentalDTO;
-use Modules\RentalManagement\App\Repositories\Interfaces\RentalRepositoryInterface;
+use Modules\RentalManagement\Repositories\Interfaces\RentalRepositoryInterface;
 use Modules\RentalManagement\App\Events\RentalCreated;
 use Modules\RentalManagement\App\Events\RentalUpdated;
 use Modules\RentalManagement\App\Events\RentalDeleted;

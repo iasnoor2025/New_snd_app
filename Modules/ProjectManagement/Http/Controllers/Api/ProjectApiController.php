@@ -40,7 +40,7 @@ class ProjectApiController extends Controller
 
         $project = Project::create($validated);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Project created successfully',
             'data' => $project
         ], Response::HTTP_CREATED);
@@ -77,7 +77,7 @@ class ProjectApiController extends Controller
 
         $project->update($validated);
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Project updated successfully',
             'data' => $project
         ]);
@@ -90,7 +90,7 @@ class ProjectApiController extends Controller
     {
         $project->delete();
 
-        return response()->json([;
+        return response()->json([
             'message' => 'Project deleted successfully'
         ]);
     }

@@ -4,7 +4,7 @@ namespace Modules\RentalManagement\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\RentalManagement\App\Repositories\Interfaces\RentalRepositoryInterface;
+use Modules\RentalManagement\Repositories\Interfaces\RentalRepositoryInterface;
 
 class RentalRepository implements RentalRepositoryInterface
 {

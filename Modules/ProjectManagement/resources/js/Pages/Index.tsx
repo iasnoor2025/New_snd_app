@@ -1,18 +1,23 @@
 import React, { useState, useMemo } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/Modules/ProjectManagement/Resources/js/layouts/app-layout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/table';
+// import AppLayout from '@/Modules/ProjectManagement/Resources/js/layouts/app-layout';
+// TODO: Update the following imports to the correct paths for your UI components
+// import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from 'your-ui-library/card';
+// import { Button } from 'your-ui-library/button';
+// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'your-ui-library/table';
+// import { Badge } from 'your-ui-library/badge';
+// import { Separator } from 'your-ui-library/separator';
+// import { Progress } from 'your-ui-library/progress';
+// import { Input } from 'your-ui-library/input';
 import { format } from 'date-fns';
 import {
     Eye, Edit, Plus, LayoutGrid, CheckCircle, Clock, AlertCircle, XCircle,
     Filter, Search
 } from 'lucide-react';
-import { Badge } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/badge';
-import { Separator } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/separator';
-import { Progress } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/progress';
-import { Input } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/input';
+// import { Badge } from '../Components/project/ProjectProgress';
+// import { Separator } from '../Components/project/ProjectProgress';
+// import { Progress } from '../Components/project/ProjectProgress';
+// import { Input } from '../Components/project/ProjectProgress';
 
 interface Project {
     id: number;

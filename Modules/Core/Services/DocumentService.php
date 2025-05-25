@@ -209,7 +209,10 @@ class DocumentService
     {
         try {
             // Get the source path
-            $sourcePath = is_string($originalDocument) ? $originalDocument : $originalDocument->getPath();
+            $sourcePath = is_string($originalDocument) ? $originalDocument : ($originalDocument ? $originalDocument->getPath() : null);
+            if (!$sourcePath) {
+                throw new \Exception('Original document not found or invalid');
+            }
 
             // Generate the destination path
             $extension = pathinfo($sourcePath, PATHINFO_EXTENSION);

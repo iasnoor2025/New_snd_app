@@ -20,8 +20,6 @@ if (typeof window !== 'undefined') {
 const modulePages: Record<string, () => Promise<any>> = {
   ...import.meta.glob('/Modules/*/resources/js/pages/**/*.tsx'),
   ...import.meta.glob('/Modules/*/resources/js/pages/**/*.jsx'),
-  ...import.meta.glob('/Modules/*/resources/js/Pages/**/*.tsx'),
-  ...import.meta.glob('/Modules/*/resources/js/Pages/**/*.jsx'),
 };
 
 // Helper function to find module pages by pattern
@@ -80,12 +78,21 @@ const timesheetPages: Record<string, string> = {
   'Timesheets/TimesheetManagement': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/TimesheetManagement.tsx',
 };
 
+// Customer Management module pages
+const customerPages: Record<string, string> = {
+  'Customers/Index': '/Modules/CustomerManagement/resources/js/pages/Customers/Index.tsx',
+  'Customers/Create': '/Modules/CustomerManagement/resources/js/pages/Customers/Create.tsx',
+  'Customers/Edit': '/Modules/CustomerManagement/resources/js/pages/Customers/Edit.tsx',
+  'Customers/Show': '/Modules/CustomerManagement/resources/js/pages/Customers/Show.tsx',
+};
+
 // Combine all page mappings
 const allPageMappings: Record<string, string> = {
   ...employeePages,
   ...projectPages,
   ...rentalPages,
   ...timesheetPages,
+  ...customerPages,
 };
 
 // Map from page name prefixes to module names
@@ -230,7 +237,9 @@ createInertiaApp({
 
             // Try to infer pattern for common page types (Create, Edit, Show)
             if (name.includes('/')) {
-                const [modulePart, pagePart] = name.split('/', 2);
+                const [modulePartRaw, pagePartRaw] = name.split('/', 2);
+                const modulePart = modulePartRaw.trim();
+                const pagePart = pagePartRaw.trim();
                 if (['Create', 'Edit', 'Show', 'Index'].includes(pagePart) && modulePart in moduleMap) {
                     const possibleModules = moduleMap[modulePart];
 
@@ -300,17 +309,12 @@ createInertiaApp({
 
             // Return a default component that shows an error
             return {
-                default: () => ({
-                    props: {
-                        error: new Error(`Page not found: ${name}`)
-                    },
-                    render() {
-                        return <div className="p-6">
-                            <h1 className="text-2xl text-red-600">Page Not Found</h1>
-                            <p className="mt-2">The page "{name}" could not be found.</p>
-                        </div>;
-                    }
-                })
+                default: () => (
+                    <div className="p-6">
+                        <h1 className="text-2xl text-red-600">Page Not Found</h1>
+                        <p className="mt-2">The page "{name}" could not be found.</p>
+                    </div>
+                )
             };
         }
     },

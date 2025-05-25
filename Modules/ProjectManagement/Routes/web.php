@@ -119,3 +119,5 @@ Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group
     });
 });
 
+Route::get('projects', [\Modules\ProjectManagement\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');
+

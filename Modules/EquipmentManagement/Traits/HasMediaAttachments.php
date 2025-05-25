@@ -185,10 +185,17 @@ trait HasMediaAttachments
      * @param Media $media
      * @return string;
      */
-    protected function getPublicUrl(Media $media): string
+    protected function getPublicUrl(Media $media): ?string
     {
         // Get the file path relative to the attachments disk
+        if (!$media || !method_exists($media, 'getPath')) {
+            return null;
+        }
         $path = $media->getPath();
+        if (!$path) {
+            // Handle the error, e.g., return null or throw an exception
+            return null;
+        }
         $relativePath = str_replace(storage_path('app/public/attachments/'), '', $path);
 
         // Return the public URL

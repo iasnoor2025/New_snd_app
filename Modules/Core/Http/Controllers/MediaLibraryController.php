@@ -334,41 +334,33 @@ class MediaLibraryController extends Controller
         if (!is_numeric($id)) {
             abort(404, 'Invalid ID provided');
         }
-        // Ensure ID is numeric
-        if (!is_numeric($id)) {
-            abort(404, 'Invalid ID provided');
-        }
-        // Ensure ID is numeric
-        if (!is_numeric($id)) {
-            abort(404, 'Invalid ID provided');
-        }
-        // Ensure ID is numeric
-        if (!is_numeric($id)) {
-            abort(404, 'Invalid ID provided');
-        }
-        $media = Media::find($id);
-
-        if (!$media) {
+        $mediaId = (int) $id;
+        $media = Media::find($mediaId);
+        if (!$media || !method_exists($media, 'getPath')) {
+            \Log::error('Media not found or invalid in MediaLibraryController@preview', [
+                'media_id' => $id,
+                'media' => $media
+            ]);
             return response()->json(['error' => 'Media not found'], 404);
         }
-
-        // Get the model this media belongs to
         $model = $media->model;
-
         if (!$model) {
             return response()->json(['error' => 'Associated model not found'], 404);
         }
-
-        // Check permissions for viewing documents
         if (Gate::denies('view', [$model, 'documents'])) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-
-        // For images and PDFs, use inline disposition
+        $path = $media->getPath();
+        if (!$path || !file_exists($path)) {
+            \Log::error('Media file does not exist on disk in MediaLibraryController@preview', [
+                'media_id' => $mediaId,
+                'path' => $path,
+            ]);
+            return response()->json(['error' => 'File not found on disk'], 404);
+        }
         $disposition = in_array($media->mime_type, ['application/pdf']) ||
                       Str::startsWith($media->mime_type, 'image/') ? 'inline' : 'attachment';
-
-            return Response::make(file_get_contents($media->getPath()), 200, [
+        return Response::make(file_get_contents($path), 200, [
             'Content-Type' => $media->mime_type,
             'Content-Disposition' => $disposition . '; filename="' . $media->file_name . '"',
         ]);

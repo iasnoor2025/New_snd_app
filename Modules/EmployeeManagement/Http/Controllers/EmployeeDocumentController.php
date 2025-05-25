@@ -180,25 +180,23 @@ class EmployeeDocumentController extends Controller
                 ], 403);
             }
 
+            $mediaId = (int) $document;
             $media = $employee->getMedia('employee_documents')
                 ->concat($employee->getMedia('employee_custom_certificates'))
-                ->find($document);
+                ->first(function ($item) use ($mediaId) {
+                    return (int) $item->id === $mediaId;
+                });
 
-            if (!$media) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Document not found'
-                ], 404);
+            if (!$media || !method_exists($media, 'getPath')) {
+                \Log::error('Media not found or invalid in EmployeeDocumentController@download', [
+                    'employee_id' => $employee->id,
+                    'document_id' => $document,
+                    'media' => $media
+                ]);
+                return response()->json(['error' => 'Media not found'], 404);
             }
 
-            return response()->download(
-                $media->getPath(),
-                $media->file_name,
-                [
-                    'Content-Type' => $media->mime_type,
-                    'Content-Disposition' => 'attachment; filename="' . $media->file_name . '"'
-                ]
-            );
+            return response()->file($media->getPath());
         } catch (\Exception $e) {
             Log::error('Error downloading employee document', [
                 'employee_id' => $employee->id,

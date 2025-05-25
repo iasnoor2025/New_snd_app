@@ -11,11 +11,11 @@ use Carbon\Carbon;
 
 class EquipmentMaintenanceController extends Controller
 {
-    protected EquipmentMaintenanceService $maintenanceService;
+    protected $maintenanceService;
 
-    public function __construct(EquipmentMaintenanceService $maintenanceService)
+    public function __construct(/* EquipmentMaintenanceService $maintenanceService */)
     {
-        $this->maintenanceService = $maintenanceService;
+        // $this->maintenanceService = $maintenanceService;
     }
 
     /**
