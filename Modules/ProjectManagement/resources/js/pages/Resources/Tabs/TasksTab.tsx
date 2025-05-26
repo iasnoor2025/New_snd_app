@@ -1,0 +1,126 @@
+import React, { useState, useCallback } from 'react';
+import { router } from '@inertiajs/react';
+import { Button } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/card';
+import { Plus } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/dialog';
+import { toast } from 'sonner';
+import { useProjectResources } from '@/Modules/ProjectManagement/Resources/js/hooks/useProjectResources';
+import { TaskStatus } from '@/Modules/ProjectManagement/Resources/js/types/projectResources';
+import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/TaskList';
+
+interface TasksTabProps {
+    project: {
+        id: number;
+        name: string;
+    };
+    tasks: ProjectTask[];
+    assignableUsers: Array<{ id: number; name: string }>;
+}
+
+export default function TasksTab({ project, tasks, assignableUsers }: TasksTabProps) {
+    const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState<ProjectTask | null>(null);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState<ProjectTask | null>(null);
+
+    const handleCreate = useCallback(() => {
+        setSelectedTask(null);
+        setCreateModalOpen(true);
+    }, []);
+
+    const handleEdit = useCallback((task: ProjectTask) => {
+        setSelectedTask(task);
+        setEditModalOpen(true);
+    }, []);
+
+    const handleDelete = useCallback((task: ProjectTask) => {
+        setTaskToDelete(task);
+        setDeleteModalOpen(true);
+    }, []);
+
+    const handleDeleteConfirmed = useCallback(async () => {
+        if (!taskToDelete) return;
+
+        try {
+            await router.delete(route('projects.tasks.destroy', [project.id, taskToDelete.id]));
+            toast.success('Task deleted successfully');
+            setDeleteModalOpen(false);
+            setTaskToDelete(null);
+        } catch (error) {
+            toast.error('Failed to delete task');
+        }
+    }, [project.id, taskToDelete]);
+
+    const handleStatusChange = useCallback(async (task: ProjectTask, event: any) => {
+        try {
+            await router.put(route('projects.tasks.status', { project: project.id, task: task.id }), {
+                status: event.target.value
+            });
+            toast.success('Task status updated successfully');
+        } catch (error) {
+            toast.error('Failed to update task status');
+        }
+    }, [project.id]);
+
+    const handleCompletionChange = useCallback(async (task: ProjectTask, percentage: number) => {
+        try {
+            await router.put(route('projects.tasks.update', [project.id, task.id]), {
+                completion_percentage: percentage
+            });
+            toast.success('Task completion updated successfully');
+        } catch (error) {
+            toast.error('Failed to update task completion');
+        }
+    }, [project.id]);
+
+    return (
+        <div className="space-y-4">
+            <div className="flex justify-end">
+                <Button onClick={handleCreate}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Task
+                </Button>
+            </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Tasks</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <TaskList
+                        tasks={tasks}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                        onStatusChange={handleStatusChange}
+                        onCompletionChange={handleCompletionChange}
+                    />
+                </CardContent>
+            </Card>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={isDeleteModalOpen} onOpenChange={setDeleteModalOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Delete Task</DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to delete this task? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end space-x-2">
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleDeleteConfirmed}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+}

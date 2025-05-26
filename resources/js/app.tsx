@@ -18,8 +18,8 @@ if (typeof window !== 'undefined') {
 
 // Dynamically import all module pages (both pages and Pages, all modules)
 const modulePages: Record<string, () => Promise<any>> = {
-  ...import.meta.glob('/Modules/*/resources/js/pages/**/*.tsx'),
-  ...import.meta.glob('/Modules/*/resources/js/pages/**/*.jsx'),
+  ...import.meta.glob('/Modules/*/resources/js/pages/**/*.tsx', { eager: false }),
+  ...import.meta.glob('/Modules/*/resources/js/pages/**/*.jsx', { eager: false }),
 };
 
 // Helper function to find module pages by pattern
@@ -32,58 +32,66 @@ function findModulePagesByPattern(moduleNamePattern: string, pageNamePattern: st
 
 // Add explicit mapping for critical pages to ensure they're available
 const employeePages: Record<string, string> = {
-  'Employees/Index': '/Modules/EmployeeManagement/resources/js/pages/Employees/Index.tsx',
-  'Employees/Create': '/Modules/EmployeeManagement/resources/js/pages/Employees/Create.tsx',
-  'Employees/Edit': '/Modules/EmployeeManagement/resources/js/pages/Employees/Edit.tsx',
-  'Employees/Show': '/Modules/EmployeeManagement/resources/js/pages/Employees/Show.tsx',
-  'Employees/Documents': '/Modules/EmployeeManagement/resources/js/pages/Employees/Documents.tsx',
-  'Employees/LeaveHistory': '/Modules/EmployeeManagement/resources/js/pages/Employees/LeaveHistory.tsx',
-  'Employees/PerformanceManagement': '/Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceManagement.tsx',
-  'Employees/PerformanceReviews': '/Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceReviews.tsx',
-  'Employees/SalaryHistory': '/Modules/EmployeeManagement/resources/js/pages/Employees/SalaryHistory.tsx',
-  'Employees/TimesheetHistory': '/Modules/EmployeeManagement/resources/js/pages/Employees/TimesheetHistory.tsx',
+  'Employees/Index': './Modules/EmployeeManagement/resources/js/pages/Employees/Index.tsx',
+  'Employees/Create': './Modules/EmployeeManagement/resources/js/pages/Employees/Create.tsx',
+  'Employees/Edit': './Modules/EmployeeManagement/resources/js/pages/Employees/Edit.tsx',
+  'Employees/Show': './Modules/EmployeeManagement/resources/js/pages/Employees/Show.tsx',
+  'Employees/Documents': './Modules/EmployeeManagement/resources/js/pages/Employees/Documents.tsx',
+  'Employees/LeaveHistory': './Modules/EmployeeManagement/resources/js/pages/Employees/LeaveHistory.tsx',
+  'Employees/PerformanceManagement': './Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceManagement.tsx',
+  'Employees/PerformanceReviews': './Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceReviews.tsx',
+  'Employees/SalaryHistory': './Modules/EmployeeManagement/resources/js/pages/Employees/SalaryHistory.tsx',
+  'Employees/TimesheetHistory': './Modules/EmployeeManagement/resources/js/pages/Employees/TimesheetHistory.tsx',
 };
 
 // Project Management module pages
 const projectPages: Record<string, string> = {
-  'Projects/Index': '/Modules/ProjectManagement/resources/js/pages/Index.tsx',
-  'Projects/Create': '/Modules/ProjectManagement/resources/js/pages/Create.tsx',
-  'Projects/Edit': '/Modules/ProjectManagement/resources/js/pages/Edit.tsx',
-  'Projects/Show': '/Modules/ProjectManagement/resources/js/pages/Show.tsx',
-  'Projects/Resources': '/Modules/ProjectManagement/resources/js/pages/Resources.tsx',
-  'Projects/Projects': '/Modules/ProjectManagement/resources/js/pages/Projects.tsx',
+  'Projects/Index': './Modules/ProjectManagement/resources/js/pages/Index.tsx',
+  'Projects/Create': './Modules/ProjectManagement/resources/js/pages/Create.tsx',
+  'Projects/Edit': './Modules/ProjectManagement/resources/js/pages/Edit.tsx',
+  'Projects/Show': './Modules/ProjectManagement/resources/js/pages/Show.tsx',
+  'Projects/Resources': './Modules/ProjectManagement/resources/js/pages/Resources.tsx',
+  'Projects/Projects': './Modules/ProjectManagement/resources/js/pages/Projects.tsx',
 };
 
 // Rental Management module pages
 const rentalPages: Record<string, string> = {
-  'Rentals/Index': '/Modules/RentalManagement/resources/js/pages/Rentals/Index.tsx',
-  'Rentals/Create': '/Modules/RentalManagement/resources/js/pages/Rentals/Create.tsx',
-  'Rentals/Edit': '/Modules/RentalManagement/resources/js/pages/Rentals/Edit.tsx',
-  'Rentals/Show': '/Modules/RentalManagement/resources/js/pages/Rentals/Show.tsx',
-  'Rentals/Print': '/Modules/RentalManagement/resources/js/pages/Rentals/Print.tsx',
-  'Rentals/Report': '/Modules/RentalManagement/resources/js/pages/Rentals/Report.tsx',
-  'Rentals/QuotationTest': '/Modules/RentalManagement/resources/js/pages/Rentals/QuotationTest.tsx',
+  'Rentals/Index': './Modules/RentalManagement/resources/js/pages/Rentals/Index.tsx',
+  'Rentals/Create': './Modules/RentalManagement/resources/js/pages/Rentals/Create.tsx',
+  'Rentals/Edit': './Modules/RentalManagement/resources/js/pages/Rentals/Edit.tsx',
+  'Rentals/Show': './Modules/RentalManagement/resources/js/pages/Rentals/Show.tsx',
+  'Rentals/Print': './Modules/RentalManagement/resources/js/pages/Rentals/Print.tsx',
+  'Rentals/Report': './Modules/RentalManagement/resources/js/pages/Rentals/Report.tsx',
+  'Rentals/QuotationTest': './Modules/RentalManagement/resources/js/pages/Rentals/QuotationTest.tsx',
 };
 
 // Timesheet Management module pages
 const timesheetPages: Record<string, string> = {
-  'Timesheets/Index': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Index.tsx',
-  'Timesheets/Create': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Create.tsx',
-  'Timesheets/Edit': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Edit.tsx',
-  'Timesheets/Show': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Show.tsx',
-  'Timesheets/Monthly': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Monthly.tsx',
-  'Timesheets/PaySlip': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/PaySlip.tsx',
-  'Timesheets/PaySlipTest': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/PaySlipTest.tsx',
-  'Timesheets/Summary': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/Summary.tsx',
-  'Timesheets/TimesheetManagement': '/Modules/TimesheetManagement/resources/js/pages/Timesheets/TimesheetManagement.tsx',
+  'Timesheets/Index': './Modules/TimesheetManagement/resources/js/pages/Timesheets/Index.tsx',
+  'Timesheets/Create': './Modules/TimesheetManagement/resources/js/pages/Timesheets/Create.tsx',
+  'Timesheets/Edit': './Modules/TimesheetManagement/resources/js/pages/Timesheets/Edit.tsx',
+  'Timesheets/Show': './Modules/TimesheetManagement/resources/js/pages/Timesheets/Show.tsx',
+  'Timesheets/Monthly': './Modules/TimesheetManagement/resources/js/pages/Timesheets/Monthly.tsx',
+  'Timesheets/PaySlip': './Modules/TimesheetManagement/resources/js/pages/Timesheets/PaySlip.tsx',
+  'Timesheets/PaySlipTest': './Modules/TimesheetManagement/resources/js/pages/Timesheets/PaySlipTest.tsx',
+  'Timesheets/Summary': './Modules/TimesheetManagement/resources/js/pages/Timesheets/Summary.tsx',
+  'Timesheets/TimesheetManagement': './Modules/TimesheetManagement/resources/js/pages/Timesheets/TimesheetManagement.tsx',
 };
 
 // Customer Management module pages
 const customerPages: Record<string, string> = {
-  'Customers/Index': '/Modules/CustomerManagement/resources/js/pages/Customers/Index.tsx',
-  'Customers/Create': '/Modules/CustomerManagement/resources/js/pages/Customers/Create.tsx',
-  'Customers/Edit': '/Modules/CustomerManagement/resources/js/pages/Customers/Edit.tsx',
-  'Customers/Show': '/Modules/CustomerManagement/resources/js/pages/Customers/Show.tsx',
+  'Customers/Index': './Modules/CustomerManagement/resources/js/pages/Customers/Index.tsx',
+  'Customers/Create': './Modules/CustomerManagement/resources/js/pages/Customers/Create.tsx',
+  'Customers/Edit': './Modules/CustomerManagement/resources/js/pages/Customers/Edit.tsx',
+  'Customers/Show': './Modules/CustomerManagement/resources/js/pages/Customers/Show.tsx',
+};
+
+// Leave Management module pages
+const leaveRequestPages: Record<string, string> = {
+  'LeaveRequests/Index': './Modules/LeaveManagement/resources/js/pages/LeaveRequests/Index.tsx',
+  'LeaveRequests/Create': './Modules/LeaveManagement/resources/js/pages/LeaveRequests/Create.tsx',
+  'LeaveRequests/Edit': './Modules/LeaveManagement/resources/js/pages/LeaveRequests/Edit.tsx',
+  'LeaveRequests/Show': './Modules/LeaveManagement/resources/js/pages/LeaveRequests/Show.tsx',
 };
 
 // Combine all page mappings
@@ -93,6 +101,7 @@ const allPageMappings: Record<string, string> = {
   ...rentalPages,
   ...timesheetPages,
   ...customerPages,
+  ...leaveRequestPages,
 };
 
 // Map from page name prefixes to module names
@@ -133,14 +142,14 @@ createInertiaApp({
                 const [module, page] = name.split('::');
                 // Try both Pages and pages directories, and both .tsx and .jsx
                 const possiblePaths = [
-                    `/Modules/${module}/resources/js/Pages/${page}.tsx`,
-                    `/Modules/${module}/resources/js/Pages/${page}.jsx`,
-                    `/Modules/${module}/resources/js/pages/${page}.tsx`,
-                    `/Modules/${module}/resources/js/pages/${page}.jsx`,
-                    `/Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
-                    `/Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
-                    `/Modules/${module}/resources/js/pages/${page}/Index.tsx`,
-                    `/Modules/${module}/resources/js/pages/${page}/Index.jsx`,
+                    `./Modules/${module}/resources/js/Pages/${page}.tsx`,
+                    `./Modules/${module}/resources/js/Pages/${page}.jsx`,
+                    `./Modules/${module}/resources/js/pages/${page}.tsx`,
+                    `./Modules/${module}/resources/js/pages/${page}.jsx`,
+                    `./Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
+                    `./Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
+                    `./Modules/${module}/resources/js/pages/${page}/Index.tsx`,
+                    `./Modules/${module}/resources/js/pages/${page}/Index.jsx`,
                 ];
                 for (const path of possiblePaths) {
                     if (path in modulePages) {
@@ -186,14 +195,15 @@ createInertiaApp({
             // Try each potential module
             for (const module of potentialModules) {
             const possiblePaths = [
-                    `/Modules/${module}/resources/js/pages/${name}.tsx`,
-                    `/Modules/${module}/resources/js/Pages/${name}.tsx`,
+                    `./Modules/${module}/resources/js/pages/${name}.tsx`,
+                    `./Modules/${module}/resources/js/Pages/${name}.tsx`,
                     // For exact module page match (like Employees/Index in EmployeeManagement)
-                    `/Modules/${module}/resources/js/pages/${pagePath}.tsx`,
-                    `/Modules/${module}/resources/js/Pages/${pagePath}.tsx`,
+                    `./Modules/${module}/resources/js/pages/${pagePath}.tsx`,
+                    `./Modules/${module}/resources/js/Pages/${pagePath}.tsx`,
                     // Common pattern: Module/pages/PagePrefix/PageName
-                    `/Modules/${module}/resources/js/pages/${moduleName}/${pagePath}.tsx`,
-                    `/Modules/${module}/resources/js/Pages/${moduleName}/${pagePath}.tsx`,
+                    `./Modules/${module}/resources/js/pages/${moduleName}/${pagePath}.tsx`,
+                    `./Modules/${module}/resources/js/Pages/${moduleName}/${pagePath}.tsx`,
+
                 ];
 
                 for (const path of possiblePaths) {
@@ -212,12 +222,17 @@ createInertiaApp({
                 'Timesheets/Index': ['TimesheetManagement/Timesheets', 'Index.tsx'],
                 'Equipment/Index': ['EquipmentManagement', 'Index.tsx'],
                 'Settings/Index': ['Settings', 'Index.tsx'],
-                'Payrolls/Index': ['Payroll', 'Index.tsx']
+                'Payrolls/Index': ['Payroll', 'Index.tsx'],
+                'LeaveRequests/Index': ['LeaveManagement', 'Index.tsx'],
+                'Customers/Index': ['CustomerManagement', 'Index.tsx'],
+
             };
 
             if (name in modulePatternMap) {
                 const [modulePattern, pagePattern] = modulePatternMap[name];
-                const specificPaths = findModulePagesByPattern(modulePattern, pagePattern);
+                const specificPaths = findModulePagesByPattern(modulePattern, pagePattern)
+                  .map(p => p.replace(/^\//, './'))
+                  .filter(p => p.endsWith(`/${modulePattern}/${pagePattern}`));
 
                 if (specificPaths.length > 0) {
                     console.log(`Found specific page at ${specificPaths[0]}`);
@@ -245,14 +260,14 @@ createInertiaApp({
 
                     for (const moduleType of possibleModules) {
                         // First try direct path in the module
-                        const directPath = `/Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`;
+                        const directPath = `./Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`;
                         if (directPath in modulePages) {
                             console.log(`Found ${pagePart} page at ${directPath}`);
                             return await modulePages[directPath]();
                         }
 
                         // Then try module part as directory
-                        const subDirPath = `/Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`;
+                        const subDirPath = `./Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`;
                         if (subDirPath in modulePages) {
                             console.log(`Found ${pagePart} page at ${subDirPath}`);
                             return await modulePages[subDirPath]();
@@ -277,10 +292,10 @@ createInertiaApp({
                     // List some paths we tried
                     for (const moduleType of moduleMap[modulePart]) {
                         const paths = [
-                            `/Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`,
-                            `/Modules/${moduleType}/resources/js/Pages/${pagePart}.tsx`,
-                            `/Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`,
-                            `/Modules/${moduleType}/resources/js/Pages/${modulePart}/${pagePart}.tsx`,
+                            `./Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`,
+                            `./Modules/${moduleType}/resources/js/Pages/${pagePart}.tsx`,
+                            `./Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`,
+                            `./Modules/${moduleType}/resources/js/Pages/${modulePart}/${pagePart}.tsx`,
                         ];
 
                         console.log(`- Paths for ${moduleType}:`);
@@ -334,3 +349,4 @@ createInertiaApp({
 
 // This will set light / dark mode on load...
 initializeTheme();
+
