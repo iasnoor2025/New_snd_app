@@ -1,25 +1,20 @@
-import React, { ReactNode } from 'react';
-import { Head } from '@inertiajs/react';
-import { BreadcrumbItem } from '../types';
-import AppLayout from '@/layouts/app-layout';
+import React from 'react';
 
 interface AdminLayoutProps {
-  children: ReactNode;
   title?: string;
-  breadcrumbs?: BreadcrumbItem[];
+  breadcrumbs?: any[];
   requiredPermission?: string;
+  children: React.ReactNode;
 }
 
-export default function AdminLayout({
-  children,
-  title = 'Dashboard',
-  breadcrumbs = [],
-  requiredPermission
-}: AdminLayoutProps) {
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={title} />
-      {children}
-    </AppLayout>
-  );
-}
+const AdminLayout: React.FC<AdminLayoutProps> = ({ title, breadcrumbs, requiredPermission, children }) => (
+  <div>
+    <header>
+      <h1>{title}</h1>
+      {/* Breadcrumbs and permission checks can be added here */}
+    </header>
+    <main>{children}</main>
+  </div>
+);
+
+export default AdminLayout;

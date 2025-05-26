@@ -1,22 +1,22 @@
 ﻿import React from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
+import type { PageProps } from '@/resources/js/types';
+import AdminLayout from '@/resources/js/layouts/AdminLayout';
 import { Equipment } from '@/Modules/EquipmentManagement/Resources/js/types/models';
 import { format } from 'date-fns';
 import ErrorBoundary from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ErrorBoundary';
 import { ToastService } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/ToastManager';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Textarea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/textarea';
+import { Button } from '@/resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/resources/js/components/ui/card';
+import { Input } from '@/resources/js/components/ui/input';
+import { Textarea } from '@/resources/js/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
+} from '@/resources/js/components/ui/select';
 import {
   Form,
   FormControl,
@@ -25,17 +25,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/form';
+} from '@/resources/js/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm as useReactHookForm, Controller } from 'react-hook-form';
-import { Calendar } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/calendar';
+import { Calendar } from '@/resources/js/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/popover';
-import { cn } from '@/Modules/EquipmentManagement/Resources/js/lib/utils';
+} from '@/resources/js/components/ui/popover';
+import { cn } from '@/resources/js/lib/utils';
 import {
   CalendarIcon,
   ArrowLeft,
@@ -55,11 +55,11 @@ import {
   Building2,
   Package
 } from 'lucide-react';
-import { ScrollArea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/scroll-area';
+import { ScrollArea } from '@/resources/js/components/ui/scroll-area';
 import { DocumentManager } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/DocumentManager';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/tabs';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/resources/js/components/ui/tabs';
+import { Separator } from '@/resources/js/components/ui/separator';
+import { Badge } from '@/resources/js/components/ui/badge';
 
 interface Props extends PageProps {
   equipment: Equipment;
@@ -89,14 +89,14 @@ const equipmentSchema = z.object({
 
 type EquipmentFormValues = z.infer<typeof equipmentSchema>;
 
-const breadcrumbs: BreadcrumbItem[] = [
+const breadcrumbs = [
   {
     title: 'Dashboard',
-    href: route('dashboard'),
+    href: window.route ? window.route('dashboard') : '/dashboard',
   },
   {
     title: 'Equipment',
-    href: route('equipment.index'),
+    href: window.route ? window.route('equipment.index') : '/equipment',
   },
   {
     title: 'Edit Equipment',
@@ -164,10 +164,10 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
     };
 
     // Use Inertia's router for form submission
-    router.put(route('equipment.update', { equipment: equipment.id }), formattedValues, {
+    router.put(window.route('equipment.update', { equipment: equipment.id }), formattedValues, {
       onSuccess: () => {
         ToastService.success("Equipment updated successfully");
-        router.visit(route('equipment.show', { equipment: equipment.id }));
+        router.visit(window.route('equipment.show', { equipment: equipment.id }));
       },
       onError: (errors) => {
         // Handle specific error cases
@@ -208,7 +208,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => router.visit(route('equipment.index'))}
+              onClick={() => router.visit(window.route('equipment.index'))}
               className="h-8 w-8 hover:bg-primary/10"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -225,7 +225,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              onClick={() => router.visit(route('equipment.show', { equipment: equipment.id }))}
+              onClick={() => router.visit(window.route('equipment.show', { equipment: equipment.id }))}
               className="h-9 hover:bg-destructive/10 hover:text-destructive hover:border-destructive transition-colors"
             >
               <X className="mr-2 h-4 w-4" />
@@ -764,9 +764,4 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
     </AdminLayout>
   );
 }
-
-</Input>
-</Input>
-</Input>
-</Input>
 

@@ -48,7 +48,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->namespace($this->moduleNamespace)
-            ->prefix('equipment')
             ->group(module_path('EquipmentManagement', '/Routes/web.php'));
     }
 

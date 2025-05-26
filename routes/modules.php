@@ -35,13 +35,6 @@ Route::middleware(['auth', 'verified'])->prefix('rentals')->group(function () {
     });
 });
 
-// Direct routes for equipment
-Route::middleware(['auth', 'verified'])->prefix('equipment')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('equipment.index');
-    });
-});
-
 // Direct routes for payrolls
 Route::middleware(['auth', 'verified'])->prefix('payrolls')->group(function () {
     Route::get('/', function () {

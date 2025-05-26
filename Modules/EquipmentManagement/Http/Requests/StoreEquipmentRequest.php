@@ -2,7 +2,7 @@
 
 namespace Modules\EquipmentManagement\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest as ;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreEquipmentRequest extends FormRequest
 {

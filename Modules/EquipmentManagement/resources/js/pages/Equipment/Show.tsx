@@ -1,15 +1,15 @@
 ﻿import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
+import type { PageProps } from '@/resources/js/types';
+import AdminLayout from '@/resources/js/layouts/AdminLayout';
 import { Equipment, MaintenanceRecord, RentalItem, ProjectEquipment } from '@/Modules/EquipmentManagement/Resources/js/types/models';
 import { formatCurrency, formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
 import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/tabs';
+import { Button } from '@/resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/resources/js/components/ui/card';
+import { Badge } from '@/resources/js/components/ui/badge';
+import { Separator } from '@/resources/js/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/resources/js/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
+} from '@/resources/js/components/ui/table';
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/dialog';
+} from '@/resources/js/components/ui/dialog';
 import {
   ArrowLeft,
   Pencil,
@@ -53,7 +53,7 @@ import {
   Plus,
   History
 } from 'lucide-react';
-import { ScrollArea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/scroll-area';
+import { ScrollArea } from '@/resources/js/components/ui/scroll-area';
 import { DocumentManager } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/DocumentManager';
 import { MediaLibrary } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/media-library/MediaLibrary';
 import { EquipmentDocumentCard } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/EquipmentDocumentCard';
@@ -63,10 +63,10 @@ import { DocumentExpiryTracker } from '@/Modules/EquipmentManagement/Resources/j
 import { DocumentUploadDialog } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/DocumentUploadDialog';
 import { AdditionalDocumentsList } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/AdditionalDocumentsList';
 import axios from 'axios';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/label';
-import { Progress } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/progress';
-import { cn } from '@/Modules/EquipmentManagement/Resources/js/lib/utils';
+import { Input } from '@/resources/js/components/ui/input';
+import { Label } from '@/resources/js/components/ui/label';
+import { Progress } from '@/resources/js/components/ui/progress';
+import { cn } from '@/resources/js/lib/utils';
 import { ToastService } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/ToastManager';
 
 interface Props extends PageProps {
@@ -85,14 +85,14 @@ interface Props extends PageProps {
   };
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
+const breadcrumbs = [
   {
     title: 'Dashboard',
-    href: route('dashboard'),
+    href: window.route ? window.route('dashboard') : '/dashboard',
   },
   {
     title: 'Equipment',
-    href: route('equipment.index'),
+    href: window.route ? window.route('equipment.index') : '/equipment',
   },
   {
     title: 'Equipment Details',
@@ -200,13 +200,13 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
   }, [rentalItems]);
 
   const handleDelete = () => {
-    router.delete(route('equipment.destroy', { equipment: equipment.id }), {
+    router.delete(window.route('equipment.destroy', { equipment: equipment.id }), {
         onSuccess: () => {
           toast({
             title: "Success",
             description: "Equipment deleted successfully"
           });
-        window.location.href = route('equipment.index');
+        window.location.href = window.route('equipment.index');
         },
         onError: () => {
           toast({
@@ -297,7 +297,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
     formData.append('is_additional', fileKey === 'documents' ? '1' : '0');
 
     try {
-      const response = await axios.post(`/api/equipment/${equipment.id}/documents/upload`, formData, {
+      const response = await axios.post(window.route('equipment.documents.upload', { equipment: equipment.id }), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -319,7 +319,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
         });
 
         // Refresh media items
-        const mediaResponse = await axios.get(`/api/media-library/Equipment/${equipment.id}`);
+        const mediaResponse = await axios.get(window.route('equipment.media-library', { equipment: equipment.id }));
         setMediaItems(mediaResponse.data.data || []);
 
         // Clear the file
@@ -428,19 +428,19 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
               </div>
               <div className="flex space-x-2">
                 <Button variant="outline" asChild>
-                  <Link href={route('equipment.index')}>
+                  <Link href={window.route('equipment.index')}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Equipment List
                   </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                <Link href={route('equipment.edit', { equipment: equipment.id })}>
+                <Link href={window.route('equipment.edit', { equipment: equipment.id })}>
                     <Pencil className="mr-2 h-4 w-4" />
                   Edit
                   </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                <Link href={route('equipment.maintenance.create', { equipment: equipment.id })}>
+                <Link href={window.route('equipment.maintenance.create', { equipment: equipment.id })}>
                     <Wrench className="mr-2 h-4 w-4" />
                   Maintenance
                   </Link>
@@ -596,7 +596,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                   </CardDescription>
                 </div>
                 <Button variant="outline" asChild>
-                  <Link href={route('equipment.maintenance.index', { equipment: equipment.id })}>
+                  <Link href={window.route('equipment.maintenance.index', { equipment: equipment.id })}>
                     <Wrench className="mr-2 h-4 w-4" />
                     View Full Maintenance Dashboard
                   </Link>
@@ -632,7 +632,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                             <TableCell>{record.performed_by}</TableCell>
                             <TableCell className="text-right">
                               <Button variant="outline" size="sm" asChild>
-                                <Link href={route('equipment.maintenance.show', [equipment.id, record.id])}>
+                                <Link href={window.route('equipment.maintenance.show', [equipment.id, record.id])}>
                                   View
                                 </Link>
                               </Button>
@@ -645,7 +645,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                 </div>
                 <div className="mt-4 flex justify-end">
                   <Button asChild>
-                    <Link href={route('equipment.maintenance.create', { equipment: equipment.id })}>
+                    <Link href={window.route('equipment.maintenance.create', { equipment: equipment.id })}>
                       <Wrench className="mr-2 h-4 w-4" />
                       Schedule Maintenance
                     </Link>
@@ -700,7 +700,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                             <TableCell className="text-right">
                               {item.rental?.id && (
                                 <Button variant="outline" size="sm" asChild>
-                                  <Link href={route('rentals.show', item.rental.id)}>
+                                  <Link href={window.route('rentals.show', item.rental.id)}>
                                     View
                                   </Link>
                                 </Button>
@@ -757,7 +757,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                             <TableCell className="text-right">
                               {item.project?.id && (
                                 <Button variant="outline" size="sm" asChild>
-                                  <Link href={route('projects.show', item.project.id)}>
+                                  <Link href={window.route('projects.show', item.project.id)}>
                                     View Project
                                   </Link>
                                 </Button>
@@ -799,7 +799,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                     documentName="Istimara"
                     onUploadSuccess={() => {
                       // Refresh media items
-                      axios.get(`/api/media-library/Equipment/${equipment.id}`)
+                      axios.get(window.route('equipment.media-library', { equipment: equipment.id }))
                         .then(response => {
                           setMediaItems(response.data.data || []);
                         })
@@ -807,7 +807,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
                     }}
                     onDeleteSuccess={() => {
                       // Refresh media items
-                      axios.get(`/api/media-library/Equipment/${equipment.id}`)
+                      axios.get(window.route('equipment.media-library', { equipment: equipment.id }))
                         .then(response => {
                           setMediaItems(response.data.data || []);
                         })

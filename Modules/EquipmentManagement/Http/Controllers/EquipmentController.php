@@ -5,7 +5,7 @@ namespace Modules\EquipmentManagement\Http\Controllers;
 use Modules\EquipmentManagement\Domain\Models\Equipment;
 use Modules\EquipmentManagement\Domain\Models\MaintenanceRecord;
 use Modules\RentalManagement\Domain\Models\RentalItem;
-use App\Models\Category;
+use Modules\Core\Domain\Models\Category;
 use App\Http\Requests\Equipment\StoreEquipmentRequest;
 use App\Http\Requests\Equipment\UpdateEquipmentRequest;
 use Modules\EquipmentManagement\Traits\HandlesDocumentUploads;
@@ -20,7 +20,7 @@ class EquipmentController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Equipment::class, 'equipment');
+        // Removed authorizeResource to rely only on Spatie permissions
     }
 
     /**
@@ -69,7 +69,7 @@ class EquipmentController extends Controller
         });
 
         // Get unique categories for filter
-        $categories = Category::whereHas('equipment')->pluck('name')->values();
+        $categories = Category::where('category_type', 'equipment')->pluck('name')->values();
 
         // Available statuses with proper formatting
         $statuses = [
@@ -97,7 +97,7 @@ class EquipmentController extends Controller
     public function create()
     {
         // Get categories and locations with id and name
-        $categories = Category::select('id', 'name')->get();
+        $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
         $locations = \App\Models\Location::select('id', 'name')->get();
 
         // Available statuses with proper formatting
@@ -210,7 +210,7 @@ class EquipmentController extends Controller
     public function edit(Equipment $equipment)
     {
         // Get categories and locations with id and name
-        $categories = Category::select('id', 'name')->get();
+        $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
         $locations = \App\Models\Location::select('id', 'name')->get();
 
         // Available statuses with proper formatting
@@ -378,7 +378,7 @@ class EquipmentController extends Controller
         }
 
         // Get categories for filter
-        $categories = Category::whereHas('equipment')->pluck('name')->values();
+        $categories = Category::where('category_type', 'equipment')->pluck('name')->values();
 
         return Inertia::render('Equipment/Availability', [
             'equipment' => $equipment,

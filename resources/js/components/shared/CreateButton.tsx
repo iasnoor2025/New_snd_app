@@ -14,7 +14,7 @@ interface CreateButtonProps {
   href?: string;
 }
 
-const CreateButton = ({
+const CreateButton: React.FC<CreateButtonProps> = ({
   resourceType,
   buttonVariant = 'default',
   buttonSize = 'default',
@@ -22,7 +22,7 @@ const CreateButton = ({
   permission,
   className = '',
   href,
-}: CreateButtonProps) => {
+}) => {
   const defaultText = `Add ${resourceType.charAt(0).toUpperCase() + resourceType.slice(1).replace(/s$/, '')}`;
   const defaultHref = `/${resourceType}/create`;
 

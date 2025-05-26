@@ -1,36 +1,29 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { Equipment } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
-import { Search, Plus, RefreshCw } from 'lucide-react';
-import CreateButton from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/CreateButton';
-import CrudButtons from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/CrudButtons';
-import { formatCurrency } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
+import type { PageProps } from '../../../../../../resources/js/types';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
+import { Button } from '../../../../../../resources/js/components/ui/button';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { Input } from '../../../../../../resources/js/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../../../resources/js/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../../../resources/js/components/ui/table';
+import { Search } from 'lucide-react';
+import CreateButton from '../../../../../../resources/js/components/shared/CreateButton';
+import CrudButtons from '../../../../../../resources/js/components/shared/CrudButtons';
+import { formatCurrency } from '../../../../../../resources/js/utils/format';
+
+interface Equipment {
+  id: number;
+  name: string;
+  model: string;
+  serial_number: string;
+  door_number?: string;
+  category?: string;
+  status: string;
+  daily_rate: number;
+  [key: string]: any;
+}
 
 interface PaginatedData<T> {
   data: T[];
@@ -49,14 +42,14 @@ interface Props extends PageProps {
   filters?: Record<string, any>;
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
+const breadcrumbs = [
   {
     title: 'Dashboard',
-    href: route('dashboard'),
+    href: window.route ? window.route('dashboard') : '/dashboard',
   },
   {
     title: 'Equipment',
-    href: route('equipment.index'),
+    href: window.route ? window.route('equipment.index') : '/equipment',
   },
 ];
 
@@ -80,7 +73,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
     };
 
     setIsLoading(true);
-    router.get(route('equipment.index'), updatedFilters, {
+    router.get(window.route('equipment.index'), updatedFilters, {
       preserveState: true,
       replace: true,
       onFinish: () => setIsLoading(false),
@@ -92,7 +85,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
     setSelectedCategory('all');
     setSelectedStatus('all');
     setIsLoading(true);
-    router.get(route('equipment.index'), {}, {
+    router.get(window.route('equipment.index'), {}, {
       preserveState: true,
       replace: true,
       onFinish: () => setIsLoading(false),
@@ -182,7 +175,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                   </div>
                   <CreateButton
                     resourceType="equipment"
-                    buttonText="Add Equipment"
+                    text="Add Equipment"
                   />
                 </div>
               </div>

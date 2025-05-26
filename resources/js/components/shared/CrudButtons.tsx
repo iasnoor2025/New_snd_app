@@ -42,9 +42,10 @@ interface CrudButtonsProps {
     onClick?: () => void;
     permission?: string;
   }>;
+  [key: string]: any;
 }
 
-const CrudButtons = ({
+const CrudButtons: React.FC<CrudButtonsProps> = ({
   resourceType,
   resourceId,
   resourceName = 'this item',
@@ -54,7 +55,8 @@ const CrudButtons = ({
   showDelete = true,
   onDelete,
   additionalActions = [],
-}: CrudButtonsProps) => {
+  ...props
+}) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { hasPermission } = usePermission();
@@ -82,73 +84,71 @@ const CrudButtons = ({
   };
 
   return (
-    <>
-      <div className={`flex items-center space-x-2 ${className}`}>
-        {showView && hasViewPermission && (
-          <Button variant="outline" size="icon" asChild title="View">
-            <Link href={`/${resourceType}/${resourceId}`}>
-              <Eye className="h-4 w-4" />
-            </Link>
-          </Button>
-        )}
+    <div className={`flex items-center space-x-2 ${className}`} {...props}>
+      {showView && hasViewPermission && (
+        <Button variant="outline" size="icon" asChild title="View">
+          <Link href={`/${resourceType}/${resourceId}`}>
+            <Eye className="h-4 w-4" />
+          </Link>
+        </Button>
+      )}
 
-        {showEdit && hasEditPermission && (
-          <Button variant="outline" size="icon" asChild title="Edit">
-            <Link href={`/${resourceType}/${resourceId}/edit`}>
-              <Pencil className="h-4 w-4" />
-            </Link>
-          </Button>
-        )}
+      {showEdit && hasEditPermission && (
+        <Button variant="outline" size="icon" asChild title="Edit">
+          <Link href={`/${resourceType}/${resourceId}/edit`}>
+            <Pencil className="h-4 w-4" />
+          </Link>
+        </Button>
+      )}
 
-        {(showDelete || additionalActions.length > 0) && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {additionalActions.map((action, index) => {
-                if (action.permission && !hasPermission(action.permission)) {
-                  return null;
-                }
+      {(showDelete || additionalActions.length > 0) && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {additionalActions.map((action, index) => {
+              if (action.permission && !hasPermission(action.permission)) {
+                return null;
+              }
 
-                if (action.href) {
-                  return (
-                    <DropdownMenuItem key={index} asChild>
-                      <Link href={action.href} className="flex items-center cursor-pointer">
-                        {action.icon && <span className="mr-2">{action.icon}</span>}
-                        {action.label}
-                      </Link>
-                    </DropdownMenuItem>
-                  );
-                }
-
+              if (action.href) {
                 return (
-                  <DropdownMenuItem
-                    key={index}
-                    onClick={action.onClick}
-                    className="cursor-pointer"
-                  >
-                    {action.icon && <span className="mr-2">{action.icon}</span>}
-                    {action.label}
+                  <DropdownMenuItem key={index} asChild>
+                    <Link href={action.href} className="flex items-center cursor-pointer">
+                      {action.icon && <span className="mr-2">{action.icon}</span>}
+                      {action.label}
+                    </Link>
                   </DropdownMenuItem>
                 );
-              })}
+              }
 
-              {showDelete && hasDeletePermission && (
+              return (
                 <DropdownMenuItem
-                  className="text-destructive cursor-pointer"
-                  onClick={() => setIsDeleteDialogOpen(true)}
+                  key={index}
+                  onClick={action.onClick}
+                  className="cursor-pointer"
                 >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
+                  {action.icon && <span className="mr-2">{action.icon}</span>}
+                  {action.label}
                 </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-      </div>
+              );
+            })}
+
+            {showDelete && hasDeletePermission && (
+              <DropdownMenuItem
+                className="text-destructive cursor-pointer"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
@@ -182,7 +182,7 @@ const CrudButtons = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
 

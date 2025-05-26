@@ -1,24 +1,24 @@
 ﻿import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
+import type { PageProps } from '@/resources/js/types';
+import AdminLayout from '@/resources/js/layouts/AdminLayout';
 import dayjs from 'dayjs';
 import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
 import ErrorBoundary from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ErrorBoundary';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Textarea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/textarea';
-import { ScrollArea } from '@/Modules/EquipmentManagement/Resources/js/components/ui/scroll-area';
-import { Alert, AlertDescription } from '@/Modules/EquipmentManagement/Resources/js/components/ui/alert';
-import { Skeleton } from '@/Modules/EquipmentManagement/Resources/js/components/ui/skeleton';
+import { Button } from '@/resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/resources/js/components/ui/card';
+import { Input } from '@/resources/js/components/ui/input';
+import { Textarea } from '@/resources/js/components/ui/textarea';
+import { ScrollArea } from '@/resources/js/components/ui/scroll-area';
+import { Alert, AlertDescription } from '@/resources/js/components/ui/alert';
+import { Skeleton } from '@/resources/js/components/ui/skeleton';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
+} from '@/resources/js/components/ui/select';
 import {
   Form,
   FormControl,
@@ -27,7 +27,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/form';
+} from '@/resources/js/components/ui/form';
 import {
   Dialog,
   DialogContent,
@@ -35,17 +35,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/Modules/EquipmentManagement/Resources/js/components/ui/dialog';
+} from '@/resources/js/components/ui/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm as useReactHookForm } from 'react-hook-form';
-import { Calendar } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/calendar';
+import { Calendar } from '@/resources/js/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/popover';
-import { cn } from '@/Modules/EquipmentManagement/Resources/js/lib/utils';
+} from '@/resources/js/components/ui/popover';
+import { cn } from '@/resources/js/lib/utils';
 import { CalendarIcon, ArrowLeft, Loader2, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { router } from '@inertiajs/react';
@@ -78,14 +78,14 @@ const equipmentSchema = z.object({
 
 type EquipmentFormValues = z.infer<typeof equipmentSchema>;
 
-const breadcrumbs: BreadcrumbItem[] = [
+const breadcrumbs = [
   {
     title: 'Dashboard',
-    href: route('dashboard'),
+    href: window.route ? window.route('dashboard') : '/dashboard',
   },
   {
     title: 'Equipment',
-    href: route('equipment.index'),
+    href: window.route ? window.route('equipment.index') : '/equipment',
   },
   {
     title: 'Create Equipment',
@@ -572,7 +572,7 @@ const CreateEquipmentForm = ({
         <div className="flex justify-end gap-2">
           <Button
             variant="outline"
-            onClick={() => window.location.href = route('equipment.index')}
+            onClick={() => window.location.href = window.route('equipment.index')}
             type="button"
           >
             Cancel
@@ -646,13 +646,13 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
       next_maintenance_date: values.next_maintenance_date ? format(values.next_maintenance_date, 'yyyy-MM-dd') : null,
     };
 
-    router.post(route('equipment.store'), formattedValues, {
+    router.post(window.route('equipment.store'), formattedValues, {
       onSuccess: () => {
         toast({
           title: "Success",
           description: "Equipment created successfully"
         });
-        window.location.href = route('equipment.index');
+        window.location.href = window.route('equipment.index');
       },
       onError: (errors: Record<string, string>) => {
         toast({
@@ -868,9 +868,4 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
     </AdminLayout>
   );
 }
-
-</Input>
-</Input>
-</Input>
-</Input>
 

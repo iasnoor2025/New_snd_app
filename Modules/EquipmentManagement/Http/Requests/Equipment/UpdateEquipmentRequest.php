@@ -2,7 +2,7 @@
 
 namespace Modules\EquipmentManagement\Http\Requests\Equipment;
 
-use Illuminate\Foundation\Http\FormRequest as ;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEquipmentRequest extends FormRequest
 {
@@ -36,7 +36,7 @@ class UpdateEquipmentRequest extends FormRequest
             'last_maintenance_date' => 'nullable|date',
             'next_maintenance_date' => 'nullable|date',
             'location_id' => 'required|exists:locations,id',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'notes' => 'nullable|string',
             'documents' => 'nullable|array',
             'documents.*' => 'file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
