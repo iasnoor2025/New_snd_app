@@ -29,7 +29,7 @@
   - Glassmorphic UI design elements
 
 ### Database
-- **MySQL 8.0**
+- **postgresql**  
   - Relational database
   - InnoDB engine
   - UTF-8mb4 character set for multilingual support

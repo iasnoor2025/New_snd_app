@@ -21,7 +21,7 @@ use Modules\EquipmentManagement\Http\Controllers\MaintenanceScheduleController;
 Route::prefix('equipment')->name('equipment.')->middleware(['web', 'auth'])->group(function () {
     // Equipment routes
     Route::middleware(['permission:equipment.view'])->group(function () {
-        Route::get('equipment', [EquipmentController::class, 'index'])->name('equipment.index');
+        Route::get('/', [EquipmentController::class, 'index'])->name('equipment.index');
         Route::get('equipment-availability', [EquipmentController::class, 'availability'])->name('equipment.availability');
     });
 

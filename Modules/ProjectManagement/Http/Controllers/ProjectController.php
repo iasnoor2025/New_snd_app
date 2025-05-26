@@ -5,6 +5,9 @@ namespace Modules\ProjectManagement\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\ProjectManagement\Domain\Models\Project;
+use Modules\CustomerManagement\Domain\Models\Customer;
+use Modules\Core\Domain\Models\Location;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
@@ -14,8 +17,9 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::with(['manager', 'tasks', 'teamMembers'])->get();
-
-        return view('projectmanagement::projects.index', compact('projects'));
+        return Inertia::render('Modules/ProjectManagement/resources/js/pages/Index', [
+            'projects' => $projects,
+        ]);
     }
 
     /**
@@ -23,7 +27,12 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projectmanagement::projects.create');
+        $customers = Customer::all();
+        $locations = Location::all();
+        return Inertia::render('Modules/ProjectManagement/resources/js/pages/Create', [
+            'customers' => $customers,
+            'locations' => $locations,
+        ]);
     }
 
     /**
@@ -58,7 +67,9 @@ class ProjectController extends Controller
     {
         $project->load(['manager', 'tasks', 'teamMembers']);
 
-        return view('projectmanagement::projects.show', compact('project'));
+        return Inertia::render('Modules/ProjectManagement/resources/js/pages/Show', [
+            'project' => $project,
+        ]);
     }
 
     /**
@@ -66,7 +77,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('projectmanagement::projects.edit', compact('project'));
+        return Inertia::render('Modules/ProjectManagement/resources/js/pages/Edit', [
+            'project' => $project,
+        ]);
     }
 
     /**

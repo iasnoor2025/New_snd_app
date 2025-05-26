@@ -71,6 +71,7 @@ use LogsActivity, AutoLoadsRelations;
         'completed_at',
         'approved_by',
         'approved_at',
+        'location_id',
     ];
 
     /**
@@ -805,6 +806,14 @@ use LogsActivity, AutoLoadsRelations;
     public function isFinalState(): bool
     {
         return $this->status->isFinalState();
+    }
+
+    /**
+     * Get the location for the rental.
+     */
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Core\Domain\Models\Location::class, 'location_id');
     }
 }
 

@@ -166,7 +166,7 @@ class PayrollServiceProvider extends ServiceProvider
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (config('view.paths') as $path) {
+        foreach (config('view.paths') as $path) { 
             if (is_dir($path.'/modules/'.$this->nameLower)) {
                 $paths[] = $path.'/modules/'.$this->nameLower;
             }

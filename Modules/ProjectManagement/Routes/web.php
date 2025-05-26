@@ -25,7 +25,7 @@ use Inertia\Inertia;
 // Web routes uncommented
 Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group(function() {
     // Project routes
-    Route::get('/', [ProjectController::class, 'index'])->name('index');
+    Route::get('/', [ProjectController::class, 'index'])->name('index'); 
     Route::get('/create', [ProjectController::class, 'create'])->name('create');
     Route::post('/', [ProjectController::class, 'store'])->name('store');
     Route::get('/{project}', [ProjectController::class, 'show'])->name('show')->where('project', '[0-9]+');
@@ -118,6 +118,4 @@ Route::prefix('projects')->name('projects.')->middleware(['web', 'auth'])->group
             ->name('resource.destroy');
     });
 });
-
-Route::get('projects', [\Modules\ProjectManagement\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');
 

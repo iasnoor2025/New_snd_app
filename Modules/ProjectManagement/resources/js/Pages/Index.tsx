@@ -1,23 +1,23 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link } from '@inertiajs/react';
-// import AppLayout from '@/Modules/ProjectManagement/Resources/js/layouts/app-layout';
-// TODO: Update the following imports to the correct paths for your UI components
-// import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from 'your-ui-library/card';
-// import { Button } from 'your-ui-library/button';
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'your-ui-library/table';
-// import { Badge } from 'your-ui-library/badge';
-// import { Separator } from 'your-ui-library/separator';
-// import { Progress } from 'your-ui-library/progress';
-// import { Input } from 'your-ui-library/input';
+import { Link } from '@inertiajs/react';
+// TODO: Uncomment and fix the path if AppLayout is added
+// import AppLayout from '../layouts/app-layout';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../../../../resources/js/components/ui/card';
+import { Button } from '../../../../../resources/js/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../../resources/js/components/ui/table';
+import { Badge } from '../../../../../resources/js/components/ui/badge';
+import { Separator } from '../../../../../resources/js/components/ui/separator';
+import { Input } from '../../../../../resources/js/components/ui/input';
 import { format } from 'date-fns';
 import {
     Eye, Edit, Plus, LayoutGrid, CheckCircle, Clock, AlertCircle, XCircle,
     Filter, Search
 } from 'lucide-react';
-// import { Badge } from '../Components/project/ProjectProgress';
-// import { Separator } from '../Components/project/ProjectProgress';
-// import { Progress } from '../Components/project/ProjectProgress';
-// import { Input } from '../Components/project/ProjectProgress';
+import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';
+// Declare window.route for TypeScript
+// @ts-ignore
+// eslint-disable-next-line
+declare global { interface Window { route: any; } }
 
 interface Project {
     id: number;
@@ -107,183 +107,179 @@ export default function Index({ projects }: Props) {
     }, [projects, statusFilter, searchQuery]);
 
     return (
-        <>
-            <Head title="Projects" />
-
-            <AppLayout>
-                <div className="container mx-auto py-6 space-y-6">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-                            <p className="text-muted-foreground mt-1">Manage all your projects</p>
-                        </div>
-                        <Link href={route('projects.create')}>
-                            <Button className="flex items-center">
-                                <Plus className="h-4 w-4 mr-2" />
-                                New Project
-                            </Button>
-                        </Link>
+        <AdminLayout title="Projects">
+            <div className="container mx-auto py-6 space-y-6">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
+                        <p className="text-muted-foreground mt-1">Manage all your projects</p>
                     </div>
+                    <Link href={window.route('projects.create')}>
+                        <Button className="flex items-center">
+                            <Plus className="h-4 w-4 mr-2" />
+                            New Project
+                        </Button>
+                    </Link>
+                </div>
 
-                    <Separator />
+                <Separator />
 
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between">
-                                <div className="space-y-1">
-                                    <CardTitle className="text-xl flex items-center">
-                                        <LayoutGrid className="h-5 w-5 mr-2 text-blue-500" />
-                                        Project List
-                                    </CardTitle>
-                                    <CardDescription>
-                                        View and manage all projects ({filteredProjects.length} of {projects.length})
-                                    </CardDescription>
+                <Card>
+                    <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-1">
+                                <CardTitle className="text-xl flex items-center">
+                                    <LayoutGrid className="h-5 w-5 mr-2 text-blue-500" />
+                                    Project List
+                                </CardTitle>
+                                <CardDescription>
+                                    View and manage all projects ({filteredProjects.length} of {projects.length})
+                                </CardDescription>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="relative">
+                                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        type="search"
+                                        placeholder="Search projects..."
+                                        className="w-[200px] pl-8"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="relative">
-                                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                                        <Input
-                                            type="search"
-                                            placeholder="Search projects..."
-                                            className="w-[200px] pl-8"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="flex items-center space-x-1">
-                                        <Button
-                                            variant={statusFilter === null ? "default" : "outline"}
-                                            size="sm"
-                                            onClick={() => setStatusFilter(null)}
-                                        >
-                                            All
-                                        </Button>
-                                        <Button
-                                            variant={statusFilter === "active" ? "default" : "outline"}
-                                            size="sm"
-                                            className="flex items-center"
-                                            onClick={() => setStatusFilter("active")}
-                                        >
-                                            <Clock className="h-3.5 w-3.5 mr-1" />
-                                            Active
-                                        </Button>
-                                        <Button
-                                            variant={statusFilter === "completed" ? "default" : "outline"}
-                                            size="sm"
-                                            className="flex items-center"
-                                            onClick={() => setStatusFilter("completed")}
-                                        >
-                                            <CheckCircle className="h-3.5 w-3.5 mr-1" />
-                                            Completed
-                                        </Button>
-                                    </div>
+                                <div className="flex items-center space-x-1">
+                                    <Button
+                                        variant={statusFilter === null ? "default" : "outline"}
+                                        size="sm"
+                                        onClick={() => setStatusFilter(null)}
+                                    >
+                                        All
+                                    </Button>
+                                    <Button
+                                        variant={statusFilter === "active" ? "default" : "outline"}
+                                        size="sm"
+                                        className="flex items-center"
+                                        onClick={() => setStatusFilter("active")}
+                                    >
+                                        <Clock className="h-3.5 w-3.5 mr-1" />
+                                        Active
+                                    </Button>
+                                    <Button
+                                        variant={statusFilter === "completed" ? "default" : "outline"}
+                                        size="sm"
+                                        className="flex items-center"
+                                        onClick={() => setStatusFilter("completed")}
+                                    >
+                                        <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                                        Completed
+                                    </Button>
                                 </div>
                             </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="rounded-md border">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Project Name</TableHead>
-                                            <TableHead>Client</TableHead>
-                                            <TableHead>Start Date</TableHead>
-                                            <TableHead>End Date</TableHead>
-                                            <TableHead>Status</TableHead>
-                                            <TableHead>Budget</TableHead>
-                                            <TableHead className="text-right">Actions</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {filteredProjects.length > 0 ? (
-                                            filteredProjects.map((project) => (
-                                                <TableRow key={project.id}>
-                                                    <TableCell className="font-medium">
-                                                        {project.name}
-                                                    </TableCell>
-                                                    <TableCell>{project.client?.company_name || 'No client assigned'}</TableCell>
-                                                    <TableCell>{format(new Date(project.start_date), 'PPP')}</TableCell>
-                                                    <TableCell>
-                                                        {project.end_date ? format(new Date(project.end_date), 'PPP') : '—'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <div className="flex items-center gap-1">
-                                                            <Badge variant={formatStatus(project.status).variant} className="flex items-center">
-                                                                {formatStatus(project.status).icon}
-                                                                {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                                                            </Badge>
-                                                            {project.status !== 'cancelled' && (
-                                                                <div className="ml-2 w-16">
-                                                                    <div className="text-xs text-muted-foreground mb-1">{calculateProgress(project)}%</div>
-                                                                    <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
-                                                                        <div
-                                                                            className={`h-full rounded-full ${
-                                                                                project.status === 'completed' ? 'bg-green-500' :
-                                                                                project.status === 'on_hold' ? 'bg-amber-500' : 'bg-blue-500'
-                                                                            }`}
-                                                                            style={{ width: `${calculateProgress(project)}%` }}
-                                                                        />
-                                                                    </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Project Name</TableHead>
+                                        <TableHead>Client</TableHead>
+                                        <TableHead>Start Date</TableHead>
+                                        <TableHead>End Date</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Budget</TableHead>
+                                        <TableHead className="text-right">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredProjects.length > 0 ? (
+                                        filteredProjects.map((project) => (
+                                            <TableRow key={project.id}>
+                                                <TableCell className="font-medium">
+                                                    {project.name}
+                                                </TableCell>
+                                                <TableCell>{project.client?.company_name || 'No client assigned'}</TableCell>
+                                                <TableCell>{format(new Date(project.start_date), 'PPP')}</TableCell>
+                                                <TableCell>
+                                                    {project.end_date ? format(new Date(project.end_date), 'PPP') : '—'}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-1">
+                                                        <Badge variant={formatStatus(project.status).variant} className="flex items-center">
+                                                            {formatStatus(project.status).icon}
+                                                            {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                                                        </Badge>
+                                                        {project.status !== 'cancelled' && (
+                                                            <div className="ml-2 w-16">
+                                                                <div className="text-xs text-muted-foreground mb-1">{calculateProgress(project)}%</div>
+                                                                <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                                    <div
+                                                                        className={`h-full rounded-full ${
+                                                                            project.status === 'completed' ? 'bg-green-500' :
+                                                                            project.status === 'on_hold' ? 'bg-amber-500' : 'bg-blue-500'
+                                                                        }`}
+                                                                        style={{ width: `${calculateProgress(project)}%` }}
+                                                                    />
                                                                 </div>
-                                                            )}
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell>SAR {project.budget.toLocaleString()}</TableCell>
-                                                    <TableCell className="text-right space-x-2">
-                                                        <Link href={route('projects.show', project.id)}>
-                                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                                <Eye className="h-4 w-4" />
-                                                            </Button>
-                                                        </Link>
-                                                        <Link href={route('projects.edit', project.id)}>
-                                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                                <Edit className="h-4 w-4" />
-                                                            </Button>
-                                                        </Link>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
-                                                    {statusFilter
-                                                        ? `No ${statusFilter} projects found.`
-                                                        : (searchQuery
-                                                            ? 'No matching projects found. Try a different search term.'
-                                                            : 'No projects found. Click "New Project" to create one.'
-                                                        )
-                                                    }
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>SAR {project.budget.toLocaleString()}</TableCell>
+                                                <TableCell className="text-right space-x-2">
+                                                    <Link href={window.route('projects.show', project.id)}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
+                                                    <Link href={window.route('projects.edit', project.id)}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                            <Edit className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
                                                 </TableCell>
                                             </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </CardContent>
-                        {filteredProjects.length > 0 && projects.length !== filteredProjects.length && (
-                            <CardFooter className="border-t bg-muted/10 py-3">
-                                <div className="flex justify-between w-full items-center">
-                                    <div className="text-sm text-muted-foreground">
-                                        Showing {filteredProjects.length} of {projects.length} projects
-                                    </div>
-                                    {(statusFilter || searchQuery) && (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => {
-                                                setStatusFilter(null);
-                                                setSearchQuery('');
-                                            }}
-                                        >
-                                            Clear filters
-                                        </Button>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
+                                                {statusFilter
+                                                    ? `No ${statusFilter} projects found.`
+                                                    : (searchQuery
+                                                        ? 'No matching projects found. Try a different search term.'
+                                                        : 'No projects found. Click "New Project" to create one.'
+                                                    )
+                                                }
+                                            </TableCell>
+                                        </TableRow>
                                     )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </CardContent>
+                    {filteredProjects.length > 0 && projects.length !== filteredProjects.length && (
+                        <CardFooter className="border-t bg-muted/10 py-3">
+                            <div className="flex justify-between w-full items-center">
+                                <div className="text-sm text-muted-foreground">
+                                    Showing {filteredProjects.length} of {projects.length} projects
                                 </div>
-                            </CardFooter>
-                        )}
-                    </Card>
-                </div>
-            </AppLayout>
-        </>
+                                {(statusFilter || searchQuery) && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            setStatusFilter(null);
+                                            setSearchQuery('');
+                                        }}
+                                    >
+                                        Clear filters
+                                    </Button>
+                                )}
+                            </div>
+                        </CardFooter>
+                    )}
+                </Card>
+            </div>
+        </AdminLayout>
     );
 }

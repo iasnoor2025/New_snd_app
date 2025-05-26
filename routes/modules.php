@@ -28,13 +28,6 @@ Route::middleware(['auth', 'verified'])->prefix('timesheets')->group(function ()
     });
 });
 
-// Direct routes for projects
-Route::middleware(['auth', 'verified'])->prefix('projects')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('projects.index');
-    });
-});
-
 // Direct routes for rentals
 Route::middleware(['auth', 'verified'])->prefix('rentals')->group(function () {
     Route::get('/', function () {
@@ -45,7 +38,7 @@ Route::middleware(['auth', 'verified'])->prefix('rentals')->group(function () {
 // Direct routes for equipment
 Route::middleware(['auth', 'verified'])->prefix('equipment')->group(function () {
     Route::get('/', function () {
-        return redirect()->route('equipment.equipment.index');
+        return redirect()->route('equipment.index');
     });
 });
 

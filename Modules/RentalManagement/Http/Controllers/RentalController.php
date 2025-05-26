@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Modules\RentalManagement\Domain\Models\Rental;
 use Modules\RentalManagement\Services\RentalService;
+use Modules\Core\Domain\Models\Location;
 
 class RentalController extends Controller
 {
@@ -41,7 +42,10 @@ class RentalController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Rentals/Create');
+        $locations = Location::all();
+        return Inertia::render('Rentals/Create', [
+            'locations' => $locations
+        ]);
     }
 
     /**
@@ -80,8 +84,10 @@ class RentalController extends Controller
     public function edit($id)
     {
         $rental = $this->rentalService->findById($id);
+        $locations = Location::all();
         return Inertia::render('Rentals/Edit', [
-            'rental' => $rental
+            'rental' => $rental,
+            'locations' => $locations
         ]);
     }
 
