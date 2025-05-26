@@ -128,6 +128,7 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
         console.log(`Attempting to resolve page: ${name}`);
+        console.log('Available modulePages keys:', Object.keys(modulePages));
 
         // First try to resolve from main app's pages
         try {
@@ -160,15 +161,17 @@ createInertiaApp({
             }
 
             // First check in our combined page mappings
-            if (name in allPageMappings && allPageMappings[name] in modulePages) {
-                try {
-                    const pagePath = allPageMappings[name];
-                    console.log(`Loading page from mappings: ${pagePath}`);
-                    const module = await modulePages[pagePath]();
-                    console.log(`Successfully loaded ${name} from explicit mappings`);
-                    return module;
-                } catch (e) {
-                    console.error(`Failed to import ${name} page from mappings:`, e);
+            const mappedPath = allPageMappings[name];
+            if (mappedPath) {
+                // Try both with and without leading slash
+                const possibleKeys = [mappedPath, mappedPath.replace(/^\./, ''), '/' + mappedPath.replace(/^\./, '')];
+                for (const key of possibleKeys) {
+                    if (key in modulePages) {
+                        console.log(`Loading page from mappings: ${key}`);
+                        const module = await modulePages[key]();
+                        console.log(`Successfully loaded ${name} from explicit mappings`);
+                        return module;
+                    }
                 }
             }
 

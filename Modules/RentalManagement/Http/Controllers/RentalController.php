@@ -22,9 +22,17 @@ class RentalController extends Controller
      */
     public function index()
     {
-        $rentals = $this->rentalService->all();
-        return Inertia::render('Rental/Index', [
-            'rentals' => $rentals
+        $rentals = $this->rentalService->getAllRentals();
+        // Ensure rentals is always an array with a data key
+        $rentalsArray = [
+            'data' => $rentals ? $rentals->toArray() : [],
+            'current_page' => 1,
+            'last_page' => 1,
+            'per_page' => count($rentals ?? []),
+            'total' => count($rentals ?? []),
+        ];
+        return Inertia::render('Rentals/Index', [
+            'rentals' => $rentalsArray
         ]);
     }
 
@@ -33,7 +41,7 @@ class RentalController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Rental/Create');
+        return Inertia::render('Rentals/Create');
     }
 
     /**
@@ -61,7 +69,7 @@ class RentalController extends Controller
     public function show($id)
     {
         $rental = $this->rentalService->findById($id);
-        return Inertia::render('Rental/Show', [
+        return Inertia::render('Rentals/Show', [
             'rental' => $rental
         ]);
     }
@@ -72,7 +80,7 @@ class RentalController extends Controller
     public function edit($id)
     {
         $rental = $this->rentalService->findById($id);
-        return Inertia::render('Rental/Edit', [
+        return Inertia::render('Rentals/Edit', [
             'rental' => $rental
         ]);
     }

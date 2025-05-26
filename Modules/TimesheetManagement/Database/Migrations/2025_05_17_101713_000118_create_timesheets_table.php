@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('project')->nullable();
             $table->string('tasks')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

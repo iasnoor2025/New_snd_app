@@ -15,28 +15,25 @@ class SupplierController extends Controller
     {
         $search = $request->input('search');
         $status = $request->input('status');
-        
+
         $query = Supplier::query();
-        
+
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('name';
-use 'like';
-use "%{$search}%")
-                  ->orWhere('contact_person';
-use 'like', "%{$search}%")
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('contact_person', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%");
             });
         }
-        
+
         if ($status) {
             $query->where('status', $status);
         }
-        
+
         $suppliers = $query->latest()->paginate(10);
-        
-        return Inertia::render('Suppliers/Index', [;
+
+        return Inertia::render('Suppliers/Index', [
             'suppliers' => $suppliers,
             'filters' => [
                 'search' => $search,
@@ -53,10 +50,10 @@ use 'like', "%{$search}%")
         // Check if user has permission to create suppliers
         $user = Auth::user();
         if (!$user->isAdmin() && !$user->hasRole('manager') && !$user->hasRole('inventory')) {
-            return redirect()->route('suppliers.index');
+            return redirect()->route('suppliers.index')
                 ->with('error', 'You do not have permission to create suppliers.');
         }
-        
+
         return Inertia::render('Suppliers/Create');
     }
 
@@ -68,10 +65,10 @@ use 'like', "%{$search}%")
         // Check if user has permission to create suppliers
         $user = Auth::user();
         if (!$user->isAdmin() && !$user->hasRole('manager') && !$user->hasRole('inventory')) {
-            return redirect()->route('suppliers.index');
+            return redirect()->route('suppliers.index')
                 ->with('error', 'You do not have permission to create suppliers.');
         }
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'contact_person' => 'nullable|string|max:255',
@@ -88,7 +85,7 @@ use 'like', "%{$search}%")
             'notes' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
-        
+
         Supplier::create([
             'name' => $request->name,
             'contact_person' => $request->contact_person,
@@ -105,8 +102,8 @@ use 'like', "%{$search}%")
             'notes' => $request->notes,
             'status' => $request->status,
         ]);
-        
-        return redirect()->route('suppliers.index');
+
+        return redirect()->route('suppliers.index')
             ->with('success', 'Supplier created successfully.');
     }
 
@@ -118,8 +115,8 @@ use 'like', "%{$search}%")
         $supplier->load(['inventoryItems', 'inventoryTransactions' => function ($query) {
             $query->latest()->take(10);
         }]);
-        
-        return Inertia::render('Suppliers/Show', [;
+
+        return Inertia::render('Suppliers/Show', [
             'supplier' => $supplier,
         ]);
     }
@@ -132,11 +129,11 @@ use 'like', "%{$search}%")
         // Check if user has permission to edit suppliers
         $user = Auth::user();
         if (!$user->isAdmin() && !$user->hasRole('manager') && !$user->hasRole('inventory')) {
-            return redirect()->route('suppliers.index');
+            return redirect()->route('suppliers.index')
                 ->with('error', 'You do not have permission to edit suppliers.');
         }
-        
-        return Inertia::render('Suppliers/Edit', [;
+
+        return Inertia::render('Suppliers/Edit', [
             'supplier' => $supplier,
         ]);
     }
@@ -149,10 +146,10 @@ use 'like', "%{$search}%")
         // Check if user has permission to update suppliers
         $user = Auth::user();
         if (!$user->isAdmin() && !$user->hasRole('manager') && !$user->hasRole('inventory')) {
-            return redirect()->route('suppliers.index');
+            return redirect()->route('suppliers.index')
                 ->with('error', 'You do not have permission to update suppliers.');
         }
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'contact_person' => 'nullable|string|max:255',
@@ -169,7 +166,7 @@ use 'like', "%{$search}%")
             'notes' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
-        
+
         $supplier->update([
             'name' => $request->name,
             'contact_person' => $request->contact_person,
@@ -186,8 +183,8 @@ use 'like', "%{$search}%")
             'notes' => $request->notes,
             'status' => $request->status,
         ]);
-        
-        return redirect()->route('suppliers.index');
+
+        return redirect()->route('suppliers.index')
             ->with('success', 'Supplier updated successfully.');
     }
 
@@ -199,19 +196,19 @@ use 'like', "%{$search}%")
         // Check if user has permission to delete suppliers
         $user = Auth::user();
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
-            return redirect()->route('suppliers.index');
+            return redirect()->route('suppliers.index')
                 ->with('error', 'You do not have permission to delete suppliers.');
         }
-        
+
         // Check if supplier has inventory items or transactions
         if ($supplier->inventoryItems()->count() > 0 || $supplier->inventoryTransactions()->count() > 0) {
-            return redirect()->route('suppliers.index');
+            return redirect()->route('suppliers.index')
                 ->with('error', 'Cannot delete supplier with inventory items or transactions. Consider deactivating it instead.');
         }
-        
+
         $supplier->delete();
-        
-        return redirect()->route('suppliers.index');
+
+        return redirect()->route('suppliers.index')
             ->with('success', 'Supplier deleted successfully.');
     }
 }

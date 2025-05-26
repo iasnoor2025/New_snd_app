@@ -15,7 +15,7 @@ use Modules\RentalManagement\Domain\Models\Rental;
 class RentalServiceProvider extends ServiceProvider
 {
     use PathNamespace;
-    protected string $name = 'Rental';  // This is the name of the module
+    protected string $name = 'RentalManagement';  // This is the name of the module
 
     protected string $nameLower = 'rental';
 
@@ -91,10 +91,10 @@ class RentalServiceProvider extends ServiceProvider
      */
     protected function registerConfig(): void
     {
-        $configPath = module_path($this->name, config('modules.paths.generator.config.path'));
+        $configPath = module_path($this->name, 'config');
 
         if (is_dir($configPath)) {
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($configPath));
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {

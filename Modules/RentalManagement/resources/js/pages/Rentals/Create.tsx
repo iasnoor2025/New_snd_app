@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { Head, Link, router } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Customer, Equipment } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
+import { PageProps } from '@/types';
+import { Customer, Equipment } from '@/types/models';
+import AdminLayout from '@/layouts/AdminLayout';
 import { format, isAfter, isBefore, startOfToday } from "date-fns";
 import { toast } from "sonner";
 
 // Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Separator } from '@/Modules/RentalManagement/Resources/js/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 // Icons
 import { ArrowLeft } from "lucide-react";
 
 // Our components
-import RentalForm, { RentalFormValues } from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalForm';
+import RentalForm from "../../components/rentals/RentalForm";
 
 interface Props extends PageProps {
   customers: Customer[];

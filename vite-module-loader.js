@@ -16,36 +16,58 @@ async function collectModuleAssetsPaths(paths, modulesPath) {
     const moduleDirectories = await fs.readdir(modulesPath);
 
     for (const moduleDir of moduleDirectories) {
-      if (moduleDir === '.DS_Store') {
-        // Skip .DS_Store directory
-        continue;
+      if (moduleDir === '.DS_Store') continue;
+      if (moduleStatuses[moduleDir] !== true) continue;
+
+      // Look for both 'pages' and 'Pages' directories
+      for (const pagesDirName of ['pages', 'Pages']) {
+        const pagesDir = path.join(modulesPath, moduleDir, 'resources', 'js', pagesDirName);
+        try {
+          const files = await getAllFilesRecursive(pagesDir, ['.tsx', '.jsx']);
+          paths.push(...files);
+        } catch (e) {
+          // Directory may not exist, skip
+        }
       }
 
-      // Check if the module is enabled (status is true)
-      if (moduleStatuses[moduleDir] === true) {
-        const viteConfigPath = path.join(modulesPath, moduleDir, 'vite.config.js');
-
-        try {
-          await fs.access(viteConfigPath);
-          // Convert to a file URL for Windows compatibility
-          const moduleConfigURL = pathToFileURL(viteConfigPath);
-
-          // Import the module-specific Vite configuration
-          const moduleConfig = await import(moduleConfigURL.href);
-
-          if (moduleConfig.paths && Array.isArray(moduleConfig.paths)) {
-            paths.push(...moduleConfig.paths);
-          }
-        } catch (error) {
-          // vite.config.js does not exist, skip this module
+      // Also support module-specific vite.config.js (optional)
+      const viteConfigPath = path.join(modulesPath, moduleDir, 'vite.config.js');
+      try {
+        await fs.access(viteConfigPath);
+        const moduleConfig = await import(pathToFileURL(viteConfigPath).href);
+        if (moduleConfig.paths && Array.isArray(moduleConfig.paths)) {
+          paths.push(...moduleConfig.paths);
         }
+      } catch (e) {
+        // No vite.config.js, skip
       }
     }
   } catch (error) {
     console.error(`Error reading module statuses or module configurations: ${error}`);
   }
 
+  console.log('Vite module input paths:', paths);
   return paths;
+}
+
+// Helper to recursively get all files with given extensions
+async function getAllFilesRecursive(dir, exts) {
+  let results = [];
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch (e) {
+    return results;
+  }
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results = results.concat(await getAllFilesRecursive(fullPath, exts));
+    } else if (exts.some(ext => entry.name.endsWith(ext))) {
+      results.push(fullPath);
+    }
+  }
+  return results;
 }
 
 // Plugin for direct module loading

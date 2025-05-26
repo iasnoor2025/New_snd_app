@@ -1,4 +1,4 @@
-declare module "@/resources/js/components/ui/*" {
+declare module "@/components/ui/*" {
   const Component: any;
   export = Component;
 }
