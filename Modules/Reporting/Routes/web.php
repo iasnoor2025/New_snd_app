@@ -20,7 +20,6 @@ Route::middleware(['web', 'auth', 'verified', 'permission:reports.view'])->prefi
     */
 
     // Report Builder
-    /*
     Route::middleware(['permission:reports.build'])->group(function () {
         Route::get('/builder', [ReportBuilderController::class, 'index'])->name('builder');
         Route::post('/builder/generate', [ReportBuilderController::class, 'generate'])->name('builder.generate');
@@ -36,7 +35,8 @@ Route::middleware(['web', 'auth', 'verified', 'permission:reports.view'])->prefi
         Route::get('/scheduled', [ReportBuilderController::class, 'scheduledReports'])->name('scheduled');
         Route::delete('/{report}', [ReportBuilderController::class, 'destroyReport'])->name('destroy');
     });
-    */
+
+    Route::post('/export-dashboard', [ReportController::class, 'exportDashboard'])->name('exportDashboard');
 });
 
 

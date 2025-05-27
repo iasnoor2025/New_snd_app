@@ -119,6 +119,7 @@ const moduleMap: Record<string, string[]> = {
   'LeaveRequests': ['LeaveManagement'],
   'Equipment': ['EquipmentManagement'],
   'Customers': ['CustomerManagement'],
+  'Users': ['Core'],
   'Core': ['Core'],
   'Audit': ['AuditCompliance'],
   'API': ['API']

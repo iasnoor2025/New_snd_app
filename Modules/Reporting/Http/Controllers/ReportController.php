@@ -16,7 +16,7 @@ class ReportController extends Controller
     /**
      * Display the reports dashboard.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Get counts for dashboard
         $clientCount = Customer::count();
@@ -25,21 +25,30 @@ class ReportController extends Controller
         $invoiceCount = Invoice::count();
         $paymentCount = Payment::count();
 
-        // Get recent activity
+        // Sorting and pagination params
+        $rentalsPage = $request->input('rentals_page', 1);
+        $rentalsSort = $request->input('rentals_sort', 'created_at');
+        $rentalsDir = $request->input('rentals_dir', 'desc');
+        $invoicesPage = $request->input('invoices_page', 1);
+        $invoicesSort = $request->input('invoices_sort', 'created_at');
+        $invoicesDir = $request->input('invoices_dir', 'desc');
+        $paymentsPage = $request->input('payments_page', 1);
+        $paymentsSort = $request->input('payments_sort', 'created_at');
+        $paymentsDir = $request->input('payments_dir', 'desc');
+        $perPage = 5;
+
+        // Get recent activity (paginated and sorted)
         $recentRentals = Rental::with('client')
-            ->latest()
-            ->take(5)
-            ->get();
+            ->orderBy($rentalsSort, $rentalsDir)
+            ->paginate($perPage, ['*'], 'rentals_page', $rentalsPage);
 
         $recentInvoices = Invoice::with('client')
-            ->latest()
-            ->take(5)
-            ->get();
+            ->orderBy($invoicesSort, $invoicesDir)
+            ->paginate($perPage, ['*'], 'invoices_page', $invoicesPage);
 
         $recentPayments = Payment::with(['client', 'invoice'])
-            ->latest()
-            ->take(5)
-            ->get();
+            ->orderBy($paymentsSort, $paymentsDir)
+            ->paginate($perPage, ['*'], 'payments_page', $paymentsPage);
 
         // Get revenue data for chart
         $monthlyRevenue = Payment::selectRaw('EXTRACT(MONTH FROM payment_date) as month, EXTRACT(YEAR FROM payment_date) as year, SUM(amount) as total')
@@ -410,6 +419,37 @@ class ReportController extends Controller
             'revenueByMethod' => $revenueByMethod,
             'totalRevenue' => $totalRevenue,
         ]);
+    }
+
+    /**
+     * Export the dashboard report as CSV or PDF.
+     */
+    public function exportDashboard(Request $request)
+    {
+        // Accept filters (date range, search, etc.)
+        $dateFrom = $request->input('dateFrom');
+        $dateTo = $request->input('dateTo');
+        $search = $request->input('search');
+        $format = $request->input('format', 'csv');
+
+        // For demo, just export the same stats as CSV
+        $clientCount = Customer::count();
+        $equipmentCount = Equipment::count();
+        $rentalCount = Rental::count();
+        $invoiceCount = Invoice::count();
+        $paymentCount = Payment::count();
+
+        $csv = "Metric,Value\n";
+        $csv .= "Clients,$clientCount\n";
+        $csv .= "Equipment,$equipmentCount\n";
+        $csv .= "Rentals,$rentalCount\n";
+        $csv .= "Invoices,$invoiceCount\n";
+        $csv .= "Payments,$paymentCount\n";
+
+        $filename = 'dashboard_report_' . date('Ymd_His') . '.csv';
+        return response($csv)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', "attachment; filename=\"$filename\"");
     }
 }
 
