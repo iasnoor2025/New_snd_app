@@ -1,27 +1,26 @@
 ﻿import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
-import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
-import { formatDate } from '@/Modules/TimesheetManagement/Resources/js/utils/format';
-import { usePermission } from '@/Modules/TimesheetManagement/Resources/js/hooks/usePermission';
-import { Button } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/button';
+import { PageProps, BreadcrumbItem } from '../../../../../../resources/js/types';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
+import { usePermission } from '../../../../../../resources/js/hooks/usePermission';
+import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/input';
-import { Badge } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/badge';
-import { Checkbox } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/checkbox';
+} from '../../../../../../resources/js/components/ui/card';
+import { Input } from '../../../../../../resources/js/components/ui/input';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { Checkbox } from '../../../../../../resources/js/components/ui/checkbox';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/select';
+} from '../../../../../../resources/js/components/ui/select';
 import {
   Table,
   TableBody,
@@ -29,8 +28,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/table';
-import { useToast } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/use-toast';
+} from '../../../../../../resources/js/components/ui/table';
 import {
   Plus as PlusIcon,
   Eye as EyeIcon,
@@ -43,11 +41,10 @@ import {
   MoreHorizontal as MoreHorizontalIcon,
   FileText as FileTextIcon
 } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/tooltip';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/popover';
-import { Calendar } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/calendar';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../../../../../resources/js/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../../../../resources/js/components/ui/popover';
+import { Calendar } from '../../../../../../resources/js/components/ui/calendar';
 import { format } from 'date-fns';
-import ErrorBoundary from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ErrorBoundary';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,9 +52,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/Modules/TimesheetManagement/Resources/js/components/ui/dropdown-menu';
-import CreateButton from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/shared/CreateButton';
-import CrudButtons from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/shared/CrudButtons';
+} from '../../../../../../resources/js/components/ui/dropdown-menu';
+import CreateButton from '../../../../../../resources/js/components/shared/CreateButton';
+import CrudButtons from '../../../../../../resources/js/components/shared/CrudButtons';
+import { route } from 'ziggy-js';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Dashboard', href: '/dashboard' },
@@ -109,7 +108,6 @@ interface Props extends PageProps {
 
 export default function TimesheetsIndex({ auth, timesheets, filters = { status: 'all', search: '', date_from: '', date_to: '', per_page: 15 } }: Props) {
   const { hasPermission } = usePermission();
-  const { toast } = useToast();
   const [processing, setProcessing] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState(filters.search || '');
   const [selectedStatus, setSelectedStatus] = useState(filters.status || 'all');
@@ -157,8 +155,8 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
   const toggleSelectAll = (checked: boolean) => {
     if (checked) {
       // Select all submitted timesheets
-      const submittedTimesheets = timesheetsData;
-        .filter(timesheet => timesheet.status === 'submitted');
+      const submittedTimesheets = timesheetsData
+        .filter(timesheet => timesheet.status === 'submitted')
         .map(timesheet => timesheet.id);
       setSelectedTimesheets(submittedTimesheets);
     } else {
@@ -170,11 +168,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
   // Handle bulk approval of selected timesheets
   const handleBulkApprove = () => {
     if (selectedTimesheets.length === 0) {
-      toast({
-        title: "Warning",
-        description: "Please select at least one timesheet to approve",
-        variant: "destructive"
-      });
+      toast("Please select at least one timesheet to approve");
       return;
     }
 
@@ -184,19 +178,12 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
         timesheet_ids: selectedTimesheets
       }, {
         onSuccess: () => {
-          toast({
-            title: "Success",
-            description: `${selectedTimesheets.length} timesheets approved successfully`
-          });
+          toast(`${selectedTimesheets.length} timesheets approved successfully`);
           setSelectedTimesheets([]);
           setBulkProcessing(false);
         },
         onError: (errors) => {
-          toast({
-            title: "Error",
-            description: errors.error || 'Failed to approve timesheets',
-            variant: "destructive"
-          });
+          toast(errors.error || 'Failed to approve timesheets');
           setBulkProcessing(false);
         },
       });
@@ -254,17 +241,10 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
     if (confirm('Are you sure you want to delete this timesheet?')) {
       router.delete(route('timesheets.destroy', id), {
         onSuccess: () => {
-          toast({
-            title: "Success",
-            description: "Timesheet deleted successfully"
-          });
+          toast("Timesheet deleted successfully");
         },
         onError: (errors) => {
-          toast({
-            title: "Error",
-            description: errors.error || 'Failed to delete timesheet',
-            variant: "destructive"
-          });
+          toast(errors.error || 'Failed to delete timesheet');
         },
       });
     }
@@ -274,18 +254,11 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
     setProcessing(id);
     router.put(route('timesheets.approve', id), {}, {
       onSuccess: () => {
-        toast({
-          title: "Success",
-          description: "Timesheet approved successfully"
-        });
+        toast("Timesheet approved successfully");
         setProcessing(null);
       },
       onError: (errors) => {
-        toast({
-          title: "Error",
-          description: errors.error || 'Failed to approve timesheet',
-          variant: "destructive"
-        });
+        toast(errors.error || 'Failed to approve timesheet');
         setProcessing(null);
       },
     });
@@ -295,18 +268,11 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
     setProcessing(id);
     router.put(route('timesheets.reject', id), {}, {
       onSuccess: () => {
-        toast({
-          title: "Success",
-          description: "Timesheet rejected successfully"
-        });
+        toast("Timesheet rejected successfully");
         setProcessing(null);
       },
       onError: (errors) => {
-        toast({
-          title: "Error",
-          description: errors.error || 'Failed to reject timesheet',
-          variant: "destructive"
-        });
+        toast(errors.error || 'Failed to reject timesheet');
         setProcessing(null);
       },
     });
@@ -328,7 +294,8 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
             <div className="flex items-center space-x-2">
               <CreateButton
                 resourceType="timesheets"
-                buttonText="Add Timesheet"
+                text="Add Timesheet"
+                href="/hr/timesheets/create"
               />
 
               {canApproveTimesheet && selectedTimesheets.length > 0 && (
@@ -462,7 +429,8 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                           {canCreateTimesheet && (
                             <CreateButton
                               resourceType="timesheets"
-                              buttonText="Add Timesheet"
+                              text="Add Timesheet"
+                              href="/hr/timesheets/create"
                               buttonVariant="default"
                               className="mt-2"
                             />
@@ -488,7 +456,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                             : `Employee ID: ${timesheet.employee_id}`
                           }
                         </TableCell>
-                        <TableCell>{formatDate(timesheet.date)}</TableCell>
+                        <TableCell>{format(new Date(timesheet.date), "PP")}</TableCell>
                         <TableCell>{timesheet.hours_worked}</TableCell>
                         <TableCell>{timesheet.overtime_hours}</TableCell>
                         <TableCell>
@@ -500,7 +468,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                             <CrudButtons
                               resourceType="timesheets"
                               resourceId={timesheet.id}
-                              resourceName={`Timesheet from ${formatDate(timesheet.date)}`}
+                              resourceName={`Timesheet from ${format(new Date(timesheet.date), "PP")}`}
                             />
 
                             {canApproveTimesheet && timesheet.status === 'submitted' && (
@@ -518,18 +486,11 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                                               preserveState: true,
                                               onSuccess: () => {
                                                 setProcessing(null);
-                                                toast({
-                                                  title: "Success",
-                                                  description: "Timesheet approved successfully"
-                                                });
+                                                toast("Timesheet approved successfully");
                                               },
                                               onError: () => {
                                                 setProcessing(null);
-                                                toast({
-                                                  title: "Error",
-                                                  description: "Failed to approve timesheet",
-                                                  variant: "destructive"
-                                                });
+                                                toast("Failed to approve timesheet");
                                               }
                                             });
                                           }
@@ -562,18 +523,11 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                                               preserveState: true,
                                               onSuccess: () => {
                                                 setProcessing(null);
-                                                toast({
-                                                  title: "Success",
-                                                  description: "Timesheet rejected successfully"
-                                                });
+                                                toast("Timesheet rejected successfully");
                                               },
                                               onError: () => {
                                                 setProcessing(null);
-                                                toast({
-                                                  title: "Error",
-                                                  description: "Failed to reject timesheet",
-                                                  variant: "destructive"
-                                                });
+                                                toast("Failed to reject timesheet");
                                               }
                                             });
                                           }

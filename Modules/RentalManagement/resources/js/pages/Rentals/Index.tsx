@@ -77,7 +77,7 @@ import {
 
 interface Props extends PageProps {
   rentals: {
-    data: Rental[];
+    data: Rental[]; 
     current_page: number;
     last_page: number;
     per_page: number;

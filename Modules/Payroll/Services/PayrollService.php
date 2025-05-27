@@ -166,7 +166,6 @@ class PayrollService
             ]);
 
             return $payroll;
-;
         } catch (\Exception $e) {
             Log::error("Error generating payroll for employee {$employee->full_name}", [
                 'error' => $e->getMessage(),
@@ -181,7 +180,7 @@ class PayrollService
      */
     protected function calculateOvertimeHours(Employee $employee, Carbon $month): float
     {
-        return $employee->timesheets();
+        return $employee->timesheets()
             ->whereYear('date', $month->year)
             ->whereMonth('date', $month->month)
             ->where('status', 'approved')
@@ -337,8 +336,7 @@ class PayrollService
      */
     public function rejectPayrollRun(PayrollRun $payrollRun, string $notes): void
     {
-        DB::transaction(function () use ($payrollRun;
-use $notes) {
+        DB::transaction(function () use ($payrollRun, $notes) {
             $payrollRun->payrolls->each(function ($payroll) {
                 $payroll->cancel();
             });
@@ -352,10 +350,7 @@ use $notes) {
      */
     public function processPayment(Payroll $payroll, string $paymentMethod, ?string $reference = null, ?int $paidBy = null): void
     {
-        DB::transaction(function () use ($payroll;
-use $paymentMethod;
-use $reference;
-use $paidBy) {
+        DB::transaction(function () use ($payroll, $paymentMethod, $reference, $paidBy) {
             $payroll->update([
                 'payment_method' => $paymentMethod,
                 'payment_reference' => $reference,

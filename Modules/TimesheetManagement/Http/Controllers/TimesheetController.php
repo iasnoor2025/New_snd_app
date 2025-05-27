@@ -4,7 +4,7 @@ namespace Modules\TimesheetManagement\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -38,7 +38,8 @@ class TimesheetController extends Controller
 
         $timesheets = $query->latest()->paginate(10);
 
-        return Inertia::render('TimesheetManagement::Timesheets/Index', [
+        return Inertia::render('Timesheets/Index', [
+
             'timesheets' => $timesheets,
             'filters' => $request->only(['month', 'employee_id'])
         ]);
@@ -94,7 +95,7 @@ class TimesheetController extends Controller
                 });
         }
 
-        return Inertia::render('TimesheetManagement::Timesheets/Create', [
+        return Inertia::render('Timesheets/Create', [
             'employees' => $employees,
             'projects' => $projects,
             'rentals' => $rentals,
@@ -218,7 +219,7 @@ class TimesheetController extends Controller
             }]);
         }, 'project']);
 
-        return Inertia::render('TimesheetManagement::Timesheets/Show', [
+        return Inertia::render('Timesheets/Show', [
             'timesheet' => $timesheet,
         ]);
     }
@@ -231,7 +232,7 @@ class TimesheetController extends Controller
         $employees = Employee::orderBy('first_name')->get(['id', 'first_name', 'last_name']);
         $projects = Project::orderBy('name')->get(['id', 'name']);
 
-        return Inertia::render('TimesheetManagement::Timesheets/Edit', [
+        return Inertia::render('Timesheets/Edit', [
             'timesheet' => $timesheet,
             'employees' => $employees,
             'projects' => $projects,
@@ -423,7 +424,7 @@ class TimesheetController extends Controller
         // Get all employees for filter
         $employees = Employee::orderBy('first_name')->get(['id', 'first_name', 'last_name']);
 
-        return Inertia::render('TimesheetManagement::Reports/Monthly', [
+        return Inertia::render('Reports/Monthly', [
             'summary' => $summaryData,
             'employees' => $employees,
             'filters' => [
@@ -442,7 +443,7 @@ class TimesheetController extends Controller
         $employeeId = $user->employee->id ?? null;
 
         if (!$employeeId) {
-            return Inertia::render('TimesheetManagement::NoEmployeeRecord');
+            return Inertia::render('Reports/NoEmployeeRecord');
         }
 
         // Get current month dates
@@ -496,7 +497,7 @@ class TimesheetController extends Controller
             ];
         })->values()->all();
 
-        return Inertia::render('TimesheetManagement::Timesheets/Monthly', [
+        return Inertia::render('Timesheets/Monthly', [
             'calendar' => $calendarData,
             'summary' => [
                 'regularHours' => $totalRegularHours,

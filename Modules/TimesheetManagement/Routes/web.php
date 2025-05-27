@@ -23,7 +23,7 @@ use Modules\TimesheetManagement\Http\Controllers\TimesheetProjectController;
 use Modules\TimesheetManagement\Http\Controllers\TimesheetSettingController;
 use Inertia\Inertia;
 
-Route::prefix('hr/timesheets')->name('timesheets.')->middleware(['auth', 'verified'])->group(function () {
+Route::name('timesheets.')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard
     Route::get('/', [TimesheetController::class, 'index'])->name('index');
     Route::get('/dashboard', [TimesheetDashboardController::class, 'index'])->name('dashboard');

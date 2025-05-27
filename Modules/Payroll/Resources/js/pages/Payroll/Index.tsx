@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
-import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
-import { PageProps } from '@/Modules/Payroll/Resources/js/types';
-import { Payroll } from '@/Modules/Payroll/Resources/js/types/payroll';
-import { Employee } from '@/Modules/Payroll/Resources/js/types/employee';
-import { Button } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/table';
-import { Badge } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/dialog';
-import { Input } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/input';
-import { Label } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/select';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
+import { PageProps } from '../../../../../../resources/js/types';
+import { Payroll } from '../../../../../../resources/js/types/payroll'; 
+import { Employee } from '../../../../../../resources/js/types/employee';
+import { Button } from '../../../../../../resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../../../resources/js/components/ui/table';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '../../../../../../resources/js/components/ui/dialog';
+import { Input } from '../../../../../../resources/js/components/ui/input';
+import { Label } from '../../../../../../resources/js/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../../../resources/js/components/ui/select';
 import { format } from 'date-fns';
 
 interface Props extends PageProps {
@@ -36,14 +36,14 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('payrolls.generate'), {
+        post(route('payroll.generate'), {
             onSuccess: () => setShowModal(false),
         });
     };
 
     const handleFilter = (key: string, value: string) => {
         router.get(
-            route('payrolls.index'),
+            route('payroll.index'),
             { ...filters, [key]: value },
             { preserveState: true }
         );
@@ -68,7 +68,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
         <AdminLayout
             title="Payroll Management"
             breadcrumbs={[
-                { title: 'Payroll', href: route('payrolls.index') },
+                { title: 'Payroll', href: route('payroll.index') },
             ]}
             requiredPermission="payrolls.view"
         >
@@ -84,7 +84,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                             </Button>
                             <Button
                                 variant="outline"
-                                onClick={() => router.post(route('payrolls.generate-monthly'))}
+                                onClick={() => router.post(route('payroll.generate-monthly'))}
                             >
                                 Generate Monthly
                             </Button>
@@ -166,7 +166,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                                 <TableCell className="text-right">
                                                     <Button
                                                         variant="ghost"
-                                                        onClick={() => router.get(route('payrolls.show', { payroll: payroll.id }))}
+                                                        onClick={() => router.get(route('payroll.show', { payroll: payroll.id }))}
                                                     >
                                                         View
                                                     </Button>

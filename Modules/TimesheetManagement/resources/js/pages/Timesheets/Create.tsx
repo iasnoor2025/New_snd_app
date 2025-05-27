@@ -1,8 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm as useInertiaForm, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
-import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
-import { Button } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/button';
+import { PageProps, BreadcrumbItem } from '../../../../../../resources/js/types';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
+import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
   Card,
   CardContent,
@@ -10,33 +10,32 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/card';
+} from '../../../../../../resources/js/components/ui/card';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/form';
-import { Input } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/input';
-import { Textarea } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/select';
+} from '../../../../../../resources/js/components/ui/form';
+import { Input } from '../../../../../../resources/js/components/ui/input';
+import { Textarea } from '../../../../../../resources/js/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../../../resources/js/components/ui/select';
 import {
   ArrowLeft as ArrowLeftIcon,
   Calendar as CalendarIcon,
   Clock as ClockIcon
 } from 'lucide-react';
-import { useToast } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/use-toast';
+// import { useToast } from '../../../../../../resources/js/components/ui/toast';  // TODO: Fix this (use sonner)
 import { useForm as useReactHookForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/popover';
-import { Calendar } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../../../../resources/js/components/ui/popover';
+import { Calendar } from '../../../../../../resources/js/components/ui/calendar';
 import { format } from 'date-fns';
-import { sonnerToast } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/use-toast';
-import { EmployeeSelect } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/shared/EmployeeSelect';
+import { toast } from "sonner";
+import { route } from 'ziggy-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Dashboard', href: '/dashboard' },
@@ -211,7 +210,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
 
       // If validation fails, don't proceed with submission
       if (!isValid) {
-        sonnerToast.error("Please fill in all required fields");
+        toast.error("Please fill in all required fields");
         return;
       }
 
@@ -230,7 +229,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
       // Check for duplicate timesheet entry
       if (!values.bulk_mode) {
         try {
-          const response = await fetch(route('api.timesheets.check-duplicate'), {
+          const response = await fetch(route('api.timesheets.check-duplicate'), { // TODO: Fix this
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -245,7 +244,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
           const result = await response.json();
 
           if (result.exists) {
-            sonnerToast.error("A timesheet already exists for this employee on this date.");
+            toast.error("A timesheet already exists for this employee on this date.");
             form.setError('date', {
               type: 'manual',
               message: 'A timesheet already exists for this employee on this date.'
@@ -254,7 +253,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
           }
         } catch (error) {
           console.error('Error checking duplicate:', error);
-          sonnerToast.error("Error checking for duplicate timesheet");
+          toast.error("Error checking for duplicate timesheet");
           return;
         }
       }
@@ -276,7 +275,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
 
         // Ensure we have valid start and end dates
         if (!values.start_date || !values.end_date) {
-          sonnerToast.error("Start date and end date are required for bulk mode");
+          toast.error("Start date and end date are required for bulk mode");
           return;
         }
 
@@ -285,12 +284,12 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
           preserveState: true,
           preserveScroll: true,
           onSuccess: () => {
-            sonnerToast.success("Bulk timesheets created successfully");
+            toast.success("Bulk timesheets created successfully");
             form.reset();
             router.visit(route('timesheets.monthly'));
           },
           onError: (errors) => {
-            sonnerToast.error("Failed to create bulk timesheets. Please check the form for errors.");
+            toast.error("Failed to create bulk timesheets. Please check the form for errors.");
             Object.entries(errors).forEach(([field, message]) => {
               form.setError(field as any, { type: 'manual', message: message as string });
             });
@@ -302,12 +301,12 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
           preserveState: true,
           preserveScroll: true,
           onSuccess: () => {
-            sonnerToast.success("Timesheet created successfully");
+            toast.success("Timesheet created successfully");
             form.reset();
             router.visit(route('timesheets.index'));
           },
           onError: (errors) => {
-            sonnerToast.error("Failed to create timesheet. Please check the form for errors.");
+            toast.error("Failed to create timesheet. Please check the form for errors.");
             Object.entries(errors).forEach(([field, message]) => {
               form.setError(field as any, { type: 'manual', message: message as string });
             });
@@ -316,7 +315,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      sonnerToast.error("An unexpected error occurred while submitting the form");
+      toast.error("An unexpected error occurred while submitting the form");
     }
   };
 
@@ -471,9 +470,6 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>Bulk Entry Mode</FormLabel>
-                          <FormDescription>
-                            Create timesheets for multiple days at once
-                          </FormDescription>
                         </div>
                       </FormItem>
                     )}
@@ -542,9 +538,6 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                                 </PopoverContent>
                               </Popover>
                               <FormMessage />
-                              <FormDescription>
-                                All days between start and end date will have timesheets created
-                              </FormDescription>
                             </FormItem>
                           )}
                         />
@@ -561,9 +554,6 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                             </FormControl>
                             <div className="space-y-1 leading-none">
                               <FormLabel>Custom Overtime Per Day</FormLabel>
-                              <FormDescription>
-                                Specify different overtime hours for each day
-                              </FormDescription>
                             </div>
                           </FormItem>
                         </div>
@@ -720,11 +710,32 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     </div>
                   )}
 
-                  <EmployeeSelect
-                    form={form}
+                  <FormField
+                    control={form.control}
                     name="employee_id"
-                    employees={employees}
-                    required
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Employee</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select employee" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {employees.map((employee) => (
+                              <SelectItem key={employee.id} value={employee.id.toString()}>
+                                {employee.first_name} {employee.last_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
 
                   <FormField
@@ -756,11 +767,8 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           </PopoverContent>
                         </Popover>
                         {isBulkMode && (
-                          <FormDescription>
-                            Not used in bulk mode - use date range above
-                          </FormDescription>
+                          <FormMessage />
                         )}
-                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -790,9 +798,6 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                             required
                           />
                         </FormControl>
-                        <FormDescription>
-                          Regular hours worked (excluding overtime)
-                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -807,9 +812,6 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                         <FormControl>
                           <Input type="number" step="0.5" min="0" max="24" placeholder="0" {...field} />
                         </FormControl>
-                        <FormDescription>
-                          Additional hours beyond regular schedule
-                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -927,7 +929,3 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
     </AdminLayout>
   );
 }
-
-</Input>
-</Input>
-

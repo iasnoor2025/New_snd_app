@@ -100,7 +100,47 @@ class AdminUserSeeder extends Seeder
             'customer_documents.delete',
             // Customer document approval
             'customer_documents.approve',
-            // Customer document approval
+            // Payroll management
+            'payrolls.view',
+            'payrolls.create',
+            'payrolls.edit',
+            'payrolls.delete',
+            'payrolls.approve',
+            'payrolls.approve-payment',
+            'payrolls.cancel',
+            'payrolls.generate-monthly',
+            'payrolls.generate',
+            'payrolls.approve-run',
+            'payrolls.reject-run',
+            'payrolls.approve-item',
+            'payrolls.reject-item',
+            'payrolls.approve-item-payment',
+            'payrolls.reject-item-payment',
+            // Project management
+            'projects.view',
+            'projects.create',
+            'projects.edit',
+            'projects.delete',
+            'projects.approve',
+            'projects.approve-payment',
+            'projects.cancel',
+            // Equipment management
+            'equipments.view',
+            'equipments.create',
+            'equipments.edit',
+            'equipments.delete',
+            'equipments.approve',
+            // Equipment approval
+            'equipments.approve-payment',
+            'equipments.cancel',
+            // Equipment document management
+            'equipment_documents.view',
+            'equipment_documents.create',
+            'equipment_documents.edit',
+            'equipment_documents.delete',
+     
+
+
 
         ];
 

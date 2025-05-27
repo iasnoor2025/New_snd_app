@@ -7,7 +7,7 @@ use Modules\Employee\Domain\Models\Employee;
 use Modules\Payroll\Domain\Models\Payroll;
 use Modules\Payroll\Domain\Models\PayrollItem;
 use Modules\Payroll\Domain\Models\PayrollRun;
-use Modules\Payroll\app\Services\PayrollService;
+use Modules\Payroll\Services\PayrollService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
