@@ -88,8 +88,14 @@ export default function Edit({ project, customers, locations }: Props) {
         { value: 'cancelled', label: 'Cancelled' }
     ];
 
+    const breadcrumbs = [
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: 'Projects', href: '/projects' },
+        { title: `Edit ${project.name}`, href: window.location.pathname },
+    ];
+
     return (
-        <AdminLayout title={`Edit ${project.name}`}>
+        <AdminLayout title={`Edit ${project.name}`} breadcrumbs={breadcrumbs} requiredPermission="projects.edit">
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col space-y-2">
                     <Link href={route('projects.show', project.id)} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">

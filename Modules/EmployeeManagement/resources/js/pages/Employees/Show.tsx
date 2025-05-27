@@ -782,8 +782,14 @@ export default function Show({
     }
   };
 
+  const breadcrumbs = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Employees', href: '/employees' },
+    { title: employee.name, href: window.location.pathname },
+  ];
+
   return (
-    <AdminLayout title="Employee Details" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+    <AdminLayout title={employee.name} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
       <Head title="Employee Details" />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

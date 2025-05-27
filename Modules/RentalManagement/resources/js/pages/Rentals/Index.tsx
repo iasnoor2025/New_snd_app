@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 // import { PageProps } from '@/types'; // Uncomment and adjust if needed
-import AdminLayout from '@/layouts/AdminLayout';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
 import { format } from "date-fns";
 // import { usePermission } from '@/Modules/RentalManagement/Resources/js/hooks/usePermission'; // Not found, comment or replace if needed
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '../../../../../../resources/js/components/ui/tooltip';
 import { toast } from "sonner";
 import axios from "axios";
 
 // Shadcn UI Components
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '../../../../../../resources/js/components/ui/button';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -18,7 +18,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '../../../../../../resources/js/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -26,19 +26,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '../../../../../../resources/js/components/ui/dialog';
 import {
   Avatar,
   AvatarFallback,
-} from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
+  AvatarImage,
+} from '../../../../../../resources/js/components/ui/avatar';
+import { Input } from '../../../../../../resources/js/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '../../../../../../resources/js/components/ui/select';
 import {
   Table,
   TableBody,
@@ -46,7 +47,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '../../../../../../resources/js/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,9 +55,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import CreateButton from '@/components/shared/CreateButton';
-import CrudButtons from '@/components/shared/CrudButtons';
+} from '../../../../../../resources/js/components/ui/dropdown-menu';
+import CreateButton from '../../../../../../resources/js/components/shared/CreateButton';
+import CrudButtons from '../../../../../../resources/js/components/shared/CrudButtons';
 
 // Icons
 import {
@@ -89,6 +90,11 @@ interface Props extends PageProps {
     end_date?: string;
   };
 }
+
+const breadcrumbs  = [
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Rentals', href: '/rentals' },
+];
 
 export default function Index({ auth, rentals, filters = {} }: Props) {
   // const { hasPermission } = usePermission();
@@ -411,7 +417,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
   };
 
   return (
-    <AdminLayout>
+    <AdminLayout title="Rentals" breadcrumbs={breadcrumbs} requiredPermission="rentals.view">
       <Head title="Rentals Management" />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

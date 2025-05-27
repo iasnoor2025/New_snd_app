@@ -104,15 +104,18 @@ export default function Edit({ auth, employee, users, positions }: Props) {
     setActiveTab(value);
   };
 
+  const breadcrumbs = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Employees', href: '/employees' },
+    { title: `Edit ${employee.name}`, href: window.location.pathname },
+  ];
+
   return (
     <AdminLayout
       user={auth.user}
-      title="Edit Employee"
-      breadcrumbs={[
-        { title: 'Dashboard', href: '/dashboard' },
-        { title: 'Employees', href: '/employees' },
-        { title: 'Edit Employee', href: `/employees/${employee.id}/edit` }
-      ]}
+      title={`Edit Employee: ${employee.name}`}
+      breadcrumbs={breadcrumbs}
+      requiredPermission="employees.edit"
       header={
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

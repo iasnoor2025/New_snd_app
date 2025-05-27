@@ -43,14 +43,8 @@ interface Props extends PageProps {
 }
 
 const breadcrumbs = [
-  {
-    title: 'Dashboard',
-    href: window.route ? window.route('dashboard') : '/dashboard',
-  },
-  {
-    title: 'Equipment',
-    href: window.route ? window.route('equipment.index') : '/equipment',
-  },
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Equipment', href: '/equipment' },
 ];
 
 export default function Index({ equipment, categories = [], statuses = {}, filters = {} }: Props) {

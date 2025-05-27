@@ -1,15 +1,12 @@
 ﻿import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import type { PageProps } from '@/resources/js/types';
-import AdminLayout from '@/resources/js/layouts/AdminLayout';
-import { Equipment, MaintenanceRecord, RentalItem, ProjectEquipment } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { formatCurrency, formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
-import { Button } from '@/resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/resources/js/components/ui/card';
-import { Badge } from '@/resources/js/components/ui/badge';
-import { Separator } from '@/resources/js/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/resources/js/components/ui/tabs';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
+import { formatCurrency } from '../../../../../../resources/js/utils/format';
+import { Button } from '../../../../../../resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../../../../resources/js/components/ui/card';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { Separator } from '../../../../../../resources/js/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../../resources/js/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -17,16 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/resources/js/components/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/resources/js/components/ui/dialog';
+} from '../../../../../../resources/js/components/ui/table';
 import {
   ArrowLeft,
   Pencil,
@@ -53,23 +41,11 @@ import {
   Plus,
   History
 } from 'lucide-react';
-import { ScrollArea } from '@/resources/js/components/ui/scroll-area';
-import { DocumentManager } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/DocumentManager';
-import { MediaLibrary } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/media-library/MediaLibrary';
-import { EquipmentDocumentCard } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/EquipmentDocumentCard';
-import { DocumentCard } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/DocumentCard';
-import { DocumentSection } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/DocumentSection';
-import { DocumentExpiryTracker } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/DocumentExpiryTracker';
-import { DocumentUploadDialog } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/DocumentUploadDialog';
-import { AdditionalDocumentsList } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/documents/AdditionalDocumentsList';
-import axios from 'axios';
-import { Input } from '@/resources/js/components/ui/input';
-import { Label } from '@/resources/js/components/ui/label';
-import { Progress } from '@/resources/js/components/ui/progress';
-import { cn } from '@/resources/js/lib/utils';
-import { ToastService } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/ToastManager';
+import { Input } from '../../../../../../resources/js/components/ui/input';
+import { Label } from '../../../../../../resources/js/components/ui/label';
+import { cn } from '../../../../../../resources/js/lib/utils';
 
-interface Props extends PageProps {
+interface Props {
   equipment: Equipment;
   maintenanceRecords: {
     data: MaintenanceRecord[];
@@ -86,21 +62,12 @@ interface Props extends PageProps {
 }
 
 const breadcrumbs = [
-  {
-    title: 'Dashboard',
-    href: window.route ? window.route('dashboard') : '/dashboard',
-  },
-  {
-    title: 'Equipment',
-    href: window.route ? window.route('equipment.index') : '/equipment',
-  },
-  {
-    title: 'Equipment Details',
-    href: '',
-  },
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Equipment', href: '/equipment' },
+  { title: 'Equipment Details', href: window.location.pathname },
 ];
 
-export default function Show({ auth, equipment, maintenanceRecords = { data: [], total: 0 }, rentalItems = { data: [], total: 0 }, projectHistory = { data: [], total: 0 } }: Props) {
+export default function Show({ equipment, maintenanceRecords = { data: [], total: 0 }, rentalItems = { data: [], total: 0 }, projectHistory = { data: [], total: 0 } }: Props) {
   const { toast } = useToast();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [mediaItems, setMediaItems] = React.useState<Array<{ id: number; file_name: string; collection: string; original_url: string }>>([]);
@@ -302,9 +269,7 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
           'Content-Type': 'multipart/form-data',
         },
         onUploadProgress: (progressEvent) => {
-          const progress = progressEvent.total;
-            ? Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            : 0;
+          const progress = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
           setUploadProgress(prev => ({
             ...prev,
             [fileKey]: progress
@@ -409,463 +374,63 @@ export default function Show({ auth, equipment, maintenanceRecords = { data: [],
 
   return (
     <AdminLayout
-      title={`Equipment: ${equipment.name}`}
+      title="Equipment Details"
       breadcrumbs={breadcrumbs}
       requiredPermission="equipment.view"
     >
-      <Head title={`Equipment: ${equipment.name}`} />
-
+      <Head title="Equipment Details" />
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <div>
+            <div>
               <CardTitle className="text-2xl font-bold">
-                {equipment.name}-{getStatusBadge(equipment.status)}
+                Equipment Details
               </CardTitle>
               <CardDescription className="mt-1">
-                {equipment.model} {equipment.door_number ? `- Door No: ${equipment.door_number}` : ''}
+                {/* Add more details as needed */}
               </CardDescription>
-              </div>
-              <div className="flex space-x-2">
-                <Button variant="outline" asChild>
-                  <Link href={window.route('equipment.index')}>
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Equipment List
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
+            </div>
+            <div className="flex space-x-2">
+              <Button variant="outline" asChild>
+                <Link href={window.route('equipment.index')}>
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Equipment List
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
                 <Link href={window.route('equipment.edit', { equipment: equipment.id })}>
-                    <Pencil className="mr-2 h-4 w-4" />
                   Edit
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
-                <Link href={window.route('equipment.maintenance.create', { equipment: equipment.id })}>
-                    <Wrench className="mr-2 h-4 w-4" />
-                  Maintenance
-                  </Link>
-                </Button>
-              <Button variant="destructive" onClick={() => setIsDeleteDialogOpen(true)}>
-                      <Trash className="mr-2 h-4 w-4" />
-                      Delete
-                    </Button>
+                </Link>
+              </Button>
             </div>
           </CardHeader>
-        </Card>
-
-        <Tabs defaultValue="details" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="details">Equipment Details</TabsTrigger>
-            <TabsTrigger value="maintenance">
-              Maintenance Records ({maintenanceRecords.total})
-            </TabsTrigger>
-            <TabsTrigger value="rentals">
-              Rental History ({processRentalItems.total})
-            </TabsTrigger>
-            <TabsTrigger value="projects">
-              Project History ({projectHistory.total})
-            </TabsTrigger>
-            <TabsTrigger value="documents">
-              Documents
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="details" className="space-y-4">
+          <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Settings className="mr-2 h-5 w-5" />
-                    Basic Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Name</div>
-                    <div className="col-span-2">{equipment.name}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Model</div>
-                    <div className="col-span-2">{equipment.model}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Serial Number</div>
-                    <div className="col-span-2">{equipment.serial_number}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Door Number</div>
-                    <div className="col-span-2">{equipment.door_number || 'â€”'}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Status</div>
-                    <div className="col-span-2">{getStatusBadge(equipment.status)}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Description</div>
-                    <div className="col-span-2">{equipment.description || 'â€”'}</div>
-                </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Tag className="mr-2 h-5 w-5" />
-                    Classification
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Category</div>
-                    <div className="col-span-2">{equipment.category || 'â€”'}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Location</div>
-                    <div className="col-span-2">{equipment.location || 'â€”'}</div>
-                </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Coins className="mr-2 h-5 w-5" />
-                    Financial Details
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Daily Rate</div>
-                    <div className="col-span-2">{formatCurrency(equipment.daily_rate)}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Weekly Rate</div>
-                    <div className="col-span-2">{formatCurrency(equipment.weekly_rate)}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Monthly Rate</div>
-                    <div className="col-span-2">{formatCurrency(equipment.monthly_rate)}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Purchase Cost</div>
-                    <div className="col-span-2">{formatCurrency(equipment.purchase_cost)}</div>
-                </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Purchase Date</div>
-                    <div className="col-span-2">{formatDate(equipment.purchase_date)}</div>
-                </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Maintenance Schedule
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Last Maintenance</div>
-                    <div className="col-span-2">{equipment.last_maintenance_date ? formatDate(equipment.last_maintenance_date) : 'â€”'}</div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="font-medium">Next Maintenance</div>
-                    <div className="col-span-2">{equipment.next_maintenance_date ? formatDate(equipment.next_maintenance_date) : 'â€”'}</div>
-                  </div>
-                  {equipment.notes && (
-                    <div className="mt-4">
-                      <div className="font-medium mb-2">Notes</div>
-                      <div className="whitespace-pre-line px-4 py-3 bg-muted rounded-md">
-                        {equipment.notes}
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <div>
+                <strong>Name:</strong> {equipment.name}
+              </div>
+              <div>
+                <strong>Model:</strong> {equipment.model}
+              </div>
+              <div>
+                <strong>Serial Number:</strong> {equipment.serial_number}
+              </div>
+              <div>
+                <strong>Door Number:</strong> {equipment.door_number || '—'}
+              </div>
+              <div>
+                <strong>Status:</strong> {equipment.status}
+              </div>
+              <div>
+                <strong>Category:</strong> {equipment.category || '—'}
+              </div>
+              <div>
+                <strong>Daily Rate:</strong> {formatCurrency(equipment.daily_rate)}
+              </div>
+              {/* Add more fields as needed */}
             </div>
-          </TabsContent>
-
-                <TabsContent value="maintenance">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                <div>
-                  <CardTitle>Maintenance History</CardTitle>
-                  <CardDescription>
-                    Recent maintenance activities for this equipment
-                  </CardDescription>
-                </div>
-                <Button variant="outline" asChild>
-                  <Link href={window.route('equipment.maintenance.index', { equipment: equipment.id })}>
-                    <Wrench className="mr-2 h-4 w-4" />
-                    View Full Maintenance Dashboard
-                  </Link>
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Cost</TableHead>
-                        <TableHead>Performed By</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {maintenanceRecords.data.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={6} className="text-center py-4">
-                            No maintenance records found
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        maintenanceRecords.data.map((record) => (
-                          <TableRow key={record.id}>
-                            <TableCell>{formatDate(record.maintenance_date)}</TableCell>
-                            <TableCell>{record.maintenance_type}</TableCell>
-                            <TableCell>{getMaintenanceStatusBadge(record.status)}</TableCell>
-                            <TableCell>{formatCurrency(record.cost)}</TableCell>
-                            <TableCell>{record.performed_by}</TableCell>
-                            <TableCell className="text-right">
-                              <Button variant="outline" size="sm" asChild>
-                                <Link href={window.route('equipment.maintenance.show', [equipment.id, record.id])}>
-                                  View
-                                </Link>
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-                <div className="mt-4 flex justify-end">
-                  <Button asChild>
-                    <Link href={window.route('equipment.maintenance.create', { equipment: equipment.id })}>
-                      <Wrench className="mr-2 h-4 w-4" />
-                      Schedule Maintenance
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-                </TabsContent>
-
-          <TabsContent value="rentals">
-            <Card>
-              <CardHeader>
-                <CardTitle>Rental History</CardTitle>
-                <CardDescription>
-                  History of this equipment's rentals
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Rental #</TableHead>
-                        <TableHead>Customer</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead>End Date</TableHead>
-                        <TableHead>Rate</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {processRentalItems.data.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={7} className="text-center py-4">
-                            No rental history found
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        processRentalItems.data.map((item) => (
-                          <TableRow key={item.id}>
-                            <TableCell>{item.rental?.rental_number || 'â€”'}</TableCell>
-                            <TableCell>{item.rental?.customer?.company_name || 'â€”'}</TableCell>
-                            <TableCell>{formatDate(item.rental?.start_date)}</TableCell>
-                            <TableCell>{formatDate(item.rental?.expected_end_date)}</TableCell>
-                            <TableCell>{formatCurrency(item.rate)} / {item.rate_type}</TableCell>
-                            <TableCell>
-                              <Badge variant={item.rental?.status === 'active' ? 'default' : 'secondary'}>
-                                {item.rental?.status || 'Unknown'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              {item.rental?.id && (
-                                <Button variant="outline" size="sm" asChild>
-                                  <Link href={window.route('rentals.show', item.rental.id)}>
-                                    View
-                                  </Link>
-                                </Button>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-          <TabsContent value="projects">
-            <Card>
-              <CardHeader>
-                <CardTitle>Project History</CardTitle>
-                <CardDescription>
-                  History of this equipment's usage in projects
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Project</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead>End Date</TableHead>
-                        <TableHead>Usage Hours</TableHead>
-                        <TableHead>Hourly Rate</TableHead>
-                        <TableHead>Total Cost</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {projectHistory.data.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={7} className="text-center py-4">
-                            No project history found
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        projectHistory.data.map((item) => (
-                          <TableRow key={item.id}>
-                            <TableCell>{item.project?.name || 'â€”'}</TableCell>
-                            <TableCell>{formatDate(item.start_date)}</TableCell>
-                            <TableCell>{formatDate(item.end_date)}</TableCell>
-                            <TableCell>{item.usage_hours}</TableCell>
-                            <TableCell>{formatCurrency(item.hourly_rate)}</TableCell>
-                            <TableCell>{formatCurrency(item.total_cost)}</TableCell>
-                            <TableCell className="text-right">
-                              {item.project?.id && (
-                                <Button variant="outline" size="sm" asChild>
-                                  <Link href={window.route('projects.show', item.project.id)}>
-                                    View Project
-                                  </Link>
-                                </Button>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="documents" className="mt-6 space-y-6">
-            {/* Legal Documents Section */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Legal Documents</CardTitle>
-                    <CardDescription>Official registration and legal documents</CardDescription>
-                  </div>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                    Required Documents
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <EquipmentDocumentCard
-                    title="Istimara"
-                    documentNumber={equipment.door_number}
-                    documentType="istimara"
-                    equipmentId={equipment.id}
-                    icon={<IdCard className="h-4 w-4 text-muted-foreground" />}
-                    previewSize="id_card"
-                    documentName="Istimara"
-                    onUploadSuccess={() => {
-                      // Refresh media items
-                      axios.get(window.route('equipment.media-library', { equipment: equipment.id }))
-                        .then(response => {
-                          setMediaItems(response.data.data || []);
-                        })
-                        .catch(console.error);
-                    }}
-                    onDeleteSuccess={() => {
-                      // Refresh media items
-                      axios.get(window.route('equipment.media-library', { equipment: equipment.id }))
-                        .then(response => {
-                          setMediaItems(response.data.data || []);
-                        })
-                        .catch(console.error);
-                    }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Additional Documents Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Additional Documents</CardTitle>
-                <CardDescription>
-                  Upload and manage additional documents for this equipment.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <MediaLibrary
-                  model="Equipment"
-                  modelId={equipment.id}
-                  collection="documents"
-                  maxFileSize={10}
-                  acceptedFileTypes={['image/*', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']}
-                  allowMultiple={true}
-                  readOnly={!canManageDocuments}
-                  title="Equipment Documents"
-                  description="Upload and manage documents for this equipment"
-                  onClose={() => {}}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Add document preview dialog */}
-        {renderDocumentPreviewDialog()}
-
-        {/* Delete Confirmation Dialog */}
-        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you sure you want to delete this equipment?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently remove the equipment and all associated records.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button variant="destructive" onClick={handleDelete}>
-                Delete
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          </CardContent>
+        </Card>
       </div>
     </AdminLayout>
   );

@@ -106,8 +106,14 @@ export default function Index({ projects }: Props) {
         });
     }, [projects, statusFilter, searchQuery]);
 
+    const breadcrumbs = [
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: 'Projects', href: '/projects' },
+    ];
+
     return (
-        <AdminLayout title="Projects">
+        <AdminLayout title="Projects" breadcrumbs={breadcrumbs} requiredPermission="projects.view">
+
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex justify-between items-center">
                     <div>

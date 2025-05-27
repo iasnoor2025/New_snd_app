@@ -73,8 +73,14 @@ export default function Create({ customers, locations }: Props) {
         { value: 'cancelled', label: 'Cancelled' }
     ];
 
+    const breadcrumbs = [
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: 'Projects', href: '/projects' },
+        { title: 'Create Project', href: window.location.pathname },
+    ];
+
     return (
-        <AdminLayout title="Create Project">
+        <AdminLayout title="Create Project" breadcrumbs={breadcrumbs} requiredPermission="projects.create">
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col space-y-2">
                     <Link href={window.route('projects.index')} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">

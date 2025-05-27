@@ -486,8 +486,14 @@ export default function Show({ project, manpower = [], equipment = [], materials
         }
     };
 
+    const breadcrumbs = [
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: 'Projects', href: '/projects' },
+        { title: project.name, href: window.location.pathname },
+    ];
+
     return (
-        <AdminLayout title={project.name}>
+        <AdminLayout title={project.name} breadcrumbs={breadcrumbs} requiredPermission="projects.view">
             <div className="container mx-auto py-4 px-4 sm:px-6 space-y-4">
                 {/* Header Section */}
                 <div className="bg-white dark:bg-gray-900 shadow-sm rounded-lg p-6 border border-gray-100 dark:border-gray-800">

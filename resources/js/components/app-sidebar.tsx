@@ -40,24 +40,44 @@ import type { PageProps } from '../types';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-// Map module names to their respective icon and route
-const moduleMap: Record<string, { icon: any; route: string }> = {
-    Core: { icon: Network, route: '/core' },
-    EmployeeManagement: { icon: UserCog, route: '/employees' },
-    LeaveManagement: { icon: ClipboardList, route: '/leave-requests' },
-    TimesheetManagement: { icon: Clock, route: '/timesheets' },
-    Payroll: { icon: DollarSign, route: '/payrolls' },
-    ProjectManagement: { icon: Briefcase, route: '/projects' },
-    RentalManagement: { icon: Calendar, route: '/rentals' },
-    EquipmentManagement: { icon: Truck, route: '/equipment' },
-    Settings: { icon: Settings, route: '/settings' },
-    Notifications: { icon: Bell, route: '/notifications' },
-    Reporting: { icon: BarChart, route: '/reports' },
-    MobileBridge: { icon: Smartphone, route: '/mobile-bridge' },
-    Localization: { icon: Globe, route: '/localization' },
-    CustomerManagement: { icon: Users, route: '/customers' },
-    AuditCompliance: { icon: FolderCheck, route: '/audit' },
-    API: { icon: FileDigit, route: '/api' }
+// Map module names to their respective icon, route, and required permission
+const moduleMap: Record<string, { icon: any; route: string; permission: string }> = {
+    Core: { icon: Network, route: '/core', permission: 'core.view' },
+    EmployeeManagement: { icon: UserCog, route: '/employees', permission: 'employees.view' },
+    LeaveManagement: { icon: ClipboardList, route: '/leave-requests', permission: 'leave-requests.view' },
+    TimesheetManagement: { icon: Clock, route: '/timesheets', permission: 'timesheets.view' },
+    Payroll: { icon: DollarSign, route: '/payrolls', permission: 'payrolls.view' },
+    ProjectManagement: { icon: Briefcase, route: '/projects', permission: 'projects.view' },
+    RentalManagement: { icon: Calendar, route: '/rentals', permission: 'rentals.view' },
+    EquipmentManagement: { icon: Truck, route: '/equipment', permission: 'equipment.view' },
+    Settings: { icon: Settings, route: '/settings', permission: 'settings.view' },
+    Notifications: { icon: Bell, route: '/notifications', permission: 'notifications.view' },
+    Reporting: { icon: BarChart, route: '/reports', permission: 'reports.view' },
+    MobileBridge: { icon: Smartphone, route: '/mobile-bridge', permission: 'mobile-bridge.view' },
+    Localization: { icon: Globe, route: '/localization', permission: 'localization.view' },
+    CustomerManagement: { icon: Users, route: '/customers', permission: 'customers.view' },
+    AuditCompliance: { icon: FolderCheck, route: '/audit', permission: 'audit.view' },
+    API: { icon: FileDigit, route: '/api', permission: 'api.view' }
+};
+
+// Map module keys to human-friendly display names
+const moduleDisplayNames: Record<string, string> = {
+    Core: 'Core',
+    EmployeeManagement: 'Employee Management',
+    LeaveManagement: 'Leave Management',
+    TimesheetManagement: 'Timesheet Management',
+    Payroll: 'Payroll',
+    ProjectManagement: 'Project Management',
+    RentalManagement: 'Rental Management',
+    EquipmentManagement: 'Equipment Management',
+    Settings: 'Settings',
+    Notifications: 'Notifications',
+    Reporting: 'Reporting',
+    MobileBridge: 'Mobile Bridge',
+    Localization: 'Localization',
+    CustomerManagement: 'Customer Management',
+    AuditCompliance: 'Audit & Compliance',
+    API: 'API',
 };
 
 export function AppSidebar() {
@@ -69,86 +89,54 @@ export function AppSidebar() {
 
     // Check if user is admin directly from auth data
     const isAdmin = auth?.user && 'roles' in auth.user && auth.user.roles
-        ? auth.user.roles.some(role => role.name === 'admin')
+        ? auth.user.roles.some((role: any) =>
+            (typeof role === 'string' && role === 'admin') ||
+            (typeof role === 'object' && role.name === 'admin')
+        )
         : false;
+
+    console.log('AppSidebar: user roles', auth?.user?.roles);
+    console.log('AppSidebar: isAdmin', isAdmin);
 
     // Check if user is a customer
     const isCustomer = auth?.user && 'is_customer' in auth.user
         ? auth.user.is_customer
         : false;
 
-    // Load enabled modules from modules_statuses.json
+    // Permission-based sidebar logic
     useEffect(() => {
-        const fetchModules = async () => {
-            try {
-                const items: NavItem[] = [];
-                // Add Dashboard as first item
+        const items: NavItem[] = [];
+        // Add Dashboard as first item
+        items.push({
+            title: 'Dashboard',
+            href: '/dashboard',
+            icon: LayoutGrid,
+        });
+        // Get permissions from auth
+        const permissions: string[] = (auth?.permissions || []);
+        // Admins see all modules
+        if (isAdmin) {
+            Object.entries(moduleMap).forEach(([module, mapInfo]) => {
                 items.push({
-                    title: 'Dashboard',
-                    href: '/dashboard',
-                    icon: LayoutGrid,
+                    title: moduleDisplayNames[module] || module,
+                    href: mapInfo.route,
+                    icon: mapInfo.icon,
                 });
-
-                // Add default modules
-                const defaultModules = ['EmployeeManagement', 'ProjectManagement', 'Settings'];
-
-                if (isAdmin) {
-                    // Admin: show all modules
-                    Object.entries(moduleMap).forEach(([module, mapInfo]) => {
-                        items.push({
-                            title: module.replace(/([A-Z])/g, ' $1').trim(),
-                            href: mapInfo.route,
-                            icon: mapInfo.icon,
-                        });
+            });
+        } else {
+            Object.entries(moduleMap).forEach(([module, mapInfo]) => {
+                if (permissions.includes(mapInfo.permission)) {
+                    items.push({
+                        title: moduleDisplayNames[module] || module,
+                        href: mapInfo.route,
+                        icon: mapInfo.icon,
                     });
-                } else {
-                    // Non-admin: try to load modules status, fallback to hardcoded list
-                    try {
-                        // Using axios directly instead of fetch to avoid parsing issues
-                        // Just use the hardcoded list for now since we know all modules are enabled
-                        Object.keys(moduleMap).forEach(module => {
-                            items.push({
-                                title: module.replace(/([A-Z])/g, ' $1').trim(),
-                                href: moduleMap[module].route,
-                                icon: moduleMap[module].icon,
-                            });
-                        });
-                    } catch (jsonError) {
-                        console.error('Failed to load modules, using defaults:', jsonError);
-                        defaultModules.forEach(module => {
-                            if (module in moduleMap) {
-                                items.push({
-                                    title: module.replace(/([A-Z])/g, ' $1').trim(),
-                                    href: moduleMap[module].route,
-                                    icon: moduleMap[module].icon,
-                                });
-                            }
-                        });
-                    }
                 }
-
-                setModuleItems(items);
-            } catch (error) {
-                console.error('Critical failure in module loading:', error);
-                // Absolute fallback
-                setModuleItems([
-                    {
-                        title: 'Dashboard',
-                        href: '/dashboard',
-                        icon: LayoutGrid,
-                    },
-                    {
-                        title: 'Employee Management',
-                        href: '/employees',
-                        icon: UserCog,
-                    }
-                ]);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchModules();
-    }, [isAdmin]);
+            });
+        }
+        setModuleItems(items);
+        setIsLoading(false);
+    }, [isAdmin, auth?.permissions]);
 
     // Add Customer Portal link for customers
     useEffect(() => {

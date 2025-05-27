@@ -417,9 +417,17 @@ export default function Create({ users, positions, employee, isEditing = false }
     }
   };
 
+  const breadcrumbs = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Employees', href: '/employees' },
+    { title: 'Create Employee', href: window.location.pathname },
+  ];
+
   return (
     <AdminLayout
       title={isEditing ? "Edit Employee" : "Create Employee"}
+      breadcrumbs={breadcrumbs}
+      requiredPermission="employees.create"
     >
       <Head title={isEditing ? "Edit Employee" : "Create Employee"} />
 

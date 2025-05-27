@@ -38,15 +38,9 @@ import Permission from '@/components/Permission';
 import { debounce } from 'lodash';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const breadcrumbs: BreadcrumbItem[] = [
-  {
-    title: 'Dashboard',
-    href: '/dashboard',
-  },
-  {
-    title: 'Employees',
-    href: '/employees',
-  },
+const breadcrumbs = [
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Employees', href: '/employees' },
 ];
 
 interface Props extends PageProps {

@@ -79,18 +79,9 @@ const equipmentSchema = z.object({
 type EquipmentFormValues = z.infer<typeof equipmentSchema>;
 
 const breadcrumbs = [
-  {
-    title: 'Dashboard',
-    href: window.route ? window.route('dashboard') : '/dashboard',
-  },
-  {
-    title: 'Equipment',
-    href: window.route ? window.route('equipment.index') : '/equipment',
-  },
-  {
-    title: 'Create Equipment',
-    href: '',
-  },
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Equipment', href: '/equipment' },
+  { title: 'Create Equipment', href: window.location.pathname },
 ];
 
 // The Create Equipment Form component (keeping all existing fields)
