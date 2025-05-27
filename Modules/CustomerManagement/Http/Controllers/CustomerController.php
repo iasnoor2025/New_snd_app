@@ -49,7 +49,7 @@ class CustomerController extends Controller
         $customers = $query->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Customers/Index ', [
+        return Inertia::render('Customers/Index', [
             'customers' => $customers,
             'filters' => $request->only(['search', 'status'])
         ]);

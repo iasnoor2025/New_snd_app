@@ -3,7 +3,7 @@
 namespace Modules\Payroll\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Employee\Domain\Models\Employee;
+use Modules\EmployeeManagement\Domain\Models\Employee;
 use Modules\Payroll\Domain\Models\Payroll;
 use Modules\Payroll\Domain\Models\PayrollItem;
 use Modules\Payroll\Domain\Models\PayrollRun;
@@ -44,7 +44,9 @@ class PayrollController extends Controller
             });
 
         $payrolls = $query->latest()->paginate(10);
-        $employees = Employee::where('status', 'active')->get(['id', 'name']);
+        $employees = Employee::where('status', 'active')->get(['id', 'first_name', 'middle_name', 'last_name'])->append('name')->filter(function ($employee) {
+            return !empty($employee->id) && !empty($employee->name);
+        })->values();
 
         return Inertia::render('Payroll/Index', [
             'payrolls' => $payrolls,

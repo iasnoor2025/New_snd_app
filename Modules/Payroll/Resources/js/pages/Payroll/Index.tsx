@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
 import { PageProps } from '../../../../../../resources/js/types';
-import { Payroll } from '../../../../../../resources/js/types/payroll'; 
-import { Employee } from '../../../../../../resources/js/types/employee';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../../../resources/js/components/ui/table';
@@ -11,8 +9,9 @@ import { Badge } from '../../../../../../resources/js/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '../../../../../../resources/js/components/ui/dialog';
 import { Input } from '../../../../../../resources/js/components/ui/input';
 import { Label } from '../../../../../../resources/js/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../../../resources/js/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../../../resources/js/components/ui/select';
 import { format } from 'date-fns';
+import { route } from 'ziggy-js';
 
 interface Props extends PageProps {
     payrolls: {
@@ -27,6 +26,28 @@ interface Props extends PageProps {
     };
     hasRecords: boolean;
 }
+
+// Inline type definitions for Payroll and Employee
+
+type Employee = {
+    id: number;
+    name: string;
+    [key: string]: any;
+};
+
+type Payroll = {
+    id: number;
+    employee: Employee;
+    salary_month: string;
+    base_salary: number;
+    overtime_amount: number;
+    bonus: number;
+    deduction: number;
+    advance_deduction?: number;
+    net_salary: number;
+    status: string;
+    [key: string]: any;
+};
 
 export default function Index({ auth, payrolls, employees, filters, hasRecords }: Props) {
     const [showModal, setShowModal] = useState(false);
@@ -63,6 +84,17 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
             </Badge>
         );
     };
+
+    const filteredEmployees = employees?.filter(employee => employee.id != null && employee.name && employee.name !== '');
+    console.log('Filtered Employees for Select:', filteredEmployees);
+    const validEmployees = Array.isArray(filteredEmployees)
+        ? filteredEmployees.filter(e => typeof e.id === 'number' && !isNaN(e.id) && e.name && typeof e.name === 'string' && e.name.trim() !== '')
+        : [];
+    console.log('Valid Employees for Select:', validEmployees);
+
+    const hasInvalidOriginalEmployee = Array.isArray(employees) && employees.some(e => typeof e.id !== 'number' || isNaN(e.id) || !e.name || typeof e.name !== 'string' || e.name.trim() === '');
+
+    console.log('Employees for Select:', employees);
 
     return (
         <AdminLayout
@@ -121,14 +153,30 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                     <SelectTrigger className="w-48">
                                         <SelectValue placeholder="All Employees" />
                                     </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="">All Employees</SelectItem>
-                                        {employees?.map((employee) => (
-                                            <SelectItem key={employee.id} value={employee.id.toString()}>
-                                                {employee.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
+                                    {hasInvalidOriginalEmployee ? (
+                                        <div style={{ color: 'red', padding: 8 }}>
+                                            Invalid employee data detected. Please copy the following and send to support:<br />
+                                            <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#fee', color: '#a00', padding: 8, borderRadius: 4 }}>{JSON.stringify(employees, null, 2)}</pre>
+                                        </div>
+                                    ) : (
+                                        <SelectContent>
+                                            <SelectItem value="">All Employees</SelectItem>
+                                            {employees
+                                                .filter(e => e.id && typeof e.id === 'number' && e.name && e.name.trim() !== '')
+                                                .map(e => {
+                                                    const value = e.id.toString();
+                                                    if (!value) {
+                                                        console.error('Invalid employee id:', e);
+                                                        return null;
+                                                    }
+                                                    return (
+                                                        <SelectItem key={e.id} value={value}>
+                                                            {e.name}
+                                                        </SelectItem>
+                                                    );
+                                                })}
+                                        </SelectContent>
+                                    )}
                                 </Select>
                             </div>
                         </div>
