@@ -26,12 +26,20 @@ use Modules\RentalManagement\Http\Controllers\RentalHistoryController;
 
 Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(function () {
     // Customer routes
-    Route::resource('customers', CustomerController::class);
-    Route::get('customers-report', [CustomerController::class, 'report'])->name('customers.report');
-    Route::get('api/customers', [CustomerController::class, 'getCustomers'])->name('api.customers');
+    Route::resource('customers', CustomerController::class)->middleware([
+        'permission:customers.view',
+    ]);
+    Route::get('customers-report', [CustomerController::class, 'report'])
+        ->middleware('permission:customers.view')
+        ->name('customers.report');
+    Route::get('api/customers', [CustomerController::class, 'getCustomers'])
+        ->middleware('permission:customers.view')
+        ->name('api.customers');
 
     // Rental routes
-    Route::resource('rentals', RentalController::class);
+    Route::resource('rentals', RentalController::class)->middleware([
+        'permission:rentals.view',
+    ]);
 
     // Extension routes
     // Route::resource('extensions', RentalExtensionController::class);
@@ -39,19 +47,65 @@ Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(f
     Route::post('extensions/{extension}/reject', [RentalExtensionController::class, 'reject'])->name('extensions.reject');
 
     // Invoice routes
-    Route::resource('invoices', InvoiceController::class);
-    Route::delete('invoices/{invoice}/documents/{documentId}', [InvoiceController::class, 'removeDocument'])->name('invoices.documents.remove');
+    Route::resource('invoices', InvoiceController::class)->middleware([
+        'permission:invoices.view',
+    ]);
+    Route::delete('invoices/{invoice}/documents/{documentId}', [InvoiceController::class, 'removeDocument'])
+        ->middleware('permission:invoices.edit')
+        ->name('invoices.documents.remove');
 
     // Quotation routes
-    Route::resource('quotations', QuotationController::class);
+    Route::resource('quotations', QuotationController::class)->middleware([
+        'permission:quotations.view',
+    ]);
     Route::post('quotations/{quotation}/approve', [QuotationController::class, 'approve'])->name('quotations.approve');
     Route::post('quotations/{quotation}/reject', [QuotationController::class, 'reject'])->name('quotations.reject');
 
-    // Payment routes
-    Route::resource('rentals.payments', PaymentController::class);
+    // Payment routes (fine-grained permissions)
+    Route::get('rentals/{rental}/payments', [PaymentController::class, 'index'])
+        ->middleware('permission:payments.view')
+        ->name('rentals.payments.index');
+    Route::get('rentals/{rental}/payments/create', [PaymentController::class, 'create'])
+        ->middleware('permission:payments.create')
+        ->name('rentals.payments.create');
+    Route::post('rentals/{rental}/payments', [PaymentController::class, 'store'])
+        ->middleware('permission:payments.create')
+        ->name('rentals.payments.store');
+    Route::get('rentals/{rental}/payments/{payment}', [PaymentController::class, 'show'])
+        ->middleware('permission:payments.view')
+        ->name('rentals.payments.show');
+    Route::get('rentals/{rental}/payments/{payment}/edit', [PaymentController::class, 'edit'])
+        ->middleware('permission:payments.edit')
+        ->name('rentals.payments.edit');
+    Route::put('rentals/{rental}/payments/{payment}', [PaymentController::class, 'update'])
+        ->middleware('permission:payments.edit')
+        ->name('rentals.payments.update');
+    Route::delete('rentals/{rental}/payments/{payment}', [PaymentController::class, 'destroy'])
+        ->middleware('permission:payments.delete')
+        ->name('rentals.payments.destroy');
 
-    // Rental item routes
-    Route::resource('rentals.items', RentalItemController::class);
+    // Rental item routes (fine-grained permissions)
+    Route::get('rentals/{rental}/items', [RentalItemController::class, 'index'])
+        ->middleware('permission:rentals.items.view')
+        ->name('rentals.items.index');
+    Route::get('rentals/{rental}/items/create', [RentalItemController::class, 'create'])
+        ->middleware('permission:rentals.items.create')
+        ->name('rentals.items.create');
+    Route::post('rentals/{rental}/items', [RentalItemController::class, 'store'])
+        ->middleware('permission:rentals.items.create')
+        ->name('rentals.items.store');
+    Route::get('rentals/{rental}/items/{item}', [RentalItemController::class, 'show'])
+        ->middleware('permission:rentals.items.view')
+        ->name('rentals.items.show');
+    Route::get('rentals/{rental}/items/{item}/edit', [RentalItemController::class, 'edit'])
+        ->middleware('permission:rentals.items.edit')
+        ->name('rentals.items.edit');
+    Route::put('rentals/{rental}/items/{item}', [RentalItemController::class, 'update'])
+        ->middleware('permission:rentals.items.edit')
+        ->name('rentals.items.update');
+    Route::delete('rentals/{rental}/items/{item}', [RentalItemController::class, 'destroy'])
+        ->middleware('permission:rentals.items.delete')
+        ->name('rentals.items.destroy');
 
     Route::get('rentals/{rental}/items/bulk-create', [RentalItemController::class, 'bulkCreate'])->name('rentals.items.bulk-create');
     Route::post('rentals/{rental}/items/bulk', [RentalItemController::class, 'bulkStore'])->name('rentals.items.bulk-store');

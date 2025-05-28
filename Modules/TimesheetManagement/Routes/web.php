@@ -25,53 +25,119 @@ use Inertia\Inertia;
 
 Route::name('timesheets.')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard
-    Route::get('/', [TimesheetController::class, 'index'])->name('index');
-    Route::get('/dashboard', [TimesheetDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [TimesheetController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('index');
+    Route::get('/dashboard', [TimesheetDashboardController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('dashboard');
 
     // Timesheets CRUD
-    Route::get('/create', [TimesheetController::class, 'create'])->name('create');
-    Route::post('/', [TimesheetController::class, 'store'])->name('store');
-    Route::get('/{timesheet}', [TimesheetController::class, 'show'])->name('show');
-    Route::get('/{timesheet}/edit', [TimesheetController::class, 'edit'])->name('edit');
-    Route::put('/{timesheet}', [TimesheetController::class, 'update'])->name('update');
-    Route::delete('/{timesheet}', [TimesheetController::class, 'destroy'])->name('destroy');
-    Route::post('/{timesheet}/submit', [TimesheetController::class, 'submit'])->name('submit');
-    Route::get('/check-duplicate', [TimesheetController::class, 'checkDuplicate'])->name('check-duplicate');
-    Route::get('/monthly', [TimesheetController::class, 'monthly'])->name('monthly');
-    Route::get('/summary', [TimesheetController::class, 'summary'])->name('summary');
+    Route::get('/create', [TimesheetController::class, 'create'])
+        ->middleware('permission:timesheets.create')
+        ->name('create');
+    Route::post('/', [TimesheetController::class, 'store'])
+        ->middleware('permission:timesheets.create')
+        ->name('store');
+    Route::get('/{timesheet}', [TimesheetController::class, 'show'])
+        ->middleware('permission:timesheets.view')
+        ->name('show');
+    Route::get('/{timesheet}/edit', [TimesheetController::class, 'edit'])
+        ->middleware('permission:timesheets.edit')
+        ->name('edit');
+    Route::put('/{timesheet}', [TimesheetController::class, 'update'])
+        ->middleware('permission:timesheets.edit')
+        ->name('update');
+    Route::delete('/{timesheet}', [TimesheetController::class, 'destroy'])
+        ->middleware('permission:timesheets.delete')
+        ->name('destroy');
+    Route::post('/{timesheet}/submit', [TimesheetController::class, 'submit'])
+        ->middleware('permission:timesheets.edit')
+        ->name('submit');
+    Route::get('/check-duplicate', [TimesheetController::class, 'checkDuplicate'])
+        ->middleware('permission:timesheets.view')
+        ->name('check-duplicate');
+    Route::get('/monthly', [TimesheetController::class, 'monthly'])
+        ->middleware('permission:timesheets.view')
+        ->name('monthly');
+    Route::get('/summary', [TimesheetController::class, 'summary'])
+        ->middleware('permission:timesheets.view')
+        ->name('summary');
 
     // Daily timesheet entries
-    Route::get('/entries', [TimeEntryController::class, 'index'])->name('entries.index');
-    Route::get('/entries/create', [TimeEntryController::class, 'create'])->name('entries.create');
-    Route::post('/entries', [TimeEntryController::class, 'store'])->name('entries.store');
-    Route::get('/entries/{entryId}', [TimeEntryController::class, 'show'])->name('entries.show');
-    Route::get('/entries/{entryId}/edit', [TimeEntryController::class, 'edit'])->name('entries.edit');
-    Route::put('/entries/{entryId}', [TimeEntryController::class, 'update'])->name('entries.update');
-    Route::delete('/entries/{entryId}', [TimeEntryController::class, 'destroy'])->name('entries.destroy');
+    Route::get('/entries', [TimeEntryController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('entries.index');
+    Route::get('/entries/create', [TimeEntryController::class, 'create'])
+        ->middleware('permission:timesheets.create')
+        ->name('entries.create');
+    Route::post('/entries', [TimeEntryController::class, 'store'])
+        ->middleware('permission:timesheets.create')
+        ->name('entries.store');
+    Route::get('/entries/{entryId}', [TimeEntryController::class, 'show'])
+        ->middleware('permission:timesheets.view')
+        ->name('entries.show');
+    Route::get('/entries/{entryId}/edit', [TimeEntryController::class, 'edit'])
+        ->middleware('permission:timesheets.edit')
+        ->name('entries.edit');
+    Route::put('/entries/{entryId}', [TimeEntryController::class, 'update'])
+        ->middleware('permission:timesheets.edit')
+        ->name('entries.update');
+    Route::delete('/entries/{entryId}', [TimeEntryController::class, 'destroy'])
+        ->middleware('permission:timesheets.delete')
+        ->name('entries.destroy');
 
     // Overtime entries
-    Route::get('/overtime', [OvertimeController::class, 'index'])->name('overtime.index');
-    Route::get('/overtime/create', [OvertimeController::class, 'create'])->name('overtime.create');
-    Route::post('/overtime', [OvertimeController::class, 'store'])->name('overtime.store');
+    Route::get('/overtime', [OvertimeController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('overtime.index');
+    Route::get('/overtime/create', [OvertimeController::class, 'create'])
+        ->middleware('permission:timesheets.create')
+        ->name('overtime.create');
+    Route::post('/overtime', [OvertimeController::class, 'store'])
+        ->middleware('permission:timesheets.create')
+        ->name('overtime.store');
 
     // Approval routes
-    Route::get('/approvals', [TimesheetApprovalController::class, 'index'])->name('approvals.index');
-    Route::put('/approvals/{timesheetId}/approve', [TimesheetApprovalController::class, 'approve'])->name('approvals.approve');
-    Route::put('/approvals/{timesheetId}/reject', [TimesheetApprovalController::class, 'reject'])->name('approvals.reject');
+    Route::get('/approvals', [TimesheetApprovalController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('approvals.index');
+    Route::put('/approvals/{timesheetId}/approve', [TimesheetApprovalController::class, 'approve'])
+        ->middleware('permission:timesheets.edit')
+        ->name('approvals.approve');
+    Route::put('/approvals/{timesheetId}/reject', [TimesheetApprovalController::class, 'reject'])
+        ->middleware('permission:timesheets.edit')
+        ->name('approvals.reject');
 
     // Reports
-    Route::get('/reports', [TimesheetReportController::class, 'index'])->name('reports.index');
-    Route::post('/reports/generate', [TimesheetReportController::class, 'generate'])->name('reports.generate');
-    Route::get('/reports/export', [TimesheetReportController::class, 'export'])->name('reports.export');
-    Route::get('/reports/monthly', [TimesheetReportController::class, 'monthlyReport'])->name('reports.monthly');
-    Route::get('/reports/payslip/{employeeId}/{month}', [TimesheetReportController::class, 'generatePaySlip'])->name('reports.payslip');
+    Route::get('/reports', [TimesheetReportController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('reports.index');
+    Route::post('/reports/generate', [TimesheetReportController::class, 'generate'])
+        ->middleware('permission:timesheets.view')
+        ->name('reports.generate');
+    Route::get('/reports/export', [TimesheetReportController::class, 'export'])
+        ->middleware('permission:timesheets.view')
+        ->name('reports.export');
+    Route::get('/reports/monthly', [TimesheetReportController::class, 'monthlyReport'])
+        ->middleware('permission:timesheets.view')
+        ->name('reports.monthly');
+    Route::get('/reports/payslip/{employeeId}/{month}', [TimesheetReportController::class, 'generatePaySlip'])
+        ->middleware('permission:timesheets.view')
+        ->name('reports.payslip');
 
     // Projects for timesheet
-    Route::get('/projects', [TimesheetProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects', [TimesheetProjectController::class, 'index'])
+        ->middleware('permission:timesheets.view')
+        ->name('projects.index');
 
     // Settings
-    Route::get('/settings', [TimesheetSettingController::class, 'edit'])->name('settings.edit')->middleware('can:manage-timesheet-settings');
-    Route::put('/settings', [TimesheetSettingController::class, 'update'])->name('settings.update')->middleware('can:manage-timesheet-settings');
+    Route::get('/settings', [TimesheetSettingController::class, 'edit'])
+        ->middleware('can:manage-timesheet-settings')
+        ->name('settings.edit');
+    Route::put('/settings', [TimesheetSettingController::class, 'update'])
+        ->middleware('can:manage-timesheet-settings')
+        ->name('settings.update');
 
     // Additional routes with permission middleware
     Route::middleware(['permission:timesheets.view'])->group(function () {

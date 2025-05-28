@@ -25,27 +25,73 @@ class PermissionSeeder extends Seeder
             }
         }
 
-        // Master list of all required permissions
+        // Master list of all required permissions (resource.action format only)
         $masterPermissions = [
-            // Project
-            'project.view', 'project.create', 'project.edit', 'project.delete',
-            // Equipment
-            'equipment.view', 'equipment.create', 'equipment.edit', 'equipment.delete',
-            // Add more as needed
+            // Dashboard
+            'dashboard.view',
+            // Users
             'users.view', 'users.create', 'users.edit', 'users.delete',
+            // Roles
             'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
+            // Permissions
             'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
+            // Employees
             'employees.view', 'employees.create', 'employees.edit', 'employees.delete',
-            'reports.view', 'reports.build',
-            'rentals.view', 'rentals.create', 'rentals.edit', 'rentals.delete', 'rentals.approve',
+            // Maintenance
             'maintenance.view', 'maintenance.create', 'maintenance.edit', 'maintenance.delete',
+            // Technicians
             'technicians.view', 'technicians.create', 'technicians.edit', 'technicians.delete',
-            'timesheets.view',
-
-            // ...add all other permissions you want to guarantee
+            // Reports
+            'reports.view', 'reports.build', 'reports.delete',
+            // Rentals
+            'rentals.view', 'rentals.create', 'rentals.edit', 'rentals.delete', 'rentals.approve',
+            // Rental Items
+            'rentals.items.view', 'rentals.items.create', 'rentals.items.edit', 'rentals.items.delete',
+            // Payments
+            'payments.view', 'payments.create', 'payments.edit', 'payments.delete',
+            // Invoices
+            'invoices.view', 'invoices.create', 'invoices.edit', 'invoices.delete',
+            // Quotations
+            'quotations.view', 'quotations.create', 'quotations.edit', 'quotations.delete',
+            // Customers
+            'customers.view', 'customers.create', 'customers.edit', 'customers.delete',
+            // Suppliers
+            'suppliers.view', 'suppliers.create', 'suppliers.edit', 'suppliers.delete',
+            // Timesheets
+            'timesheets.view', 'timesheets.create', 'timesheets.edit', 'timesheets.delete',
+            // Tasks
+            'tasks.view', 'tasks.create', 'tasks.edit', 'tasks.delete',
+            // Manpower
+            'manpower.view', 'manpower.create', 'manpower.edit', 'manpower.delete',
+            // Material
+            'material.view', 'material.create', 'material.edit', 'material.delete',
+            // Fuel
+            'fuel.view', 'fuel.create', 'fuel.edit', 'fuel.delete',
+            // Expense
+            'expense.view', 'expense.create', 'expense.edit', 'expense.delete',
+            // Payroll
+            'payroll.view', 'payroll.create', 'payroll.edit', 'payroll.delete',
+            // Salary Advances
+            'salary-advances.view', 'salary-advances.create', 'salary-advances.edit', 'salary-advances.delete',
+            // Final Settlements
+            'final-settlements.view', 'final-settlements.create', 'final-settlements.edit', 'final-settlements.delete',
+            // Advances
+            'advances.view', 'advances.create', 'advances.edit', 'advances.delete', 'advances.approve',
+            // Rental Timesheets
+            'rental-timesheets.view', 'rental-timesheets.create', 'rental-timesheets.edit', 'rental-timesheets.delete',
+            // Leave Management
+            'leave-requests.view', 'leave-requests.create', 'leave-requests.edit', 'leave-requests.delete',
+            'leave-approvals.view', 'leave-approvals.edit',
+            'leave-balances.view',
+            'leave-reports.view', 'leave-reports.create',
         ];
 
-        $permissionNames = $permissionNames->merge($masterPermissions)->unique()->filter();
+        // Remove any permissions not in resource.action format
+        $permissionNames = $permissionNames->merge($masterPermissions)
+            ->unique()
+            ->filter(function ($name) {
+                return preg_match('/^[a-z0-9-]+(\.[a-z0-9-]+)+$/', $name);
+            });
 
         foreach ($permissionNames as $permission) {
             Permission::firstOrCreate([
