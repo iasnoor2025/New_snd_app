@@ -112,6 +112,19 @@ export function AppSidebar() {
             href: '/dashboard',
             icon: LayoutGrid,
         });
+        // Add Users and Roles for admins
+        if (isAdmin) {
+            items.push({
+                title: 'Users',
+                href: '/users',
+                icon: Users,
+            });
+            items.push({
+                title: 'Roles',
+                href: '/roles',
+                icon: Shield,
+            });
+        }
         // Get permissions from auth
         const permissions: string[] = (auth?.permissions || []);
         // Admins see all modules

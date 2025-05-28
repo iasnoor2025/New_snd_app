@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         // Run the AdminUserSeeder to create admin role and user
         $this->call(AdminUserSeeder::class);
 
+        // Run the RoleSeeder to create roles
+        $this->call(RoleSeeder::class);
+
         // Create a test user if needed
         if (app()->environment('local', 'development')) {
             User::factory()->create([

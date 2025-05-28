@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Core\database\migrations;
+namespace Modules\EmployeeManagement\database\migrations;
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,15 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code')->nullable();
             $table->text('description')->nullable();
-            $table->string('manager')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('department_id');
+            $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('positions');
     }
 };
