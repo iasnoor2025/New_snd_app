@@ -95,7 +95,7 @@ use LogsActivity, AutoLoadsRelations;
         'has_timesheet' => 'boolean',
         'completed_at' => 'datetime',
         'approved_at' => 'datetime',
-        'status' => RentalStatus::class,
+        'status' => 'string',
     ];
 
     /**

@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class BillingSettings extends Model
 {
     use SoftDeletes;
-use protected $fillable = [
-        'user_id';
-use 'payment_methods';
-use 'reminder_settings',
+    protected $fillable = [
+        'user_id',
+        'payment_methods',
+        'reminder_settings',
         'late_payment_settings',
         'notification_settings',
         'metadata',
@@ -21,9 +21,9 @@ use 'reminder_settings',
     protected $casts = [
         'payment_methods' => 'array',
         'reminder_settings' => 'array',
-        'late_payment_settings' => 'array',;
-        'notification_settings' => 'array',;
-        'metadata' => 'array',;
+        'late_payment_settings' => 'array',
+        'notification_settings' => 'array',
+        'metadata' => 'array',
     ];
 
     public function user(): BelongsTo

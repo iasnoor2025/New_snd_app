@@ -17,6 +17,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\TimesheetManagement\Domain\Models\Timesheet;
+use Modules\ProjectManagement\Domain\Models\ProjectManpower;
+use Modules\RentalManagement\Domain\Models\RentalOperatorAssignment;
+use Modules\RentalManagement\Domain\Models\RentalItem;
 
 class Employee extends Model implements HasMedia
 {

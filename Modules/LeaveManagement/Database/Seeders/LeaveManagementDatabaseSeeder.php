@@ -11,8 +11,6 @@ class LeaveManagementDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add LeaveManagement module specific seeders here
-        // ]);
+        $this->call(LeaveTypeSeeder::class);
     }
 }

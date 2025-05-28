@@ -9,19 +9,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FinalSettlementItem extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'final_settlement_id';
-use 'type';
-use 'description',
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        'final_settlement_id',
+        'type',
+        'description',
         'amount',
         'metadata',
     ];
 
-    protected $casts = [;
-        'amount' => 'decimal:2',;
-        'metadata' => 'array',;
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'metadata' => 'array',
     ];
 
     public function finalSettlement(): BelongsTo

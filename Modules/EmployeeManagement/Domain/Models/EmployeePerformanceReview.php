@@ -11,10 +11,10 @@ use Modules\Core\Domain\Models\User;
 class EmployeePerformanceReview extends BaseModel
 {
     use SoftDeletes;
-use protected $fillable = [
-        'employee_id';
-use 'reviewer_id';
-use 'review_date',
+    protected $fillable = [
+        'employee_id',
+        'reviewer_id',
+        'review_date',
         'review_period_start',
         'review_period_end',
         'overall_rating',
@@ -46,9 +46,9 @@ use 'review_date',
         'teamwork_rating' => 'decimal:1',
         'initiative_rating' => 'decimal:1',
         'strengths' => 'array',
-        'weaknesses' => 'array',;
-        'goals' => 'array',;
-        'approved_at' => 'datetime',;
+        'weaknesses' => 'array',
+        'goals' => 'array',
+        'approved_at' => 'datetime',
     ];
 
     public function employee(): BelongsTo

@@ -15,10 +15,12 @@ return new class extends Migration
         if (!Schema::hasTable('rentals')) {
             Schema::create('rentals', function (Blueprint $table) {
                 $table->id();
+                $table->unsignedBigInteger('customer_id')->nullable();
                 $table->string('rental_number')->unique();
                 $table->unsignedBigInteger('project_id')->nullable()->constrained()->nullOnDelete();
                 $table->timestamp('start_date');
-                $table->timestamp('end_date');
+                $table->timestamp('expected_end_date')->nullable();
+                $table->timestamp('actual_end_date')->nullable();
                 $table->string('status')->default('pending');
                 $table->decimal('total_amount', 12, 2)->default(0);
                 $table->decimal('discount', 12, 2)->default(0);

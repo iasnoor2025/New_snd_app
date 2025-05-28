@@ -19,11 +19,8 @@ class LocationController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name';
-use 'like';
-use "%{$search}%")
-                    ->orWhere('address';
-use 'like', "%{$search}%")
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%")
                     ->orWhere('city', 'like', "%{$search}%");
             });
         }
@@ -36,7 +33,7 @@ use 'like', "%{$search}%")
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Locations/Index', [;
+        return Inertia::render('Locations/Index', [
             'locations' => $locations,
             'filters' => $request->only(['search', 'status'])
         ]);
@@ -83,7 +80,7 @@ use 'like', "%{$search}%")
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors()
             ], 422);
@@ -93,18 +90,18 @@ use 'like', "%{$search}%")
             $location = Location::create($validator->validated());
 
             if ($request->ajax() || $request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Location created successfully',
                 'name' => $location->name,
                 'id' => $location->id
             ], 201);
             }
 
-            return redirect()->route('locations.index');
+        return redirect()->route('locations.index')
                 ->with('success', 'Location created successfully.');
         } catch (\Exception $e) {
             if ($request->ajax() || $request->wantsJson()) {
-            return response()->json([;
+            return response()->json([
                 'message' => 'Failed to create location',
                 'error' => $e->getMessage()
             ], 500);
@@ -128,13 +125,13 @@ use 'like', "%{$search}%")
             // Get employee count at this location
             $employeeCount = $location->employees()->count();
 
-            return Inertia::render('Locations/Show', [;
+            return Inertia::render('Locations/Show', [
                 'location' => $location,
                 'equipmentCount' => $equipmentCount,
                 'employeeCount' => $employeeCount,
             ]);
         } catch (\Exception $e) {
-            return redirect()->route('locations.index');
+            return redirect()->route('locations.index')
                 ->with('error', 'Location not found.');
         }
     }
@@ -144,7 +141,7 @@ use 'like', "%{$search}%")
      */
     public function edit(Location $location)
     {
-        return Inertia::render('Locations/Edit', [;
+        return Inertia::render('Locations/Edit', [
             'location' => $location,
         ]);
     }
@@ -168,8 +165,8 @@ use 'like', "%{$search}%")
 
         $location->update($validated);
 
-        return redirect()->route('locations.show', $location);
-            ->with('success', 'Location updated successfully.');
+        return redirect()->route('locations.show', $location)
+                ->with('success', 'Location updated successfully.');
     }
 
     /**
@@ -184,7 +181,7 @@ use 'like', "%{$search}%")
 
         $location->delete();
 
-        return redirect()->route('locations.index');
+        return redirect()->route('locations.index')
             ->with('success', 'Location deleted successfully.');
     }
 }

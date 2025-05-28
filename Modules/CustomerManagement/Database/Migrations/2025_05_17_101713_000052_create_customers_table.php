@@ -22,10 +22,15 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
+            $table->string('postal_code')->nullable();
             $table->string('zip')->nullable();
             $table->string('country')->nullable();
+            $table->string('website')->nullable();
             $table->string('tax_id')->nullable();
             $table->string('payment_terms')->nullable();
+            $table->string('tax_number')->nullable();
+            $table->decimal('credit_limit', 12, 2)->nullable();
+            $table->boolean('is_active')->default(true);
             $table->string('status')->default('active');
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('user_id')->nullable()->constrained()->nullOnDelete();

@@ -11,8 +11,6 @@ class NotificationsDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add Notifications module specific seeders here
-        // ]);
+        $this->call(LeaveTypeSeeder::class);
     }
 }

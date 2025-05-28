@@ -11,8 +11,6 @@ class ReportingDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add Reporting module specific seeders here
-        // ]);
+        $this->call(ReportTemplateSeeder::class);
     }
 }

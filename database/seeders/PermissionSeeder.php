@@ -37,6 +37,8 @@ class PermissionSeeder extends Seeder
             'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
             // Employees
             'employees.view', 'employees.create', 'employees.edit', 'employees.delete',
+            // Add the custom permission for policy
+            'view-employee',
             // Maintenance
             'maintenance.view', 'maintenance.create', 'maintenance.edit', 'maintenance.delete',
             // Technicians

@@ -2,11 +2,12 @@
 
 namespace Modules\EmployeeManagement\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use Modules\EmployeeManagement\Domain\Models\EmployeeAdvance;
 use Modules\EmployeeManagement\Domain\Models\EmployeeDocument;
 use Modules\EmployeeManagement\Policies\EmployeeAdvancePolicy;
 use Modules\EmployeeManagement\Policies\EmployeeDocumentPolicy;
+use Modules\EmployeeManagement\Domain\Models\Employee;
+use Modules\EmployeeManagement\Policies\EmployeePolicy;
 
 class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthServiceProvider
 {
@@ -25,6 +26,7 @@ class AuthServiceProvider extends \Illuminate\Foundation\Support\Providers\AuthS
     protected $policies = [
         EmployeeDocument::class => EmployeeDocumentPolicy::class,
         EmployeeAdvance::class => EmployeeAdvancePolicy::class,
+        Employee::class => EmployeePolicy::class,
     ];
 
     /**

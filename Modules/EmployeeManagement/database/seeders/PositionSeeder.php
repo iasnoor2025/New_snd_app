@@ -4,17 +4,22 @@ namespace Modules\EmployeeManagement\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\EmployeeManagement\Domain\Models\Position;
+use Modules\EmployeeManagement\Domain\Models\Department;
 
 class PositionSeeder extends Seeder
 {
     public function run()
     {
+        $department = Department::where('name', 'General')->first();
+        if (!$department) {
+            throw new \Exception('Department "General" not found.');
+        }
         $positions = [
-            ['name' => 'Manager', 'description' => 'Manages the team', 'is_active' => true],
-            ['name' => 'Engineer', 'description' => 'Handles engineering tasks', 'is_active' => true],
-            ['name' => 'Technician', 'description' => 'Technical support', 'is_active' => true],
-            ['name' => 'HR', 'description' => 'Human Resources', 'is_active' => true],
-            ['name' => 'Accountant', 'description' => 'Handles accounts', 'is_active' => true],
+            ['name' => 'Manager', 'description' => 'Manages the team', 'is_active' => true, 'department_id' => $department->id],
+            ['name' => 'Engineer', 'description' => 'Handles engineering tasks', 'is_active' => true, 'department_id' => $department->id],
+            ['name' => 'Technician', 'description' => 'Technical support', 'is_active' => true, 'department_id' => $department->id],
+            ['name' => 'HR', 'description' => 'Human Resources', 'is_active' => true, 'department_id' => $department->id],
+            ['name' => 'Accountant', 'description' => 'Handles accounts', 'is_active' => true, 'department_id' => $department->id],
         ];
 
         foreach ($positions as $position) {

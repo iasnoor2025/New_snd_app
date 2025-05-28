@@ -9,12 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PayrollItem extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use protected $fillable = [
-        'payroll_id';
-use 'type';
-use 'description',
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        'payroll_id',
+        'type',
+        'description',
         'amount',
         'is_taxable',
         'tax_rate',
@@ -25,9 +24,9 @@ use 'description',
     protected $casts = [
         'amount' => 'decimal:2',
         'is_taxable' => 'boolean',
-        'tax_rate' => 'decimal:4',;
-        'order' => 'integer',;
-        'metadata' => 'array';
+        'tax_rate' => 'decimal:4',
+        'order' => 'integer',
+        'metadata' => 'array',
     ];
 
     public function payroll(): BelongsTo

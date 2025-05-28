@@ -8,7 +8,7 @@ use Tests\TestCase;
 class EmployeeControllerTest extends TestCase
 {
     use RefreshDatabase;
-use protected function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->withoutExceptionHandling();

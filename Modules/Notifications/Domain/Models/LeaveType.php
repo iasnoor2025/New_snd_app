@@ -9,16 +9,16 @@ use Modules\Notifications\Database\Factories\LeaveTypeFactory;
 class LeaveType extends Model
 {
     use HasFactory;
-use protected $fillable = [
-        'name';
-use 'description';
-use 'days_per_year',
+    protected $fillable = [
+        'name',
+        'description',
+        'days_per_year',
         'color',
         'is_active',
     ];
 
-    protected $casts = [;
-        'is_active' => 'boolean',;
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function leaves()

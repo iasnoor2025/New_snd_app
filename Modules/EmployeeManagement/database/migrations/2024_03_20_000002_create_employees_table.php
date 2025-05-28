@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->string('file_number')->unique()->nullable();
             $table->string('employee_id')->unique();
             $table->string('first_name');
             $table->string('last_name');
@@ -45,6 +46,7 @@ return new class extends Migration
             $table->decimal('housing_allowance', 10, 2)->default(0);
             $table->decimal('transport_allowance', 10, 2)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

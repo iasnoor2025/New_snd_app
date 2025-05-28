@@ -9,17 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeResignation extends Model
 {
-    use HasFactory as ;
-use SoftDeletes;
-use /**
+    use HasFactory, SoftDeletes;
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int;
-use string>
+     * @var array<int, string>
      */
-    protected $fillable = [;
-        'employee_id';
-use 'resignation_date',
+    protected $fillable = [
+        'employee_id',
+        'resignation_date',
         'last_working_date',
         'reason',
         'status',
@@ -30,8 +29,8 @@ use 'resignation_date',
         'approval_date',
         'exit_interview_date',
         'exit_interview_conducted_by_id',
-        'clearance_status',;
-        'handover_notes';
+        'clearance_status',
+        'handover_notes',
     ];
 
     /**
@@ -42,9 +41,9 @@ use 'resignation_date',
     protected $casts = [
         'resignation_date' => 'date',
         'last_working_date' => 'date',
-        'approval_date' => 'date',;
-        'exit_interview_date' => 'date',;
-        'notice_period' => 'integer';
+        'approval_date' => 'date',
+        'exit_interview_date' => 'date',
+        'notice_period' => 'integer',
     ];
 
     /**

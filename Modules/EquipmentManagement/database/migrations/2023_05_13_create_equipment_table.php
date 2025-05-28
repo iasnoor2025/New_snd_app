@@ -31,6 +31,12 @@ return new class extends Migration
             $table->date('last_maintenance_date')->nullable();
             $table->date('next_maintenance_date')->nullable();
             $table->text('notes')->nullable();
+            $table->string('unit')->nullable();
+            $table->decimal('default_unit_cost', 12, 2)->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->decimal('daily_rate', 12, 2)->nullable();
+            $table->decimal('weekly_rate', 12, 2)->nullable();
+            $table->decimal('monthly_rate', 12, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

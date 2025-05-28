@@ -10,8 +10,6 @@ class AuditComplianceDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add AuditCompliance module specific seeders here
-        // ]);
+        $this->call(ActivityLogSeeder::class);
     }
 }

@@ -14,6 +14,13 @@ return new class extends Migration
     {
         Schema::create('employee_resignations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('employee_id')->index();
+            $table->string('status')->index();
+            $table->text('reason')->nullable();
+            $table->date('resignation_date')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

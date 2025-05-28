@@ -11,8 +11,6 @@ class CustomerManagementDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add CustomerManagement module specific seeders here
-        // ]);
+        $this->call(CustomerSeeder::class);
     }
 }

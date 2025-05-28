@@ -19,6 +19,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
+            $table->integer('days_per_year')->nullable();
+            $table->string('color')->nullable();
             $table->integer('days_allowed')->default(0);
             $table->boolean('requires_approval')->default(true);
             $table->boolean('requires_attachment')->default(false);

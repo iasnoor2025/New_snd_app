@@ -16,10 +16,18 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable()->constrained()->onDelete('set null');
             $table->unsignedBigInteger('role_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('action');
-            $table->string('description')->nullable();
+            $table->string('action')->nullable();
             $table->float('system_load')->nullable();
             $table->json('metadata')->nullable();
+            $table->string('log_name')->nullable();
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('subject_id')->nullable();
+            $table->string('subject_type')->nullable();
+            $table->unsignedBigInteger('causer_id')->nullable();
+            $table->string('causer_type')->nullable();
+            $table->string('event')->nullable();
+            $table->json('properties')->nullable();
+            $table->uuid('batch_uuid')->nullable();
             $table->timestamps();
         });
     }

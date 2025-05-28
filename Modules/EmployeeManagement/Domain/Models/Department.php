@@ -15,6 +15,8 @@ class Department extends Model
         'status',
     ];
 
+    protected $table = 'departments';
+
     public function employees(): HasMany
     {
         return $this->hasMany(Employee::class);

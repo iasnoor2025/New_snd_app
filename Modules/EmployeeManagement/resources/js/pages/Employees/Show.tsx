@@ -1,8 +1,9 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
-import { Employee as BaseEmployee, Timesheet as BaseTimesheet, LeaveRequest as BaseLeaveRequest, Assignment as BaseAssignment } from '@/Modules/EmployeeManagement/Resources/js/types/models';
+import { PageProps, BreadcrumbItem } from '../../../types';
+import AdminLayout from '../../../layouts/AdminLayout';
+import { Employee as BaseEmployee, Timesheet as BaseTimesheet, LeaveRequest as BaseLeaveRequest, Assignment as BaseAssignment } from '../../../types/models';
+import { route } from 'ziggy-js';
 import { Breadcrumb } from '../../../../../../resources/js/components/ui/breadcrumb';
 import {
   Card,

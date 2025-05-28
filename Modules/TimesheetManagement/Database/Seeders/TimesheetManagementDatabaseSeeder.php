@@ -11,8 +11,6 @@ class TimesheetManagementDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add TimesheetManagement module specific seeders here
-        // ]);
+        $this->call(TimesheetSeeder::class);
     }
 }

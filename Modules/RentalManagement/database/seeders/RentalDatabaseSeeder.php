@@ -10,6 +10,6 @@ class RentalDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call(RentalSeeder::class);
     }
 }

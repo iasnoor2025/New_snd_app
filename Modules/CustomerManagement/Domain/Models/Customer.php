@@ -35,6 +35,7 @@ class Customer extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
+        'name',
         'company_name',
         'contact_person',
         'email',

@@ -30,6 +30,22 @@ class DatabaseSeeder extends Seeder
         // Run the RoleSeeder to create roles
         $this->call(RoleSeeder::class);
 
+        // Seed all modules
+        $this->call(\Modules\Settings\Database\Seeders\SettingsDatabaseSeeder::class);
+        $this->call(\Modules\EmployeeManagement\database\seeders\EmployeeManagementDatabaseSeeder::class);
+        $this->call(\Modules\CustomerManagement\Database\Seeders\CustomerManagementDatabaseSeeder::class);
+        $this->call(\Modules\EquipmentManagement\database\Seeders\EquipmentManagementDatabaseSeeder::class);
+        $this->call(\Modules\LeaveManagement\Database\Seeders\LeaveManagementDatabaseSeeder::class);
+        $this->call(\Modules\ProjectManagement\database\seeders\ProjectManagementDatabaseSeeder::class);
+        $this->call(\Modules\RentalManagement\database\seeders\RentalDatabaseSeeder::class);
+        $this->call(\Modules\AuditCompliance\database\Seeders\AuditComplianceDatabaseSeeder::class);
+        $this->call(\Modules\Notifications\Database\Seeders\NotificationsDatabaseSeeder::class);
+        $this->call(\Modules\Payroll\database\Seeders\PayrollDatabaseSeeder::class);
+        $this->call(\Modules\TimesheetManagement\Database\Seeders\TimesheetManagementDatabaseSeeder::class);
+        $this->call(\Modules\Reporting\Database\Seeders\ReportingDatabaseSeeder::class);
+        $this->call(\Modules\MobileBridge\Database\Seeders\MobileBridgeDatabaseSeeder::class);
+        $this->call(\Modules\Localization\Database\Seeders\LocalizationDatabaseSeeder::class);
+
         // Create a test user if needed
         if (app()->environment('local', 'development')) {
             User::factory()->create([

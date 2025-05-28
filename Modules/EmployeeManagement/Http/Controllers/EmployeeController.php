@@ -13,7 +13,7 @@ use Modules\EmployeeManagement\Domain\Models\Department;
 use Modules\EmployeeManagement\Actions\CreateEmployeeAction;
 use Modules\EmployeeManagement\Actions\UpdateEmployeeAction;
 use Modules\EmployeeManagement\Actions\DeleteEmployeeAction;
-use App\Actions\Employee\ShowEmployeeAction;
+use Modules\EmployeeManagement\Actions\ShowEmployeeAction;
 use Illuminate\Support\Facades\Log;
 use Modules\Core\Domain\Models\User;
 

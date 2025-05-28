@@ -10,6 +10,8 @@ class PayrollDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(PayrollRunSeeder::class);
+
         // $this->call([
         //     // Add Payroll module specific seeders here
         // ]);
