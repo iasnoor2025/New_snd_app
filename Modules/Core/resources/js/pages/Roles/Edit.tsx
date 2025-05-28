@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import { toast } from 'sonner';
@@ -68,24 +68,53 @@ const EditRole: React.FC<Props> = ({ role, permissions, selectedPermissions, suc
           <div>
             <label className="block mb-4 font-medium text-lg">Permissions</label>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Object.entries(permissions).map(([section, perms]) => (
-                <div key={section} className="mb-6">
-                  <div className="font-semibold capitalize mb-3 text-blue-700 text-base border-b pb-1">{section.replace('-', ' ')}</div>
-                  <div className="flex flex-col gap-2">
-                    {perms.map(permission => (
-                      <label key={permission.id} className="flex items-center gap-2 text-base">
+              {Object.entries(permissions).map(([section, perms]) => {
+                // Get all permission IDs for this section
+                const sectionPermissionIds = perms.map(p => p.id);
+                // Check if all are selected
+                const allSelected = sectionPermissionIds.every(id => data.permissions.includes(id));
+                // Check if none are selected
+                const noneSelected = sectionPermissionIds.every(id => !data.permissions.includes(id));
+                // Handlers
+                const handleSelectAll = () => {
+                  setData('permissions', Array.from(new Set([...data.permissions, ...sectionPermissionIds])));
+                };
+                const handleDeselectAll = () => {
+                  setData('permissions', data.permissions.filter((id: number) => !sectionPermissionIds.includes(id)));
+                };
+                return (
+                  <div key={section} className="mb-6">
+                    <div className="font-semibold capitalize mb-3 text-blue-700 text-base border-b pb-1 flex items-center gap-4">
+                      {section.replace('-', ' ')}
+                      <label className="flex items-center gap-1 text-sm font-normal">
                         <input
                           type="checkbox"
-                          checked={data.permissions.includes(permission.id)}
-                          onChange={() => handlePermissionChange(permission.id)}
+                          ref={el => {
+                            if (el) el.indeterminate = !(allSelected || noneSelected);
+                          }}
+                          checked={allSelected && !noneSelected}
+                          onChange={e => e.target.checked ? handleSelectAll() : handleDeselectAll()}
                           className="accent-blue-600 w-4 h-4"
                         />
-                        {permission.name}
+                        Select All
                       </label>
-                    ))}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {perms.map(permission => (
+                        <label key={permission.id} className="flex items-center gap-2 text-base">
+                          <input
+                            type="checkbox"
+                            checked={data.permissions.includes(permission.id)}
+                            onChange={() => handlePermissionChange(permission.id)}
+                            className="accent-blue-600 w-4 h-4"
+                          />
+                          {permission.name}
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             {errors.permissions && <div className="text-red-500 text-sm mt-1">{errors.permissions}</div>}
           </div>
