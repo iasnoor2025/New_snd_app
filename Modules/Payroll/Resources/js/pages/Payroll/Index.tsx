@@ -139,7 +139,6 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                         <SelectValue placeholder="All Status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All Status</SelectItem>
                                         <SelectItem value="pending">Pending</SelectItem>
                                         <SelectItem value="approved">Approved</SelectItem>
                                         <SelectItem value="paid">Paid</SelectItem>
@@ -160,7 +159,6 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                         </div>
                                     ) : (
                                         <SelectContent>
-                                            <SelectItem value="">All Employees</SelectItem>
                                             {employees
                                                 .filter(e => e.id && typeof e.id === 'number' && e.name && e.name.trim() !== '')
                                                 .map(e => {

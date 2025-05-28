@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import { Input } from '../../../../../../resources/js/components/ui/input';
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from '../../../../../../resources/js/components/ui/select';
+import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
 
 interface Role { id: number; name: string; }
 interface User {
@@ -81,7 +82,7 @@ const UsersIndex: React.FC<Props> = ({ users, roles }) => {
   };
 
   return (
-    <div>
+    <AdminLayout title="User Management">
       <Head title="User Management" />
       <Card>
         <CardHeader>
@@ -122,7 +123,6 @@ const UsersIndex: React.FC<Props> = ({ users, roles }) => {
                         <SelectValue placeholder="Select Role" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Select Role</SelectItem>
                         {roles.map(role => (
                           <SelectItem key={role.id} value={String(role.id)}>{role.name}</SelectItem>
                         ))}
@@ -139,7 +139,7 @@ const UsersIndex: React.FC<Props> = ({ users, roles }) => {
           </Table>
         </CardContent>
       </Card>
-    </div>
+    </AdminLayout>
   );
 };
 
