@@ -128,17 +128,11 @@ const moduleMap: Record<string, string[]> = {
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
-        console.log(`Attempting to resolve page: ${name}`);
-        console.log('Available modulePages keys:', Object.keys(modulePages));
-
         // First try to resolve from main app's pages
         try {
             const component = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
-            console.log(`Successfully loaded ${name} from main app`);
             return component;
         } catch (error) {
-            console.log(`Page not found in main app: ${name}, checking module pages...`);
-
             // Handle Laravel's Inertia::render('Module::Page') pattern (like Employee module)
             if (name.includes('::')) {
                 const [module, page] = name.split('::');
@@ -155,7 +149,6 @@ createInertiaApp({
                 ];
                 for (const path of possiblePaths) {
                     if (path in modulePages) {
-                        console.log(`Resolved ${name} to ${path}`);
                         return await modulePages[path]();
                     }
                 }
@@ -168,10 +161,7 @@ createInertiaApp({
                 const possibleKeys = [mappedPath, mappedPath.replace(/^\./, ''), '/' + mappedPath.replace(/^\./, '')];
                 for (const key of possibleKeys) {
                     if (key in modulePages) {
-                        console.log(`Loading page from mappings: ${key}`);
-                        const module = await modulePages[key]();
-                        console.log(`Successfully loaded ${name} from explicit mappings`);
-                        return module;
+                        return await modulePages[key]();
                     }
                 }
             }
@@ -180,10 +170,7 @@ createInertiaApp({
             if (name in employeePages && employeePages[name] in modulePages) {
                 try {
                     const pagePath = employeePages[name];
-                    console.log(`Loading employee page from: ${pagePath}`);
-                    const module = await modulePages[pagePath]();
-                    console.log(`Successfully loaded ${name} from employee pages`);
-                    return module;
+                    return await modulePages[pagePath]();
                 } catch (e) {
                     console.error(`Failed to import ${name} page directly:`, e);
                 }
@@ -212,7 +199,6 @@ createInertiaApp({
 
                 for (const path of possiblePaths) {
                     if (path in modulePages) {
-                        console.log(`Found page at ${path}`);
                         return await modulePages[path]();
                     }
                 }
@@ -239,7 +225,6 @@ createInertiaApp({
                   .filter(p => p.endsWith(`/${modulePattern}/${pagePattern}`));
 
                 if (specificPaths.length > 0) {
-                    console.log(`Found specific page at ${specificPaths[0]}`);
                     return await modulePages[specificPaths[0]]();
               }
             }
@@ -266,62 +251,14 @@ createInertiaApp({
                         // First try direct path in the module
                         const directPath = `./Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`;
                         if (directPath in modulePages) {
-                            console.log(`Found ${pagePart} page at ${directPath}`);
                             return await modulePages[directPath]();
                         }
 
                         // Then try module part as directory
                         const subDirPath = `./Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`;
                         if (subDirPath in modulePages) {
-                            console.log(`Found ${pagePart} page at ${subDirPath}`);
                             return await modulePages[subDirPath]();
                         }
-                    }
-                }
-            }
-
-            console.error(`Module page not found: ${name}`);
-            console.error('Available module page keys:', Object.keys(modulePages).length);
-
-            // Print diagnostic information about what we tried
-            if (name.includes('/')) {
-                const [modulePart, pagePart] = name.split('/', 2);
-                console.log(`Diagnostic info for ${name}:`);
-                console.log(`- Module part: ${modulePart}`);
-                console.log(`- Page part: ${pagePart}`);
-                console.log(`- In moduleMap: ${modulePart in moduleMap}`);
-                if (modulePart in moduleMap) {
-                    console.log(`- Possible modules: ${moduleMap[modulePart].join(', ')}`);
-
-                    // List some paths we tried
-                    for (const moduleType of moduleMap[modulePart]) {
-                        const paths = [
-                            `./Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`,
-                            `./Modules/${moduleType}/resources/js/Pages/${pagePart}.tsx`,
-                            `./Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`,
-                            `./Modules/${moduleType}/resources/js/Pages/${modulePart}/${pagePart}.tsx`,
-                        ];
-
-                        console.log(`- Paths for ${moduleType}:`);
-                        paths.forEach(path => {
-                            console.log(`  - ${path}: ${path in modulePages ? 'FOUND' : 'not found'}`);
-                        });
-                    }
-                }
-
-                // List some similar paths that do exist
-                const similarPaths = Object.keys(modulePages).filter(path =>
-                    (path.includes(modulePart) || path.includes(modulePart.toLowerCase())) &&
-                    (path.includes(pagePart) || path.includes(pagePart.toLowerCase()))
-                );
-
-                if (similarPaths.length > 0) {
-                    console.log(`- Similar paths that exist:`);
-                    similarPaths.slice(0, 5).forEach(path => {
-                        console.log(`  - ${path}`);
-                    });
-                    if (similarPaths.length > 5) {
-                        console.log(`  - ... and ${similarPaths.length - 5} more`);
                     }
                 }
             }

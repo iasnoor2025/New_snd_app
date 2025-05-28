@@ -16,9 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-Route::middleware(['auth', 'role:Admin'])->group(function () {
+// Use lowercase role names for Spatie permission middleware (case-sensitive)
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
     Route::post('users/{user}/roles', [UserController::class, 'assignRole'])->name('users.assignRole');
 });
@@ -32,6 +32,15 @@ Route::get('/modules_statuses.json', function () {
         'Content-Type' => 'application/json'
     ]);
 });
+
+Route::get('/whoami', function () {
+    return [
+        'user' => auth()->user(),
+        'permissions' => auth()->user()?->getAllPermissions()->pluck('name'),
+    ];
+});
+
+Route::redirect('/roles', '/settings/roles');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

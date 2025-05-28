@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
-import { Input } from '../../../../../../resources/js/components/ui/input';
 import { Button } from '../../../../../../resources/js/components/ui/button';
-import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from '../../../../../../resources/js/components/ui/select';
 import { toast } from 'sonner';
 import { route } from 'ziggy-js';
+import AdminLayout from '@/layouts/AdminLayout';
 
 interface Permission {
   id: number;
@@ -20,12 +18,13 @@ interface Role {
 
 interface Props {
   role: Role;
-  permissions: Permission[];
+  permissions: Record<string, Permission[]>;
+  selectedPermissions?: number[];
   success?: string;
   error?: string;
 }
 
-const EditRole: React.FC<Props> = ({ role, permissions, success, error }) => {
+const EditRole: React.FC<Props> = ({ role, permissions, selectedPermissions, success, error }) => {
   const { data, setData, put, processing, errors } = useForm({
     name: role.name,
     permissions: role.permissions.map(p => p.id),
@@ -50,42 +49,52 @@ const EditRole: React.FC<Props> = ({ role, permissions, success, error }) => {
   };
 
   return (
-    <Card className="max-w-lg mx-auto mt-8">
-      <CardHeader>
-        <CardTitle>Edit Role</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <AdminLayout title="Edit Role">
+      <div className="container mx-auto px-6 py-10">
+        <h1 className="text-3xl font-bold mb-8">Edit Role</h1>
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div>
-            <Input
-              label="Name"
+            <label htmlFor="role-name" className="block mb-2 font-medium text-lg">Role Name</label>
+            <input
+              id="role-name"
+              className="w-full border rounded px-3 py-2 text-lg focus:outline-none focus:ring focus:border-blue-300"
               value={data.name}
               onChange={e => setData('name', e.target.value)}
               placeholder="Role Name"
               required
             />
-            {errors.name && <div className="text-red-500 text-sm">{errors.name}</div>}
+            {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
           </div>
           <div>
-            <label className="block mb-1 font-medium">Permissions</label>
-            <div className="flex flex-wrap gap-2">
-              {permissions.map(permission => (
-                <label key={permission.id} className="flex items-center gap-1">
-                  <input
-                    type="checkbox"
-                    checked={data.permissions.includes(permission.id)}
-                    onChange={() => handlePermissionChange(permission.id)}
-                  />
-                  {permission.name}
-                </label>
+            <label className="block mb-4 font-medium text-lg">Permissions</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Object.entries(permissions).map(([section, perms]) => (
+                <div key={section} className="mb-6">
+                  <div className="font-semibold capitalize mb-3 text-blue-700 text-base border-b pb-1">{section.replace('-', ' ')}</div>
+                  <div className="flex flex-col gap-2">
+                    {perms.map(permission => (
+                      <label key={permission.id} className="flex items-center gap-2 text-base">
+                        <input
+                          type="checkbox"
+                          checked={data.permissions.includes(permission.id)}
+                          onChange={() => handlePermissionChange(permission.id)}
+                          className="accent-blue-600 w-4 h-4"
+                        />
+                        {permission.name}
+                      </label>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
-            {errors.permissions && <div className="text-red-500 text-sm">{errors.permissions}</div>}
+            {errors.permissions && <div className="text-red-500 text-sm mt-1">{errors.permissions}</div>}
           </div>
-          <Button type="submit" disabled={processing} className="w-full">Update</Button>
+          <div className="sticky bottom-0 bg-white py-4 border-t flex justify-end">
+            <Button type="submit" disabled={processing} className="px-8 py-2 text-lg">Update</Button>
+          </div>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </AdminLayout>
   );
 };
 

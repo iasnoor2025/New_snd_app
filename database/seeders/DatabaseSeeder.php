@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
         // Run the Core module migrations manually
         $this->call(CoreModuleMigrator::class);
 
+        // Run the PermissionSeeder first
+        $this->call(PermissionSeeder::class);
+
         // Run the AdminUserSeeder to create admin role and user
         $this->call(AdminUserSeeder::class);
 

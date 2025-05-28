@@ -95,9 +95,6 @@ export function AppSidebar() {
         )
         : false;
 
-    console.log('AppSidebar: user roles', auth?.user?.roles);
-    console.log('AppSidebar: isAdmin', isAdmin);
-
     // Check if user is a customer
     const isCustomer = auth?.user && 'is_customer' in auth.user
         ? auth.user.is_customer

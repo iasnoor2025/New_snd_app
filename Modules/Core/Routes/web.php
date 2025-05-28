@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Role routes
     Route::middleware(['permission:roles.view'])->group(function () {
         Route::get('settings/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('settings/roles/create', [RoleController::class, 'create'])->name('roles.create');
         Route::get('settings/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
         Route::get('settings/user-roles', [RoleController::class, 'userRoles'])->name('roles.user-roles');
     });

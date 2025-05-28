@@ -21,7 +21,7 @@ class RoleController extends Controller
 
         $roles = Role::with('permissions')->get();
 
-        return Inertia::render('settings/Roles/Index', [
+        return Inertia::render('Roles/Index', [
             'roles' => $roles,
         ]);
     }
@@ -37,7 +37,7 @@ class RoleController extends Controller
             return explode('.', $permission->name)[0];
         });
 
-        return Inertia::render('settings/Roles/Create', [
+        return Inertia::render('Roles/Create', [
             'permissions' => $permissions,
         ]);
     }
@@ -79,7 +79,7 @@ class RoleController extends Controller
 
         $role->load('permissions');
 
-        return Inertia::render('settings/Roles/Show', [
+        return Inertia::render('Roles/Show', [
             'role' => $role,
         ]);
     }
@@ -97,7 +97,7 @@ class RoleController extends Controller
             return explode('.', $permission->name)[0];
         });
 
-        return Inertia::render('settings/Roles/Edit', [
+        return Inertia::render('Roles/Edit', [
             'role' => $role,
             'permissions' => $permissions,
             'selectedPermissions' => $role->permissions->pluck('id'),
@@ -163,7 +163,7 @@ class RoleController extends Controller
         $users = User::with('roles', 'permissions')->get();
         $roles = Role::all();
 
-        return Inertia::render('settings/Roles/UserRoles', [
+        return Inertia::render('Roles/UserRoles', [
             'users' => $users,
             'roles' => $roles,
         ]);
