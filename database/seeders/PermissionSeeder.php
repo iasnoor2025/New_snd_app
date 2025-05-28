@@ -24,7 +24,28 @@ class PermissionSeeder extends Seeder
                 $permissionNames = $permissionNames->merge($matches1[1])->merge($matches2[1]);
             }
         }
-        $permissionNames = $permissionNames->unique()->filter();
+
+        // Master list of all required permissions
+        $masterPermissions = [
+            // Project
+            'project.view', 'project.create', 'project.edit', 'project.delete',
+            // Equipment
+            'equipment.view', 'equipment.create', 'equipment.edit', 'equipment.delete',
+            // Add more as needed
+            'users.view', 'users.create', 'users.edit', 'users.delete',
+            'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
+            'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
+            'employees.view', 'employees.create', 'employees.edit', 'employees.delete',
+            'reports.view', 'reports.build',
+            'rentals.view', 'rentals.create', 'rentals.edit', 'rentals.delete', 'rentals.approve',
+            'maintenance.view', 'maintenance.create', 'maintenance.edit', 'maintenance.delete',
+            'technicians.view', 'technicians.create', 'technicians.edit', 'technicians.delete',
+            'timesheets.view',
+
+            // ...add all other permissions you want to guarantee
+        ];
+
+        $permissionNames = $permissionNames->merge($masterPermissions)->unique()->filter();
 
         foreach ($permissionNames as $permission) {
             Permission::firstOrCreate([
