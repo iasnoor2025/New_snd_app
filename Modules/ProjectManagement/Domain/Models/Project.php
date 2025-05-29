@@ -43,6 +43,31 @@ class Project extends Model
     {
         return $this->hasMany(ProjectTeamMember::class);
     }
+
+    public function manpower(): HasMany
+    {
+        return $this->hasMany(ProjectManpower::class);
+    }
+
+    public function equipment(): HasMany
+    {
+        return $this->hasMany(ProjectEquipment::class);
+    }
+
+    public function materials(): HasMany
+    {
+        return $this->hasMany(ProjectMaterial::class);
+    }
+
+    public function fuel(): HasMany
+    {
+        return $this->hasMany(ProjectFuel::class);
+    }
+
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(ProjectExpense::class);
+    }
 }
 
 

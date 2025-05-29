@@ -18,11 +18,11 @@ import { CalendarIcon, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import axios from 'axios';
 import { Toggle } from '@/components/ui/toggle';
-// import { ToastService } from '@/components/shared/ToastManager'; // TODO: ToastService import unresolved, revisit if file is added
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { z } from 'zod';
 import { route } from 'ziggy-js';
-// import { DatePicker } from '@/components/ui/date-picker'; // TODO: DatePicker component import unresolved, revisit if file is added
+import { ToastService } from '@/components/shared/ToastManager';
+import { DatePicker } from '@/components/ui/date-picker';
 
 interface Employee {
     id: number;
@@ -503,7 +503,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                {/*
                                 <DatePicker
                                     date={data.start_date ? new Date(data.start_date) : undefined}
                                     onDateChange={(date: any) => handleInputChange('start_date', date?.toISOString().split('T')[0])}
@@ -512,8 +511,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     fromDate={new Date(2020, 0, 1)}
                                     toDate={new Date()}
                                 />
-                                */}
-                                {/* TODO: DatePicker component usage commented out, revisit if DatePicker is added or path is fixed */}
                             </div>
                             <div className="space-y-2">
                                 <DatePicker
@@ -611,22 +608,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                {/*
-                                <DatePicker
-                                    date={data.start_date ? new Date(data.start_date) : undefined}
-                                    onDateChange={(date: any) => handleInputChange('start_date', date?.toISOString().split('T')[0])}
-                                    label="Start Date"
-                                    error={errors.start_date}
-                                    fromDate={new Date(2020, 0, 1)}
-                                    toDate={new Date()}
-                                />
-                                */}
-                                {/* TODO: DatePicker component usage commented out, revisit if DatePicker is added or path is fixed */}
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="usage_hours">Usage Hours</Label>
                                 <Input
@@ -784,7 +765,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                {/*
                                 <DatePicker
                                     date={data.date ? new Date(data.date) : undefined}
                                     onDateChange={(date: any) => handleInputChange('date', date?.toISOString().split('T')[0])}
@@ -793,8 +773,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     fromDate={new Date(2020, 0, 1)}
                                     toDate={new Date()}
                                 />
-                                */}
-                                {/* TODO: DatePicker component usage commented out, revisit if DatePicker is added or path is fixed */}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="notes">Notes</Label>
@@ -910,7 +888,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                {/*
                                 <DatePicker
                                     date={data.date ? new Date(data.date) : undefined}
                                     onDateChange={(date: any) => handleInputChange('date', date?.toISOString().split('T')[0])}
@@ -919,8 +896,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     fromDate={new Date(2020, 0, 1)}
                                     toDate={new Date()}
                                 />
-                                */}
-                                {/* TODO: DatePicker component usage commented out, revisit if DatePicker is added or path is fixed */}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="notes">Notes</Label>
@@ -1017,7 +992,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                 <div className="space-y-4">
                                     <div className="space-y-2">
                                         <Label htmlFor="date" className="text-sm font-medium">Date</Label>
-                                        {/*
                                         <DatePicker
                                             date={data.date ? new Date(data.date) : undefined}
                                             onDateChange={(date: any) => handleInputChange('date', date?.toISOString().split('T')[0])}
@@ -1026,8 +1000,6 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                             fromDate={new Date(2020, 0, 1)}
                                             toDate={new Date()}
                                         />
-                                        */}
-                                        {/* TODO: DatePicker component usage commented out, revisit if DatePicker is added or path is fixed */}
                                     </div>
 
                                     <div className="space-y-2">

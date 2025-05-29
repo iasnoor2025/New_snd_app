@@ -26,7 +26,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Get all records.
      *
-     * @return mixed;
+     * @return mixed
      */
     public function all()
     {
@@ -37,7 +37,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * Find a record by ID.
      *
      * @param int $id
-     * @return mixed;
+     * @return mixed
      */
     public function find($id)
     {

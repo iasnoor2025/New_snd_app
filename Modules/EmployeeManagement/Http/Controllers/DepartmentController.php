@@ -3,7 +3,7 @@
 namespace Modules\EmployeeManagement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\EmployeeManagement\Services\DepartmentService;
+use Modules\EmployeeManagement\Services\DepartmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;

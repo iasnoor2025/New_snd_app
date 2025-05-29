@@ -1,9 +1,9 @@
 ﻿import React, { useState, useMemo, useEffect } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/tabs';
-import ResourceForm from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/ResourceForm';
-import ResourceList from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/ResourceList';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ResourceForm from '@/Modules/ProjectManagement/resources/js/components/project/ResourceForm';
+import ResourceList from '@/Modules/ProjectManagement/resources/js/components/project/ResourceList';
 import {
     Dialog,
     DialogContent,
@@ -11,16 +11,16 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogDescription,
-} from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/dialog';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/button';
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { Plus, ArrowLeft, Layers, PieChart, BarChart, DollarSign, Users, Search, Filter, SlidersHorizontal, X, CheckSquare, FileText, Package, Calendar as CalendarIcon } from 'lucide-react';
-import AdminLayout from '@/Modules/ProjectManagement/Resources/js/layouts/AdminLayout';
-import ConfirmDialog from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/shared/ConfirmDialog';
-import { ToastService } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/shared/ToastManager';
-import { Separator } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/separator';
-import { Badge } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/badge';
-import { Progress } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/progress';
-import { Input } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/input';
+import AdminLayout from '@/Modules/ProjectManagement/resources/js/layouts/AdminLayout';
+import ConfirmDialog from '@/components/shared/ToastManager';
+import { ToastService } from '@/components/shared/ToastManager';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import {
     DropdownMenu,
@@ -35,12 +35,12 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
     DropdownMenuPortal,
-} from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/popover';
+} from '@/components/ui/popover';
 import {
     Form,
     FormControl,
@@ -48,26 +48,26 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/form';
+} from '@/components/ui/form';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/select';
-import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/TaskList';
-import TaskDialog from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/TaskDialog';
+} from '@/components/ui/select';
+import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/resources/js/components/project/TaskList';
+import TaskDialog from '@/Modules/ProjectManagement/resources/js/components/project/TaskDialog';
 import axios from 'axios';
-import { DialogErrorBoundary } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/DialogErrorBoundary';
-import ErrorBoundary from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ErrorBoundary';
-import { SafeDialog } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/SafeDialog';
-import TaskForm from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/TaskForm';
-import ResourceFilters from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/ResourceFilters';
-import ResourcePagination from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/ResourcePagination';
-import ResourceSearch from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/ResourceSearch';
-import { cn } from '@/Modules/ProjectManagement/Resources/js/lib/utils';
-import { Calendar } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/calendar';
+import { DialogErrorBoundary } from '@/Modules/ProjectManagement/resources/js/components/DialogErrorBoundary';
+import ErrorBoundary from '@/Modules/ProjectManagement/resources/js/components/ErrorBoundary';
+import { SafeDialog } from '@/Modules/ProjectManagement/resources/js/components/ui/SafeDialog';
+import TaskForm from '@/Modules/ProjectManagement/resources/js/components/project/TaskForm';
+import ResourceFilters from '@/Modules/ProjectManagement/resources/js/components/project/ResourceFilters';
+import ResourcePagination from '@/Modules/ProjectManagement/resources/js/components/project/ResourcePagination';
+import ResourceSearch from '@/Modules/ProjectManagement/resources/js/components/project/ResourceSearch';
+import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
 
 // Import tab components
 import { ManpowerTab } from './Resources/Tabs/ManpowerTab';
@@ -243,7 +243,7 @@ const ManpowerDialog = React.memo(({
   initialData: any;
   onSuccess: () => void;
 }) => {
-  const formKey = useMemo(() =>;
+  const formKey = useMemo(() =>
     `manpower-form-${initialData?.id || 'new'}-${Date.now()}`,
     [initialData?.id]
   );
@@ -292,7 +292,7 @@ const EquipmentDialog = React.memo(({
   initialData: any;
   onSuccess: () => void;
 }) => {
-  const formKey = useMemo(() =>;
+  const formKey = useMemo(() =>
     `equipment-form-${initialData?.id || 'new'}-${Date.now()}`,
     [initialData?.id]
   );
@@ -341,7 +341,7 @@ const MaterialDialog = React.memo(({
   initialData: any;
   onSuccess: () => void;
 }) => {
-  const formKey = useMemo(() =>;
+  const formKey = useMemo(() =>
     `material-form-${initialData?.id || 'new'}-${Date.now()}`,
     [initialData?.id]
   );
@@ -390,7 +390,7 @@ const FuelDialog = React.memo(({
   initialData: any;
   onSuccess: () => void;
 }) => {
-  const formKey = useMemo(() =>;
+  const formKey = useMemo(() =>
     `fuel-form-${initialData?.id || 'new'}-${Date.now()}`,
     [initialData?.id]
   );
@@ -439,7 +439,7 @@ const ExpenseDialog = React.memo(({
   initialData: any;
   onSuccess: () => void;
 }) => {
-  const formKey = useMemo(() =>;
+  const formKey = useMemo(() =>
     `expense-form-${initialData?.id || 'new'}-${Date.now()}`,
     [initialData?.id]
   );
@@ -834,8 +834,8 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                 status: newStatus,
             }).then((response) => {
                 // Update the task in local state
-                const updatedTasks = localTasks.map(t =>;
-                    t.id === task.id;
+                const updatedTasks = localTasks.map(t =>
+                    t.id === task.id
                     ? { ...t, status: newStatus, updated_at: new Date().toISOString() }
                     : t
                 );
@@ -873,8 +873,8 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                 status: updatedStatus
             }).then(() => {
                 // Update local state
-                const updatedTasks = localTasks.map(t =>;
-                    t.id === task.id;
+                const updatedTasks = localTasks.map(t =>
+                    t.id === task.id
                         ? { ...t, completion_percentage: percentage, status: updatedStatus, updated_at: new Date().toISOString() }
                         : t
                 );
@@ -912,8 +912,8 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                 const taskData = Object.fromEntries(formData.entries());
 
                 if (editingTask) {
-                    const updatedTasks = localTasks.map(task =>;
-                        task.id === editingTask.id;
+                    const updatedTasks = localTasks.map(task =>
+                        task.id === editingTask.id
                             ? { ...task, ...taskData, updated_at: new Date().toISOString() }
                             : task
                     );
@@ -1105,8 +1105,8 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     // Search in common fields
                     const searchable = [
                         'name' in resource ? resource.name : '',
-                        'description' in resource ? resource.description : '',;
-                        'notes' in resource ? resource.notes : '',;
+                        'description' in resource ? resource.description : '',
+                        'notes' in resource ? resource.notes : '',
                         'title' in resource ? resource.title : '', // For tasks;
                     ].filter(Boolean).join(' ').toLowerCase();
 

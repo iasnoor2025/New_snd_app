@@ -12,21 +12,21 @@ use App\Services\ProjectResourceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use App\Actions\ProjectResources\CreateManpower;
-use App\Actions\ProjectResources\UpdateManpower;
-use App\Actions\ProjectResources\DeleteManpower;
-use App\Actions\ProjectResources\CreateEquipment;
-use App\Actions\ProjectResources\UpdateEquipment;
-use App\Actions\ProjectResources\DeleteEquipment;
-use App\Actions\ProjectResources\CreateMaterial;
-use App\Actions\ProjectResources\UpdateMaterial;
-use App\Actions\ProjectResources\DeleteMaterial;
-use App\Actions\ProjectResources\CreateFuel;
-use App\Actions\ProjectResources\UpdateFuel;
-use App\Actions\ProjectResources\DeleteFuel;
-use App\Actions\ProjectResources\CreateExpense;
-use App\Actions\ProjectResources\UpdateExpense;
-use App\Actions\ProjectResources\DeleteExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateManpower;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateManpower;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteManpower;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateEquipment;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateEquipment;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteEquipment;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateMaterial;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateMaterial;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteMaterial;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateFuel;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateFuel;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteFuel;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteExpense;
 
 class ProjectResourcesApiController extends Controller
 {

@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import { router } from '@inertiajs/react';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { useProjectResources } from '@/Modules/ProjectManagement/Resources/js/hooks/useProjectResources';
 import { TaskStatus } from '@/Modules/ProjectManagement/Resources/js/types/projectResources';
-import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/project/TaskList';
+import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/resources/js/components/project/TaskList';
 
 interface TasksTabProps {
     project: {

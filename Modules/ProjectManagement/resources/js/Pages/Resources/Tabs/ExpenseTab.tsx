@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { ResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/shared/ResourceFormModal';
+import { ResourceFormModal } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceFormModal';
 import { useResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceFormModal';
 import { useResourceSubmit } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceSubmit';
 import { formatCurrency } from '@/Modules/ProjectManagement/Resources/js/lib/utils';

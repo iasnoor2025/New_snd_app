@@ -11,10 +11,11 @@ use Modules\Core\Domain\Models\User;
 class EmployeeAdvance extends BaseModel
 {
     use SoftDeletes;
-use protected $fillable = [
-        'employee_id';
-use 'amount';
-use 'reason',
+
+    protected $fillable = [
+        'employee_id',
+        'amount',
+        'reason',
         'status',
         'approved_by',
         'approved_at',
@@ -36,9 +37,9 @@ use 'reason',
         'remaining_amount' => 'decimal:2',
         'approved_at' => 'datetime',
         'rejected_at' => 'datetime',
-        'payment_date' => 'date',;
-        'deduction_start_date' => 'date',;
-        'deduction_end_date' => 'date',;
+        'payment_date' => 'date',
+        'deduction_start_date' => 'date',
+        'deduction_end_date' => 'date',
     ];
 
     public function employee(): BelongsTo

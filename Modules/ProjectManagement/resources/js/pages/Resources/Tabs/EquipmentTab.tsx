@@ -1,7 +1,7 @@
-﻿import React from 'react';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/button';
-import { ResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/shared/ResourceFormModal';
-import { ResourceTable } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/shared/ResourceTable';
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { ResourceFormModal } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceFormModal';
+import { ResourceTable } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceTable';
 import { useResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceFormModal';
 import { useResourceSubmit } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceSubmit';
 import type { EquipmentResource } from '@/Modules/ProjectManagement/Resources/js/types/projectResources';

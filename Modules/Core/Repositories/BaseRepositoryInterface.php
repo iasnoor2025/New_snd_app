@@ -7,7 +7,7 @@ interface BaseRepositoryInterface
     /**
      * Get all records.
      *
-     * @return mixed;
+     * @return mixed
      */
     public function all();
 
@@ -15,7 +15,7 @@ interface BaseRepositoryInterface
      * Find a record by ID.
      *
      * @param int $id
-     * @return mixed;
+     * @return mixed
      */
     public function find($id);
 
@@ -23,7 +23,7 @@ interface BaseRepositoryInterface
      * Create a new record.
      *
      * @param array $data
-     * @return mixed;
+     * @return mixed
      */
     public function create(array $data);
 

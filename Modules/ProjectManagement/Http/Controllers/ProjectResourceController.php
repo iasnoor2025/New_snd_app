@@ -22,9 +22,9 @@ use Modules\EquipmentManagement\Domain\Models\Equipment;
 use Modules\EquipmentManagement\Domain\Models\EquipmentResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
-use App\Actions\ProjectResource\DeleteManpower;
-use App\Actions\ProjectResources\CreateManpower;
-use App\Actions\ProjectResources\UpdateManpower;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteManpower;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateManpower;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateManpower;
 
 class ProjectResourceController extends Controller
 {
@@ -688,19 +688,19 @@ class ProjectResourceController extends Controller
                     break;
                 case 'equipment':
                     $resource = ProjectEquipment::findOrFail($resourceId);
-                    $action = app(\App\Actions\ProjectResources\DeleteEquipment::class);
+                    $action = app(\Modules\ProjectManagement\Actions\ProjectResources\DeleteEquipment::class);
                     break;
                 case 'material':
                     $resource = ProjectMaterial::findOrFail($resourceId);
-                    $action = app(\App\Actions\ProjectResources\DeleteMaterial::class);
+                    $action = app(\Modules\ProjectManagement\Actions\ProjectResources\DeleteMaterial::class);
                     break;
                 case 'fuel':
                     $resource = ProjectFuel::findOrFail($resourceId);
-                    $action = app(\App\Actions\ProjectResources\DeleteFuel::class);
+                    $action = app(\Modules\ProjectManagement\Actions\ProjectResources\DeleteFuel::class);
                     break;
                 case 'expense':
                     $resource = ProjectExpense::findOrFail($resourceId);
-                    $action = app(\App\Actions\ProjectResources\DeleteExpense::class);
+                    $action = app(\Modules\ProjectManagement\Actions\ProjectResources\DeleteExpense::class);
                     break;
                 default:
                     return response()->json([

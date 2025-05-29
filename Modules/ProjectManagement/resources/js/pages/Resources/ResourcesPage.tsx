@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ResourcesPage Component
  *
  * This component serves as the main container for managing all project resources.
@@ -7,8 +7,8 @@
  */
 
 import React, { Suspense, lazy, useCallback, useMemo } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/ProjectManagement/Resources/js/Modules/ProjectManagement/Resources/js/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useResourceStore } from '@/Modules/ProjectManagement/Resources/js/stores/resourceStore';
 import type {
     ManpowerResource,

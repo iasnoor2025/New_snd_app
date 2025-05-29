@@ -1,9 +1,9 @@
 <?php
 namespace Modules\ProjectManagement\Http\Controllers;
 
-use App\Actions\ProjectResources\CreateExpense;
-use App\Actions\ProjectResources\UpdateExpense;
-use App\Actions\ProjectResources\DeleteExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\CreateExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\DeleteExpense;
 use App\Http\Controllers\Controller;
 use Modules\ProjectManagement\Domain\Models\Project;
 use Modules\ProjectManagement\Domain\Models\ProjectExpense;
