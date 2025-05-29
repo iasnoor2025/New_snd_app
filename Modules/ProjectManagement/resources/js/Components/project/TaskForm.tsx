@@ -156,7 +156,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                 <FormField
                     control={form.control}
                     name="title"
-                    render={({ field }) => (
+                    render={({ field }: { field: any }) => (
                         <FormItem>
                             <FormLabel>Title</FormLabel>
                             <FormControl>
@@ -170,7 +170,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                 <FormField
                     control={form.control}
                     name="description"
-                    render={({ field }) => (
+                    render={({ field }: { field: any }) => (
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
@@ -189,13 +189,14 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                     <FormField
                         control={form.control}
                         name="status"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                             <FormItem>
                                 <FormLabel>Status</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                     value={field.value}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select status" />
@@ -216,13 +217,14 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                     <FormField
                         control={form.control}
                         name="priority"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                             <FormItem>
                                 <FormLabel>Priority</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                     value={field.value}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select priority" />
@@ -244,7 +246,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                     <FormField
                         control={form.control}
                         name="due_date"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Due Date</FormLabel>
                                 <Popover>
@@ -256,6 +258,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                                                     "pl-3 text-left font-normal",
                                                     !field.value && "text-muted-foreground"
                                                 )}
+                                            >
                                                 {field.value ? (
                                                     format(field.value, "PPP")
                                                 ) : (
@@ -282,7 +285,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                     <FormField
                         control={form.control}
                         name="completion_percentage"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                             <FormItem>
                                 <FormLabel>Completion Percentage</FormLabel>
                                 <FormControl>
@@ -298,13 +301,14 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                     <FormField
                         control={form.control}
                         name="assigned_to_id"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                             <FormItem>
                                 <FormLabel>Assigned To</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                     value={field.value}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select person" />

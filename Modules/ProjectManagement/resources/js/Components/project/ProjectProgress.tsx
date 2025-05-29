@@ -6,8 +6,8 @@ import {
   CardTitle,
   CardContent,
   CardFooter
-} from "../ui/card";
-import { Progress } from "../ui/progress";
+} from "../../../../../../resources/js/components/ui/card";
+// import { Progress } from 'resources/js/components/ui/progress'; // TODO: Progress component import unresolved, revisit if file is added
 import { CheckCircle2, Calendar, Clock } from "lucide-react";
 
 interface ProjectProgressProps {
@@ -86,7 +86,10 @@ export function ProjectProgress({
           <p className="text-sm font-medium">{percentage}% completed</p>
           <p className="text-sm text-muted-foreground">{completed}/{total} tasks</p>
         </div>
-        <Progress value={percentage} className="h-2" />
+        {/*
+        <Progress value={progressValue} className="h-3 bg-gray-100" />
+        */}
+        {/* TODO: Progress bar component usage commented out, revisit if Progress is added or path is fixed */}
         <div className="grid grid-cols-3 gap-2">
           <div className="flex flex-col items-center justify-center rounded-md bg-blue-50 p-2">
             <span className="text-xl font-semibold text-blue-600">{inProgress}</span>

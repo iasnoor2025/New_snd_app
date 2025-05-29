@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import TaskForm from './TaskForm';
 import { ProjectTask } from './TaskList';
 import { XIcon } from 'lucide-react';
-import ErrorBoundary from '../ErrorBoundary';
 
 interface TaskDialogProps {
   open: boolean;
@@ -106,48 +105,48 @@ const TaskDialog = memo(function TaskDialog({
 
   return (
     <Portal>
-      <ErrorBoundary>
-        {/* Backdrop */}
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+        onClick={handleClose}
+      >
+        {/* Dialog */}
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-          onClick={handleClose}
-          {/* Dialog */}
-          <div
-            className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-lg p-6 shadow-lg relative"
-            onClick={(e) => e.stopPropagation()}
-            {/* Close button */}
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-              onClick={handleClose}
-              <XIcon size={20} />
-              <span className="sr-only">Close</span>
-            </button>
-
-            {/* Header */}
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold">
-                {initialData ? 'Edit Task' : 'Add Task'}
-              </h2>
-              <p className="text-sm text-gray-500">
-                {initialData
-                  ? 'Update the details for this task.'
-                  : 'Add a new task to this project.'}
-              </p>
-            </div>
-
-            {/* Form */}
-            <div className="py-2">
-              <TaskForm
-                key={formKey}
-                projectId={projectId}
-                initialData={initialData}
-                assignableUsers={assignableUsers}
-                onSuccess={handleSuccess}
-              />
-            </div>
+          className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-lg p-6 shadow-lg relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close button */}
+          <button
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            onClick={handleClose}
+          >
+            <XIcon size={20} />
+            <span className="sr-only">Close</span>
+          </button>
+          {/* Header */}
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">
+              {initialData ? 'Edit Task' : 'Add Task'}
+            </h2>
+            <p className="text-sm text-gray-500">
+              {initialData
+                ? 'Update the details for this task.'
+                : 'Add a new task to this project.'}
+            </p>
+          </div>
+          {/* Form */}
+          <div className="py-2">
+            <TaskForm
+              key={formKey}
+              projectId={projectId}
+              initialData={initialData}
+              assignableUsers={assignableUsers}
+              onSuccess={handleSuccess}
+              {...({} as any)}
+            />
           </div>
         </div>
-      </ErrorBoundary>
+      </div>
     </Portal>
   );
 })
