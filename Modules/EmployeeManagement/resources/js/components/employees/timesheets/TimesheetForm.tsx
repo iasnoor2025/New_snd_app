@@ -1,9 +1,10 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, ControllerRenderProps } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +18,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/useToast';
 
 // Define the form schema with validation
 const timesheetSchema = z.object({
@@ -47,7 +47,6 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
   defaultValues,
   projects = [],
 }) => {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   // Initialize form with default values
@@ -166,7 +165,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
               <FormField
                 control={form.control}
                 name="date"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
                     <FormLabel>Date</FormLabel>
                     <FormControl>
@@ -181,7 +180,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
                 <FormField
                   control={form.control}
                   name="project_id"
-                  render={({ field }) => (
+                  render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                     <FormItem>
                       <FormLabel>Project (Optional)</FormLabel>
                       <FormControl>
@@ -189,6 +188,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
                           className="w-full rounded-md border border-input bg-background px-3 py-2"
                           {...field}
                           disabled={isLoading}
+                        >
                           <option value="">Select a project</option>
                           {projects.map((project) => (
                             <option key={project.id} value={project.id}>
@@ -208,7 +208,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
               <FormField
                 control={form.control}
                 name="clock_in"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
                     <FormLabel>Clock In Time</FormLabel>
                     <FormControl>
@@ -222,7 +222,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
               <FormField
                 control={form.control}
                 name="clock_out"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
                     <FormLabel>Clock Out Time</FormLabel>
                     <FormControl>
@@ -238,7 +238,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
               <FormField
                 control={form.control}
                 name="break_start"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
                     <FormLabel>Break Start (Optional)</FormLabel>
                     <FormControl>
@@ -252,7 +252,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
               <FormField
                 control={form.control}
                 name="break_end"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
                     <FormLabel>Break End (Optional)</FormLabel>
                     <FormControl>
@@ -267,7 +267,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
             <FormField
               control={form.control}
               name="notes"
-              render={({ field }) => (
+              render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                 <FormItem>
                   <FormLabel>Notes (Optional)</FormLabel>
                   <FormControl>
@@ -292,9 +292,4 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
     </Card>
   );
 };
-
-
-</Input>
-</Input>
-</Input>
 

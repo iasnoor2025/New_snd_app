@@ -7,6 +7,7 @@ import { initializeTheme } from './hooks/use-appearance';
 import { Toaster } from 'sonner';
 // Import Ziggy configuration
 import { Ziggy } from './ziggy';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -276,11 +277,12 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         const root = createRoot(el);
+        const queryClient = new QueryClient();
         root.render(
-            <>
+            <QueryClientProvider client={queryClient}>
                 <App {...props} />
                 <Toaster richColors position="top-right" />
-            </>
+            </QueryClientProvider>
         );
     },
     progress: {

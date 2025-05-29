@@ -4,6 +4,7 @@ import { format, parseISO } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/useToast';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -26,7 +27,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CalendarIcon, DotsHorizontalIcon, PlusIcon } from '@radix-ui/react-icons';
+import { Calendar as CalendarIcon, Ellipsis, Plus } from 'lucide-react';
 
 interface Timesheet {
   id: number;
@@ -59,7 +60,6 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
   onAddNew,
   onEdit,
 }) => {
-  const { toast } = useToast();
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -82,12 +82,13 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
       );
       setTimesheets(response.data.timesheets);
     } catch (error) {
-      console.error('Error fetching timesheets:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load timesheets',
-        variant: 'destructive',
-      })
+      const err = error as any;
+      if (err?.response?.status === 404) {
+        setTimesheets([]);
+      } else {
+        console.error('Error fetching timesheets:', error);
+        toast('Failed to load timesheets');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -111,11 +112,7 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
       fetchTimesheets();
     } catch (error) {
       console.error('Error deleting timesheet:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete timesheet',
-        variant: 'destructive',
-      })
+      toast('Failed to delete timesheet');
     }
   };
 
@@ -187,7 +184,7 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
           </div>
           {onAddNew && (
             <Button onClick={onAddNew}>
-              <PlusIcon className="mr-2 h-4 w-4" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Timesheet
             </Button>
           )}
@@ -247,19 +244,21 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
                             <span className="sr-only">Open menu</span>
-                            <DotsHorizontalIcon className="h-4 w-4" />
+                            <Ellipsis className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             onClick={() => onEdit && onEdit(timesheet.id)}
                             disabled={timesheet.status === 'approved'}
+                          >
                             Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => deleteTimesheet(timesheet.id)}
                             disabled={timesheet.status === 'approved'}
                             className="text-red-600"
+                          >
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>

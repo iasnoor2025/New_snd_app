@@ -23,4 +23,19 @@ class EmployeePolicy
 
 
     // You can add more methods (create, update, delete, etc.) as needed
+    public function create(User $user): bool
+    {
+        return $user->hasPermissionTo('employees.create');
+    }
+
+    public function update(User $user, Employee $employee): bool
+    {
+        return $user->hasPermissionTo('employees.edit');
+    }
+
+    public function delete(User $user, Employee $employee): bool
+    {
+        return $user->hasPermissionTo('employees.delete');
+    }
+
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeManagementController;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeController;
+use Modules\EmployeeManagement\Http\Controllers\ResignationController;
 use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -78,6 +79,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })
         ->middleware('permission:employees.view')
         ->name('employees.leave-history');
+
+    // Add resignations.create route for the frontend
+    Route::get('/resignations/create', [ResignationController::class, 'create'])
+        ->middleware('permission:resignations.create')
+        ->name('resignations.create');
 });
 
 // Add access restriction update route

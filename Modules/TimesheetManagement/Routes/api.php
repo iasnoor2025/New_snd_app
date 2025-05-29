@@ -14,6 +14,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\TimesheetManagement\Http\Controllers\TimesheetController;
 
 Route::middleware('auth:sanctum')->group(function () {
     // Weekly timesheets
@@ -55,5 +56,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Tasks for timesheet
     Route::get('/tasks', 'Api\TimesheetTaskController@index');
     Route::get('/projects/{projectId}/tasks', 'Api\TimesheetTaskController@tasksForProject');
+
+    Route::prefix('employees/{employee}')->group(function () {
+        Route::get('timesheets', [TimesheetController::class, 'apiEmployeeTimesheets']);
+        Route::get('timesheets/total-hours', [TimesheetController::class, 'apiEmployeeTimesheetTotalHours']);
+    });
 });
 

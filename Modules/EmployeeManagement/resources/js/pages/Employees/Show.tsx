@@ -1,8 +1,8 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '../../../types';
-import AdminLayout from '../../../layouts/AdminLayout';
-import { Employee as BaseEmployee, Timesheet as BaseTimesheet, LeaveRequest as BaseLeaveRequest, Assignment as BaseAssignment } from '../../../types/models';
+import { PageProps, BreadcrumbItem } from '../../types';
+import AdminLayout from '../../layouts/AdminLayout';
+import { Employee as BaseEmployee } from '../../types/models';
 import { route } from 'ziggy-js';
 import { Breadcrumb } from '../../../../../../resources/js/components/ui/breadcrumb';
 import {
@@ -32,7 +32,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/Modules/EmployeeManagement/Resources/js/components/ui/dialog';
+} from '../../../../../../resources/js/components/ui/dialog';
 import { Input } from '../../../../../../resources/js/components/ui/input';
 import { Label } from '../../../../../../resources/js/components/ui/label';
 import { ArrowLeft, Edit, Trash2, FileText, Calendar, Check, X, AlertCircle, RefreshCw, ExternalLink, Download, User, Briefcase, CreditCard, FileBox, Upload, Printer, Car, Truck, Award, IdCard, Plus, History, Receipt, XCircle, CheckCircle, Clock } from 'lucide-react';
@@ -52,12 +52,17 @@ import { Separator } from '../../../../../../resources/js/components/ui/separato
 import { Avatar, AvatarFallback } from '../../../../../../resources/js/components/ui/avatar';
 // import { MediaLibrary } from '@/Modules/EmployeeManagement/Resources/js/components/media-library/MediaLibrary'; // TODO: Fix or replace MediaLibrary import
 // import { DailyTimesheetRecords } from '@/Modules/EmployeeManagement/Resources/js/components/timesheets/DailyTimesheetRecords'; // TODO: Fix or replace DailyTimesheetRecords import
-import { useToast } from '@/Modules/EmployeeManagement/Resources/js/components/ui/use-toast';
-import { PaymentHistory } from '@/Modules/EmployeeManagement/Resources/js/components/advances/PaymentHistory';
-import { AssignmentHistory } from '@/Modules/EmployeeManagement/Resources/js/components/assignments/AssignmentHistory';
+import { useToast } from '../../../../../../resources/js/components/ui/use-toast';
+import { PaymentHistory } from '../../../../../../Modules/Payroll/resources/js/components/advances/PaymentHistory';
+// import { AssignmentHistory } from '../../components/assignments/AssignmentHistory';
+import { AssignmentHistory } from '../../../../../../Modules/EmployeeManagement/resources/js/components/assignments/AssignmentHistory';
 import { toast } from 'sonner';
 import FinalSettlementTab from '../../components/employees/FinalSettlementTab';
 // import { route } from 'ziggy-js';
+import { Textarea } from '../../../../../../resources/js/components/ui/textarea';
+import { TimesheetSummary } from '../../components/employees/timesheets/TimesheetSummary';
+import { TimesheetList } from '../../components/employees/timesheets/TimesheetList';
+import { TimesheetForm } from '../../components/employees/timesheets/TimesheetForm';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -84,26 +89,37 @@ interface Payment {
   advance_payment_id: number;
 }
 
-interface Employee extends Omit<BaseEmployee, 'nationality' | 'hourly_rate'> {
+interface Employee extends Omit<BaseEmployee, 'file_number'> {
+  file_number?: string;
   department?: string;
   supervisor?: string;
   erp_employee_id?: string;
-  file_number?: string;
   nationality: string;
   iqama_number?: string;
   iqama_expiry?: string;
+  iqama_cost?: number;
+  iqama_file?: string;
   passport_number?: string;
   passport_expiry?: string;
+  passport_file?: string;
   date_of_birth?: string;
   driving_license_number?: string;
   driving_license_expiry?: string;
+  driving_license_cost?: number;
+  driving_license_file?: string;
   operator_license_number?: string;
   operator_license_expiry?: string;
+  operator_license_cost?: number;
+  operator_license_file?: string;
   tuv_certification_number?: string;
   tuv_certification_expiry?: string;
+  tuv_certification_cost?: number;
+  tuv_certification_file?: string;
   spsp_license_number?: string;
   spsp_license_expiry?: string;
-  hourly_rate: number;
+  spsp_license_cost?: number;
+  spsp_license_file?: string;
+  hourly_rate?: number;
   monthly_deduction?: number;
   current_location?: string;
   payrolls?: {
@@ -120,18 +136,20 @@ interface Employee extends Omit<BaseEmployee, 'nationality' | 'hourly_rate'> {
     status: 'pending' | 'approved' | 'rejected';
     created_at: string;
   }[];
+  custom_certifications?: any[];
 }
 
 // Extend the Timesheet interface with additional properties
-interface Timesheet extends BaseTimesheet {
+interface Timesheet {
   clock_in?: string;
   clock_out?: string;
   regular_hours?: number;
   status?: string;
+  [key: string]: any;
 }
 
 // Extend the LeaveRequest interface with additional properties
-interface LeaveRequest extends BaseLeaveRequest {
+interface LeaveRequest {
   id: number;
   leave_type: string;
   start_date: string;
@@ -143,6 +161,7 @@ interface LeaveRequest extends BaseLeaveRequest {
     id: number;
     name: string;
   };
+  [key: string]: any;
 }
 
 interface Advance {
@@ -324,22 +343,27 @@ function formatFileSize(bytes: number): string {
 
 export default function Show({
   employee,
-  timesheets,
-  leaveRequests,
-  advances,
-  assignments,
-  finalSettlements,
-  monthlyHistory: initialMonthlyHistory,
-  totalRepaid: initialTotalRepaid,
-  pagination: initialPagination
+  timesheets = { data: [] },
+  leaveRequests = { data: [] },
+  advances = { data: [] },
+  assignments = { data: [] },
+  finalSettlements = { data: [] },
+  monthlyHistory: initialMonthlyHistory = { data: [] },
+  totalRepaid: initialTotalRepaid = 0,
+  pagination: initialPagination = {}
 }: Props) {
   // Add console log for debugging
+  console.log('Employee data:', employee);
   console.log('Advances data:', advances);
-  console.log('Show component assignments:', assignments);
+  console.log('Assignments data:', assignments);
+  console.log('Timesheets data:', timesheets);
+  console.log('Leave requests data:', leaveRequests);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [advanceAmount, setAdvanceAmount] = useState('');
-  const [monthlyDeduction, setMonthlyDeduction] = useState(advances?.data?.[0]?.monthly_deduction?.toString() || '');
+  const [monthlyDeduction, setMonthlyDeduction] = useState(
+    advances?.data?.[0]?.monthly_deduction?.toString() || ''
+  );
   const [advanceReason, setAdvanceReason] = useState('');
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'yyyy-MM'));
   const [isAdvanceRequestDialogOpen, setIsAdvanceRequestDialogOpen] = useState(false);
@@ -355,7 +379,12 @@ export default function Show({
   const queryClient = useQueryClient();
 
   // Early return if no valid employee data
-  if (!employee?.id) {
+  if (!employee || !employee.id) {
+    const breadcrumbs = [
+      { title: 'Dashboard', href: '/dashboard' },
+      { title: 'Employees', href: '/employees' },
+      { title: 'Employee Details', href: window.location.pathname },
+    ];
     return (
       <AdminLayout title="Employee Details" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
         <Head title="Employee Not Found" />
@@ -374,6 +403,13 @@ export default function Show({
       </AdminLayout>
     );
   }
+
+  // Only define breadcrumbs here, after we know employee exists
+  const breadcrumbs = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Employees', href: '/employees' },
+    { title: employee.first_name + ' ' + (employee.last_name || ''), href: window.location.pathname },
+  ];
 
   const handleAdvanceRequest = () => {
     if (!advanceAmount || isNaN(Number(advanceAmount)) || Number(advanceAmount) <= 0) {
@@ -440,6 +476,8 @@ export default function Show({
   };
 
   const getStatusBadge = (status: string) => {
+    if (!status) return null;
+
     switch (status) {
       case 'active':
         return <Badge variant="default" className="bg-green-500 hover:bg-green-600">Active</Badge>;
@@ -453,6 +491,11 @@ export default function Show({
   };
 
   const handleRepayment = async (amount: number, activeAdvances: any[]) => {
+    if (!amount || !activeAdvances || !activeAdvances.length || !selectedAdvance) {
+      toast.error('Invalid repayment data');
+      return;
+    }
+
     try {
       console.log('Sending repayment request:', {
         amount,
@@ -478,7 +521,7 @@ export default function Show({
       console.log('Repayment response:', response.data);
 
       if (response.data.success) {
-        // TODO: Replace with toast('message')
+        toast.success('Repayment recorded successfully');
         setIsRepaymentDialogOpen(false);
         // Force reload to get updated balances
         router.visit(route('employees.show', { employee: employee.id }));
@@ -493,7 +536,7 @@ export default function Show({
         config: error.config
       });
 
-      // TODO: Replace with toast('message')
+      toast.error(error.response?.data?.message || error.message || 'Failed to record repayment');
     }
   };
 
@@ -636,8 +679,12 @@ export default function Show({
     });
   };
 
-  // Add this function to calculate monthly summary
-  const calculateMonthlySummary = (timesheets: any[]) => {
+  // Add this function to calculate monthly summary with null checks
+  const calculateMonthlySummary = (timesheetData: any[] = []) => {
+    if (!timesheetData) {
+      timesheetData = [];
+    }
+
     const summary = {
       totalRegularHours: 0,
       totalOvertimeHours: 0,
@@ -652,7 +699,9 @@ export default function Show({
       } as Record<string, number>
     };
 
-    timesheets.forEach(timesheet => {
+    timesheetData.forEach(timesheet => {
+      if (!timesheet) return;
+
       summary.totalRegularHours += Number(timesheet?.regular_hours || timesheet?.hours_worked || 0);
       summary.totalOvertimeHours += Number(timesheet?.overtime_hours || 0);
       summary.daysWorked++;
@@ -663,9 +712,13 @@ export default function Show({
 
     // Calculate total days in month
     const [year, month] = selectedMonth.split('-');
+    if (year && month) {
     const startDate = new Date(Number(year), Number(month) - 1, 1);
     const endDate = new Date(Number(year), Number(month), 0);
     summary.totalDays = endDate.getDate();
+    } else {
+      summary.totalDays = 30; // Default fallback
+    }
 
     // Calculate absent days
     summary.daysAbsent = summary.totalDays - summary.daysWorked;
@@ -783,14 +836,8 @@ export default function Show({
     }
   };
 
-  const breadcrumbs = [
-    { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Employees', href: '/employees' },
-    { title: employee.name, href: window.location.pathname },
-  ];
-
   return (
-    <AdminLayout title={employee.name} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+    <AdminLayout title={employee ? `${employee.first_name || ''} ${employee.last_name || ''}` : 'Employee Details'} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
       <Head title="Employee Details" />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -798,23 +845,23 @@ export default function Show({
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16 border-2 border-primary/10">
               <AvatarFallback className="bg-primary/10 text-primary">
-                {employee.first_name?.[0]}{employee.last_name?.[0]}
+                {employee?.first_name?.[0] || ''}{employee?.last_name?.[0] || ''}
               </AvatarFallback>
             </Avatar>
             <div>
               <h1 className="text-2xl font-bold tracking-tight">
-                {employee.first_name} {employee.middle_name ? `${employee.middle_name} ` : ''}{employee.last_name}
+                {employee?.first_name || ''} {employee?.middle_name ? `${employee.middle_name} ` : ''}{employee?.last_name || ''}
               </h1>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <span>{typeof employee.position === 'object' && employee.position !== null ? employee.position.name : employee.position}</span>
+                <span>{typeof employee?.position === 'object' && employee?.position !== null ? employee.position.name : employee?.position}</span>
                 <span className="text-xs">â€¢</span>
-                <span>ID: {employee.employee_id}</span>
-                {getStatusBadge(employee.status)}
+                <span>ID: {employee?.employee_id || 'N/A'}</span>
+                {employee?.status && getStatusBadge(employee.status)}
                 <span className="text-xs">â€¢</span>
                 <Badge
                   variant="outline"
                   className={
-                    !employee.current_location
+                    !employee?.current_location
                       ? 'bg-gray-50 text-gray-500 border-gray-200'
                       : employee.current_location === 'Available'
                       ? 'bg-green-50 text-green-700 border-green-200'
@@ -825,7 +872,7 @@ export default function Show({
                       : 'bg-blue-50 text-blue-700 border-blue-200'
                   }
                 >
-                  {employee.current_location || 'Not Assigned'}
+                  {employee?.current_location || 'Not Assigned'}
                 </Badge>
               </div>
             </div>
@@ -857,7 +904,7 @@ export default function Show({
               </Button>
             )}
             <Button size="sm" asChild>
-              <Link href={route('advances.index', { employee: employee.id })}>
+              <Link href={route('payroll.employees.advances.index', { employee: employee.id })}>
                 <CreditCard className="mr-2 h-4 w-4" />
                 View Advances
               </Link>
@@ -960,10 +1007,10 @@ export default function Show({
                             {employee.first_name} {employee.middle_name ? `${employee.middle_name} ` : ''}{employee.last_name}
                           </dd>
                         </div>
-                        <div className="flex justify-between border-b pb-2">
+                        {/* <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Email</dt>
                           <dd className="text-sm">{employee.user?.email || 'Not set'}</dd>
-                        </div>
+                        </div> */}
                         <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Phone</dt>
                           <dd className="text-sm">{employee.phone || 'Not set'}</dd>
@@ -983,7 +1030,7 @@ export default function Show({
                       </dl>
                     </div>
 
-                    <div>
+                    {/* <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-3">Emergency Contact</h3>
                       {(employee.emergency_contact_name || employee.emergency_contact_phone) ? (
                         <dl className="space-y-2">
@@ -1003,7 +1050,7 @@ export default function Show({
                       ) : (
                         <p className="text-sm text-muted-foreground italic">No emergency contact information</p>
                       )}
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="space-y-4">
@@ -1132,7 +1179,11 @@ export default function Show({
                         </div>
                         <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Department</dt>
-                          <dd className="text-sm">{employee.department || 'Not assigned'}</dd>
+                          <dd className="text-sm">{
+                            (typeof employee.department === 'object' && employee.department !== null && 'name' in employee.department)
+                              ? (employee.department as { name: string }).name
+                              : employee.department || 'Not assigned'
+                          }</dd>
                         </div>
                         {employee.supervisor && (
                           <div className="flex justify-between border-b pb-2">
@@ -1152,13 +1203,13 @@ export default function Show({
                       <dl className="space-y-2">
                         <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Hire Date</dt>
-                          <dd className="text-sm">{format(new Date(employee.hire_date), 'PPP')}</dd>
+                          <dd className="text-sm">{employee.hire_date ? format(new Date(employee.hire_date), 'PPP') : 'Not set'}</dd>
                         </div>
                         <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Service Period</dt>
                           <dd className="text-sm">
                             {(() => {
-                              const hireDate = new Date(employee.hire_date);
+                              const hireDate = employee.hire_date ? new Date(employee.hire_date) : new Date();
                               const today = new Date();
 
                               let years = today.getFullYear() - hireDate.getFullYear();
@@ -1505,7 +1556,7 @@ export default function Show({
             </Card>
 
             {/* Legal Documents Section */}
-            <DocumentSection
+            {/* <DocumentSection
               title="Legal Documents"
               description="Official identification and legal documents"
               badgeText="Required Documents"
@@ -1529,10 +1580,10 @@ export default function Show({
                 previewSize="id_card"
                 documentName="Passport"
               />
-            </DocumentSection>
+            </DocumentSection> */}
 
             {/* Licenses Section */}
-            <DocumentSection
+            {/* <DocumentSection
               title="Licenses & Certifications"
               description="Professional licenses and certifications"
               badgeText="Professional Documents"
@@ -1574,10 +1625,10 @@ export default function Show({
                 previewSize="id_card"
                 documentName="SPSP License"
               />
-            </DocumentSection>
+            </DocumentSection> */}
 
             {/* Additional Documents Section */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle>Additional Documents</CardTitle>
                 <CardDescription>
@@ -1597,10 +1648,10 @@ export default function Show({
                   }}
                 />
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Document Expiry Tracker */}
-            <DocumentExpiryTracker
+            {/* <DocumentExpiryTracker
               documents={[
                 { name: 'Iqama', expiry: employee.iqama_expiry, number: employee.iqama_number },
                 { name: 'Passport', expiry: employee.passport_expiry, number: employee.passport_number },
@@ -1609,7 +1660,269 @@ export default function Show({
                 { name: 'TÃœV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
                 { name: 'SPSP License', expiry: employee.spsp_license_expiry, number: employee.spsp_license_number },
               ]}
-            />
+            /> */}
+
+            {/* Enhanced Document Details Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Legal & Identification Documents</CardTitle>
+                <CardDescription>View and manage key employee documents</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Iqama */}
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Iqama</h3>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Number</span>
+                      <span className="text-sm">{employee.iqama_number || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Expiry</span>
+                      <span className="text-sm">{employee.iqama_expiry ? format(new Date(employee.iqama_expiry), 'PPP') : 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Cost</span>
+                      <span className="text-sm">{employee.iqama_cost ? `SAR ${Number(employee.iqama_cost).toFixed(2)}` : 'Not set'}</span>
+                    </div>
+                    {/* File upload/download */}
+                    <div className="flex items-center gap-2 mt-2">
+                      {employee.iqama_file && (
+                        <Button asChild variant="outline" size="sm">
+                          <a href={employee.iqama_file} target="_blank" rel="noopener noreferrer">Download</a>
+                        </Button>
+                      )}
+                      {hasPermission('employees.edit') && (
+                        <>
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            id="iqama-upload"
+                            onChange={e => {/* TODO: handle upload */}}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('iqama-upload')?.click()}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {/* Passport */}
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Passport</h3>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Number</span>
+                      <span className="text-sm">{employee.passport_number || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Expiry</span>
+                      <span className="text-sm">{employee.passport_expiry ? format(new Date(employee.passport_expiry), 'PPP') : 'Not set'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      {employee.passport_file && (
+                        <Button asChild variant="outline" size="sm">
+                          <a href={employee.passport_file} target="_blank" rel="noopener noreferrer">Download</a>
+                        </Button>
+                      )}
+                      {hasPermission('employees.edit') && (
+                        <>
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            id="passport-upload"
+                            onChange={e => {/* TODO: handle upload */}}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('passport-upload')?.click()}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {/* Add similar blocks for Driving License, Operator License, TUV Certification, SPSP License */}
+                  {/* Driving License */}
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Driving License</h3>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Number</span>
+                      <span className="text-sm">{employee.driving_license_number || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Expiry</span>
+                      <span className="text-sm">{employee.driving_license_expiry ? format(new Date(employee.driving_license_expiry), 'PPP') : 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Cost</span>
+                      <span className="text-sm">{employee.driving_license_cost ? `SAR ${Number(employee.driving_license_cost).toFixed(2)}` : 'Not set'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      {employee.driving_license_file && (
+                        <Button asChild variant="outline" size="sm">
+                          <a href={employee.driving_license_file} target="_blank" rel="noopener noreferrer">Download</a>
+                        </Button>
+                      )}
+                      {hasPermission('employees.edit') && (
+                        <>
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            id="driving-license-upload"
+                            onChange={e => {/* TODO: handle upload */}}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('driving-license-upload')?.click()}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {/* Operator License */}
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Operator License</h3>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Number</span>
+                      <span className="text-sm">{employee.operator_license_number || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Expiry</span>
+                      <span className="text-sm">{employee.operator_license_expiry ? format(new Date(employee.operator_license_expiry), 'PPP') : 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Cost</span>
+                      <span className="text-sm">{employee.operator_license_cost ? `SAR ${Number(employee.operator_license_cost).toFixed(2)}` : 'Not set'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      {employee.operator_license_file && (
+                        <Button asChild variant="outline" size="sm">
+                          <a href={employee.operator_license_file} target="_blank" rel="noopener noreferrer">Download</a>
+                        </Button>
+                      )}
+                      {hasPermission('employees.edit') && (
+                        <>
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            id="operator-license-upload"
+                            onChange={e => {/* TODO: handle upload */}}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('operator-license-upload')?.click()}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {/* TUV Certification */}
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">TUV Certification</h3>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Number</span>
+                      <span className="text-sm">{employee.tuv_certification_number || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Expiry</span>
+                      <span className="text-sm">{employee.tuv_certification_expiry ? format(new Date(employee.tuv_certification_expiry), 'PPP') : 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Cost</span>
+                      <span className="text-sm">{employee.tuv_certification_cost ? `SAR ${Number(employee.tuv_certification_cost).toFixed(2)}` : 'Not set'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      {employee.tuv_certification_file && (
+                        <Button asChild variant="outline" size="sm">
+                          <a href={employee.tuv_certification_file} target="_blank" rel="noopener noreferrer">Download</a>
+                        </Button>
+                      )}
+                      {hasPermission('employees.edit') && (
+                        <>
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            id="tuv-cert-upload"
+                            onChange={e => {/* TODO: handle upload */}}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('tuv-cert-upload')?.click()}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {/* SPSP License */}
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">SPSP License</h3>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Number</span>
+                      <span className="text-sm">{employee.spsp_license_number || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Expiry</span>
+                      <span className="text-sm">{employee.spsp_license_expiry ? format(new Date(employee.spsp_license_expiry), 'PPP') : 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between border-b pb-2">
+                      <span className="text-sm font-medium">Cost</span>
+                      <span className="text-sm">{employee.spsp_license_cost ? `SAR ${Number(employee.spsp_license_cost).toFixed(2)}` : 'Not set'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      {employee.spsp_license_file && (
+                        <Button asChild variant="outline" size="sm">
+                          <a href={employee.spsp_license_file} target="_blank" rel="noopener noreferrer">Download</a>
+                        </Button>
+                      )}
+                      {hasPermission('employees.edit') && (
+                        <>
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            id="spsp-license-upload"
+                            onChange={e => {/* TODO: handle upload */}}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('spsp-license-upload')?.click()}
+                          >
+                            Upload
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="assignments" className="mt-6 space-y-6">
@@ -1636,7 +1949,7 @@ export default function Show({
                 <div className="space-y-6">
                   {/* Assignment List */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {assignments?.data?.map((assignment: BaseAssignment) => (
+                    {assignments?.data?.map((assignment: any) => (
                       <Card key={assignment.id}>
                         <CardHeader>
                           <CardTitle>{assignment.title}</CardTitle>
@@ -1672,108 +1985,28 @@ export default function Show({
           <TabsContent value="timesheets" className="mt-6">
             <Card>
               <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
                     <CardTitle>Timesheet Records</CardTitle>
                     <CardDescription>View and manage employee timesheet records</CardDescription>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="month"
-                      value={selectedMonth}
-                      onChange={handleMonthChange}
-                      className="w-40"
-                    />
-                    <Button variant="outline" onClick={handleViewAllTimesheets}>
-                      <History className="h-4 w-4 mr-2" />
-                      View All
-                    </Button>
-                  </div>
-                </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {/* Monthly Summary */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Total Regular Hours</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-4 pt-0">
-                        <div className="text-2xl font-bold">
-                          {calculateMonthlySummary(timesheets.data).totalRegularHours.toFixed(1)}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Total Overtime Hours</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-4 pt-0">
-                        <div className="text-2xl font-bold">
-                          {calculateMonthlySummary(timesheets.data).totalOvertimeHours.toFixed(1)}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Days Worked</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-4 pt-0">
-                        <div className="text-2xl font-bold">
-                          {calculateMonthlySummary(timesheets.data).daysWorked}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Days Absent</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-4 pt-0">
-                        <div className="text-2xl font-bold">
-                          {calculateMonthlySummary(timesheets.data).daysAbsent}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Daily Records */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Daily Records</CardTitle>
-                      <CardDescription>
-                        Timesheet entries for {format(new Date(selectedMonth), 'MMMM yyyy')}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {/* Render DailyTimesheetRecords component */}
-                      {/* <DailyTimesheetRecords
-                        timesheets={formatDailyRecords(timesheets.data)}
-                        selectedMonth={selectedMonth}
-                        showSummary={true}
-                      /> */}
-                    </CardContent>
-                  </Card>
-
-                  {/* Status Summary */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Status Summary</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {Object.entries(calculateMonthlySummary(timesheets.data).status).map(([status, count]) => (
-                          <div key={status} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                            <span className="text-sm font-medium capitalize">{status}</span>
-                            <Badge variant="outline" className="ml-2">
-                              {count}
-                            </Badge>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                {/* Timesheet Summary */}
+                <TimesheetSummary employeeId={employee.id} />
+                {/* Add Timesheet Button and Dialog */}
+                {hasPermission('timesheets.create') && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="mt-4 mb-4">Add Timesheet</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New Timesheet</DialogTitle>
+                      </DialogHeader>
+                      <TimesheetForm employeeId={employee.id} onSuccess={() => window.location.reload()} />
+                    </DialogContent>
+                  </Dialog>
+                )}
+                {/* Timesheet List */}
+                <TimesheetList employeeId={employee.id} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -2352,8 +2585,8 @@ export default function Show({
                 <CardDescription>Manage employee's final settlement and clearance</CardDescription>
               </CardHeader>
               <CardContent>
-                {employee.hasApprovedResignation ? (
-                  <div className="space-y-6">
+                {/* Final settlement details are commented out due to missing properties on Employee */}
+                {/* <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <h3 className="text-sm font-medium text-muted-foreground">Settlement Details</h3>
@@ -2444,15 +2677,7 @@ export default function Show({
                         </Button>
                       )}
                     </div>
-                  </div>
-                ) : (
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      Final settlement is only available for employees with approved resignations.
-                    </AlertDescription>
-                  </Alert>
-                )}
+                </div> */}
               </CardContent>
             </Card>
           </TabsContent>
@@ -2557,7 +2782,7 @@ export default function Show({
                 <Textarea
                   id="reason"
                   value={advanceReason}
-                  onChange={(e) => setAdvanceReason(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAdvanceReason(e.target.value)}
                   placeholder="Enter reason for advance"
                 />
               </div>

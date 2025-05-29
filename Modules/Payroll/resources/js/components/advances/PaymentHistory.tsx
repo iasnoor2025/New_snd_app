@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Download, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
-import { ToastService } from '@/components/shared/ToastManager';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -23,8 +23,6 @@ import {
 } from "@/components/ui/dialog";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { RefreshCw } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
-import axios from 'axios';
 import { Link } from '@inertiajs/react';
 
 interface Payment {
@@ -69,7 +67,6 @@ export function PaymentHistory({
   const [totalPages, setTotalPages] = useState(initialPagination.last_page);
   const [selectedPayment, setSelectedPayment] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const toast = useToast();
 
   const fetchPaymentHistory = async (page = 1) => {
     try {
@@ -90,10 +87,7 @@ export function PaymentHistory({
       }
     } catch (error) {
       console.error('Error fetching payment history:', error);
-      toast.error({
-        title: "Error",
-        description: "Failed to load payment history"
-      });
+      toast.error("Failed to load payment history");
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +101,7 @@ export function PaymentHistory({
 
   const handleDeletePayment = (paymentId: number) => {
     if (!paymentId) {
-      ToastService.error("Invalid payment ID");
+      toast.error("Invalid payment ID");
       return;
     }
 
@@ -116,7 +110,7 @@ export function PaymentHistory({
       payment: paymentId
     }), {
       onSuccess: () => {
-        ToastService.success("Payment record deleted successfully");
+        toast.success("Payment record deleted successfully");
         setIsDeleteDialogOpen(false);
         setSelectedPayment(null);
         // Refresh only the payment history data
@@ -124,7 +118,7 @@ export function PaymentHistory({
       },
       onError: (errors) => {
         console.error('Delete payment error:', errors);
-        ToastService.error(errors?.message || "Failed to delete payment record");
+        toast.error(errors?.message || "Failed to delete payment record");
         setIsDeleteDialogOpen(false);
         setSelectedPayment(null);
       }

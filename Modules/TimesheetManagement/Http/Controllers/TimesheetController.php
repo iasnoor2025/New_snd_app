@@ -579,6 +579,39 @@ class TimesheetController extends Controller
 
         return response()->json(['duplicate' => $duplicate]);
     }
+
+    /**
+     * API: Get timesheets for an employee in a date range
+     */
+    public function apiEmployeeTimesheets(Request $request, $employeeId)
+    {
+        $employee = Employee::findOrFail($employeeId);
+        $start = $request->query('start_date');
+        $end = $request->query('end_date');
+
+        $timesheets = Timesheet::where('employee_id', $employeeId)
+            ->whereBetween('date', [$start, $end])
+            ->get();
+
+        return response()->json(['timesheets' => $timesheets]);
+    }
+
+    /**
+     * API: Get total hours summary for an employee in a date range
+     */
+    public function apiEmployeeTimesheetTotalHours(Request $request, $employeeId)
+    {
+        $employee = Employee::findOrFail($employeeId);
+        $start = $request->query('start_date');
+        $end = $request->query('end_date');
+
+        $summary = Timesheet::where('employee_id', $employeeId)
+            ->whereBetween('date', [$start, $end])
+            ->selectRaw('COALESCE(SUM(hours_worked),0) as regular_hours, COALESCE(SUM(overtime_hours),0) as overtime_hours, COALESCE(SUM(hours_worked + overtime_hours),0) as total_hours')
+            ->first();
+
+        return response()->json($summary);
+    }
 }
 
 

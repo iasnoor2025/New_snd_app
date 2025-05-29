@@ -9,9 +9,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/useToast';
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { DailyTimesheetRecords } from '@/components/timesheets/DailyTimesheetRecords';
+import { toast } from 'sonner';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { DailyTimesheetRecords } from 'Modules/TimesheetManagement/resources/js/components/timesheets/DailyTimesheetRecords';
 
 interface TimesheetSummary {
   total_hours: number;
@@ -37,7 +37,6 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
   employeeId,
   showEmployeeSelector = false,
 }) => {
-  const { toast } = useToast();
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
   const [summary, setSummary] = useState<TimesheetSummary | null>(null);
   const [dailyRecords, setDailyRecords] = useState<TimesheetRecord[]>([]);
@@ -123,12 +122,28 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
 
         setDailyRecords(records);
       } catch (error) {
-        console.error('Error fetching timesheet data:', error);
-        toast({
-          title: 'Error',
-          description: 'Failed to load timesheet data',
-          variant: 'destructive',
-        })
+        if (error?.response?.status === 404) {
+          setSummary({ total_hours: 0, regular_hours: 0, overtime_hours: 0 });
+          const daysInMonth = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0).getDate();
+          const records = [];
+          for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), day);
+            const dateStr = format(date, 'yyyy-MM-dd');
+            const dayName = format(date, 'EEE');
+            records.push({
+              date: dateStr,
+              day: String(day),
+              dayName,
+              regularHours: 0,
+              overtimeHours: 0,
+              status: 'A',
+            });
+          }
+          setDailyRecords(records);
+        } else {
+          console.error('Error fetching timesheet data:', error);
+          toast('Failed to load timesheet data');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -147,6 +162,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
               className="rounded-md border border-input bg-background px-3 py-2"
               value={selectedEmployeeId}
               onChange={(e) => setSelectedEmployeeId(Number(e.target.value))}
+            >
               <option value="">Select Employee</option>
               {employees.map((employee) => (
                 <option key={employee.id} value={employee.id}>
@@ -155,6 +171,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
               ))}
             </select>
           )}
+
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="h-10 pl-3 pr-3">
@@ -164,7 +181,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
-                mode="month"
+                mode="single"
                 selected={selectedMonth}
                 onSelect={(date) => setSelectedMonth(date || new Date())}
                 initialFocus
@@ -183,6 +200,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
           Please select an employee to view timesheet data.
         </div>
       ) : (
+        <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
@@ -221,11 +239,15 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
               <CardTitle>Monthly Timesheet Records</CardTitle>
             </CardHeader>
             <CardContent>
-              <DailyTimesheetRecords
-                timesheets={dailyRecords}
-                selectedMonth={format(selectedMonth, 'yyyy-MM')}
-                showSummary={true}
-              />
+              {DailyTimesheetRecords ? (
+                <DailyTimesheetRecords
+                  timesheets={dailyRecords}
+                  selectedMonth={format(selectedMonth, 'yyyy-MM')}
+                  showSummary={true}
+                />
+              ) : (
+                <div className="text-muted-foreground italic">DailyTimesheetRecords component not found.</div>
+              )}
             </CardContent>
           </Card>
         </>

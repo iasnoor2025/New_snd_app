@@ -117,5 +117,8 @@
         "resources/js/**/*.ts",
         "resources/js/**/*.d.ts",
         "resources/js/**/*.tsx",
+        "Modules/*/resources/js/**/*.ts",
+        "Modules/*/resources/js/**/*.tsx",
+        "Modules/*/resources/js/**/*.d.ts"
     ]
 }
