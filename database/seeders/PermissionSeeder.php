@@ -75,8 +75,10 @@ class PermissionSeeder extends Seeder
             'payroll.view', 'payroll.create', 'payroll.edit', 'payroll.delete',
             // Salary Advances
             'salary-advances.view', 'salary-advances.create', 'salary-advances.edit', 'salary-advances.delete',
+            // Salary Increments
+            'salary-increments.view', 'salary-increments.create', 'salary-increments.edit', 'salary-increments.delete', 'salary-increments.approve', 'salary-increments.apply',
             // Final Settlements
-            'final-settlements.view', 'final-settlements.create', 'final-settlements.edit', 'final-settlements.delete',
+            'final-settlements.view', 'final-settlements.create', 'final-settlements.edit', 'final-settlements.delete', 'final-settlements.approve',
             // Advances
             'advances.view', 'advances.create', 'advances.edit', 'advances.delete', 'advances.approve',
             // Rental Timesheets

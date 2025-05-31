@@ -43,6 +43,11 @@ const employeePages: Record<string, string> = {
   'Employees/PerformanceReviews': './Modules/EmployeeManagement/resources/js/pages/Employees/PerformanceReviews.tsx',
   'Employees/SalaryHistory': './Modules/EmployeeManagement/resources/js/pages/Employees/SalaryHistory.tsx',
   'Employees/TimesheetHistory': './Modules/EmployeeManagement/resources/js/pages/Employees/TimesheetHistory.tsx',
+  // Salary Increment pages
+  'EmployeeManagement/SalaryIncrements/Index': './Modules/EmployeeManagement/resources/js/pages/SalaryIncrements/Index.tsx',
+  'EmployeeManagement/SalaryIncrements/Create': './Modules/EmployeeManagement/resources/js/pages/SalaryIncrements/Create.tsx',
+  'EmployeeManagement/SalaryIncrements/Show': './Modules/EmployeeManagement/resources/js/pages/SalaryIncrements/Show.tsx',
+  'EmployeeManagement/SalaryIncrements/Edit': './Modules/EmployeeManagement/resources/js/pages/SalaryIncrements/Edit.tsx',
 };
 
 // Project Management module pages

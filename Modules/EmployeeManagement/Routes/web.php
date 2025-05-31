@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeManagementController;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeController;
 use Modules\EmployeeManagement\Http\Controllers\ResignationController;
+use Modules\EmployeeManagement\Http\Controllers\SalaryIncrementController;
 use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -84,6 +85,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/resignations/create', [ResignationController::class, 'create'])
         ->middleware('permission:resignations.create')
         ->name('resignations.create');
+
+    // Salary Increment routes
+    Route::get('/salary-increments', [SalaryIncrementController::class, 'index'])
+        ->middleware('permission:salary-increments.view')
+        ->name('salary-increments.index');
+    Route::get('/salary-increments/create', [SalaryIncrementController::class, 'create'])
+        ->middleware('permission:salary-increments.create')
+        ->name('salary-increments.create');
+    Route::post('/salary-increments', [SalaryIncrementController::class, 'store'])
+        ->middleware('permission:salary-increments.create')
+        ->name('salary-increments.store');
+    Route::get('/salary-increments/{salaryIncrement}', [SalaryIncrementController::class, 'show'])
+        ->middleware('permission:salary-increments.view')
+        ->name('salary-increments.show');
+    Route::get('/salary-increments/{salaryIncrement}/edit', [SalaryIncrementController::class, 'edit'])
+        ->middleware('permission:salary-increments.edit')
+        ->name('salary-increments.edit');
+    Route::put('/salary-increments/{salaryIncrement}', [SalaryIncrementController::class, 'update'])
+        ->middleware('permission:salary-increments.edit')
+        ->name('salary-increments.update');
+    Route::delete('/salary-increments/{salaryIncrement}', [SalaryIncrementController::class, 'destroy'])
+        ->middleware('permission:salary-increments.delete')
+        ->name('salary-increments.destroy');
+    Route::post('/salary-increments/{salaryIncrement}/approve', [SalaryIncrementController::class, 'approve'])
+        ->middleware('permission:salary-increments.approve')
+        ->name('salary-increments.approve');
+    Route::post('/salary-increments/{salaryIncrement}/reject', [SalaryIncrementController::class, 'reject'])
+        ->middleware('permission:salary-increments.approve')
+        ->name('salary-increments.reject');
+    Route::post('/salary-increments/{salaryIncrement}/apply', [SalaryIncrementController::class, 'apply'])
+        ->middleware('permission:salary-increments.apply')
+        ->name('salary-increments.apply');
 });
 
 // Add access restriction update route

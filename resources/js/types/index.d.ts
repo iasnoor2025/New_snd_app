@@ -25,6 +25,7 @@ export interface NavItem {
     disabled?: boolean;
     external?: boolean;
     label?: string;
+    items?: NavItem[];
 }
 
 export interface SharedData {

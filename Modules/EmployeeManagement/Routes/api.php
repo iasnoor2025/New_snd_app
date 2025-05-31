@@ -8,6 +8,7 @@ use Modules\EmployeeManagement\Http\Controllers\PositionController;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeDocumentController;
 use Modules\EmployeeManagement\Http\Controllers\EmployeeAdvanceController;
 use Modules\EmployeeManagement\Http\Controllers\ResignationController;
+use Modules\EmployeeManagement\Http\Controllers\SalaryIncrementController;
 
 // Public route for last-file-number (no auth middleware)
 Route::prefix('v1')->group(function () {
@@ -44,5 +45,13 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     Route::apiResource('resignations', ResignationController::class);
     Route::post('resignations/{resignation}/approve', [ResignationController::class, 'approve']);
     Route::post('resignations/{resignation}/reject', [ResignationController::class, 'reject']);
+
+    // Salary Increments
+    Route::apiResource('salary-increments', SalaryIncrementController::class);
+    Route::post('salary-increments/{salaryIncrement}/approve', [SalaryIncrementController::class, 'approve']);
+    Route::post('salary-increments/{salaryIncrement}/reject', [SalaryIncrementController::class, 'reject']);
+    Route::post('salary-increments/{salaryIncrement}/apply', [SalaryIncrementController::class, 'apply']);
+    Route::get('salary-increments/statistics/overview', [SalaryIncrementController::class, 'statistics']);
+    Route::get('employees/{employee}/salary-increments', [SalaryIncrementController::class, 'getEmployeeSalaryHistory']);
 });
 

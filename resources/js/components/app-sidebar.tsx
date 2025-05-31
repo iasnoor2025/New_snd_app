@@ -41,9 +41,17 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 // Map module names to their respective icon, route, and required permission
-const moduleMap: Record<string, { icon: any; route: string; permission: string }> = {
+const moduleMap: Record<string, { icon: any; route: string; permission: string; subItems?: Array<{ title: string; route: string; permission: string }> }> = {
     Core: { icon: Network, route: '/core', permission: 'core.view' },
-    EmployeeManagement: { icon: UserCog, route: '/employees', permission: 'employees.view' },
+    EmployeeManagement: {
+        icon: UserCog,
+        route: '/employees',
+        permission: 'employees.view',
+        subItems: [
+            { title: 'Employees', route: '/employees', permission: 'employees.view' },
+            { title: 'Salary Increments', route: '/salary-increments', permission: 'salary-increments.view' }
+        ]
+    },
     LeaveManagement: { icon: ClipboardList, route: '/leave-requests', permission: 'leave-requests.view' },
     TimesheetManagement: { icon: Clock, route: '/timesheets', permission: 'timesheets.view' },
     Payroll: { icon: DollarSign, route: '/payrolls', permission: 'payrolls.view' },
@@ -127,20 +135,45 @@ export function AppSidebar() {
         // Admins see all modules
         if (isAdmin) {
             Object.entries(moduleMap).forEach(([module, mapInfo]) => {
-                items.push({
+                const navItem: NavItem = {
                     title: moduleDisplayNames[module] || module,
                     href: mapInfo.route,
                     icon: mapInfo.icon,
-                });
+                };
+
+                // Add sub-items if they exist
+                if (mapInfo.subItems) {
+                    navItem.items = mapInfo.subItems.map(subItem => ({
+                        title: subItem.title,
+                        href: subItem.route,
+                    }));
+                }
+
+                items.push(navItem);
             });
         } else {
             Object.entries(moduleMap).forEach(([module, mapInfo]) => {
                 if (permissions.includes(mapInfo.permission)) {
-                    items.push({
+                    const navItem: NavItem = {
                         title: moduleDisplayNames[module] || module,
                         href: mapInfo.route,
                         icon: mapInfo.icon,
-                    });
+                    };
+
+                    // Add sub-items if they exist and user has permission
+                    if (mapInfo.subItems) {
+                        const allowedSubItems = mapInfo.subItems.filter(subItem =>
+                            isAdmin || permissions.includes(subItem.permission)
+                        );
+                        if (allowedSubItems.length > 0) {
+                            navItem.items = allowedSubItems.map(subItem => ({
+                                title: subItem.title,
+                                href: subItem.route,
+                            }));
+                        }
+                    }
+
+                    items.push(navItem);
                 }
             });
         }

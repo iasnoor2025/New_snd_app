@@ -22,6 +22,9 @@ use Modules\RentalManagement\Domain\Models\RentalOperatorAssignment;
 use Modules\RentalManagement\Domain\Models\RentalItem;
 use Modules\Core\Domain\Models\User;
 
+// Add SalaryIncrement import
+use Modules\EmployeeManagement\Domain\Models\SalaryIncrement;
+
 class Employee extends Model implements HasMedia
 {
     use HasFactory;
@@ -710,6 +713,22 @@ use AutoLoadsRelations, SoftDeletes;
     public function salaryHistory()
     {
         return $this->hasMany(EmployeeSalaryHistory::class);
+    }
+
+    /**
+     * Get the salary records for the employee
+     */
+    public function salaries(): HasMany
+    {
+        return $this->hasMany(EmployeeSalary::class);
+    }
+
+    /**
+     * Get the salary increments for the employee
+     */
+    public function salaryIncrements(): HasMany
+    {
+        return $this->hasMany(SalaryIncrement::class);
     }
 
     /**
