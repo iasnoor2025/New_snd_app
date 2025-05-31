@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Core\Http\Controllers;
 
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
@@ -13,6 +13,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        $this->authorize('permissions.view');
+
         $permissions = Permission::all();
         return Inertia::render('Permissions/Index', [
             'permissions' => $permissions,
@@ -24,6 +26,8 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        $this->authorize('permissions.create');
+
         return Inertia::render('Permissions/Create');
     }
 
@@ -32,19 +36,28 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('permissions.create');
+
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:permissions,name',
         ]);
+
         Permission::create(['name' => $data['name']]);
-        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
+
+        return redirect()->route('permissions.index')
+            ->with('success', 'Permission created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Permission $permission)
     {
-        //
+        $this->authorize('permissions.view');
+
+        return Inertia::render('Permissions/Show', [
+            'permission' => $permission,
+        ]);
     }
 
     /**
@@ -52,6 +65,8 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
+        $this->authorize('permissions.edit');
+
         return Inertia::render('Permissions/Edit', [
             'permission' => $permission,
         ]);
@@ -62,12 +77,16 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
+        $this->authorize('permissions.edit');
+
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:permissions,name,' . $permission->id,
         ]);
-        $permission->name = $data['name'];
-        $permission->save();
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
+
+        $permission->update($data);
+
+        return redirect()->route('permissions.index')
+            ->with('success', 'Permission updated successfully.');
     }
 
     /**
@@ -75,7 +94,11 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
+        $this->authorize('permissions.delete');
+
         $permission->delete();
-        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
+
+        return redirect()->route('permissions.index')
+            ->with('success', 'Permission deleted successfully.');
     }
 }

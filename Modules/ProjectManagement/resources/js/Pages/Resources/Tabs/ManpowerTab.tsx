@@ -9,10 +9,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { ResourceFormModal } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceFormModal';
-import { useResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceFormModal';
-import { useResourceSubmit } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceSubmit';
-import type { ManpowerResource } from '@/Modules/ProjectManagement/Resources/js/types/projectResources';
+import { ResourceFormModal } from '../../../Components/project/resources/ResourceModal';
+import { useResourceFormModal } from '../../../hooks/useResourceFormModal';
+import { useResourceSubmit } from '../../../hooks/useResourceSubmit';
+import type { ManpowerResource } from '../../../types/projectResources';
 import { router } from '@inertiajs/react';
 import { format } from 'date-fns';
 

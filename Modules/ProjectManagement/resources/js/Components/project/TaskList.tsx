@@ -1,14 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import { CheckCircle2, Clock, AlertCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { Progress } from '../../../../../../resources/js/components/ui/progress';
+import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '../../../../../../resources/js/components/ui/dropdown-menu';
 import { formatDistanceToNow } from 'date-fns';
 
 export interface ProjectTask {
@@ -165,11 +165,13 @@ export default function TaskList({ tasks, onEdit, onDelete, onStatusChange, onCo
                             <span className="text-xs font-medium">{task.completion_percentage}% completed</span>
                             <div className="flex space-x-2">
                                 {task.status !== 'completed' && task.completion_percentage < 100 && (
+                                    <>
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             className="h-6 text-xs py-0 px-2"
                                             onClick={() => onCompletionChange(task, Math.min(100, task.completion_percentage + 10))}
+                                        >
                                             +10%
                                         </Button>
                                         <Button
@@ -177,6 +179,7 @@ export default function TaskList({ tasks, onEdit, onDelete, onStatusChange, onCo
                                             size="sm"
                                             className="h-6 text-xs py-0 px-2"
                                             onClick={() => onCompletionChange(task, 100)}
+                                        >
                                             Mark 100%
                                         </Button>
                                     </>

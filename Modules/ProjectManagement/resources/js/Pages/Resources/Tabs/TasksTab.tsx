@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { useProjectResources } from '@/Modules/ProjectManagement/Resources/js/hooks/useProjectResources';
-import { TaskStatus } from '@/Modules/ProjectManagement/Resources/js/types/projectResources';
-import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/resources/js/components/project/TaskList';
+import { useProjectResources } from '../../../hooks/useProjectResources';
+import { TaskStatus } from '../../../types/projectResources';
+import TaskList, { ProjectTask } from '../../../Components/project/TaskList';
 
 interface TasksTabProps {
     project: {

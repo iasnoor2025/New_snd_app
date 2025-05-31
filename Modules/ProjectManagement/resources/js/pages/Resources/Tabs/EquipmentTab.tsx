@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ResourceFormModal } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceFormModal';
-import { ResourceTable } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceTable';
-import { useResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceFormModal';
-import { useResourceSubmit } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceSubmit';
-import type { EquipmentResource } from '@/Modules/ProjectManagement/Resources/js/types/projectResources';
-import { formatCurrency } from '@/Modules/ProjectManagement/Resources/js/lib/utils';
+import { ResourceFormModal } from '../../../Components/project/resources/ResourceModal';
+import { ResourceTable } from '../../../Components/project/resources/ResourceTable';
+import { useResourceFormModal } from '../../../hooks/useResourceFormModal';
+import { useResourceSubmit } from '../../../hooks/useResourceSubmit';
+import type { EquipmentResource } from '../../../types/projectResources';
+import { formatCurrency } from '../../../lib/utils';
 
 interface EquipmentTabProps {
     project: {
@@ -50,7 +50,7 @@ export function EquipmentTab({ project, equipments, availableEquipment }: Equipm
         }
     };
 
-    const columns = [;
+    const columns = [
         { key: 'name' as keyof EquipmentResource, header: 'Equipment Name' },
         { key: 'model' as keyof EquipmentResource, header: 'Model' },
         { key: 'door_number' as keyof EquipmentResource, header: 'Door Number' },

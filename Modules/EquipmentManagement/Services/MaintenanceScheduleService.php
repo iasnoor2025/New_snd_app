@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Modules\EquipmentManagement\Services;
 
 /**
  * Placeholder service to make routes work

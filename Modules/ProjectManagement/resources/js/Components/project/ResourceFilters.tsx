@@ -1,22 +1,22 @@
-﻿import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import React from 'react';
+import { Button } from '../../../../../../resources/js/components/ui/button';
+import { Input } from '../../../../../../resources/js/components/ui/input';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select';
+} from '../../../../../../resources/js/components/ui/select';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
+} from '../../../../../../resources/js/components/ui/popover';
+import { Calendar } from '../../../../../../resources/js/components/ui/calendar';
 import { format } from 'date-fns';
 import { CalendarIcon, Filter, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '../../../../../../resources/js/lib/utils';
 
 interface ResourceFiltersProps {
     type: 'manpower' | 'equipment' | 'material' | 'fuel' | 'expense';
@@ -48,7 +48,7 @@ export default function ResourceFilters({
     };
 
     const getSortOptions = () => {
-        const commonOptions = [;
+        const commonOptions = [
             { value: 'created_at-desc', label: 'Newest First' },
             { value: 'created_at-asc', label: 'Oldest First' },
         ];
@@ -117,6 +117,7 @@ export default function ResourceFilters({
                                 "w-[240px] justify-start text-left font-normal",
                                 !filters.startDate && "text-muted-foreground"
                             )}
+                        >
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {filters.startDate ? (
                                 format(filters.startDate, "PPP")
@@ -145,6 +146,7 @@ export default function ResourceFilters({
                                 "w-[240px] justify-start text-left font-normal",
                                 !filters.endDate && "text-muted-foreground"
                             )}
+                        >
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {filters.endDate ? (
                                 format(filters.endDate, "PPP")
@@ -168,6 +170,7 @@ export default function ResourceFilters({
             <Select
                 value={`${filters.sortBy || 'created_at'}-${filters.sortOrder || 'desc'}`}
                 onValueChange={handleSortChange}
+            >
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
@@ -185,6 +188,7 @@ export default function ResourceFilters({
                 variant="outline"
                 onClick={onReset}
                 className="ml-auto"
+            >
                 <X className="h-4 w-4 mr-2" />
                 Reset Filters
             </Button>

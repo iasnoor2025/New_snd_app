@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -21,13 +21,7 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
+import { DatePicker } from '@/components/ui/date-picker';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ProjectTask } from './TaskList';
@@ -151,8 +145,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
     };
 
     return (
-        <Form {...form}>
-            <form data-resource-type="task" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <Form {...form} data-resource-type="task" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
                     name="title"
@@ -244,43 +237,22 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
-                        control={form.control}
-                        name="due_date"
-                        render={({ field }: { field: any }) => (
-                            <FormItem className="flex flex-col">
-                                <FormLabel>Due Date</FormLabel>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                className={cn(
-                                                    "pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                {field.value ? (
-                                                    format(field.value, "PPP")
-                                                ) : (
-                                                    <span>Pick a date</span>
-                                                )}
-                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={field.value || undefined}
-                                            onSelect={field.onChange}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    control={form.control}
+                    name="due_date"
+                    render={({ field }: { field: any }) => (
+                        <FormItem className="flex flex-col">
+                            <FormLabel>Due Date</FormLabel>
+                            <FormControl>
+                                <DatePicker
+                                    date={field.value || undefined}
+                                    setDate={field.onChange}
+                                    placeholder="Select due date"
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
                     <FormField
                         control={form.control}
@@ -334,7 +306,6 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                         {initialData ? 'Save Changes' : 'Create Task'}
                     </Button>
                 </div>
-            </form>
         </Form>
     );
 })

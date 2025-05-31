@@ -6,10 +6,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/Modules/ProjectManagement/Resources/js/Components/ui/table';
-import { Badge } from '@/Modules/ProjectManagement/Resources/js/Components/ui/badge';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Components/ui/button';
-import { Progress } from '@/Modules/ProjectManagement/Resources/js/Components/ui/progress';
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
 
 interface Project {

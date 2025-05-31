@@ -76,12 +76,14 @@ const ResourceTable: React.FC<ResourceTableProps> = ({
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => onEdit(resource)}
+                                >
                                     <Pencil className="h-4 w-4" />
                                 </Button>
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => onDelete(resource)}
+                                >
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>

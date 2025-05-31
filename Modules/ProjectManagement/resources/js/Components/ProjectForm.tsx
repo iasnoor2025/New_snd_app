@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -9,26 +9,26 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/Modules/ProjectManagement/Resources/js/Components/ui/form';
-import { Input } from '@/Modules/ProjectManagement/Resources/js/Components/ui/input';
-import { Textarea } from '@/Modules/ProjectManagement/Resources/js/Components/ui/textarea';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Modules/ProjectManagement/Resources/js/Components/ui/select';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Components/ui/button';
-import { Calendar } from '@/Modules/ProjectManagement/Resources/js/Components/ui/calendar';
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from '@/Modules/ProjectManagement/Resources/js/Components/ui/popover';
+} from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
-import { cn } from '@/Modules/ProjectManagement/Resources/js/lib/utils';
+import { cn } from '../lib/utils';
 
 const projectSchema = z.object({
     name: z.string().min(1, 'Name is required'),

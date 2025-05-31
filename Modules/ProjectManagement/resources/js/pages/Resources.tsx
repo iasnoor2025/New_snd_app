@@ -1,9 +1,10 @@
-﻿import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ResourceForm from '@/Modules/ProjectManagement/resources/js/components/project/ResourceForm';
-import ResourceList from '@/Modules/ProjectManagement/resources/js/components/project/ResourceList';
+import ResourceForm from '../Components/project/ResourceForm';
+import ResourceList from '../Components/project/ResourceList';
 import {
     Dialog,
     DialogContent,
@@ -11,12 +12,12 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogDescription,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Plus, ArrowLeft, Layers, PieChart, BarChart, DollarSign, Users, Search, Filter, SlidersHorizontal, X, CheckSquare, FileText, Package, Calendar as CalendarIcon } from 'lucide-react';
-import AdminLayout from '@/Modules/ProjectManagement/resources/js/layouts/AdminLayout';
-import ConfirmDialog from '@/components/shared/ToastManager';
-import { ToastService } from '@/components/shared/ToastManager';
+import AdminLayout from '../layouts/AdminLayout';
+import { toast } from "sonner";
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -56,16 +57,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import TaskList, { ProjectTask } from '@/Modules/ProjectManagement/resources/js/components/project/TaskList';
-import TaskDialog from '@/Modules/ProjectManagement/resources/js/components/project/TaskDialog';
-import axios from 'axios';
-import { DialogErrorBoundary } from '@/Modules/ProjectManagement/resources/js/components/DialogErrorBoundary';
-import ErrorBoundary from '@/Modules/ProjectManagement/resources/js/components/ErrorBoundary';
-import { SafeDialog } from '@/Modules/ProjectManagement/resources/js/components/ui/SafeDialog';
-import TaskForm from '@/Modules/ProjectManagement/resources/js/components/project/TaskForm';
-import ResourceFilters from '@/Modules/ProjectManagement/resources/js/components/project/ResourceFilters';
-import ResourcePagination from '@/Modules/ProjectManagement/resources/js/components/project/ResourcePagination';
-import ResourceSearch from '@/Modules/ProjectManagement/resources/js/components/project/ResourceSearch';
+import TaskList, { ProjectTask } from '../Components/project/TaskList';
+import TaskDialog from '../Components/project/TaskDialog';
+import { DialogErrorBoundary } from '../Components/DialogErrorBoundary';
+import ErrorBoundary from '../Components/ErrorBoundary';
+import { SafeDialog } from '../Components/ui/SafeDialog';
+import TaskForm from '../Components/project/TaskForm';
+import ResourceFilters from '../Components/project/ResourceFilters';
+import ResourcePagination from '../Components/project/ResourcePagination';
+import ResourceSearch from '../Components/project/ResourceSearch';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 
@@ -546,7 +546,7 @@ const ResourcesPage = ({ project, manpower = { data: [], current_page: 1, last_p
     // Wrap the entire component with an ErrorBoundary to prevent blank page
     return (
         <AdminLayout
-            title={`${project.name} - Resources`}
+            title="Resources"
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
                 { title: 'Projects', href: '/projects' },
@@ -854,14 +854,10 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                 });
 
                 // Show success message
-                ToastService.success(`The task status has been changed from "${oldStatus}" to "${newStatus}".`, {
-                    title: 'Task status updated'
-                });
+                toast.success(`The task status has been changed from "${oldStatus}" to "${newStatus}".`);
             }).catch((error) => {
                 // Show error message
-                ToastService.error('There was an error updating the task status. Please try again.', {
-                    title: 'Error updating task'
-                });
+                toast.error('There was an error updating the task status. Please try again.');
             });
         };
 
@@ -892,13 +888,9 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     }
                 });
 
-                ToastService.success(`Task completion has been updated to ${percentage}%.`, {
-                    title: "Task updated"
-                });
+                toast.success(`Task completion has been updated to ${percentage}%.`);
             }).catch(() => {
-                ToastService.error("Failed to update task completion. Please try again.", {
-                    title: "Error"
-                });
+                toast.error("Failed to update task completion. Please try again.");
             });
         };
 
@@ -919,8 +911,8 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     );
                     setTasks(updatedTasks);
 
-                    ToastService.success(`The task has been successfully updated.`, {
-                        title: `Task updated`
+                    toast.success(`Task updated`, {
+                        description: `The task has been successfully updated.`
                     });
                 } else {
                     axios.get(route('projects.tasks.index', { project: project.id }))
@@ -929,9 +921,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                 setTasks(response.data);
                             }
 
-                            ToastService.success(`The task has been successfully added.`, {
-                                title: `Task added`
-                            });
+                            toast.success(`The task has been successfully added.`);
                         })
                         .catch(error => {
                             console.error('Error fetching updated tasks:', error);
@@ -946,9 +936,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                             setTasks(page.props.tasks as Resource[]);
                         }
 
-                        ToastService.success(`The task has been successfully ${editingTask ? 'updated' : 'added'}.`, {
-                            title: `Task ${editingTask ? 'updated' : 'added'}`
-                        });
+                        toast.success(`The task has been successfully ${editingTask ? 'updated' : 'added'}.`);
                     }
                 });
             }
@@ -979,18 +967,14 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
 
             axios.delete(url)
                 .then(() => {
-                    ToastService.success("The resource has been successfully deleted.", {
-                        title: "Resource deleted"
-                    });
+                    toast.success("The resource has been successfully deleted.");
                     setDeleteConfirmOpen(false);
                     setResourceToDelete(null);
                     router.reload({ only: [type] });
                 })
                 .catch((error) => {
                     console.error('Error deleting resource:', error);
-                    ToastService.error("Failed to delete the resource. Please try again.", {
-                        title: "Error"
-                    });
+                    toast.error("Failed to delete the resource. Please try again.");
                     setDeleteConfirmOpen(false);
                     setResourceToDelete(null);
                 });
@@ -1107,7 +1091,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                         'name' in resource ? resource.name : '',
                         'description' in resource ? resource.description : '',
                         'notes' in resource ? resource.notes : '',
-                        'title' in resource ? resource.title : '', // For tasks;
+                        'title' in resource ? resource.title : '', // For tasks
                     ].filter(Boolean).join(' ').toLowerCase();
 
                     return searchable.includes(query);
@@ -1466,21 +1450,24 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     </ErrorBoundary>
 
                     {/* Delete Confirmation Dialog */}
-                    <ConfirmDialog
-                        open={deleteConfirmOpen}
-                        onOpenChange={setDeleteConfirmOpen}
-                        title={`Delete ${resourceToDelete?.type === 'tasks' ? 'Task' : 'Resource'}`}
-                        description={`Are you sure you want to delete this ${resourceToDelete?.type === 'tasks' ? 'task' : resourceToDelete?.type + ' resource'}? This action cannot be undone.`}
-                        triggerButton={null}
-                        confirmButton={{
-                            text: "Delete",
-                            variant: "destructive"
-                        }}
-                        cancelButton={{
-                            text: "Cancel"
-                        }}
-                        onConfirm={handleDeleteConfirmed}
-                    />
+                    <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Delete {resourceToDelete?.type === 'tasks' ? 'Task' : 'Resource'}</DialogTitle>
+                                <DialogDescription>
+                                    Are you sure you want to delete this {resourceToDelete?.type === 'tasks' ? 'task' : resourceToDelete?.type + ' resource'}? This action cannot be undone.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
+                                    Cancel
+                                </Button>
+                                <Button variant="destructive" onClick={handleDeleteConfirmed}>
+                                    Delete
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </ErrorBoundary>
         );

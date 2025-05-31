@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
     Dialog,
     DialogContent,
@@ -97,6 +97,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                         {type === 'manpower' && (
+                            <>
                                 <FormField
                                     control={form.control}
                                     name="employee_id"
@@ -106,6 +107,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             <Select
                                                 onValueChange={(value) => field.onChange(Number(value))}
                                                 defaultValue={field.value?.toString()}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select employee" />
@@ -140,6 +142,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                         )}
 
                         {type === 'equipment' && (
+                            <>
                                 <FormField
                                     control={form.control}
                                     name="equipment_id"
@@ -149,6 +152,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             <Select
                                                 onValueChange={(value) => field.onChange(Number(value))}
                                                 defaultValue={field.value?.toString()}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select equipment" />
@@ -183,6 +187,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                         )}
 
                         {type === 'material' && (
+                            <>
                                 <FormField
                                     control={form.control}
                                     name="name"
@@ -247,6 +252,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                         )}
 
                         {type === 'fuel' && (
+                            <>
                                 <FormField
                                     control={form.control}
                                     name="equipment_id"
@@ -256,6 +262,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             <Select
                                                 onValueChange={(value) => field.onChange(Number(value))}
                                                 defaultValue={field.value?.toString()}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select equipment" />
@@ -278,6 +285,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select fuel type" />
@@ -331,6 +339,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                         )}
 
                         {type === 'expense' && (
+                            <>
                                 <FormField
                                     control={form.control}
                                     name="name"
@@ -370,6 +379,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select category" />
@@ -408,6 +418,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                 type="button"
                                 variant="outline"
                                 onClick={() => onOpenChange(false)}
+                            >
                                 Cancel
                             </Button>
                             <Button type="submit" disabled={isSubmitting}>
@@ -422,6 +433,4 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
 };
 
 export default ResourceModal;
-
-</Input>
 

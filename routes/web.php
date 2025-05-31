@@ -2,9 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\PermissionController;
+use Modules\Core\Http\Controllers\UserController;
+use Modules\Core\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -18,9 +17,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Use lowercase role names for Spatie permission middleware (case-sensitive)
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('users', UserController::class);
-    Route::resource('permissions', PermissionController::class);
-    Route::post('users/{user}/roles', [UserController::class, 'assignRole'])->name('users.assignRole');
+    // User and role management routes are handled by Core module
+// See Modules/Core/Routes/web.php for detailed routes
 });
 
 Route::get('/modules_statuses.json', function () {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Modules\EquipmentManagement\Services;
 
 /**
  * Placeholder service to make routes work
@@ -28,7 +28,7 @@ class UtilizationTrackingService
         return [];
     }
 
-    public function getActiveUtilizationLogs()
+    public function getUtilizationSummary($equipmentId)
     {
         return [];
     }

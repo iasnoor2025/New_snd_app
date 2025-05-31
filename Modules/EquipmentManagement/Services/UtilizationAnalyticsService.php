@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Modules\EquipmentManagement\Services;
 
 /**
  * Placeholder service to make routes work
@@ -28,7 +28,12 @@ class UtilizationAnalyticsService
         return [];
     }
 
-    public function analyzeUtilizationTrends($equipmentId, $months)
+    public function getUtilizationTrends($equipmentId)
+    {
+        return [];
+    }
+
+    public function getEfficiencyMetrics($equipmentId)
     {
         return [];
     }

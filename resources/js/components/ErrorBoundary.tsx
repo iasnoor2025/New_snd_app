@@ -24,8 +24,8 @@ class ErrorBoundary extends React.Component<
         <div className="p-6 border rounded-md bg-red-50 text-red-800 my-4">
           <h3 className="font-bold mb-2">Something went wrong</h3>
           <p className="mb-4 text-sm">{this.state.error?.message || "An error occurred while rendering this component."}</p>
-          <Button
-            size="sm"
+          <Button 
+            size="sm" 
             onClick={() => window.location.reload()}
             variant="destructive"
           >

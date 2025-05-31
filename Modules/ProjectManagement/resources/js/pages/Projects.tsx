@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
+import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';
 import { ProjectList } from '../Components/ProjectList';
 import { ProjectForm } from '../Components/ProjectForm';
 import {
@@ -7,8 +8,8 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from '@/Modules/ProjectManagement/Resources/js/Components/ui/dialog';
-import { Button } from '@/Modules/ProjectManagement/Resources/js/Components/ui/button';
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -112,7 +113,13 @@ export default function Projects({ projects: initialProjects, managers }: Projec
     };
 
     return (
-        <>
+        <AdminLayout
+            title="Projects"
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/dashboard' },
+                { title: 'Projects', href: '/projects' }
+            ]}
+        >
             <Head title="Projects" />
 
             <div className="py-12">
@@ -169,6 +176,6 @@ export default function Projects({ projects: initialProjects, managers }: Projec
                     )}
                 </DialogContent>
             </Dialog>
-        </>
+        </AdminLayout>
     );
 }

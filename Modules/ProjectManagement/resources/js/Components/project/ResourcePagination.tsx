@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../../../../../resources/js/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ResourcePaginationProps {
@@ -43,6 +43,7 @@ const ResourcePagination: React.FC<ResourcePaginationProps> = ({
                 size="sm"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
+            >
                 <ChevronLeft className="h-4 w-4" />
             </Button>
 
@@ -52,6 +53,7 @@ const ResourcePagination: React.FC<ResourcePaginationProps> = ({
                     variant={currentPage === page ? "default" : "outline"}
                     size="sm"
                     onClick={() => handlePageChange(page)}
+                >
                     {page}
                 </Button>
             ))}
@@ -61,6 +63,7 @@ const ResourcePagination: React.FC<ResourcePaginationProps> = ({
                 size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
+            >
                 <ChevronRight className="h-4 w-4" />
             </Button>
         </div>

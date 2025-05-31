@@ -5,7 +5,7 @@ namespace Modules\EquipmentManagement\Http\Controllers;
 use Modules\EquipmentManagement\Domain\Models\Equipment;
 use Modules\EquipmentManagement\Domain\Models\MaintenanceRecord;
 use Modules\Core\Domain\Models\User;
-use App\Services\MaintenanceScheduleService;
+use Modules\EquipmentManagement\Services\MaintenanceScheduleService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;

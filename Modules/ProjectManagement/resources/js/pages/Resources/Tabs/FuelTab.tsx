@@ -2,10 +2,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { ResourceFormModal } from '@/Modules/ProjectManagement/resources/js/components/shared/ResourceFormModal';
-import { useResourceFormModal } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceFormModal';
-import { useResourceSubmit } from '@/Modules/ProjectManagement/Resources/js/hooks/useResourceSubmit';
-import { formatCurrency } from '@/Modules/ProjectManagement/Resources/js/lib/utils';
+import { ResourceFormModal } from '../../../Components/project/resources/ResourceModal';
+import { useResourceFormModal } from '../../../hooks/useResourceFormModal';
+import { useResourceSubmit } from '../../../hooks/useResourceSubmit';
+import { formatCurrency } from '../../../lib/utils';
 
 interface FuelTabProps {
     project: {

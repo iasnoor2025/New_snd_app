@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -324,6 +324,7 @@ export default function Resources({ project }: { project: any }) {
                     size="icon"
                     className="h-6 w-6 p-0"
                     onClick={handleDialogClose}
+                >
                     <X className="h-4 w-4" />
                 </Button>
             </DialogHeader>
@@ -490,6 +491,7 @@ export default function Resources({ project }: { project: any }) {
                                     variant="outline"
                                     onClick={resetFilters}
                                     className="w-full"
+                                >
                                     Reset Filters
                                 </Button>
                             </div>

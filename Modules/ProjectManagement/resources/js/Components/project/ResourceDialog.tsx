@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { XIcon } from 'lucide-react';
 import ResourceForm from './ResourceForm';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -68,6 +68,7 @@ export default function ResourceDialog({
             <div
                 className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto"
                 onClick={handleBackdropClick}
+            >
                 <div
                     className="bg-white rounded-lg shadow-lg max-w-[500px] w-full relative"
                     onClick={e => e.stopPropagation()}

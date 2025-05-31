@@ -1,7 +1,7 @@
 <?php
 namespace Modules\ProjectManagement\Actions\ProjectResources;
 
-use App\Actions\ProjectResources\UpdateExpense;
+use Modules\ProjectManagement\Actions\ProjectResources\UpdateExpense;
 use Modules\ProjectManagement\Domain\Models\Project;
 use Modules\ProjectManagement\Domain\Models\ProjectExpense;
 use Illuminate\Foundation\Testing\RefreshDatabase;

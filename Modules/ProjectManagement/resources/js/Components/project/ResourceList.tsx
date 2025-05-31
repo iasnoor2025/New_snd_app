@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -58,8 +58,8 @@ export default function ResourceList({
     // Fetch employee data for resources with employee_id
     useEffect(() => {
         const fetchEmployeeData = async () => {
-            const employeeIds = safeResources;
-                .filter(resource => resource.employee_id && !resource.employee);
+            const employeeIds = safeResources
+                .filter(resource => resource.employee_id && !resource.employee)
                 .map(resource => resource.employee_id);
 
             if (employeeIds.length === 0) return;
@@ -117,9 +117,10 @@ export default function ResourceList({
         };
 
         const renderSortableHeader = (label: string, key: string, className: string = "") => (
-            <TableHead;
+            <TableHead
                 className={`cursor-pointer hover:bg-muted/50 ${className}`}
                 onClick={() => handleSort(key)}
+            >
                 <div className="flex items-center gap-1">
                     {label}
                     {getSortIcon && getSortIcon(key)}
@@ -130,6 +131,7 @@ export default function ResourceList({
         switch (type) {
             case 'manpower':
                 return (
+                    <>
                         {renderSortableHeader('Worker', 'worker_name', 'w-[25%]')}
                         {renderSortableHeader('Job Title', 'job_title', 'w-[20%]')}
                         {renderSortableHeader('Start Date', 'start_date', 'w-[15%]')}
@@ -142,6 +144,7 @@ export default function ResourceList({
 
             case 'equipment':
                 return (
+                    <>
                         {renderSortableHeader('Equipment', 'equipment.name', 'w-[30%]')}
                         {renderSortableHeader('Usage Hours', 'usage_hours', 'w-[15%] text-right')}
                         {renderSortableHeader('Hourly Rate', 'hourly_rate', 'w-[15%] text-right')}
@@ -153,6 +156,7 @@ export default function ResourceList({
 
             case 'material':
                 return (
+                    <>
                         {renderSortableHeader('Name', 'name', 'w-[30%]')}
                         {renderSortableHeader('Unit', 'unit', 'w-[15%]')}
                         {renderSortableHeader('Quantity', 'quantity', 'w-[15%] text-right')}
@@ -164,6 +168,7 @@ export default function ResourceList({
 
             case 'fuel':
                 return (
+                    <>
                         {renderSortableHeader('Equipment', 'equipment.name', 'w-[30%]')}
                         {renderSortableHeader('Type', 'type', 'w-[20%]')}
                         {renderSortableHeader('Quantity', 'quantity', 'w-[15%] text-right')}
@@ -175,6 +180,7 @@ export default function ResourceList({
 
             case 'expense':
                 return (
+                    <>
                         {renderSortableHeader('Category', 'category', 'w-[20%]')}
                         {renderSortableHeader('Description', 'description', 'w-[40%]')}
                         {renderSortableHeader('Amount', 'amount', 'w-[15%] text-right')}
@@ -196,6 +202,7 @@ export default function ResourceList({
                 const isInternalWorker = Boolean(resource.employee_id);
 
                 return (
+                    <>
                         <TableCell className="max-w-[25%] truncate">
                             <div className="flex items-center">
                                 <span>{employeeName}</span>
@@ -206,6 +213,7 @@ export default function ResourceList({
                                             ? 'bg-blue-100 text-blue-800'
                                             : 'bg-slate-100'
                                     }`}
+                                >
                                     {isInternalWorker ? 'Internal' : 'External'}
                                 </Badge>
                             </div>
@@ -220,6 +228,7 @@ export default function ResourceList({
 
             case 'equipment':
                 return (
+                    <>
                         <TableCell className="max-w-[30%] truncate">{resource.equipment?.name || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.usage_hours || '0'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.hourly_rate)}</TableCell>
@@ -230,6 +239,7 @@ export default function ResourceList({
 
             case 'material':
                 return (
+                    <>
                         <TableCell className="max-w-[30%] truncate">{resource.name || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%]">{resource.unit || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.quantity || '0'}</TableCell>
@@ -240,6 +250,7 @@ export default function ResourceList({
 
             case 'fuel':
                 return (
+                    <>
                         <TableCell className="max-w-[30%] truncate">{resource.equipment?.name || 'N/A'}</TableCell>
                         <TableCell className="max-w-[20%]">{resource.type || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.quantity || '0'}</TableCell>
@@ -250,6 +261,7 @@ export default function ResourceList({
 
             case 'expense':
                 return (
+                    <>
                         <TableCell className="max-w-[20%]">{resource.category || 'N/A'}</TableCell>
                         <TableCell className="max-w-[40%] truncate">{resource.description || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.amount)}</TableCell>
@@ -304,12 +316,14 @@ export default function ResourceList({
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => onEdit?.(resource)}
+                                        >
                                             <Pencil className="h-4 w-4" />
                                         </Button>
                                         <Button
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => onDelete?.(resource)}
+                                        >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
                                     </div>

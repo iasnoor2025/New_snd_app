@@ -4,9 +4,9 @@ namespace Modules\EquipmentManagement\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\EquipmentManagement\Domain\Models\Equipment;
 use Modules\EquipmentManagement\Domain\Models\EquipmentUtilizationLog;
-use App\Services\UtilizationTrackingService;
-use App\Services\UtilizationAnalyticsService;
-use App\Http\Requests\EquipmentUtilizationRequest;
+use Modules\EquipmentManagement\Services\UtilizationTrackingService;
+use Modules\EquipmentManagement\Services\UtilizationAnalyticsService;
+use Modules\EquipmentManagement\Http\Requests\EquipmentUtilizationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 

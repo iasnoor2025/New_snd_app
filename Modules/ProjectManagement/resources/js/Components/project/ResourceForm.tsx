@@ -430,10 +430,14 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         Do you want to connect this resource to an employee?
                                     </p>
                                 </div>
-                                <Toggle
-                                    pressed={useEmployee}
-                                    onPressedChange={handleUseEmployeeChange}
-                                />
+                                <div className="flex items-center">
+                                    <Toggle
+                                        pressed={useEmployee}
+                                        onPressedChange={handleUseEmployeeChange}
+                                        className="bg-white border border-gray-300 hover:bg-gray-50 data-[state=on]:bg-blue-500 data-[state=on]:text-white min-w-12 h-8"
+                                        aria-label="Toggle employee link"
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -503,24 +507,26 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
+                                <label className="text-sm font-medium">Start Date</label>
                                 <DatePicker
                                     date={data.start_date ? new Date(data.start_date) : undefined}
-                                    onDateChange={(date: any) => handleInputChange('start_date', date?.toISOString().split('T')[0])}
-                                    label="Start Date"
-                                    error={errors.start_date}
-                                    fromDate={new Date(2020, 0, 1)}
-                                    toDate={new Date()}
+                                    setDate={(date: Date | undefined) => handleInputChange('start_date', date?.toISOString().split('T')[0])}
+                                    placeholder="Select start date"
                                 />
+                                {errors.start_date && (
+                                    <p className="text-sm text-red-500">{errors.start_date}</p>
+                                )}
                             </div>
                             <div className="space-y-2">
+                                <label className="text-sm font-medium">End Date (Optional)</label>
                                 <DatePicker
                                     date={data.end_date ? new Date(data.end_date) : undefined}
-                                    onDateChange={(date: any) => handleInputChange('end_date', date?.toISOString().split('T')[0])}
-                                    label="End Date (Optional)"
-                                    error={errors.end_date}
-                                    fromDate={new Date(2020, 0, 1)}
-                                    toDate={new Date()}
+                                    setDate={(date: Date | undefined) => handleInputChange('end_date', date?.toISOString().split('T')[0])}
+                                    placeholder="Select end date"
                                 />
+                                {errors.end_date && (
+                                    <p className="text-sm text-red-500">{errors.end_date}</p>
+                                )}
                             </div>
                         </div>
 
@@ -765,14 +771,15 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
+                                <label className="text-sm font-medium">Date</label>
                                 <DatePicker
                                     date={data.date ? new Date(data.date) : undefined}
-                                    onDateChange={(date: any) => handleInputChange('date', date?.toISOString().split('T')[0])}
-                                    label="Date"
-                                    error={errors.date}
-                                    fromDate={new Date(2020, 0, 1)}
-                                    toDate={new Date()}
+                                    setDate={(date: Date | undefined) => handleInputChange('date', date?.toISOString().split('T')[0])}
+                                    placeholder="Select date"
                                 />
+                                {errors.date && (
+                                    <p className="text-sm text-red-500">{errors.date}</p>
+                                )}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="notes">Notes</Label>
@@ -888,14 +895,15 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
+                                <label className="text-sm font-medium">Date</label>
                                 <DatePicker
                                     date={data.date ? new Date(data.date) : undefined}
-                                    onDateChange={(date: any) => handleInputChange('date', date?.toISOString().split('T')[0])}
-                                    label="Date"
-                                    error={errors.date}
-                                    fromDate={new Date(2020, 0, 1)}
-                                    toDate={new Date()}
+                                    setDate={(date: Date | undefined) => handleInputChange('date', date?.toISOString().split('T')[0])}
+                                    placeholder="Select date"
                                 />
+                                {errors.date && (
+                                    <p className="text-sm text-red-500">{errors.date}</p>
+                                )}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="notes">Notes</Label>
@@ -994,12 +1002,12 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         <Label htmlFor="date" className="text-sm font-medium">Date</Label>
                                         <DatePicker
                                             date={data.date ? new Date(data.date) : undefined}
-                                            onDateChange={(date: any) => handleInputChange('date', date?.toISOString().split('T')[0])}
-                                            label="Date"
-                                            error={errors.date}
-                                            fromDate={new Date(2020, 0, 1)}
-                                            toDate={new Date()}
+                                            setDate={(date: Date | undefined) => handleInputChange('date', date?.toISOString().split('T')[0])}
+                                            placeholder="Select date"
                                         />
+                                        {errors.date && (
+                                            <p className="text-sm text-red-500">{errors.date}</p>
+                                        )}
                                     </div>
 
                                     <div className="space-y-2">
