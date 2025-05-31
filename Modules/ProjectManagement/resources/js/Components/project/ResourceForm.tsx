@@ -123,6 +123,46 @@ const manpowerSchema = z.object({
     path: ['end_date']
 })
 
+const materialSchema = z.object({
+    material_id: z.number().min(1, 'Material selection is required'),
+    name: z.string().min(1, 'Material name is required'),
+    unit: z.string().min(1, 'Unit is required'),
+    quantity: z.number().min(0.01, 'Quantity must be greater than 0'),
+    unit_price: z.number().min(0, 'Unit price must be positive'),
+    total_cost: z.number().min(0, 'Total cost must be positive'),
+    date_used: z.string().min(1, 'Date used is required'),
+    description: z.string().optional(),
+    project_id: z.number().optional(),
+    notes: z.string().optional()
+});
+
+const equipmentSchema = z.object({
+    equipment_id: z.number().min(1, 'Equipment is required'),
+    usage_hours: z.number().min(0, 'Usage hours must be positive'),
+    hourly_rate: z.number().min(0, 'Hourly rate must be positive'),
+    maintenance_cost: z.number().min(0, 'Maintenance cost must be positive').optional(),
+    start_date: z.string().min(1, 'Start date is required'),
+    end_date: z.string().optional(),
+    description: z.string().optional()
+});
+
+const fuelSchema = z.object({
+    fuel_type: z.string().min(1, 'Fuel type is required'),
+    quantity: z.number().min(0.01, 'Quantity must be greater than 0'),
+    unit_price: z.number().min(0, 'Unit price must be positive'),
+    total_cost: z.number().min(0, 'Total cost must be positive'),
+    date: z.string().min(1, 'Date is required'),
+    description: z.string().optional()
+});
+
+const expenseSchema = z.object({
+    category: z.string().min(1, 'Category is required'),
+    amount: z.number().min(0.01, 'Amount must be greater than 0'),
+    total_cost: z.number().min(0, 'Total cost must be positive'),
+    date: z.string().min(1, 'Date is required'),
+    description: z.string().optional()
+});
+
 // Dummy data for employees to avoid API call
 const dummyEmployees: Employee[] = [
     { id: 1, first_name: 'John', last_name: 'Doe', full_name: 'John Doe', hourly_rate: 15, position: 'Operator' },
@@ -391,21 +431,220 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                 }
             }
 
+            // Use the router.post/put methods directly with proper error handling
             const routeName = `projects.resources.${type}.${initialData?.id ? 'update' : 'store'}`;
             const routeParams = {
                 project: projectId,
                 ...(initialData?.id && { [type]: initialData.id })
             };
 
-            if (initialData?.id) {
-                await put(route(routeName, routeParams), formData);
-            } else {
-                await post(route(routeName, routeParams), formData);
+            console.log('Route name:', routeName);
+            console.log('Route params:', routeParams);
+            console.log('Form data:', formData);
+            console.log('Resource type:', type);
+            console.log('Generated URL:', route(routeName, routeParams));
+
+            // Client-side validation before submission
+            let validationSchema;
+            switch (type) {
+                case 'manpower':
+                    validationSchema = manpowerSchema;
+                    console.log('Using manpower schema - should validate:', Object.keys(manpowerSchema.shape));
+                    break;
+                case 'material':
+                    validationSchema = materialSchema;
+                    console.log('Using material schema - should validate:', Object.keys(materialSchema.shape));
+                    break;
+                case 'equipment':
+                    validationSchema = equipmentSchema;
+                    console.log('Using equipment schema - should validate:', Object.keys(equipmentSchema.shape));
+                    break;
+                case 'fuel':
+                    validationSchema = fuelSchema;
+                    console.log('Using fuel schema - should validate:', Object.keys(fuelSchema.shape));
+                    break;
+                case 'expense':
+                    validationSchema = expenseSchema;
+                    console.log('Using expense schema - should validate:', Object.keys(expenseSchema.shape));
+                    break;
+                default:
+                    console.error('Unknown resource type:', type);
+                    setIsLoading(false);
+                    return;
             }
 
-            if (onSuccess) {
-                onSuccess();
+            // Prepare data for validation by converting string numbers to actual numbers
+            const dataForValidation = { ...formData };
+
+            // Convert numeric fields from strings to numbers for validation
+            if (type === 'material') {
+                // Ensure material_id is a number or undefined for validation
+                if (dataForValidation.material_id && dataForValidation.material_id !== '') {
+                    dataForValidation.material_id = parseInt(dataForValidation.material_id);
+                } else {
+                    delete dataForValidation.material_id;
+                }
+
+                // Map material_id to name for validation
+                if (dataForValidation.material_id) {
+                    const materialNames = {
+                        1: 'Cement',
+                        2: 'Steel',
+                        3: 'Bricks',
+                        4: 'Sand',
+                        5: 'Gravel',
+                        6: 'Wood',
+                        7: 'Paint',
+                        8: 'Other'
+                    };
+                    dataForValidation.name = materialNames[dataForValidation.material_id] || 'Unknown';
+                } else {
+                    // If no material is selected, we need to fail validation
+                    dataForValidation.name = '';
+                }
+
+                // Convert numeric fields, keeping them for validation even if empty
+                const quantity = dataForValidation.quantity && dataForValidation.quantity !== ''
+                    ? parseFloat(dataForValidation.quantity) : 0;
+                const unitPrice = dataForValidation.unit_price && dataForValidation.unit_price !== ''
+                    ? parseFloat(dataForValidation.unit_price) : 0;
+
+                dataForValidation.quantity = quantity;
+                dataForValidation.unit_price = unitPrice;
+
+                // Calculate total_cost automatically
+                dataForValidation.total_cost = quantity * unitPrice;
+
+                // Ensure unit and date_used are strings
+                dataForValidation.unit = dataForValidation.unit || '';
+                dataForValidation.date_used = dataForValidation.date_used || '';
+            } else if (type === 'equipment') {
+                if (dataForValidation.equipment_id && dataForValidation.equipment_id !== '') {
+                    dataForValidation.equipment_id = parseInt(dataForValidation.equipment_id);
+                } else {
+                    delete dataForValidation.equipment_id;
+                }
+                if (dataForValidation.usage_hours && dataForValidation.usage_hours !== '') {
+                    dataForValidation.usage_hours = parseFloat(dataForValidation.usage_hours);
+                } else {
+                    delete dataForValidation.usage_hours;
+                }
+                if (dataForValidation.hourly_rate && dataForValidation.hourly_rate !== '') {
+                    dataForValidation.hourly_rate = parseFloat(dataForValidation.hourly_rate);
+                } else {
+                    delete dataForValidation.hourly_rate;
+                }
+                if (dataForValidation.maintenance_cost && dataForValidation.maintenance_cost !== '') {
+                    dataForValidation.maintenance_cost = parseFloat(dataForValidation.maintenance_cost);
+                } else {
+                    delete dataForValidation.maintenance_cost;
+                }
+            } else if (type === 'fuel') {
+                if (dataForValidation.quantity && dataForValidation.quantity !== '') {
+                    dataForValidation.quantity = parseFloat(dataForValidation.quantity);
+                } else {
+                    delete dataForValidation.quantity;
+                }
+                if (dataForValidation.unit_price && dataForValidation.unit_price !== '') {
+                    dataForValidation.unit_price = parseFloat(dataForValidation.unit_price);
+                } else {
+                    delete dataForValidation.unit_price;
+                }
+                if (dataForValidation.total_cost && dataForValidation.total_cost !== '') {
+                    dataForValidation.total_cost = parseFloat(dataForValidation.total_cost);
+                } else {
+                    delete dataForValidation.total_cost;
+                }
+            } else if (type === 'expense') {
+                if (dataForValidation.amount && dataForValidation.amount !== '') {
+                    dataForValidation.amount = parseFloat(dataForValidation.amount);
+                    // For expenses, total_cost should equal amount
+                    dataForValidation.total_cost = dataForValidation.amount;
+                } else {
+                    delete dataForValidation.amount;
+                    delete dataForValidation.total_cost;
+                }
+                // Ensure category and date are strings
+                dataForValidation.category = dataForValidation.category || '';
+                dataForValidation.date = dataForValidation.date || '';
+            } else if (type === 'manpower') {
+                if (dataForValidation.employee_id && dataForValidation.employee_id !== '') {
+                    dataForValidation.employee_id = parseInt(dataForValidation.employee_id);
+                } else {
+                    delete dataForValidation.employee_id;
+                }
+                if (dataForValidation.daily_rate && dataForValidation.daily_rate !== '') {
+                    dataForValidation.daily_rate = parseFloat(dataForValidation.daily_rate);
+                } else {
+                    delete dataForValidation.daily_rate;
+                }
+                if (dataForValidation.total_days && dataForValidation.total_days !== '') {
+                    dataForValidation.total_days = parseInt(dataForValidation.total_days);
+                } else {
+                    delete dataForValidation.total_days;
+                }
             }
+
+            // Validate form data before submission
+            let finalSubmissionData;
+            try {
+                const validatedData = validationSchema.parse(dataForValidation);
+                console.log('Validation passed:', validatedData);
+                // Use the validated data for submission instead of original formData
+                finalSubmissionData = {
+                    ...formData,
+                    ...validatedData,
+                    status: formData.status || 'pending',
+                    resource_type: type
+                };
+            } catch (validationError) {
+                console.error('Client-side validation failed:', validationError);
+                if (validationError instanceof z.ZodError) {
+                    const fieldErrors: Record<string, string> = {};
+                    validationError.errors.forEach(error => {
+                        if (error.path.length > 0) {
+                            fieldErrors[error.path[0] as string] = error.message;
+                        }
+                    });
+                    setErrors(fieldErrors);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
+            const submitPromise = new Promise((resolve, reject) => {
+                if (initialData?.id) {
+                    router.put(route(routeName, routeParams), finalSubmissionData, {
+                        onSuccess: () => {
+                            resolve(true);
+                            if (onSuccess) {
+                                onSuccess();
+                            }
+                        },
+                        onError: (errors) => {
+                            console.error('Update errors:', errors);
+                            setErrors(errors);
+                            reject(errors);
+                        }
+                    });
+                } else {
+                    router.post(route(routeName, routeParams), finalSubmissionData, {
+                        onSuccess: () => {
+                            resolve(true);
+                            if (onSuccess) {
+                                onSuccess();
+                            }
+                        },
+                        onError: (errors) => {
+                            console.error('Submission errors:', errors);
+                            setErrors(errors);
+                            reject(errors);
+                        }
+                    });
+                }
+            });
+
+            await submitPromise;
         } catch (error) {
             const err = error as any;
             console.error('Form submission errors:', err);
@@ -688,7 +927,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     value={data.material_id?.toString()}
                                     onValueChange={(value) => handleInputChange('material_id', parseInt(value))}
                                 >
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger className={`w-full ${errors.material_id ? 'border-red-500' : ''}`}>
                                         <SelectValue placeholder="Select material" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -771,14 +1010,14 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium">Date</label>
+                                <label className="text-sm font-medium">Date Used</label>
                                 <DatePicker
-                                    date={data.date ? new Date(data.date) : undefined}
-                                    setDate={(date: Date | undefined) => handleInputChange('date', date?.toISOString().split('T')[0])}
-                                    placeholder="Select date"
+                                    date={data.date_used ? new Date(data.date_used) : undefined}
+                                    setDate={(date: Date | undefined) => handleInputChange('date_used', date?.toISOString().split('T')[0])}
+                                    placeholder="Select date used"
                                 />
-                                {errors.date && (
-                                    <p className="text-sm text-red-500">{errors.date}</p>
+                                {errors.date_used && (
+                                    <p className="text-sm text-red-500">{errors.date_used}</p>
                                 )}
                             </div>
                             <div className="space-y-2">
@@ -895,14 +1134,14 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium">Date</label>
+                                <label className="text-sm font-medium">Date Used</label>
                                 <DatePicker
-                                    date={data.date ? new Date(data.date) : undefined}
-                                    setDate={(date: Date | undefined) => handleInputChange('date', date?.toISOString().split('T')[0])}
-                                    placeholder="Select date"
+                                    date={data.date_used ? new Date(data.date_used) : undefined}
+                                    setDate={(date: Date | undefined) => handleInputChange('date_used', date?.toISOString().split('T')[0])}
+                                    placeholder="Select date used"
                                 />
-                                {errors.date && (
-                                    <p className="text-sm text-red-500">{errors.date}</p>
+                                {errors.date_used && (
+                                    <p className="text-sm text-red-500">{errors.date_used}</p>
                                 )}
                             </div>
                             <div className="space-y-2">

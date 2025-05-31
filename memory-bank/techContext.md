@@ -5,7 +5,10 @@
 ### Backend Framework
 - **Laravel 12**
   - Latest version with improved performance
-  - Modular architecture using Laravel Modules
+  - **Modular architecture using Laravel Modules**
+    - Self-contained modules in `Modules/` directory
+    - Each module has its own Controllers, Models, Services, etc.
+    - Cross-module services in `app/Services/` for shared functionality
   - Service-Repository pattern
   - RESTful API endpoints
   - Background job processing

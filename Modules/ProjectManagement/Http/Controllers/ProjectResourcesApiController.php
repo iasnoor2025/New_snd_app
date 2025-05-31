@@ -32,9 +32,9 @@ class ProjectResourcesApiController extends Controller
 {
     protected $resourceService;
 
-    public function __construct(/* ProjectResourceService $resourceService */)
+    public function __construct(ProjectResourceService $resourceService)
     {
-        // $this->resourceService = $resourceService;
+        $this->resourceService = $resourceService;
     }
 
     /**

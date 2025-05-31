@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, router } from '@inertiajs/react';
 import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../../../../resources/js/components/ui/card';
@@ -24,9 +24,11 @@ import {
 } from 'lucide-react';
 import ResourceList from '../Components/project/ResourceList';
 import ResourceForm from '../Components/project/ResourceForm';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from 'resources/js/components/ui/dialog';
-// import { Badge } from '../../../../../../resources/js/components/ui/badge'; // TODO: Badge component import unresolved, revisit if file is added
-import { Separator } from 'resources/js/components/ui/separator';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../../../../resources/js/components/ui/dialog';
+import { Badge } from '../../../../../resources/js/components/ui/badge';
+import { Separator } from '../../../../../resources/js/components/ui/separator';
+import { Progress } from '../../../../../resources/js/components/ui/progress';
+import { toast } from 'sonner';
 import TaskList, { ProjectTask } from '../Components/project/TaskList';
 import TaskDialog from '../Components/project/TaskDialog';
 import { ProjectProgress } from '../Components/project/ProjectProgress';
@@ -282,7 +284,7 @@ export default function Show({ project, manpower = [], equipment = [], materials
             [type]: resource.id
         }), {
             onSuccess: () => {
-                // TODO: Implement notification for resource deleted
+                toast.success('Resource deleted successfully');
             }
         });
     };
@@ -355,10 +357,10 @@ export default function Show({ project, manpower = [], equipment = [], materials
             completion_percentage: status === 'completed' ? 100 : task.completion_percentage
         }, {
             onSuccess: () => {
-                // TODO: Implement notification for task updated
+                toast.success('Task updated successfully');
             },
             onError: () => {
-                // TODO: Implement notification for task update error
+                toast.error('Failed to update task');
             }
         });
     };
@@ -369,10 +371,10 @@ export default function Show({ project, manpower = [], equipment = [], materials
             status: percentage === 100 ? 'completed' : task.status
         }, {
             onSuccess: () => {
-                // TODO: Implement notification for task updated
+                toast.success('Task updated successfully');
             },
             onError: () => {
-                // TODO: Implement notification for task update error
+                toast.error('Failed to update task');
             }
         });
     };
@@ -397,11 +399,11 @@ export default function Show({ project, manpower = [], equipment = [], materials
             preserveState: false,
             preserveScroll: false,
             onSuccess: () => {
-                // TODO: Implement notification for task deleted
+                toast.success('Task deleted successfully');
             },
             onError: (errors: any) => {
                 console.error('Delete errors:', errors);
-                // TODO: Implement notification for task delete error
+                toast.error('Failed to delete task');
             }
         });
     };
@@ -443,10 +445,10 @@ export default function Show({ project, manpower = [], equipment = [], materials
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
 
-            // TODO: Implement notification for report generated successfully
+            toast.success('Report generated successfully');
         } catch (error) {
             console.error('Error generating report:', error);
-            // TODO: Implement notification for report generation error
+            toast.error('Failed to generate report');
         } finally {
             setIsGeneratingReport(false);
         }
@@ -468,12 +470,9 @@ export default function Show({ project, manpower = [], equipment = [], materials
                         <div>
                             <div className="flex items-center gap-2 mb-1">
                                 <h1 className="text-2xl font-bold tracking-tight dark:text-white">{project.name}</h1>
-                                {/*
                                 <Badge variant={statusStyle.variant} className={`${statusStyle.color} ml-2`}>
                                     {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                                 </Badge>
-                                */}
-                                // TODO: Badge component usage commented out, revisit if Badge is added or path is fixed
                             </div>
                             <p className="text-muted-foreground text-sm">Project ID: {project.id}</p>
                         </div>
@@ -620,7 +619,6 @@ export default function Show({ project, manpower = [], equipment = [], materials
                                         })()}
                                     </span>
                                 </div>
-                                {/*
                                 <Progress
                                     value={(() => {
                                         const today = new Date();
@@ -635,8 +633,6 @@ export default function Show({ project, manpower = [], equipment = [], materials
                                     })()}
                                     className="h-3 bg-gray-100"
                                 />
-                                */}
-                                // TODO: Progress bar component usage commented out, revisit if Progress is added or path is fixed
                                 <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
                                     <div className="flex items-center">
                                         <Clock className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
@@ -760,12 +756,9 @@ export default function Show({ project, manpower = [], equipment = [], materials
                                             </div>
 
                                             <div className="flex items-center justify-center">
-                                                {/*
                                                 <Badge className={isProfitable ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'}>
-                                                    {isProfitable ? 'Profit' : 'Loss'}: {profitPercentage}%
-                                                </Badge>
-                                                */}
-                                                // TODO: Badge component usage commented out, revisit if Badge is added or path is fixed
+                                                {isProfitable ? 'Profit' : 'Loss'}: {profitPercentage}%
+                                            </Badge>
                                             </div>
                                         </>
                                     );
@@ -987,64 +980,75 @@ export default function Show({ project, manpower = [], equipment = [], materials
                 )}
 
                 {/* Delete Resource Confirmation Dialog */}
-                {/*
-                <ConfirmDialog
-                    open={deleteConfirmOpen}
-                    onOpenChange={setDeleteConfirmOpen}
-                    title="Delete Resource"
-                    description="Are you sure you want to delete this resource? This action cannot be undone."
-                    triggerButton={null}
-                    confirmButton={{
-                        text: "Delete",
-                        variant: "destructive"
-                    }}
-                    cancelButton={{
-                        text: "Cancel"
-                    }}
-                    onConfirm={handleDeleteConfirm}
-                />
-                */}
-                // TODO: Implement confirmation dialog for resource deletion
+                <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Delete Resource</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete this resource? This action cannot be undone.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+                            <Button
+                                onClick={() => {
+                                    if (resourceToDelete) {
+                                        handleDeleteResource(resourceToDelete.resource, resourceToDelete.type);
+                                    }
+                                }}
+                                variant="destructive"
+                            >
+                                Delete
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
                 {/* Delete Task Confirmation Dialog */}
-                {/*
-                <ConfirmDialog
-                    open={taskDeleteConfirmOpen}
-                    onOpenChange={setTaskDeleteConfirmOpen}
-                    title="Delete Task"
-                    description="Are you sure you want to delete this task? This action cannot be undone."
-                    triggerButton={null}
-                    confirmButton={{
-                        text: "Delete",
-                        variant: "destructive"
-                    }}
-                    cancelButton={{
-                        text: "Cancel"
-                    }}
-                    onConfirm={handleDeleteTaskConfirm}
-                />
-                */}
-                // TODO: Implement confirmation dialog for task deletion
+                <Dialog open={taskDeleteConfirmOpen} onOpenChange={setTaskDeleteConfirmOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Delete Task</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete this task? This action cannot be undone.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setTaskDeleteConfirmOpen(false)}>Cancel</Button>
+                            <Button
+                                onClick={() => {
+                                    if (taskToDelete) {
+                                        handleDeleteTask(taskToDelete);
+                                    }
+                                }}
+                                variant="destructive"
+                            >
+                                Delete
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
                 {/* Project Delete Confirmation Dialog */}
-                {/*
-                <ConfirmDialog
-                    open={projectDeleteDialogOpen}
-                    onOpenChange={setProjectDeleteDialogOpen}
-                    title="Delete Project"
-                    description="Are you sure you want to delete this project? This action cannot be undone."
-                    triggerButton={null}
-                    confirmButton={{
-                        text: "Delete",
-                        variant: "destructive"
-                    }}
-                    cancelButton={{
-                        text: "Cancel"
-                    }}
-                    onConfirm={handleConfirmProjectDelete}
-                />
-                */}
-                // TODO: Implement confirmation dialog for project deletion
+                <Dialog open={projectDeleteDialogOpen} onOpenChange={setProjectDeleteDialogOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Delete Project</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete this project? This action cannot be undone.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setProjectDeleteDialogOpen(false)}>Cancel</Button>
+                            <Button
+                                onClick={handleConfirmProjectDelete}
+                                variant="destructive"
+                            >
+                                Delete
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         </AdminLayout>
     );

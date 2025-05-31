@@ -33,6 +33,42 @@ use SoftDeletes;
         'total_cost',
         'date_used',
         'notes',
+        'job_title',
+        'start_date',
+        'daily_rate',
+        'total_days',
+        'usage_hours',
+        'hourly_rate',
+        'type',
+        'date',
+        'category',
+        'amount',
+        'unit_cost',
+        'status',
+        'worker_name',
+        'liters',
+        'price_per_liter',
+    ];
+
+    /**
+     * The attributes that should have default values.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'job_title' => 'Material Supply',
+        'daily_rate' => 0,
+        'total_days' => 1,
+        'usage_hours' => 0,
+        'hourly_rate' => 0,
+        'type' => 'material',
+        'category' => 'material',
+        'amount' => 0,
+        'unit_cost' => 0,
+        'status' => 'active',
+        'worker_name' => 'Material Handler',
+        'liters' => 0,
+        'price_per_liter' => 0,
     ];
 
     /**
@@ -42,9 +78,19 @@ use SoftDeletes;
      */
     protected $casts = [
         'date_used' => 'date',
+        'start_date' => 'date',
+        'date' => 'date',
         'quantity' => 'decimal:2',
         'unit_price' => 'decimal:2',
         'total_cost' => 'decimal:2',
+        'daily_rate' => 'decimal:2',
+        'total_days' => 'decimal:2',
+        'usage_hours' => 'decimal:2',
+        'hourly_rate' => 'decimal:2',
+        'amount' => 'decimal:2',
+        'unit_cost' => 'decimal:2',
+        'liters' => 'decimal:2',
+        'price_per_liter' => 'decimal:2',
     ];
 
     /**

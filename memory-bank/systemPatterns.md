@@ -395,7 +395,63 @@ class EmployeeDTO
 }
 ```
 
-### Service Layer
+### Service Layer Architecture
+
+The application uses a comprehensive service layer architecture that encapsulates business logic and provides a clean interface between controllers and data access layers. Services are organized within their respective modules following the Laravel Modules pattern.
+
+#### Modular Service Organization
+
+Services are organized within each module's Services directory:
+
+```
+Modules/
+├── Core/Services/
+│   ├── AuthenticationService.php
+│   ├── AuthorizationService.php
+│   └── ActivityLogService.php
+├── EmployeeManagement/Services/
+│   ├── EmployeeService.php
+│   ├── PerformanceService.php
+│   └── DocumentService.php
+├── LeaveManagement/Services/
+│   ├── LeaveService.php
+│   ├── ApprovalService.php
+│   └── BalanceService.php
+├── TimesheetManagement/Services/
+│   ├── TimesheetService.php
+│   ├── ApprovalWorkflowService.php
+│   └── GeofencingService.php
+├── Payroll/Services/
+│   ├── PayrollService.php
+│   ├── AdvanceService.php
+│   └── SettlementService.php
+├── ProjectManagement/Services/
+│   ├── ProjectService.php
+│   ├── TaskService.php
+│   └── BudgetService.php
+├── RentalManagement/Services/
+│   ├── RentalService.php
+│   ├── InvoiceService.php
+│   └── PaymentService.php
+├── EquipmentManagement/Services/
+│   ├── EquipmentService.php
+│   ├── MaintenanceService.php
+│   └── AvailabilityService.php
+└── Notifications/Services/
+    ├── NotificationService.php
+    ├── EmailService.php
+    └── SMSService.php
+```
+
+#### Cross-Module Services
+
+For services that need to be shared across modules, they are placed in:
+- `app/Services/` - Global application services
+- `Modules/Core/Services/` - Core domain services
+
+Example: `app/Services/ProjectResourceService.php` - Handles resource management across projects
+
+#### Service Implementation Pattern
 
 Services encapsulate business logic and orchestrate operations:
 

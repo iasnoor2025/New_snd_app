@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from '@inertiajs/react';
-// TODO: Uncomment and fix the path if AppLayout is added
-// import AppLayout from '../layouts/app-layout';
+import AppLayout from '@/layouts/app-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../../../../resources/js/components/ui/card';
 import { Button } from '../../../../../resources/js/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../../resources/js/components/ui/table';

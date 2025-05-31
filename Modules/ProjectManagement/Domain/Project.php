@@ -5,7 +5,7 @@ namespace Modules\ProjectManagement\Domain;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\Employee\Domain\Employee;
+use Modules\EmployeeManagement\Domain\Models\Employee;
 
 class Project extends Model
 {

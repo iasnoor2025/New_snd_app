@@ -1212,51 +1212,51 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                     onValueChange={handleTypeChange}
                                     className="w-full"
                                 >
-                                    <TabsList className="grid grid-cols-6 mb-4">
-                                        <TabsTrigger value="manpower" className="flex items-center">
-                                            Manpower
+                                    <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-4">
+                                        <TabsTrigger value="manpower" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
+                                            <span className="truncate">Manpower</span>
                                             {getResourceCount('manpower') > 0 && (
-                                                <Badge variant="secondary" className="ml-2 h-5 px-2">
+                                                <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('manpower')}
                                                 </Badge>
                                             )}
                                         </TabsTrigger>
-                                        <TabsTrigger value="equipment" className="flex items-center">
-                                            Equipment
+                                        <TabsTrigger value="equipment" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
+                                            <span className="truncate">Equipment</span>
                                             {getResourceCount('equipment') > 0 && (
-                                                <Badge variant="secondary" className="ml-2 h-5 px-2">
+                                                <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('equipment')}
                                                 </Badge>
                                             )}
                                         </TabsTrigger>
-                                        <TabsTrigger value="material" className="flex items-center">
-                                            Materials
+                                        <TabsTrigger value="material" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
+                                            <span className="truncate">Materials</span>
                                             {getResourceCount('material') > 0 && (
-                                                <Badge variant="secondary" className="ml-2 h-5 px-2">
+                                                <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('material')}
                                                 </Badge>
                                             )}
                                         </TabsTrigger>
-                                        <TabsTrigger value="fuel" className="flex items-center">
-                                            Fuel
+                                        <TabsTrigger value="fuel" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
+                                            <span className="truncate">Fuel</span>
                                             {getResourceCount('fuel') > 0 && (
-                                                <Badge variant="secondary" className="ml-2 h-5 px-2">
+                                                <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('fuel')}
                                                 </Badge>
                                             )}
                                         </TabsTrigger>
-                                        <TabsTrigger value="expense" className="flex items-center">
-                                            Expenses
+                                        <TabsTrigger value="expense" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
+                                            <span className="truncate">Expenses</span>
                                             {getResourceCount('expense') > 0 && (
-                                                <Badge variant="secondary" className="ml-2 h-5 px-2">
+                                                <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('expense')}
                                                 </Badge>
                                             )}
                                         </TabsTrigger>
-                                        <TabsTrigger value="tasks" className="flex items-center">
-                                            Tasks
+                                        <TabsTrigger value="tasks" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
+                                            <span className="truncate">Tasks</span>
                                             {getResourceCount('tasks') > 0 && (
-                                                <Badge variant="secondary" className="ml-2 h-5 px-2">
+                                                <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('tasks')}
                                                 </Badge>
                                             )}

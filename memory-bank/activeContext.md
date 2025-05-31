@@ -4,20 +4,34 @@
 
 We are now focused on implementing a comprehensive modular system with Laravel 12, Inertia.js, and React. The application follows a well-structured modular architecture with specialized modules for different business domains including HR & Payroll, Project Management, Rental Management, Equipment Management, and more.
 
-### Recent Implementation: Modular Architecture with Domain-Driven Structure
+### Recent Implementation: Project Resource Management Fix
 
-We have implemented a comprehensive modular architecture that organizes the application into self-contained, domain-specific modules. Each module follows a consistent structure with dedicated directories for:
+We have successfully resolved critical issues in the Project Resource Management system:
 
-- Domain Models
-- Controllers and Requests
-- Actions for business operations
-- Events and Listeners
-- Jobs for background processing
-- Queries for specialized data retrieval
-- Repositories for data access
-- Services for business logic
+1. **Frontend Validation Fix**: Updated `ResourceForm.tsx` to ensure proper data validation and submission using `finalSubmissionData` instead of raw `formData`
+2. **Backend Service Architecture**: Created `ProjectResourceService.php` in `app/Services/` to handle cross-module resource operations
+3. **Dependency Injection Fix**: Restored proper dependency injection in both `ProjectResourceController.php` and `ProjectResourcesApiController.php`
 
-The modules are organized in a way that promotes separation of concerns and domain-driven design principles.
+### Modular Architecture with Domain-Driven Structure
+
+The application uses Laravel Modules for organizing code into self-contained, domain-specific modules. Each module follows a consistent structure:
+
+- **Domain Models** - Core business entities
+- **Controllers and Requests** - HTTP layer and validation
+- **Actions** - Single-purpose business operations
+- **Events and Listeners** - Event-driven architecture
+- **Jobs** - Background processing
+- **Queries** - Specialized data retrieval
+- **Repositories** - Data access layer
+- **Services** - Business logic orchestration
+
+### Service Organization Pattern
+
+Services are organized in two ways:
+- **Module-specific services**: Located in `Modules/{ModuleName}/Services/`
+- **Cross-module services**: Located in `app/Services/` for shared functionality
+
+Example: `ProjectResourceService` handles resource operations across multiple modules and is placed in `app/Services/`.
 
 ## Comprehensive Module Structure
 

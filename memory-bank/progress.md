@@ -199,6 +199,10 @@
 - [x] Project dashboards
 - [x] Client access portal
 - [x] File sharing and collaboration
+- [x] Project resource management (materials, fuel, expenses)
+- [x] ProjectResourceService implementation
+- [x] Resource form validation and submission
+- [x] Cross-module resource operations
 - [ ] Project equipment management
   - [ ] Equipment allocation to projects
   - [ ] Usage tracking
