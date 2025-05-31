@@ -12,6 +12,7 @@ use Modules\EquipmentManagement\Http\Controllers\MaintenanceTaskController as Ma
 use Modules\EquipmentManagement\Http\Controllers\MaintenanceRecordController as MaintenanceRecordApiController;
 use Modules\EquipmentManagement\Http\Controllers\TechnicianController as TechnicianApiController;
 use Modules\EquipmentManagement\Http\Controllers\DepreciationController as DepreciationApiController;
+use Modules\Core\Http\Controllers\MediaLibraryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,5 +68,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     Route::apiResource('technicians', TechnicianApiController::class);
     Route::get('technicians/{technician}/workload', [TechnicianApiController::class, 'workload']);
     Route::post('maintenance/{maintenance}/assign', [MaintenanceApiController::class, 'assignTechnician']);
+
+    // Media Library
+    Route::get('media-library/{model}/{modelId}', [MediaLibraryController::class, 'index']);
+    Route::post('media-library/{model}/{modelId}', [MediaLibraryController::class, 'upload']);
+    Route::delete('media-library/{media}', [MediaLibraryController::class, 'destroy']);
+    Route::get('media-library/{media}/preview', [MediaLibraryController::class, 'preview']);
 });
 

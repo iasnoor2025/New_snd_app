@@ -17,6 +17,7 @@ use Modules\EquipmentManagement\Http\Controllers\MaintenanceController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenanceRecordController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenancePartController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenanceScheduleController;
+use Modules\Core\Http\Controllers\MediaLibraryController;
 
 Route::middleware(['auth'])->group(function () {
     // Equipment index
@@ -33,6 +34,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/equipment', [EquipmentController::class, 'store'])
         ->middleware('permission:equipment.create')
         ->name('equipment.store');
+    Route::get('/equipment/{equipment}', [EquipmentController::class, 'show'])
+        ->middleware('permission:equipment.view')
+        ->name('equipment.show');
     Route::get('/equipment/{equipment}/edit', [EquipmentController::class, 'edit'])
         ->middleware('permission:equipment.edit')
         ->name('equipment.edit');
@@ -45,6 +49,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/equipment/{equipment}', [EquipmentController::class, 'destroy'])
         ->middleware('permission:equipment.delete')
         ->name('equipment.destroy');
+    // Equipment media library
+    Route::get('/equipment/{equipment}/media-library', function($equipment) {
+        return app(MediaLibraryController::class)->index(request(), 'Equipment', $equipment);
+    })->middleware('permission:equipment.view')
+        ->name('equipment.media-library');
+    Route::post('/equipment/{equipment}/media-library', function($equipment) {
+        return app(MediaLibraryController::class)->upload(request(), app(\App\Actions\Media\UploadMediaAction::class));
+    })->middleware('permission:equipment.edit')
+        ->name('equipment.media-library.upload');
     // Maintenance routes
     Route::get('/equipment/maintenance/create', [MaintenanceRecordController::class, 'create'])
         ->middleware('permission:maintenance.create')

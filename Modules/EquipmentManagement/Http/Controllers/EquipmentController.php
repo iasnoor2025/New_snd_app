@@ -6,6 +6,7 @@ use Modules\EquipmentManagement\Domain\Models\Equipment;
 use Modules\EquipmentManagement\Domain\Models\MaintenanceRecord;
 use Modules\RentalManagement\Domain\Models\RentalItem;
 use Modules\Core\Domain\Models\Category;
+use Modules\Core\Domain\Models\Location;
 use App\Http\Requests\Equipment\StoreEquipmentRequest;
 use App\Http\Requests\Equipment\UpdateEquipmentRequest;
 use Modules\EquipmentManagement\Traits\HandlesDocumentUploads;
@@ -98,7 +99,7 @@ class EquipmentController extends Controller
     {
         // Get categories and locations with id and name
         $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
-        $locations = \App\Models\Location::select('id', 'name')->get();
+        $locations = Location::select('id', 'name')->get();
 
         // Available statuses with proper formatting
         $statuses = [
@@ -211,7 +212,7 @@ class EquipmentController extends Controller
     {
         // Get categories and locations with id and name
         $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
-        $locations = \App\Models\Location::select('id', 'name')->get();
+        $locations = Location::select('id', 'name')->get();
 
         // Available statuses with proper formatting
         $statuses = [

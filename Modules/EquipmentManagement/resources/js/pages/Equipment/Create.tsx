@@ -1,10 +1,10 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { PageProps } from '@/resources/js/types';
 import AdminLayout from '@/resources/js/layouts/AdminLayout';
 import dayjs from 'dayjs';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
-import ErrorBoundary from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ErrorBoundary';
+import { toast } from 'sonner';
+import ErrorBoundary from '@/resources/js/components/ErrorBoundary';
 import { Button } from '@/resources/js/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/resources/js/components/ui/card';
 import { Input } from '@/resources/js/components/ui/input';
@@ -579,7 +579,6 @@ const CreateEquipmentForm = ({
 };
 
 export default function Create({ auth, categories = [], locations = [] }: Props) {
-  const { toast } = useToast();
   const { processing, errors: serverErrors } = useForm();
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategory, setNewCategory] = useState("");

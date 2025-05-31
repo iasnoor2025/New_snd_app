@@ -1,5 +1,6 @@
-﻿import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import React from 'react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import axios from 'axios';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
 import { formatCurrency } from '../../../../../../resources/js/utils/format';
 import { Button } from '../../../../../../resources/js/components/ui/button';
@@ -44,6 +45,77 @@ import {
 import { Input } from '../../../../../../resources/js/components/ui/input';
 import { Label } from '../../../../../../resources/js/components/ui/label';
 import { cn } from '../../../../../../resources/js/lib/utils';
+import { toast } from 'sonner';
+import RiskManagement from './Risk/Management';
+
+interface Equipment {
+  id: number;
+  name: string;
+  model: string;
+  serial_number: string;
+  door_number: string;
+  status: string;
+  category: any;
+  unit: string;
+  location: any;
+  is_active: boolean;
+  description?: string;
+  notes?: string;
+  daily_rate?: number;
+  weekly_rate?: number;
+  monthly_rate?: number;
+  default_unit_cost?: number;
+  purchase_cost?: number;
+  purchase_date?: string;
+  lifetime_maintenance_cost?: number;
+  avg_operating_cost_per_hour?: number;
+  avg_operating_cost_per_mile?: number;
+  last_maintenance_date?: string;
+  next_maintenance_date?: string;
+  next_performance_review?: string;
+  efficiency_rating?: number;
+  current_operating_hours?: number;
+  current_mileage?: number;
+  current_cycle_count?: number;
+  initial_operating_hours?: number;
+  initial_mileage?: number;
+  initial_cycle_count?: number;
+  avg_daily_usage_hours?: number;
+  avg_daily_usage_miles?: number;
+  last_metric_update?: string;
+}
+
+interface MaintenanceRecord {
+  id: number;
+  equipment_id: number;
+  type: string;
+  description: string;
+  cost: number;
+  date: string;
+  technician: string;
+  status: string;
+}
+
+interface RentalItem {
+  id: number;
+  equipment_id: number;
+  customer_name?: string;
+  start_date?: string;
+  end_date?: string;
+  status?: string;
+  rental_rate?: number;
+  total_cost?: number;
+}
+
+interface ProjectEquipment {
+  id: number;
+  equipment_id: number;
+  project_name?: string;
+  assigned_date?: string;
+  return_date?: string;
+  status?: string;
+  usage_hours?: number;
+}
 
 interface Props {
   equipment: Equipment;
@@ -68,7 +140,7 @@ const breadcrumbs = [
 ];
 
 export default function Show({ equipment, maintenanceRecords = { data: [], total: 0 }, rentalItems = { data: [], total: 0 }, projectHistory = { data: [], total: 0 } }: Props) {
-  const { toast } = useToast();
+  const { auth } = usePage<any>().props;
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [mediaItems, setMediaItems] = React.useState<Array<{ id: number; file_name: string; collection: string; original_url: string }>>([]);
   const [previewDocument, setPreviewDocument] = React.useState<{ id: number; file_name: string; collection: string; original_url: string } | null>(null);
@@ -405,30 +477,432 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <strong>Name:</strong> {equipment.name}
-              </div>
-              <div>
-                <strong>Model:</strong> {equipment.model}
-              </div>
-              <div>
-                <strong>Serial Number:</strong> {equipment.serial_number}
-              </div>
-              <div>
-                <strong>Door Number:</strong> {equipment.door_number || '—'}
-              </div>
-              <div>
-                <strong>Status:</strong> {equipment.status}
-              </div>
-              <div>
-                <strong>Category:</strong> {equipment.category || '—'}
-              </div>
-              <div>
-                <strong>Daily Rate:</strong> {formatCurrency(equipment.daily_rate)}
-              </div>
-              {/* Add more fields as needed */}
-            </div>
+            <Tabs defaultValue="basic" className="w-full">
+              <TabsList className="grid w-full grid-cols-7">
+                <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                <TabsTrigger value="financial">Financial</TabsTrigger>
+                <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
+                <TabsTrigger value="metrics">Metrics</TabsTrigger>
+                <TabsTrigger value="risk">Risk Management</TabsTrigger>
+                <TabsTrigger value="projects">Projects/Rentals</TabsTrigger>
+                <TabsTrigger value="documents">Documents</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="basic" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Equipment Name</Label>
+                    <p className="text-sm">{equipment.name || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Model</Label>
+                    <p className="text-sm">{equipment.model || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Serial Number</Label>
+                    <p className="text-sm">{equipment.serial_number || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Door Number</Label>
+                    <p className="text-sm">{equipment.door_number || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Status</Label>
+                    <div>{getStatusBadge(equipment.status)}</div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Category</Label>
+                    <p className="text-sm">{equipment.category?.name || equipment.category || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Unit</Label>
+                    <p className="text-sm">{equipment.unit || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Location</Label>
+                    <p className="text-sm">{equipment.location?.name || equipment.location || '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Active Status</Label>
+                    <Badge variant={equipment.is_active ? 'default' : 'secondary'}>
+                      {equipment.is_active ? 'Active' : 'Inactive'}
+                    </Badge>
+                  </div>
+                </div>
+                {equipment.description && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Description</Label>
+                    <p className="text-sm">{equipment.description}</p>
+                  </div>
+                )}
+                {equipment.notes && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Notes</Label>
+                    <p className="text-sm">{equipment.notes}</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="financial" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Daily Rate</Label>
+                    <p className="text-sm font-semibold">{formatCurrency(equipment.daily_rate || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Weekly Rate</Label>
+                    <p className="text-sm font-semibold">{formatCurrency(equipment.weekly_rate || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Monthly Rate</Label>
+                    <p className="text-sm font-semibold">{formatCurrency(equipment.monthly_rate || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Default Unit Cost</Label>
+                    <p className="text-sm">{formatCurrency(equipment.default_unit_cost || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Purchase Cost</Label>
+                    <p className="text-sm">{formatCurrency(equipment.purchase_cost || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Purchase Date</Label>
+                    <p className="text-sm">{equipment.purchase_date ? new Date(equipment.purchase_date).toLocaleDateString() : '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Lifetime Maintenance Cost</Label>
+                    <p className="text-sm">{formatCurrency(equipment.lifetime_maintenance_cost || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Avg Cost per Hour</Label>
+                    <p className="text-sm">{formatCurrency(equipment.avg_operating_cost_per_hour || 0)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Avg Cost per Mile</Label>
+                    <p className="text-sm">{formatCurrency(equipment.avg_operating_cost_per_mile || 0)}</p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="maintenance" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Last Maintenance</Label>
+                    <p className="text-sm">{equipment.last_maintenance_date ? new Date(equipment.last_maintenance_date).toLocaleDateString() : '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Next Maintenance</Label>
+                    <p className="text-sm">{equipment.next_maintenance_date ? new Date(equipment.next_maintenance_date).toLocaleDateString() : '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Next Performance Review</Label>
+                    <p className="text-sm">{equipment.next_performance_review ? new Date(equipment.next_performance_review).toLocaleDateString() : '—'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Efficiency Rating</Label>
+                    <p className="text-sm">{equipment.efficiency_rating ? `${equipment.efficiency_rating}%` : '—'}</p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="metrics" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Current Operating Hours</Label>
+                    <p className="text-sm">{equipment.current_operating_hours || '0'} hrs</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Current Mileage</Label>
+                    <p className="text-sm">{equipment.current_mileage || '0'} miles</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Current Cycle Count</Label>
+                    <p className="text-sm">{equipment.current_cycle_count || '0'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Initial Operating Hours</Label>
+                    <p className="text-sm">{equipment.initial_operating_hours || '0'} hrs</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Initial Mileage</Label>
+                    <p className="text-sm">{equipment.initial_mileage || '0'} miles</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Initial Cycle Count</Label>
+                    <p className="text-sm">{equipment.initial_cycle_count || '0'}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Avg Daily Usage (Hours)</Label>
+                    <p className="text-sm">{equipment.avg_daily_usage_hours || '0'} hrs/day</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Avg Daily Usage (Miles)</Label>
+                    <p className="text-sm">{equipment.avg_daily_usage_miles || '0'} miles/day</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Last Metric Update</Label>
+                    <p className="text-sm">{equipment.last_metric_update ? new Date(equipment.last_metric_update).toLocaleDateString() : '—'}</p>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="risk" className="space-y-4">
+                <RiskManagement equipmentId={equipment.id} />
+              </TabsContent>
+
+              <TabsContent value="projects" className="space-y-4">
+                <div className="grid gap-6">
+                  {/* Current Projects/Rentals */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Car className="h-5 w-5" />
+                        Current Projects & Rentals
+                      </CardTitle>
+                      <CardDescription>
+                        Equipment currently assigned to projects or rental agreements
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {rentalItems.data.length > 0 || projectHistory.data.length > 0 ? (
+                        <div className="space-y-4">
+                          {/* Rental Items */}
+                          {rentalItems.data.length > 0 && (
+                            <div>
+                              <h4 className="font-medium mb-3 text-sm text-muted-foreground">Active Rentals</h4>
+                              <div className="space-y-2">
+                                {rentalItems.data.map((rental) => (
+                                  <div key={rental.id} className="flex items-center justify-between p-3 border rounded-lg">
+                                    <div className="flex items-center gap-3">
+                                      <Truck className="h-4 w-4 text-blue-500" />
+                                      <div>
+                                        <p className="font-medium text-sm">{rental.customer_name || 'Unknown Customer'}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                          {rental.start_date ? new Date(rental.start_date).toLocaleDateString() : 'No start date'} -
+                                          {rental.end_date ? new Date(rental.end_date).toLocaleDateString() : 'Ongoing'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <Badge variant="outline">
+                                      {rental.status || 'Active'}
+                                    </Badge>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Project History */}
+                          {projectHistory.data.length > 0 && (
+                            <div>
+                              <h4 className="font-medium mb-3 text-sm text-muted-foreground">Project Assignments</h4>
+                              <div className="space-y-2">
+                                {projectHistory.data.map((project) => (
+                                  <div key={project.id} className="flex items-center justify-between p-3 border rounded-lg">
+                                    <div className="flex items-center gap-3">
+                                      <Settings className="h-4 w-4 text-green-500" />
+                                      <div>
+                                        <p className="font-medium text-sm">{project.project_name || 'Unknown Project'}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                          Assigned: {project.assigned_date ? new Date(project.assigned_date).toLocaleDateString() : 'Unknown'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <Badge variant="secondary">
+                                      {project.status || 'Active'}
+                                    </Badge>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Car className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p>No current projects or rentals assigned</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Usage History */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <History className="h-5 w-5" />
+                        Usage History
+                      </CardTitle>
+                      <CardDescription>
+                        Historical usage across projects and rentals
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="text-center p-4 border rounded-lg">
+                            <div className="text-2xl font-bold text-blue-600">{rentalItems.total}</div>
+                            <div className="text-sm text-muted-foreground">Total Rentals</div>
+                          </div>
+                          <div className="text-center p-4 border rounded-lg">
+                            <div className="text-2xl font-bold text-green-600">{projectHistory.total}</div>
+                            <div className="text-sm text-muted-foreground">Total Projects</div>
+                          </div>
+                          <div className="text-center p-4 border rounded-lg">
+                            <div className="text-2xl font-bold text-purple-600">{equipment.current_operating_hours || 0}</div>
+                            <div className="text-sm text-muted-foreground">Operating Hours</div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="documents" className="space-y-4">
+                <div className="grid gap-6">
+                  {/* Document Upload Section */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <FileText className="h-5 w-5" />
+                        Equipment Documents
+                      </CardTitle>
+                      <CardDescription>
+                        RC (Registration Certificate), Insurance, and other important documents
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {canManageDocuments && (
+                        <div className="mb-6 p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                          <div className="text-center">
+                            <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                            <p className="text-sm text-gray-600 mb-2">Upload Equipment Documents</p>
+                            <div className="flex gap-2 justify-center">
+                              <Button size="sm" variant="outline">
+                                <Plus className="h-4 w-4 mr-1" />
+                                Upload RC
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                <Plus className="h-4 w-4 mr-1" />
+                                Upload Insurance
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                <Plus className="h-4 w-4 mr-1" />
+                                Upload Other
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Documents List */}
+                      <div className="space-y-4">
+                        {mediaItems.length > 0 ? (
+                          <div className="grid gap-3">
+                            {mediaItems.map((item) => (
+                              <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 bg-blue-100 rounded">
+                                    {item.collection === 'istimara' ? (
+                                      <IdCard className="h-4 w-4 text-blue-600" />
+                                    ) : (
+                                      <FileIcon className="h-4 w-4 text-blue-600" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-sm">{item.file_name}</p>
+                                    <p className="text-xs text-muted-foreground capitalize">
+                                      {item.collection === 'istimara' ? 'Registration Certificate (RC)' : 'Document'}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      setPreviewDocument(item);
+                                      setShowPreviewDialog(true);
+                                    }}
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => window.open(item.original_url, '_blank')}
+                                  >
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                  {canManageDocuments && (
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="text-red-600 hover:text-red-700"
+                                    >
+                                      <Trash className="h-4 w-4" />
+                                    </Button>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 text-muted-foreground">
+                            <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                            <p>No documents uploaded yet</p>
+                            <p className="text-sm">Upload RC, insurance, and other important documents</p>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Document Categories */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Award className="h-5 w-5" />
+                        Document Categories
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="text-center p-4 border rounded-lg">
+                          <IdCard className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                          <div className="font-medium text-sm">Registration Certificate</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {mediaItems.filter(item => item.collection === 'istimara').length} files
+                          </div>
+                        </div>
+                        <div className="text-center p-4 border rounded-lg">
+                          <Award className="h-8 w-8 mx-auto mb-2 text-green-600" />
+                          <div className="font-medium text-sm">Insurance Documents</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {mediaItems.filter(item => item.collection === 'insurance').length} files
+                          </div>
+                        </div>
+                        <div className="text-center p-4 border rounded-lg">
+                          <FileText className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                          <div className="font-medium text-sm">Maintenance Records</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {mediaItems.filter(item => item.collection === 'maintenance').length} files
+                          </div>
+                        </div>
+                        <div className="text-center p-4 border rounded-lg">
+                          <FileIcon className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+                          <div className="font-medium text-sm">Other Documents</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {mediaItems.filter(item => !['istimara', 'insurance', 'maintenance'].includes(item.collection)).length} files
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>

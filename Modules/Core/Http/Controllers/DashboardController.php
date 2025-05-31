@@ -12,7 +12,7 @@ use Modules\Core\Domain\Models\User;
 use Modules\Core\Domain\Models\Role;
 use Modules\LeaveManagement\Domain\Models\LeaveRequest;
 use Modules\TimesheetManagement\Domain\Models\Timesheet;
-use App\Models\Location;
+use Modules\Core\Domain\Models\Location;
 use Modules\ProjectManagement\Domain\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

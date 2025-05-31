@@ -1,7 +1,7 @@
 <?php
 namespace Modules\Core\Http\Controllers;
 
-use App\Models\Location;
+use Modules\Core\Domain\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;

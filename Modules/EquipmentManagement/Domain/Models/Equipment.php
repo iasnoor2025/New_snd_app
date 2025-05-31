@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use App\Traits\HasMediaAttachments;
 use App\Traits\AutoLoadsRelations;
+use Modules\Core\Domain\Models\Category;
+use Modules\Core\Domain\Models\Location;
 
 class Equipment extends Model implements HasMedia
 {
