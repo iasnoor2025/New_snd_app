@@ -298,6 +298,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                       <SelectItem
                         key={project.id}
                         value={project.id.toString()}
+                      >
                         {project.name}
                       </SelectItem>
                     ))}
@@ -332,6 +333,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
           </div>
 
           {useTimeClock ? (
+            <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="clock_in">Clock In</Label>
@@ -459,10 +461,12 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
           variant="outline"
           onClick={onCancel}
           disabled={isLoading}
+        >
           Cancel
         </Button>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
+            <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Saving...
             </>

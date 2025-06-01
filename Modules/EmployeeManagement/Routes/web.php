@@ -69,14 +69,54 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Employee salary history
     Route::get('/employees/{employee}/salary-history', function ($employee) {
-        return Inertia::render('Employees/SalaryHistory', ['employeeId' => $employee]);
+        $employeeModel = \Modules\EmployeeManagement\Domain\Models\Employee::findOrFail($employee);
+
+        // Get salary increments and transform them to match the expected structure
+        $salaryIncrements = \Modules\EmployeeManagement\Domain\Models\SalaryIncrement::forEmployee($employee)
+            ->with(['requestedBy', 'approvedBy'])
+            ->where('status', 'approved')
+            ->latest('effective_date')
+            ->get();
+
+        $records = $salaryIncrements->map(function ($increment) {
+            $basicSalary = (float) ($increment->new_base_salary ?? 0);
+            $foodAllowance = (float) ($increment->new_food_allowance ?? 0);
+            $housingAllowance = (float) ($increment->new_housing_allowance ?? 0);
+            $transportAllowance = (float) ($increment->new_transport_allowance ?? 0);
+
+            return [
+                'id' => $increment->id,
+                'salary_month' => $increment->effective_date,
+                'basic_salary' => $basicSalary,
+                'food_allowance' => $foodAllowance,
+                'housing_allowance' => $housingAllowance,
+                'transport_allowance' => $transportAllowance,
+                'overtime_amount' => 0.0, // Not available in salary increments
+                'deductions' => 0.0, // Not available in salary increments
+                'net_salary' => $basicSalary + $foodAllowance + $housingAllowance + $transportAllowance,
+                'status' => $increment->status === 'approved' ? 'approved' : $increment->status,
+                'paid_date' => $increment->approved_at,
+                'notes' => $increment->notes,
+            ];
+        });
+
+        return Inertia::render('Employees/SalaryHistory', [
+            'employeeId' => $employee,
+            'records' => $records
+        ]);
     })
         ->middleware('permission:employees.view')
         ->name('employees.salary-history');
 
     // Employee leave history
     Route::get('/employees/{employee}/leave-history', function ($employee) {
-        return Inertia::render('Employees/LeaveHistory', ['employeeId' => $employee]);
+        $employeeService = app(\Modules\EmployeeManagement\Services\EmployeeService::class);
+        $records = $employeeService->getEmployeeLeaveHistory($employee);
+
+        return Inertia::render('Employees/LeaveHistory', [
+            'employeeId' => $employee,
+            'records' => $records
+        ]);
     })
         ->middleware('permission:employees.view')
         ->name('employees.leave-history');

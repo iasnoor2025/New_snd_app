@@ -11,7 +11,8 @@ use Tests\TestCase;
 class CreateExpenseTest extends TestCase
 {
     use RefreshDatabase;
-use protected Project $project;
+
+    protected Project $project;
     protected CreateExpense $action;
 
     protected function setUp(): void

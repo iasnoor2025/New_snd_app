@@ -87,11 +87,11 @@ export default function Create({ employees, incrementTypes }: Props) {
     const calculateNewSalary = () => {
         if (!selectedEmployee) return;
 
-        // Ensure all salary components are valid numbers
-        const baseSalary = selectedEmployee.base_salary || 0;
-        const foodAllowance = selectedEmployee.food_allowance || 0;
-        const housingAllowance = selectedEmployee.housing_allowance || 0;
-        const transportAllowance = selectedEmployee.transport_allowance || 0;
+        // Ensure all salary components are valid numbers (convert strings to numbers)
+        const baseSalary = parseFloat(selectedEmployee.base_salary) || 0;
+        const foodAllowance = parseFloat(selectedEmployee.food_allowance) || 0;
+        const housingAllowance = parseFloat(selectedEmployee.housing_allowance) || 0;
+        const transportAllowance = parseFloat(selectedEmployee.transport_allowance) || 0;
 
         const currentTotal = baseSalary + foodAllowance + housingAllowance + transportAllowance;
 
@@ -149,12 +149,12 @@ export default function Create({ employees, incrementTypes }: Props) {
         post(route('salary-increments.store'));
     };
 
-    const formatCurrency = (amount: number) => {
+    const formatCurrency = (amount: number | null | undefined) => {
         // Handle NaN, null, undefined values
-        const validAmount = isNaN(amount) || amount === null || amount === undefined ? 0 : amount;
+        const validAmount = amount == null || isNaN(Number(amount)) ? 0 : Number(amount);
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'SAR',
         }).format(validAmount);
     };
 
@@ -194,7 +194,11 @@ export default function Create({ employees, incrementTypes }: Props) {
                                     <Label htmlFor="employee_id">Employee</Label>
                                     <Select
                                         value={data.employee_id}
-                                        onValueChange={(value) => setData('employee_id', value)}
+                                        onValueChange={(value) => {
+                                            setData('employee_id', value);
+                                            const employee = employees.find(emp => emp.id.toString() === value);
+                                            setSelectedEmployee(employee || null);
+                                        }}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select an employee" />
@@ -256,7 +260,14 @@ export default function Create({ employees, incrementTypes }: Props) {
                                     <Label htmlFor="increment_type">Increment Type</Label>
                                     <Select
                                         value={data.increment_type}
-                                        onValueChange={(value) => setData('increment_type', value)}
+                                        onValueChange={(value) => {
+                                            setData('increment_type', value);
+                                            // Auto-select Fixed Amount calculation method when Fixed Amount Increase is selected
+                                            if (value === 'amount') {
+                                                setCalculationMethod('fixed');
+                                                setData('increment_percentage', undefined);
+                                            }
+                                        }}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select increment type" />
@@ -324,7 +335,7 @@ export default function Create({ employees, incrementTypes }: Props) {
                                     </div>
                                 ) : (
                                     <div>
-                                        <Label htmlFor="increment_amount">Increment Amount ($)</Label>
+                                        <Label htmlFor="increment_amount">Increment Amount (SAR)</Label>
                                         <Input
                                             id="increment_amount"
                                             type="number"

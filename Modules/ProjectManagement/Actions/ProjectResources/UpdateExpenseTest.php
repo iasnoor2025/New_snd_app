@@ -11,7 +11,8 @@ use Tests\TestCase;
 class UpdateExpenseTest extends TestCase
 {
     use RefreshDatabase;
-use protected Project $project;
+
+    protected Project $project;
     protected ProjectExpense $expense;
     protected UpdateExpense $action;
 

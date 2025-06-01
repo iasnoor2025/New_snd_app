@@ -73,11 +73,13 @@ interface Props extends PageProps {
 }
 
 export default function Show({ increment }: Props) {
-    const formatCurrency = (amount: number) => {
+    const formatCurrency = (amount: number | null | undefined) => {
+        // Handle null, undefined, or NaN values
+        const validAmount = amount == null || isNaN(Number(amount)) ? 0 : Number(amount);
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
-        }).format(amount);
+            currency: 'SAR',
+        }).format(validAmount);
     };
 
     const formatDate = (dateString: string) => {
@@ -123,8 +125,10 @@ export default function Show({ increment }: Props) {
         }
     };
 
-    const increaseAmount = increment.new_total_salary - increment.current_total_salary;
-    const increasePercentage = ((increaseAmount / increment.current_total_salary) * 100).toFixed(2);
+    const increaseAmount = (increment.new_total_salary || 0) - (increment.current_total_salary || 0);
+    const increasePercentage = increment.current_total_salary && increment.current_total_salary > 0
+        ? ((increaseAmount / increment.current_total_salary) * 100).toFixed(2)
+        : '0.00';
 
     return (
         <AdminLayout

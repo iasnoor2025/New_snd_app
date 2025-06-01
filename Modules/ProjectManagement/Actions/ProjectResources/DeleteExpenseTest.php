@@ -10,7 +10,8 @@ use Tests\TestCase;
 class DeleteExpenseTest extends TestCase
 {
     use RefreshDatabase;
-use protected Project $project;
+
+    protected Project $project;
     protected ProjectExpense $expense;
     protected DeleteExpense $action;
 

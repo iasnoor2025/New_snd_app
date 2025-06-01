@@ -238,16 +238,17 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
                           Edit
                         </DropdownMenuItem>
                         {timesheet.status === 'pending' && (
-                            <DropdownMenuItem onClick={() => handleApprove(timesheet.id)}>
-                              <CheckCircle className="mr-2 h-4 w-4" />
-                              Approve
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => openRejectDialog(timesheet.id)}>
-                              <XCircle className="mr-2 h-4 w-4" />
-                              Reject
-                            </DropdownMenuItem>
-                          </>
-                        )}
+          <>
+            <DropdownMenuItem onClick={() => handleApprove(timesheet.id)}>
+              <CheckCircle className="mr-2 h-4 w-4" />
+              Approve
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openRejectDialog(timesheet.id)}>
+              <XCircle className="mr-2 h-4 w-4" />
+              Reject
+            </DropdownMenuItem>
+          </>
+        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

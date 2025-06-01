@@ -6,9 +6,9 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/table';
-import { Badge } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/badge';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/button';
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { Download, Eye } from 'lucide-react';
 

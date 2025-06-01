@@ -4,6 +4,7 @@ namespace Modules\EmployeeManagement\Http\Controllers;
 
 use Modules\EmployeeManagement\Domain\Models\Employee;
 use Illuminate\Http\Request;
+use Modules\EmployeeManagement\Http\Requests\UpdateEmployeeRequest;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Modules\EmployeeManagement\Services\EmployeeService;
@@ -162,21 +163,49 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
         $this->authorize('update', $employee);
 
         try {
-            $this->updateEmployeeAction->execute($employee, $request->all());
+            Log::info('Employee update request received', [
+                'employee_id' => $employee->id,
+                'request_data' => $request->all(),
+                'is_ajax' => $request->ajax(),
+                'wants_json' => $request->wantsJson(),
+            ]);
 
+            $updatedEmployee = $this->updateEmployeeAction->execute($employee, $request->all());
+
+            // Handle AJAX/JSON requests (from Inertia)
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Employee updated successfully',
+                    'employee' => $updatedEmployee,
+                ], 200);
+            }
+
+            // Handle regular form submissions
             return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
         } catch (\Exception $e) {
             Log::error('Error updating employee', [
                 'employee_id' => $employee->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all(),
             ]);
 
+            // Handle AJAX/JSON requests
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update employee: ' . $e->getMessage(),
+                    'errors' => ['error' => $e->getMessage()]
+                ], 422);
+            }
+
+            // Handle regular form submissions
             return redirect()->back()->withInput()->with('error', 'Failed to update employee: ' . $e->getMessage());
         }
     }

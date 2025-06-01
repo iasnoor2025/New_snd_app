@@ -56,6 +56,13 @@ class SalaryIncrement extends BaseModel
         'rejected_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'current_total_salary',
+        'new_total_salary',
+        'total_increment_amount',
+        'actual_increment_percentage',
+    ];
+
     const STATUS_PENDING = 'pending';
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
@@ -112,7 +119,7 @@ class SalaryIncrement extends BaseModel
 
     public function getActualIncrementPercentageAttribute(): float
     {
-        if ($this->current_total_salary === 0) {
+        if ($this->current_total_salary == 0 || $this->current_total_salary === null) {
             return 0;
         }
 

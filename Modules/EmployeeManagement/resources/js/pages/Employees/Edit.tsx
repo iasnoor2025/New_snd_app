@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EmployeeMana
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formSchema } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/schemas/employee';
+import * as z from 'zod';
 import { FileUpload } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Employee/FileUpload';
 import { ExpiryDateInput } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Employee/ExpiryDateInput';
 import { SectionHeader } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Employee/SectionHeader';
@@ -20,6 +20,39 @@ import axios from 'axios';
 import { Input } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/select';
 import SalaryInfoTab from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/employees/create/tabs/SalaryInfoTab';
+
+// Define form schema
+const formSchema = z.object({
+  file_number: z.string().optional(),
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Valid email is required'),
+  phone: z.string().optional(),
+  date_of_birth: z.string().optional(),
+  nationality: z.string().optional(),
+  emergency_contact_name: z.string().optional(),
+  emergency_contact_phone: z.string().optional(),
+  position_id: z.string().optional(),
+  department: z.string().optional(),
+  join_date: z.string().optional(),
+  status: z.string().optional(),
+  basic_salary: z.number().min(0).optional(),
+  hourly_rate: z.number().min(0).optional(),
+  food_allowance: z.number().min(0).optional(),
+  housing_allowance: z.number().min(0).optional(),
+  transport_allowance: z.number().min(0).optional(),
+  absent_deduction_rate: z.number().min(0).optional(),
+  advance_payment: z.number().min(0).optional(),
+  overtime_rate_multiplier: z.number().min(0).optional(),
+  overtime_fixed_rate: z.number().min(0).optional(),
+  contract_hours_per_day: z.number().min(0).optional(),
+  contract_days_per_month: z.number().min(0).optional(),
+  other_allowance: z.number().min(0).optional(),
+  mobile_allowance: z.number().min(0).optional(),
+  bank_name: z.string().optional(),
+  bank_account_number: z.string().optional(),
+  bank_iban: z.string().optional(),
+});
 
 interface Position {
   id: number;
@@ -89,12 +122,52 @@ export default function Edit({ auth, employee, users, positions }: Props) {
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
+
+    console.log('Form data being submitted:', data);
+
     try {
-      await router.put(`/employees/${employee.id}`, data);
+      // Format the data to ensure proper types
+      const formattedData = {
+        ...data,
+        position_id: data.position_id ? parseInt(data.position_id) : null,
+        basic_salary: data.basic_salary || 0,
+        hourly_rate: data.hourly_rate || 0,
+        food_allowance: data.food_allowance || 0,
+        housing_allowance: data.housing_allowance || 0,
+        transport_allowance: data.transport_allowance || 0,
+        absent_deduction_rate: data.absent_deduction_rate || 0,
+        advance_payment: data.advance_payment || 0,
+        overtime_rate_multiplier: data.overtime_rate_multiplier || 1.5,
+        overtime_fixed_rate: data.overtime_fixed_rate || 0,
+        contract_hours_per_day: data.contract_hours_per_day || 8,
+        contract_days_per_month: data.contract_days_per_month || 22,
+        other_allowance: data.other_allowance || 0,
+        mobile_allowance: data.mobile_allowance || 0,
+      };
+
+      console.log('Formatted data being sent:', formattedData);
+
+      await router.put(`/employees/${employee.id}`, formattedData);
       toast.success('Employee updated successfully');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating employee:', error);
-      toast.error('Failed to update employee');
+
+      // More detailed error handling
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+
+        if (error.response.data?.errors) {
+          const errorMessages = Object.values(error.response.data.errors).flat();
+          toast.error(`Validation errors: ${errorMessages.join(', ')}`);
+        } else if (error.response.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Failed to update employee');
+        }
+      } else {
+        toast.error('Failed to update employee: Network error');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +200,8 @@ export default function Edit({ auth, employee, users, positions }: Props) {
             <h2 className="text-xl font-semibold">Edit Employee</h2>
           </div>
           <Button
-            onClick={() => form.handleSubmit(onSubmit)()}
+            type="submit"
+            form="employee-edit-form"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -149,7 +223,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
 
       <div className="container mx-auto py-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form id="employee-edit-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
               <TabsList>
                 <TabsTrigger value="personal">Personal Information</TabsTrigger>

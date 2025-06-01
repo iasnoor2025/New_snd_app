@@ -168,11 +168,13 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
         put(route('salary-increments.update', increment.id));
     };
 
-    const formatCurrency = (amount: number) => {
+    const formatCurrency = (amount: number | null | undefined) => {
+        // Handle null, undefined, or NaN values
+        const validAmount = amount == null || isNaN(Number(amount)) ? 0 : Number(amount);
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
-        }).format(amount);
+            currency: 'SAR',
+        }).format(validAmount);
     };
 
     return (

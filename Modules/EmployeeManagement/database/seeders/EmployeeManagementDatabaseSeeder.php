@@ -21,6 +21,7 @@ class EmployeeManagementDatabaseSeeder extends Seeder
             \Modules\EmployeeManagement\Database\Seeders\DepartmentSeeder::class,
             \Modules\EmployeeManagement\Database\Seeders\PositionSeeder::class,
             \Modules\EmployeeManagement\Database\Seeders\EmployeeSeeder::class,
+            \Modules\EmployeeManagement\Database\Seeders\SalaryIncrementSeeder::class,
         ]);
     }
 }

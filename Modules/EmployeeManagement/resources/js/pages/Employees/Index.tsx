@@ -213,7 +213,7 @@ export default function Index({ auth, employees, filters, departments, positions
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Departments</SelectItem>
-                  {departments.map((dept) => (
+                  {departments?.map((dept) => dept && (
                     <SelectItem key={dept.id} value={dept.id.toString()}>
                       {dept.name}
                     </SelectItem>
@@ -229,7 +229,7 @@ export default function Index({ auth, employees, filters, departments, positions
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Positions</SelectItem>
-                  {positions.map((pos) => (
+                  {positions?.map((pos) => pos && (
                     <SelectItem key={pos.id} value={pos.id.toString()}>
                       {pos.name}
                     </SelectItem>

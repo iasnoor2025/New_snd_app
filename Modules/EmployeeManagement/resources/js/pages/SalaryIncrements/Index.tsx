@@ -109,11 +109,13 @@ export default function Index({ increments, statistics, projectedCost, filters, 
         );
     };
 
-    const formatCurrency = (amount: number) => {
+    const formatCurrency = (amount: number | null | undefined) => {
+        // Handle null, undefined, or NaN values
+        const validAmount = amount == null || isNaN(Number(amount)) ? 0 : Number(amount);
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
-        }).format(amount);
+            currency: 'SAR',
+        }).format(validAmount);
     };
 
     const handleApprove = (incrementId: number) => {
@@ -314,7 +316,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                                         </div>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell>{increment.employee.department.name}</TableCell>
+                                                <TableCell>{increment.employee.department?.name || 'N/A'}</TableCell>
                                                 <TableCell>{formatCurrency(increment.current_total_salary)}</TableCell>
                                                 <TableCell>{formatCurrency(increment.new_total_salary)}</TableCell>
                                                 <TableCell>

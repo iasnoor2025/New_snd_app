@@ -74,7 +74,8 @@ class SalaryIncrementController extends Controller
 
         return Inertia::render('EmployeeManagement/SalaryIncrements/Create', [
             'employee' => $employee,
-            'employees' => Employee::select('id', 'first_name', 'last_name', 'employee_id', 'basic_salary')
+            'employees' => Employee::select('id', 'first_name', 'last_name', 'employee_id', 'basic_salary as base_salary', 'food_allowance', 'housing_allowance', 'transport_allowance')
+                ->with(['department', 'position'])
                 ->orderBy('first_name')
                 ->get(),
             'incrementTypes' => [
@@ -143,7 +144,8 @@ class SalaryIncrementController extends Controller
 
         return Inertia::render('EmployeeManagement/SalaryIncrements/Edit', [
             'increment' => $salaryIncrement,
-            'employees' => Employee::select('id', 'first_name', 'last_name', 'employee_id', 'basic_salary')
+            'employees' => Employee::select('id', 'first_name', 'last_name', 'employee_id', 'basic_salary as base_salary', 'food_allowance', 'housing_allowance', 'transport_allowance')
+                ->with(['department', 'position'])
                 ->orderBy('first_name')
                 ->get(),
             'incrementTypes' => [

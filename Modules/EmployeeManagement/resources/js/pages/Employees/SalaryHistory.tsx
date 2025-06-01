@@ -6,9 +6,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/table';
-import { Badge } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/badge';
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import AdminLayout from '../../layouts/AdminLayout';
 
 interface SalaryRecord {
     id: number;
@@ -26,10 +27,10 @@ interface SalaryRecord {
 }
 
 interface Props {
-    records: SalaryRecord[];
+    records?: SalaryRecord[];
 }
 
-export default function SalaryHistory({ records }: Props) {
+export default function SalaryHistory({ records = [] }: Props) {
     const calculateTotal = (record: SalaryRecord) => {
         return (
             record.basic_salary +
@@ -41,84 +42,91 @@ export default function SalaryHistory({ records }: Props) {
         );
     };
 
+    const breadcrumbs = [
+        { label: 'Employees', href: '/employees' },
+        { label: 'Salary History', href: '#' }
+    ];
+
     return (
-        <div className="rounded-md border">
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Month</TableHead>
-                        <TableHead>Basic Salary</TableHead>
-                        <TableHead>Allowances</TableHead>
-                        <TableHead>Overtime</TableHead>
-                        <TableHead>Deductions</TableHead>
-                        <TableHead>Net Salary</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Paid Date</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {records.map((record) => (
-                        <TableRow key={record.id}>
-                            <TableCell>
-                                {format(new Date(record.salary_month), 'MMMM yyyy')}
-                            </TableCell>
-                            <TableCell>
-                                SAR {record.basic_salary.toFixed(2)}
-                            </TableCell>
-                            <TableCell>
-                                <div className="space-y-1">
-                                    <div className="text-sm">
-                                        Food: SAR {record.food_allowance.toFixed(2)}
-                                    </div>
-                                    <div className="text-sm">
-                                        Housing: SAR {record.housing_allowance.toFixed(2)}
-                                    </div>
-                                    <div className="text-sm">
-                                        Transport: SAR {record.transport_allowance.toFixed(2)}
-                                    </div>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                SAR {record.overtime_amount.toFixed(2)}
-                            </TableCell>
-                            <TableCell>
-                                SAR {record.deductions.toFixed(2)}
-                            </TableCell>
-                            <TableCell className="font-medium">
-                                SAR {calculateTotal(record).toFixed(2)}
-                            </TableCell>
-                            <TableCell>
-                                <Badge
-                                    variant={
-                                        record.status === 'paid'
-                                            ? 'success'
-                                            : record.status === 'approved'
-                                            ? 'default'
-                                            : 'secondary'
-                                    }
-                                >
-                                    {record.status}
-                                </Badge>
-                            </TableCell>
-                            <TableCell>
-                                {record.paid_date
-                                    ? format(new Date(record.paid_date), 'MMM dd, yyyy')
-                                    : '-'}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                    {records.length === 0 && (
+        <AdminLayout title="Salary History" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
                         <TableRow>
-                            <TableCell
-                                colSpan={8}
-                                className="h-24 text-center text-muted-foreground"
-                            >
-                                No salary records found
-                            </TableCell>
+                            <TableHead>Month</TableHead>
+                            <TableHead>Basic Salary</TableHead>
+                            <TableHead>Allowances</TableHead>
+                            <TableHead>Overtime</TableHead>
+                            <TableHead>Deductions</TableHead>
+                            <TableHead>Net Salary</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Paid Date</TableHead>
                         </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </div>
+                    </TableHeader>
+                    <TableBody>
+                        {records.map((record) => (
+                            <TableRow key={record.id}>
+                                <TableCell>
+                                    {format(new Date(record.salary_month), 'MMMM yyyy')}
+                                </TableCell>
+                                <TableCell>
+                                    SAR {record.basic_salary.toFixed(2)}
+                                </TableCell>
+                                <TableCell>
+                                    <div className="space-y-1">
+                                        <div className="text-sm">
+                                            Food: SAR {record.food_allowance.toFixed(2)}
+                                        </div>
+                                        <div className="text-sm">
+                                            Housing: SAR {record.housing_allowance.toFixed(2)}
+                                        </div>
+                                        <div className="text-sm">
+                                            Transport: SAR {record.transport_allowance.toFixed(2)}
+                                        </div>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    SAR {record.overtime_amount.toFixed(2)}
+                                </TableCell>
+                                <TableCell>
+                                    SAR {record.deductions.toFixed(2)}
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                    SAR {calculateTotal(record).toFixed(2)}
+                                </TableCell>
+                                <TableCell>
+                                    <Badge
+                                        variant={
+                                            record.status === 'paid'
+                                                ? 'default'
+                                                : record.status === 'approved'
+                                                ? 'outline'
+                                                : 'secondary'
+                                        }
+                                    >
+                                        {record.status}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    {record.paid_date
+                                        ? format(new Date(record.paid_date), 'MMM dd, yyyy')
+                                        : '-'}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                        {records.length === 0 && (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={8}
+                                    className="h-24 text-center text-muted-foreground"
+                                >
+                                    No salary records found
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+        </AdminLayout>
     );
 }

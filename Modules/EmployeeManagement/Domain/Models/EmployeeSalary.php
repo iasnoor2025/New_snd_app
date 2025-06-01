@@ -11,10 +11,11 @@ use Modules\Core\Domain\Models\User;
 class EmployeeSalary extends BaseModel
 {
     use SoftDeletes;
-use protected $fillable = [
-        'employee_id';
-use 'base_salary';
-use 'food_allowance',
+
+    protected $fillable = [
+        'employee_id',
+        'base_salary',
+        'food_allowance',
         'housing_allowance',
         'transport_allowance',
         'effective_from',
@@ -30,9 +31,9 @@ use 'food_allowance',
         'food_allowance' => 'decimal:2',
         'housing_allowance' => 'decimal:2',
         'transport_allowance' => 'decimal:2',
-        'effective_from' => 'date',;
-        'effective_to' => 'date',;
-        'approved_at' => 'datetime',;
+        'effective_from' => 'date',
+        'effective_to' => 'date',
+        'approved_at' => 'datetime',
     ];
 
     public function employee(): BelongsTo
@@ -47,7 +48,7 @@ use 'food_allowance',
 
     public function getTotalSalaryAttribute(): float
     {
-        return $this->base_salary +;
+        return $this->base_salary +
             $this->food_allowance +
             $this->housing_allowance +
             $this->transport_allowance;
@@ -55,7 +56,7 @@ use 'food_allowance',
 
     public function getTotalAllowancesAttribute(): float
     {
-        return $this->food_allowance +;
+        return $this->food_allowance +
             $this->housing_allowance +
             $this->transport_allowance;
     }
@@ -71,7 +72,7 @@ use 'food_allowance',
 
     public function isActive(): bool
     {
-        return $this->status === 'approved' &&;
+        return $this->status === 'approved' &&
             $this->effective_from <= now() &&
             ($this->effective_to === null || $this->effective_to >= now());
     }

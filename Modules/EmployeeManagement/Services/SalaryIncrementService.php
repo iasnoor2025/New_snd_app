@@ -249,14 +249,19 @@ class SalaryIncrementService
 
         $baseQuery = clone $query;
 
+        // Calculate total increment amount from the difference between new and current total salaries
+        $totalIncrementAmount = (clone $query)->applied()
+            ->selectRaw('SUM(new_base_salary + new_food_allowance + new_housing_allowance + new_transport_allowance - current_base_salary - current_food_allowance - current_housing_allowance - current_transport_allowance) as total')
+            ->value('total') ?? 0;
+
         return [
-            'total_requests' => $baseQuery->count(),
-            'pending_requests' => (clone $query)->pending()->count(),
-            'approved_requests' => (clone $query)->approved()->count(),
-            'rejected_requests' => (clone $query)->rejected()->count(),
-            'applied_requests' => (clone $query)->applied()->count(),
-            'total_increment_amount' => (clone $query)->applied()->sum('increment_amount'),
-            'average_increment_percentage' => (clone $query)->applied()->avg('increment_percentage'),
+            'total_increments' => $baseQuery->count(),
+            'pending_increments' => (clone $query)->pending()->count(),
+            'approved_increments' => (clone $query)->approved()->count(),
+            'rejected_increments' => (clone $query)->rejected()->count(),
+            'applied_increments' => (clone $query)->applied()->count(),
+            'total_increment_amount' => $totalIncrementAmount,
+            'average_increment_percentage' => (clone $query)->applied()->avg('increment_percentage') ?? 0,
             'by_type' => (clone $query)->applied()
                 ->selectRaw('increment_type, COUNT(*) as count, AVG(increment_percentage) as avg_percentage')
                 ->groupBy('increment_type')
