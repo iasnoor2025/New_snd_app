@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -23,8 +23,8 @@ import {
 import { Input } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/input';
 import { Textarea } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/select';
-import { 
-  ArrowLeft as ArrowLeftIcon, 
+import {
+  ArrowLeft as ArrowLeftIcon,
   Calendar as CalendarIcon,
   Clock as ClockIcon,
   Save as SaveIcon
@@ -123,9 +123,9 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
       ...values,
       project_id: values.project_id === 'none' ? '' : values.project_id
     };
-    
+
     setProcessing(true);
-     
+
     router.put(route('timesheets.update', timesheet.id), formData, {
       onSuccess: () => {
         toast({
@@ -141,12 +141,12 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
           variant: "destructive"
         });
         setProcessing(false);
-        
+
         // Map errors to form
         Object.keys(errors).forEach(key => {
-          form.setError(key as any, { 
-            type: 'manual', 
-            message: errors[key] 
+          form.setError(key as any, {
+            type: 'manual',
+            message: errors[key]
           });
         });
       }
@@ -174,10 +174,9 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
             </Button>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <Form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                 <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''} />
-                
+
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <FormField
                     control={form.control}
@@ -185,8 +184,8 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Employee</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
+                        <Select
+                          onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -279,8 +278,8 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Project (Optional)</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
+                        <Select
+                          onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -309,8 +308,8 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Status</FormLabel>
-                          <Select 
-                            onValueChange={field.onChange} 
+                          <Select
+                            onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
@@ -339,10 +338,10 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     <FormItem>
                       <FormLabel>Description (Optional)</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="Brief description of work performed" 
-                          className="min-h-[80px]" 
-                          {...field} 
+                        <Textarea
+                          placeholder="Brief description of work performed"
+                          className="min-h-[80px]"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -357,10 +356,10 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     <FormItem>
                       <FormLabel>Tasks Completed (Optional)</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="List of tasks completed during this time" 
-                          className="min-h-[120px]" 
-                          {...field} 
+                        <Textarea
+                          placeholder="List of tasks completed during this time"
+                          className="min-h-[120px]"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -377,14 +376,13 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     Update Timesheet
                   </Button>
                 </div>
-              </form>
             </Form>
           </CardContent>
         </Card>
       </div>
     </AdminLayout>
   );
-} 
+}
 </Input>
 </Input>
 </Input>

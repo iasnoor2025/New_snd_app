@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/button';
 import {
@@ -189,8 +189,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
               Update the leave request details
             </CardDescription>
           </CardHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <Form onSubmit={form.handleSubmit(handleSubmit)}>
               <CardContent className="space-y-4 pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
@@ -365,7 +364,6 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                   Update Leave Request
                 </Button>
               </CardFooter>
-            </form>
           </Form>
         </Card>
       </div>

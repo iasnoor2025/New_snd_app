@@ -94,8 +94,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+                <Form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                         {type === 'manpower' && (
                             <>
                                 <FormField
@@ -425,7 +424,6 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                 {isSubmitting ? 'Saving...' : 'Save'}
                             </Button>
                         </div>
-                    </form>
                 </Form>
             </DialogContent>
         </Dialog>

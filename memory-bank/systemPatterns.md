@@ -106,17 +106,19 @@ Modules/
 
 ├── LeaveManagement/              # HR: leave types & approvals
 │   ├── database/
-│      ├── migrations/           # leave_types, leaves 
+│      ├── migrations/           # leave_types, leaves, leave_balances
+│      ├── Factories/            # LeaveTypeFactory, LeaveFactory, LeaveBalanceFactory
 │   ├── Domain/
-│      ├── Models/               # LeaveType, Leave
+│      ├── Models/               # LeaveType, Leave, LeaveBalance
 │   ├── Http/
-│      ├── Controllers/          # LeaveController
+│      ├── Controllers/          # LeaveController, LeaveTypeController
 │      ├── Requests/             # StoreLeaveRequest, UpdateLeaveRequest
 │   ├── Observers/                # LeaveObserver
-│   ├── Actions/                  # RequestLeaveAction
+│   ├── Actions/                  # RequestLeaveAction, ApproveLeaveAction
 │   ├── Jobs/                     # SendLeaveReminderJob
-│   ├── Events/                   # LeaveRequested
-│   ├── Listeners/                # NotifyManagerOfLeave
+│   ├── Events/                   # LeaveRequested, LeaveApproved, LeaveRejected
+│   ├── Listeners/                # NotifySupervisor, NotifyEmployee, NotifyEmployeeRejection, UpdateLeaveBalance
+│   ├── Notifications/            # NewLeaveRequestNotification, LeaveApprovedNotification, LeaveRejectedNotification
 │   ├── Queries/                  # GetPendingLeavesQuery
 │   ├── Repositories/             # LeaveRepository
 │   ├── Services/                 # LeaveService
@@ -126,25 +128,38 @@ Modules/
 │   └── tests/                    # Unit & Feature tests
 
 ├── TimesheetManagement/          # HR: mobile time-log, geofencing, approvals
+│   ├── config/
+│      ├── mobile_geofencing.php # Geofencing configuration
 │   ├── database/
-│      ├── migrations/           # timesheets, attendance_logs
+│      ├── migrations/           # timesheets, attendance_logs, geofence_zones, geofence_violations
 │   ├── Domain/
-│      ├── Models/               # Timesheet, AttendanceLog
+│      ├── Models/               # Timesheet, AttendanceLog, GeofenceZone, GeofenceViolation
 │   ├── Http/
-│      ├── Controllers/          # TimesheetController, AttendanceController
-│      ├── Requests/             # StoreTimesheetRequest
+│      ├── Controllers/          # TimesheetController, AttendanceController, GeofenceController
+│      ├── Requests/             # StoreTimesheetRequest, GeofenceZoneRequest
+│      ├── Middleware/           # GeofenceCheck, GeofenceVerify, MobileAuth
 │   ├── Observers/                # TimesheetObserver
 │   ├── Actions/                  # LogAttendanceAction
 │   ├── Jobs/                     # SendGeoFenceAlertJob
-│   ├── Events/                   # TimesheetSubmitted
-│   ├── Listeners/                # NotifyApproverOfTimesheet
+│   ├── Events/                   # TimesheetSubmitted, GeofenceViolationDetected
+│   ├── Listeners/                # NotifyApproverOfTimesheet, HandleGeofenceViolation
+│   ├── Console/                  # CleanupGeofenceData, ProcessOfflineTimesheets
 │   ├── Queries/                  # GetApprovedTimesheetsQuery
 │   ├── Repositories/             # TimesheetRepository
-│   ├── Services/                 # GeoFenceService, TimesheetApprovalService
-│   ├── Providers/                # ModuleServiceProvider
+│   ├── Services/                 # GeoFenceService, TimesheetApprovalService, GeofencingService
+│   ├── Providers/                # ModuleServiceProvider, GeofencingServiceProvider
+│   ├── Tests/
+│      ├── Unit/                 # GeofencingServiceTest
+│      ├── Feature/              # GeofenceControllerTest
+│   ├── docs/                     # API_Geofencing.md
 │   ├── routes/                   # Web routes (prefix: hr/timesheets)
 │   ├── resources/                # Views and frontend components
-│   └── tests/                    # Unit & Feature tests
+│      ├── js/
+│         ├── components/        # GeofenceZoneManager, GeofenceMapView, GeofenceStatsDashboard, GeofenceViolationManager, MobileTimesheetLogger
+│         ├── services/          # geofencingApi.ts
+│         ├── types/             # geofencing.ts
+│   ├── tests/                    # Unit & Feature tests
+│   └── README_Geofencing.md      # Comprehensive geofencing documentation
 
 ├── Payroll/                      # HR: payroll calc, advances & settlements
 │   ├── database/

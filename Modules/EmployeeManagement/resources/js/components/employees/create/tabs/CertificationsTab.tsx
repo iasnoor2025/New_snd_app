@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -154,7 +154,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
         <CardTitle>Certifications</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
+        <Form>
           <div className="space-y-6">
             {/* Standard Certifications Section */}
             <div className="space-y-4">

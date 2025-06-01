@@ -61,33 +61,54 @@ Route::prefix('leaves')->name('leaves.')->middleware(['auth', 'verified'])->grou
         ->name('approvals.reject');
 
     // Leave Balances
-    Route::get('/balances', [LeaveBalanceController::class, 'index'])
+    Route::get('balances', [LeaveBalanceController::class, 'index'])
         ->middleware('permission:leave-balances.view')
         ->name('balances.index');
-    Route::get('/balances/{employee}', [LeaveBalanceController::class, 'show'])
+    Route::get('balances/{employee}', [LeaveBalanceController::class, 'show'])
         ->middleware('permission:leave-balances.view')
         ->name('balances.show');
+    Route::get('balances/summary/api', [LeaveBalanceController::class, 'summary'])
+        ->middleware('permission:leave-balances.view')
+        ->name('balances.summary');
 
-    // Leave Types Management
-    Route::resource('types', LeaveTypeController::class)->middleware('can:manage-leave-types');
+    // Leave Types
+    Route::resource('types', LeaveTypeController::class)
+        ->middleware('permission:leave-types.view,leave-types.create,leave-types.edit,leave-types.delete')
+        ->names([
+            'index' => 'types.index',
+            'create' => 'types.create',
+            'store' => 'types.store',
+            'show' => 'types.show',
+            'edit' => 'types.edit',
+            'update' => 'types.update',
+            'destroy' => 'types.destroy',
+        ]);
 
-    // Leave Reports
-    Route::get('/reports', [LeaveReportController::class, 'index'])
-        ->middleware('permission:leave-reports.view')
-        ->name('reports.index');
-    Route::post('/reports/generate', [LeaveReportController::class, 'generate'])
-        ->middleware('permission:leave-reports.create')
-        ->name('reports.generate');
-    Route::get('/reports/export', [LeaveReportController::class, 'export'])
-        ->middleware('permission:leave-reports.view')
-        ->name('reports.export');
+    Route::post('types/{leaveType}/toggle-status', [LeaveTypeController::class, 'toggleStatus'])
+        ->middleware('permission:leave-types.edit')
+        ->name('types.toggle-status');
+
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [LeaveReportController::class, 'index'])->name('index')->middleware('permission:leave-reports.view');
+        Route::get('/export', [LeaveReportController::class, 'export'])->name('export')->middleware('permission:leave-reports.export');
+    });
 
     // Leave Settings
-    Route::get('/settings', [LeaveSettingController::class, 'edit'])
-        ->middleware('can:manage-leave-settings')
-        ->name('settings.edit');
+    Route::get('/settings', [LeaveSettingController::class, 'index'])
+        ->name('settings.index')
+        ->middleware('permission:leave-settings.view');
     Route::put('/settings', [LeaveSettingController::class, 'update'])
-        ->middleware('can:manage-leave-settings')
-        ->name('settings.update');
+        ->name('settings.update')
+        ->middleware('permission:leave-settings.edit');
+    Route::put('/settings/reset', [LeaveSettingController::class, 'reset'])
+        ->name('settings.reset')
+        ->middleware('permission:leave-settings.edit');
+    Route::get('/settings/export', [LeaveSettingController::class, 'export'])
+        ->name('settings.export')
+        ->middleware('permission:leave-settings.view');
+    Route::post('/settings/import', [LeaveSettingController::class, 'import'])
+        ->name('settings.import')
+        ->middleware('permission:leave-settings.edit');
 });
 

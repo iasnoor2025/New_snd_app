@@ -145,7 +145,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
     };
 
     return (
-        <Form {...form} data-resource-type="task" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <Form data-resource-type="task" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
                     name="title"

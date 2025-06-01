@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/button';
 import {
@@ -229,8 +229,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
               Create a new leave request for an employee
             </CardDescription>
           </CardHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <Form onSubmit={form.handleSubmit(handleSubmit)}>
               <CardContent className="space-y-6 pt-6">
                 {/* Employee and Leave Type Section */}
                 <div className="space-y-4">
@@ -410,7 +409,6 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                   {submitting ? 'Saving...' : 'Save Leave Request'}
                 </Button>
               </CardFooter>
-            </form>
           </Form>
         </Card>
       </div>

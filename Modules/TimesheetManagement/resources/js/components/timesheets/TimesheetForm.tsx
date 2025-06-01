@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { route } from 'ziggy-js';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -139,9 +140,9 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
         };
 
         if (timesheet) {
-          await axios.put(`/api/timesheets/${timesheet.id}`, formattedData);
+          await axios.put(route('timesheets.update', timesheet.id), formattedData);
         } else {
-          await axios.post('/api/timesheets', formattedData);
+          await axios.post(route('timesheets.store'), formattedData);
         }
 
         onSave();

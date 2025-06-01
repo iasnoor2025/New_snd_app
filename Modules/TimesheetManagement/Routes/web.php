@@ -39,6 +39,18 @@ Route::name('timesheets.')->middleware(['auth', 'verified'])->group(function () 
     Route::post('/', [TimesheetController::class, 'store'])
         ->middleware('permission:timesheets.create')
         ->name('store');
+    Route::post('/bulk', [TimesheetController::class, 'storeBulk'])
+        ->middleware('permission:timesheets.create')
+        ->name('store-bulk');
+    Route::post('/check-duplicate', [TimesheetController::class, 'checkDuplicate'])
+        ->middleware('permission:timesheets.view')
+        ->name('check-duplicate');
+    Route::get('/monthly', [TimesheetController::class, 'monthly'])
+        ->middleware('permission:timesheets.view')
+        ->name('monthly');
+    Route::get('/summary', [TimesheetController::class, 'summary'])
+        ->middleware('permission:timesheets.view')
+        ->name('summary');
     Route::get('/{timesheet}', [TimesheetController::class, 'show'])
         ->middleware('permission:timesheets.view')
         ->name('show');
@@ -54,15 +66,6 @@ Route::name('timesheets.')->middleware(['auth', 'verified'])->group(function () 
     Route::post('/{timesheet}/submit', [TimesheetController::class, 'submit'])
         ->middleware('permission:timesheets.edit')
         ->name('submit');
-    Route::get('/check-duplicate', [TimesheetController::class, 'checkDuplicate'])
-        ->middleware('permission:timesheets.view')
-        ->name('check-duplicate');
-    Route::get('/monthly', [TimesheetController::class, 'monthly'])
-        ->middleware('permission:timesheets.view')
-        ->name('monthly');
-    Route::get('/summary', [TimesheetController::class, 'summary'])
-        ->middleware('permission:timesheets.view')
-        ->name('summary');
 
     // Daily timesheet entries
     Route::get('/entries', [TimeEntryController::class, 'index'])

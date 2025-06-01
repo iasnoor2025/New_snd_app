@@ -35,6 +35,9 @@ interface CrudButtonsProps {
   showEdit?: boolean;
   showDelete?: boolean;
   onDelete?: () => void;
+  viewRoute?: string;
+  onView?: () => void;
+  hideView?: boolean;
   additionalActions?: Array<{
     label: string;
     icon?: React.ReactNode;
@@ -55,6 +58,9 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
   showDelete = true,
   onDelete,
   additionalActions = [],
+  viewRoute,
+  onView,
+  hideView,
   ...props
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -84,7 +90,7 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
   };
 
   return (
-    <div className={`flex items-center space-x-2 ${className}`} {...props}>
+    <div className={`flex items-center space-x-2 ${className}`}>
       {showView && hasViewPermission && (
         <Button variant="outline" size="icon" asChild title="View">
           <Link href={`/${resourceType}/${resourceId}`}>

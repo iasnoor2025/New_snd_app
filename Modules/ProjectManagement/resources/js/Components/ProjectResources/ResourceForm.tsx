@@ -13,7 +13,7 @@ interface ResourceFormProps {
 
 export function ResourceForm({ form, children }: ResourceFormProps) {
     return (
-        <Form {...form}>
+        <Form>
             <form className="space-y-4">
                 {children}
             </form>

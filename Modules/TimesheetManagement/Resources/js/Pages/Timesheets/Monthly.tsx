@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -83,7 +83,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
   const [selectedEmployee, setSelectedEmployee] = useState<string>('all');
   const [filteredTimesheets, setFilteredTimesheets] = useState<MonthlyTimesheet[]>([]);
   const [viewMode, setViewMode] = useState<'week' | 'month'>('month');
-  
+
   // Format number to remove decimal if it's a whole number
   const formatNumber = (num: number) => {
     // Round to 2 decimal places to handle floating point precision issues
@@ -91,56 +91,56 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
     // Check if it's effectively a whole number
     return rounded % 1 === 0 ? Math.floor(rounded).toString() : rounded.toString();
   };
-  
+
   // Calculate absent days and hours for a timesheet
   const calculateAbsenceStats = (timesheet: MonthlyTimesheet) => {
     // Use server-side calculated values if available
     if (timesheet.absent_days !== undefined && timesheet.absent_hours !== undefined) {
-      return { 
-        absentDays: timesheet.absent_days, 
-        absentHours: timesheet.absent_hours, 
+      return {
+        absentDays: timesheet.absent_days,
+        absentHours: timesheet.absent_hours,
         isFullMonthAbsent: timesheet.absent_days === daysInMonth.filter(day => {
           const dayOfWeek = format(day, 'E');
           return dayOfWeek !== 'Fri';
         }).length
       };
     }
-    
+
     // Fallback to customer-side calculation if server values aren't available
     // Special case for April - always return 10 days absent (80 hours)
     const isApril = format(selectedDate, 'MMMM').toLowerCase() === 'april';
     if (isApril) {
       return { absentDays: 10, absentHours: 80, isFullMonthAbsent: false };
     }
-    
+
     // Get working days (excluding weekends)
     const workingDays = daysInMonth.filter(day => {
       const dayOfWeek = format(day, 'E');
       return dayOfWeek !== 'Fri';
     });
-    
+
     // Count absent days by checking each working day
     let absentDays = 0;
     workingDays.forEach(day => {
       const formattedDate = format(day, 'yyyy-MM-dd');
       const dayData = timesheet.days.find(d => d.date === formattedDate);
-      
+
       // If no data or hours are 0, count as absent
       if (!dayData || dayData.hours === 0) {
         absentDays++;
       }
     });
-    
+
     // Assuming 8 hours per working day
     const standardHoursPerDay = 8;
     const absentHours = absentDays * standardHoursPerDay;
-    
+
     // Check if employee is fully absent for working days
     const isFullMonthAbsent = absentDays === workingDays.length;
-    
+
     return { absentDays, absentHours, isFullMonthAbsent };
   };
-  
+
   // Get all days in the selected month
   const daysInMonth = eachDayOfInterval({
     start: startOfMonth(selectedDate),
@@ -161,7 +161,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
 
   // Initialize filtered timesheets on component mount and when timesheets prop changes
   useEffect(() => {
-    
+
     // Apply initial filtering
     applyFilters(selectedDate, selectedEmployee);
   }, [timesheets, selectedDate]);
@@ -195,7 +195,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
   const applyFilters = (date: Date, employeeId: string) => {
     try {
       let filtered = [...timesheets];
-      
+
       // Only apply filters if we have data
       if (filtered.length > 0) {
         // Try to filter by month/year
@@ -203,17 +203,17 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
           timesheet.month.toLowerCase() === format(date, 'MMMM').toLowerCase() && ;
           timesheet.year === date.getFullYear();
         );
-        
+
         // If we have results after month filtering, use them
         if (monthFiltered.length > 0) {
           filtered = monthFiltered;
-          
+
           // Then try to filter by employee if needed
           if (employeeId && employeeId !== 'all') {
             const employeeFiltered = filtered.filter(timesheet => ;
               timesheet.employee_id.toString() === employeeId;
             );
-            
+
             // Only use employee filtering if it returns results
             if (employeeFiltered.length > 0) {
               filtered = employeeFiltered;
@@ -221,11 +221,11 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
           }
         }
       }
-      
-      
+
+
       setFilteredTimesheets(filtered);
     } catch (error) {
-      
+
       // Fallback to showing all timesheets
       setFilteredTimesheets(timesheets);
     }
@@ -236,7 +236,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
       title: "Export Started",
       description: "Your monthly timesheet export is being prepared."
     });
-    
+
     // Here you would implement the actual export functionality
     // For example, making an API call to generate a PDF or Excel file
   };
@@ -267,24 +267,24 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
 
     try {
       const month = format(selectedDate, 'yyyy-MM');
-      
+
       // Create a form and submit it
       const form = document.createElement('form');
       form.method = 'GET';
-      form.action = `/timesheets/pay-slip/${selectedEmployee}/${month}`;
+      form.action = `/hr/timesheets/pay-slip/${selectedEmployee}/${month}`;
       form.target = '_blank';
       document.body.appendChild(form);
       form.submit();
       document.body.removeChild(form);
-      
-      
+
+
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate pay slip. Please try again.",
         variant: "destructive"
       });
-      
+
     }
   };
 
@@ -294,12 +294,12 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
     const dayData = timesheet.days.find(d => d.date === formattedDate);
     const isFriday = format(day, 'E') === 'Fri';
     const isWeekend = isFriday;
-    
+
     // Don't mark weekends (Friday) as absent - they're not working days
     if (isWeekend) {
       return (
-        <TableCell 
-          key={day.toString()} 
+        <TableCell
+          key={day.toString()}
           className={`text-center px-1 ${isWeekend ? 'bg-muted/10' : ''} ${isFriday ? 'bg-amber-50/80' : ''}`}
         >
           <div className="flex flex-col items-center">
@@ -308,12 +308,12 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
         </TableCell>
       );
     }
-    
+
     // Show "A" if there's no data or hours are 0 for non-Friday days
     if (!dayData || dayData.hours === 0) {
       return (
-        <TableCell 
-          key={day.toString()} 
+        <TableCell
+          key={day.toString()}
           className={`text-center px-1 ${isWeekend ? 'bg-muted/10' : ''} ${isFriday ? 'bg-amber-50/80' : ''}`}
         >
           <div className="flex flex-col items-center">
@@ -322,11 +322,11 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
         </TableCell>
       );
     }
-    
+
     // If we have data and hours > 0 for non-Friday days, show the hours with overtime
     return (
-      <TableCell 
-        key={day.toString()} 
+      <TableCell
+        key={day.toString()}
         className={`text-center px-1 ${isWeekend ? 'bg-muted/10' : ''} ${isFriday ? 'bg-amber-50/80' : ''}`}
       >
         <div className="flex flex-col items-center">
@@ -343,14 +343,14 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
   return (
     <AdminLayout title="Monthly Timesheets" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
       <Head title="Monthly Timesheets" />
-      
+
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
             <CalendarIcon className="h-6 w-6 text-primary" />
             <h1 className="text-2xl font-bold">Monthly Timesheets</h1>
           </div>
-          
+
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
               <Link href={route('timesheets.index')}>
@@ -358,15 +358,15 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                 Back
               </Link>
             </Button>
-            
+
             <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
               <Link href={`${route('timesheets.create')}?bulk=true&month=${format(selectedDate, 'yyyy-MM')}`}>
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 Add Month
               </Link>
             </Button>
-            
-            <Button variant="outline" size="sm" className="w-full sm:w-auto" 
+
+            <Button variant="outline" size="sm" className="w-full sm:w-auto"
               onClick={() => {
                 if (!selectedEmployee || selectedEmployee === 'all') {
                   toast({
@@ -376,16 +376,16 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   });
                   return;
                 }
-                
+
                 // Use the HTML pay slip route which is more reliable
-                window.open(`/timesheets/html-pay-slip/${selectedEmployee}/${format(selectedDate, 'yyyy-MM')}`, '_blank');
+                window.open(`/hr/timesheets/html-pay-slip/${selectedEmployee}/${format(selectedDate, 'yyyy-MM')}`, '_blank');
               }}
             >
               <FileTextIcon className="mr-2 h-4 w-4" />
               Pay Slip
             </Button>
-            
-            <Button variant="outline" size="sm" className="w-full sm:w-auto" 
+
+            <Button variant="outline" size="sm" className="w-full sm:w-auto"
               onClick={() => {
                 if (!selectedEmployee || selectedEmployee === 'all') {
                   toast({
@@ -395,22 +395,22 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   });
                   return;
                 }
-                
+
                 // Use the direct pay slip route
-                window.open(`/timesheets/direct-pay-slip/${selectedEmployee}/${format(selectedDate, 'yyyy-MM')}`, '_blank');
+                window.open(`/hr/timesheets/direct-pay-slip/${selectedEmployee}/${format(selectedDate, 'yyyy-MM')}`, '_blank');
               }}
             >
               <FileTextIcon className="mr-2 h-4 w-4" />
               React Pay Slip
             </Button>
-            
+
             <Button variant="default" size="sm" className="w-full sm:w-auto" onClick={handleExport}>
               <DownloadIcon className="mr-2 h-4 w-4" />
               Export
             </Button>
           </div>
         </div>
-        
+
         <Card>
           <CardHeader>
             <div className="flex justify-between items-center">
@@ -428,7 +428,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
               </Tabs>
             </div>
           </CardHeader>
-          
+
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
@@ -441,7 +441,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   >
                     <ArrowLeftIcon className="h-4 w-4" />
                   </Button>
-                  <Select 
+                  <Select
                     value={format(selectedDate, 'yyyy-MM')}
                     onValueChange={(value) => {
                       const [year, month] = value.split('-').map(Number);
@@ -474,11 +474,11 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   </Button>
                 </div>
               </div>
-              
+
               <div className="w-full md:w-1/3">
                 <label className="text-sm font-medium mb-2 block">Employee</label>
-                <Select 
-                  value={selectedEmployee} 
+                <Select
+                  value={selectedEmployee}
                   onValueChange={handleEmployeeSelect}
                 >
                   <SelectTrigger>
@@ -494,7 +494,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="w-full md:w-1/3">
                 <label className="text-sm font-medium mb-2 block">Search</label>
                 <div className="relative">
@@ -507,7 +507,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                 </div>
               </div>
             </div>
-            
+
             {filteredTimesheets.length > 0 ? (
               viewMode === 'week' ? (
                 // Week view (first week)
@@ -518,8 +518,8 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                         <TableRow>
                           <TableHead className="w-[180px] bg-muted">Employee</TableHead>
                           {daysInMonth.slice(0, 7).map((day) => (
-                            <TableHead 
-                              key={day.toString()} 
+                            <TableHead
+                              key={day.toString()}
                               className={`text-center w-14 px-1 ${format(day, 'E') === 'Fri' ? 'bg-amber-100/90 border-x border-amber-200' : 'bg-muted'}`}
                             >
                               <div className="flex flex-col items-center">
@@ -547,9 +547,9 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                                 {timesheet.employee.first_name} {timesheet.employee.last_name}
                               </div>
                             </TableCell>
-                            
+
                             {daysInMonth.slice(0, 7).map((day) => renderDayCell(day, timesheet))}
-                            
+
                             <TableCell className="text-right font-bold bg-muted/20">
                               <div className="flex flex-col items-end">
                                 <span>
@@ -583,24 +583,24 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                           <UserIcon className="mr-2 h-5 w-5 text-muted-foreground" />
                           <h3 className="font-medium text-lg">
                             {timesheet.employee.first_name} {timesheet.employee.last_name}
-                            <button 
+                            <button
                               className="ml-2 text-sm text-blue-600 hover:underline"
                               onClick={() => {
                                 const month = format(selectedDate, 'yyyy-MM');
-                                
+
                                 // Use the HTML pay slip route
-                                window.open(`/timesheets/html-pay-slip/${timesheet.employee_id}/${month}`, '_blank');
+                                window.open(`/hr/timesheets/html-pay-slip/${timesheet.employee_id}/${month}`, '_blank');
                               }}
                             >
                               (View Pay Slip)
                             </button>
-                            <button 
+                            <button
                               className="ml-2 text-sm text-green-600 hover:underline"
                               onClick={() => {
                                 const month = format(selectedDate, 'yyyy-MM');
-                                
+
                                 // Use the direct pay slip route
-                                window.open(`/timesheets/direct-pay-slip/${timesheet.employee_id}/${month}`, '_blank');
+                                window.open(`/hr/timesheets/direct-pay-slip/${timesheet.employee_id}/${month}`, '_blank');
                               }}
                             >
                               (React Pay Slip)
@@ -629,15 +629,15 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                         <div style={{ minWidth: 'max-content' }}>
                           <Table>
                             <TableHeader>
                               <TableRow>
                                 {daysInMonth.map((day) => (
-                                  <TableHead 
-                                    key={day.toString()} 
+                                  <TableHead
+                                    key={day.toString()}
                                     className={`text-center w-14 px-1 ${format(day, 'E') === 'Fri' ? 'bg-amber-100/90 border-x border-amber-200' : 'bg-muted'}`}
                                   >
                                     <div className="flex flex-col items-center">
@@ -671,10 +671,10 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                 </p>
               </div>
             )}
-            
+
             <div className="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-sm text-muted-foreground">
               <p>
-                {viewMode === 'week' 
+                {viewMode === 'week'
                   ? "This view shows the first week of the month. Switch to Full Month view to see all days."
                   : "Showing all days of the month in format: Regular Hours/Overtime Hours."
                 }
@@ -703,6 +703,6 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
       </div>
     </AdminLayout>
   );
-} 
+}
 
 

@@ -1,21 +1,20 @@
-﻿import { useState, useEffect, useMemo, lazy, Suspense } from "react";
+﻿import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import { Head, Link, router } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Rental, RentalItem, PermissionString } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
-import RentalItemsTable from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalItemsTable';
-import RentalWorkflowStatus from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalWorkflowStatus';
+import { PageProps } from '@/types';
+import { Rental, RentalItem, PermissionString } from '@/types/models';
+import AdminLayout from '@/layouts/AdminLayout';
+import RentalItemsTable from '../../Components/rentals/RentalItemsTable';
+import RentalWorkflowStatus from '../../Components/rentals/RentalWorkflowStatus';
 import { format, differenceInDays, addDays, isAfter, isBefore } from "date-fns";
-import React from "react";
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-import { cn } from '@/Modules/RentalManagement/Resources/js/lib/utils';
+import { cn } from '@/lib/utils';
 import axios from "axios";
 
 // Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/RentalManagement/Resources/js/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -24,30 +23,30 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/dialog';
+} from '@/components/ui/dialog';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/tabs';
+} from '@/components/ui/tabs';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/avatar';
-import { Separator } from '@/Modules/RentalManagement/Resources/js/components/ui/separator';
-import { Progress } from '@/Modules/RentalManagement/Resources/js/components/ui/progress';
-import { Switch } from '@/Modules/RentalManagement/Resources/js/components/ui/switch';
-import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
-import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
-import { Textarea } from '@/Modules/RentalManagement/Resources/js/components/ui/textarea';
-import { Calendar } from '@/Modules/RentalManagement/Resources/js/components/ui/calendar';
+} from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/popover';
+} from '@/components/ui/popover';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,13 +54,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/tooltip';
+} from '@/components/ui/tooltip';
 import {
   Sheet,
   SheetClose,
@@ -71,12 +70,12 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/sheet';
+} from '@/components/ui/sheet';
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/alert';
+} from '@/components/ui/alert';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -87,8 +86,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/alert-dialog';
-import { ScrollArea } from '@/Modules/RentalManagement/Resources/js/components/ui/scroll-area';
+} from '@/components/ui/alert-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Icons
 import {
@@ -143,22 +142,22 @@ import {
   Zap,
   DollarSign
 } from "lucide-react";
-import ToastManager from '@/Modules/RentalManagement/Resources/js/utils/toast-manager';
-import RentalAnalytics from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalAnalytics';
-import MaintenanceRecordList from '@/Modules/RentalManagement/Resources/js/components/maintenance/MaintenanceRecordList';
-import PaymentStatusBadge from '@/Modules/RentalManagement/Resources/js/components/shared/PaymentStatusBadge';
-import MapView from '@/Modules/RentalManagement/Resources/js/components/maps/MapView';
-import { formatCurrency } from '@/Modules/RentalManagement/Resources/js/lib/utils';
+import { toast } from 'sonner';
+import RentalAnalytics from '../../Components/rentals/RentalAnalytics';
+// import MaintenanceRecordList from '../../Components/maintenance/MaintenanceRecordList';
+// import PaymentStatusBadge from '../../Components/shared/PaymentStatusBadge';
+// import MapView from '../../Components/maps/MapView';
+import { formatCurrency } from '@/lib/utils';
 
 // Other components
-import RentalTimeline from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalTimeline';
-import RentalExtensionForm from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalExtensionForm';
-import DocumentsViewer from '@/Modules/RentalManagement/Resources/js/components/documents/DocumentsViewer';
+import RentalTimeline from '../../Components/rentals/RentalTimeline';
+import RentalExtensionForm from '../../Components/rentals/RentalExtensionForm';
+// import DocumentsViewer from '../../Components/documents/DocumentsViewer';
 
 // Add import for QRCode component
-import QRCode from '@/Modules/RentalManagement/Resources/js/components/ui/qr-code';
-import { RentalWorkflowStepper } from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalWorkflowStepper';
-import { RentalWorkflowActions } from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalWorkflowActions';
+import QRCode from '@/components/ui/qr-code';
+import { RentalWorkflowStepper } from '../../Components/rentals/RentalWorkflowStepper';
+import { RentalWorkflowActions } from '../../Components/rentals/RentalWorkflowActions';
 
 // Add Echo declaration for TypeScript
 declare global {
@@ -167,29 +166,29 @@ declare global {
   }
 }
 
-import RentalNotificationsPanel from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalNotificationsPanel';
-import RentalExtensionDialog from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalExtensionDialog';
-import QuotationGenerator from '@/Modules/RentalManagement/Resources/js/components/rentals/QuotationGenerator';
+import RentalNotificationsPanel from '../../Components/rentals/RentalNotificationsPanel';
+import RentalExtensionDialog from '../../Components/rentals/RentalExtensionDialog';
+import QuotationGenerator from '../../Components/rentals/QuotationGenerator';
 
 // New components
-import StatusTimeline from '@/Modules/RentalManagement/Resources/js/components/rentals/StatusTimeline';
-import InvoicesCard from '@/Modules/RentalManagement/Resources/js/components/rentals/InvoicesCard';
-import DocumentsCard from '@/Modules/RentalManagement/Resources/js/components/rentals/DocumentsCard';
+import StatusTimeline from '../../Components/rentals/StatusTimeline';
+import InvoicesCard from '../../Components/rentals/InvoicesCard';
+import DocumentsCard from '../../Components/rentals/DocumentsCard';
 
 // Our custom components
-import RentalInfoCard from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalInfoCard';
-import CustomerCard from '@/Modules/RentalManagement/Resources/js/components/rentals/CustomerCard';
-import RentalItemsCard from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalItemsCard';
-import RentalActionsCard from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalActionsCard';
+import RentalInfoCard from '../../Components/rentals/RentalInfoCard';
+import CustomerCard from '../../Components/rentals/CustomerCard';
+import RentalItemsCard from '../../Components/rentals/RentalItemsCard';
+import RentalActionsCard from '../../Components/rentals/RentalActionsCard';
 
 // Lazy load workflow-specific components
-const PendingSection = lazy(() => import("@/components/rentals/workflow/PendingSection"));
-const QuotationSection = lazy(() => import("@/components/rentals/workflow/QuotationSection"));
-const MobilizationSection = lazy(() => import("@/components/rentals/workflow/MobilizationSection"));
-const ActiveSection = lazy(() => import("@/components/rentals/workflow/ActiveSection"));
-const CompletedSection = lazy(() => import("@/components/rentals/workflow/CompletedSection"));
-const CancelledSection = lazy(() => import("@/components/rentals/workflow/CancelledSection"));
-const OverdueSection = lazy(() => import("@/components/rentals/workflow/OverdueSection"));
+const PendingSection = lazy(() => import("../../Components/rentals/workflow/PendingSection"));
+const QuotationSection = lazy(() => import("../../Components/rentals/workflow/QuotationSection"));
+const MobilizationSection = lazy(() => import("../../Components/rentals/workflow/MobilizationSection"));
+const ActiveSection = lazy(() => import("../../Components/rentals/workflow/ActiveSection"));
+const CompletedSection = lazy(() => import("../../Components/rentals/workflow/CompletedSection"));
+const CancelledSection = lazy(() => import("../../Components/rentals/workflow/CancelledSection"));
+const OverdueSection = lazy(() => import("../../Components/rentals/workflow/OverdueSection"));
 
 interface ExtendedRental extends Rental {
   subtotal: number;
@@ -350,12 +349,8 @@ export default function Show({
   // Verify rental data exists and is valid
   useEffect(() => {
     // More comprehensive check for rental data
-    const isValidRental = !!(rental &&;
-                          rental.id &&;
-                          typeof rental.id === 'number' &&;
-                          rental.rental_number);
-
-    if (!isValidRental) {
+    const isValidRental = !!(rental && rental.id && typeof rental.id === 'number' && rental.rental_number && rental.customer);
+                             if (!isValidRental) {
       console.error('Invalid rental data received:', rental);
       console.log('Component received props:', {
         rentalId: rental?.id,
@@ -365,13 +360,13 @@ export default function Show({
       });
 
       // Use a more informative error message
-      ToastManager.error('Unable to load rental details. The data may be incomplete.');
+      toast.error('Unable to load rental details. The data may be incomplete.');
 
       // Don't redirect immediately - give more time for debugging and potential data loading
       setTimeout(() => {
         router.visit('/rentals', {
           onBefore: () => {
-            ToastManager.info('Returning to rentals list');
+            toast.info('Returning to rentals list');
             return true;
           }
         });
@@ -551,7 +546,7 @@ export default function Show({
 
   // Handle extension request
   const handleExtensionRequest = (days: number) => {
-    ToastManager.success(`Extension request for ${days} days submitted successfully`);
+    toast.success(`Extension request for ${days} days submitted successfully`);
     setIsExtensionFormOpen(false);
   };
 
@@ -562,9 +557,9 @@ export default function Show({
     localStorage.setItem(`rental_notifications_${rental.id}`, String(newState));
 
     if (newState) {
-      ToastManager.success("Rental status notifications enabled");
+      toast.success("Rental status notifications enabled");
     } else {
-      ToastManager.info("Rental status notifications disabled");
+      toast.info("Rental status notifications disabled");
     }
   };
 
@@ -580,17 +575,17 @@ export default function Show({
         url: rentalUrl,
       })
       .then(() => {
-        ToastManager.success("Rental shared successfully");
+        toast.success("Rental shared successfully");
       })
       .catch((error) => {
         console.error("Error sharing rental:", error);
-        ToastManager.error("Failed to share rental");
+        toast.error("Failed to share rental");
       });
     } else {
       // Fallback to copy to clipboard
       navigator.clipboard.writeText(rentalUrl)
-        .then(() => ToastManager.success("Rental link copied to clipboard"))
-        .catch(() => ToastManager.error("Failed to copy rental link"));
+        .then(() => toast.success("Rental link copied to clipboard"))
+      .catch(() => toast.error("Failed to copy rental link"));
     }
   };
 
@@ -884,16 +879,16 @@ export default function Show({
   // Handle deleting the rental
   const handleDelete = () => {
     if (!canDeleteRental) {
-      ToastManager.error("You don't have permission to delete rentals");
+      toast.error("You don't have permission to delete rentals");
       return;
     }
 
     router.delete(route("rentals.destroy", rental.id), {
       onSuccess: () => {
-        ToastManager.success("Rental deleted successfully");
+        toast.success("Rental deleted successfully");
         navigateToPage(route("rentals.index"));
       },
-      onError: () => ToastManager.error("Failed to delete rental"),
+      onError: () => toast.error("Failed to delete rental"),
     });
   };
 
@@ -940,15 +935,15 @@ export default function Show({
       if (window.Echo) {
         window.Echo.private(`rental.${rental.id}`)
           .listen('RentalStatusUpdated', (e: any) => {
-            ToastManager.info(`Rental status updated to ${e.status}`);
+            toast.info(`Rental status updated to ${e.status}`);
             router.reload({ preserveUrl: true });
           })
           .listen('RentalPaymentReceived', (e: any) => {
-            ToastManager.success(`Payment received: ${formatCurrency(e.amount)}`);
+            toast.success(`Payment received: ${formatCurrency(e.amount)}`);
             router.reload({ preserveUrl: true });
           })
           .listen('RentalMaintenanceRequired', (e: any) => {
-            ToastManager.warning(`Maintenance required for ${e.equipment_name}`);
+            toast.warning(`Maintenance required for ${e.equipment_name}`);
             setNotifications(prev => [...prev, {
               type: 'maintenance',
               message: `Maintenance required for ${e.equipment_name}`,
@@ -956,7 +951,7 @@ export default function Show({
             }]);
           })
           .listen('RentalOverdue', (e: any) => {
-            ToastManager.error('Rental is now overdue!');
+            toast.error('Rental is now overdue!');
             setNotifications(prev => [...prev, {
               type: 'overdue',
               message: 'Rental is now overdue!',
@@ -980,13 +975,13 @@ export default function Show({
     // Check if rental is eligible for extension
     const nonExtendableStatuses = ['completed', 'cancelled'];
     if (nonExtendableStatuses.includes(rental.status.toLowerCase())) {
-      ToastManager.error(`Cannot extend a ${rental.status} rental`);
+      toast.error(`Cannot extend a ${rental.status} rental`);
       return;
     }
 
     // Set the initial date to 7 days after current end date
-    const newEndDateValue = rental.expected_end_date ?;
-      addDays(new Date(rental.expected_end_date), 7) :;
+    const newEndDateValue = rental.expected_end_date ?
+      addDays(new Date(rental.expected_end_date), 7) :
       addDays(new Date(), 7);
 
     // Reset form state
@@ -1004,12 +999,12 @@ export default function Show({
 
     // Validate form
     if (!simpleNewEndDate) {
-      ToastManager.error("Please select a new end date");
+      toast.error("Please select a new end date");
       return;
     }
 
     if (!simpleReason.trim() || simpleReason.length < 10) {
-      ToastManager.error("Please provide a reason (minimum 10 characters)");
+      toast.error("Please provide a reason (minimum 10 characters)");
       return;
     }
 
@@ -1024,14 +1019,14 @@ export default function Show({
     // Send extension request to server
     axios.post(route('rentals.request-extension', rental.id), requestData)
       .then(response => {
-        ToastManager.success("Rental extension requested successfully");
+        toast.success("Rental extension requested successfully");
         setIsSimpleExtensionModalOpen(false);
         router.reload();
       })
       .catch(error => {
         console.error('Extension error:', error);
         const errorMessage = error.response?.data?.message || "Failed to extend rental";
-        ToastManager.error(errorMessage);
+        toast.error(errorMessage);
         setIsSimpleSubmitting(false);
       });
   };
@@ -1063,7 +1058,7 @@ export default function Show({
 
       // Show error toast
       try {
-        ToastManager.error('Could not load rental details. Redirecting to rentals list.');
+        toast.error('Could not load rental details. Redirecting to rentals list.');
       } catch (err) {
         console.error('Toast error:', err);
       }

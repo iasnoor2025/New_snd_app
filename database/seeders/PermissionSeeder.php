@@ -84,10 +84,13 @@ class PermissionSeeder extends Seeder
             // Rental Timesheets
             'rental-timesheets.view', 'rental-timesheets.create', 'rental-timesheets.edit', 'rental-timesheets.delete',
             // Leave Management
-            'leave-requests.view', 'leave-requests.create', 'leave-requests.edit', 'leave-requests.delete',
+            'leave-requests.view', 'leave-requests.create', 'leave-requests.edit', 'leave-requests.delete', 'leave-requests.approve',
             'leave-approvals.view', 'leave-approvals.edit',
             'leave-balances.view',
-            'leave-reports.view', 'leave-reports.create',
+            'leave-types.view', 'leave-types.create', 'leave-types.edit', 'leave-types.delete',
+            'leave-reports.view', 'leave-reports.export',
+            'leave-settings.view', 'leave-settings.edit',
+            'approve-leave-requests'
         ];
 
         // Remove any permissions not in resource.action format

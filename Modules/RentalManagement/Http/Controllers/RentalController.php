@@ -72,7 +72,7 @@ class RentalController extends Controller
      */
     public function show($id)
     {
-        $rental = $this->rentalService->findById($id);
+        $rental = $this->rentalService->findById((int) $id);
         return Inertia::render('Rentals/Show', [
             'rental' => $rental
         ]);
@@ -83,7 +83,7 @@ class RentalController extends Controller
      */
     public function edit($id)
     {
-        $rental = $this->rentalService->findById($id);
+        $rental = $this->rentalService->findById((int) $id);
         $locations = Location::all();
         return Inertia::render('Rentals/Edit', [
             'rental' => $rental,

@@ -24,7 +24,7 @@ use Modules\RentalManagement\Http\Controllers\RentalHistoryController;
 |
 */
 
-Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(function () {
+Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
     // Customer routes
     Route::resource('customers', CustomerController::class)->middleware([
         'permission:customers.view',
@@ -160,7 +160,7 @@ Route::prefix('rentals')->name('rentals.')->middleware(['web', 'auth'])->group(f
 
     // Core CRUD routes
     Route::get('rentals', [RentalController::class, 'index'])
-        ->name('index')
+        ->name('rentals.index')
         ->middleware('permission:rentals.view');
 
     Route::get('rentals/create', [RentalController::class, 'create'])

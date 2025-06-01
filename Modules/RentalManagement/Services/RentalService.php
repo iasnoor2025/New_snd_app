@@ -52,6 +52,17 @@ class RentalService
     }
 
     /**
+     * Find rental by ID
+     *
+     * @param int $id
+     * @return Model|null;
+     */
+    public function findById(int $id): ?Model
+    {
+        return $this->getRentalById($id);
+    }
+
+    /**
      * Create new rental
      *
      * @param RentalDTO $dto

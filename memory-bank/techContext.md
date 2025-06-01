@@ -30,6 +30,11 @@
   - ShadCN UI with Tailwind CSS
   - RTL support for Arabic language
   - Glassmorphic UI design elements
+  - **Leaflet** with React-Leaflet for interactive maps
+  - **Turf.js** for geospatial calculations and analysis
+  - **Browser Geolocation API** for location tracking
+  - **Web Workers** for background geofence calculations
+  - **IndexedDB** for offline location data storage
 
 ### Database
 - **postgresql**  
@@ -81,6 +86,21 @@
   - Job batching
   - Rate limiting
   - Failed job handling
+
+### Geofencing & Location Services
+- **Spatial Database Support**
+  - MySQL spatial data types (POINT, POLYGON)
+  - Spatial indexing for performance
+  - Distance calculations
+  - Point-in-polygon queries
+- **Background Processing**
+  - Laravel Jobs for geofence validation
+  - Queue workers for location processing
+  - Scheduled tasks for cleanup
+- **Real-time Features**
+  - Laravel Broadcasting for live updates
+  - WebSocket connections
+  - Event-driven architecture
 
 ### Testing
 - **PHPUnit & Jest**

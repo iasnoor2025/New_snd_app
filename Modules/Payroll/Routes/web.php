@@ -5,6 +5,7 @@ use Modules\Payroll\Http\Controllers\PayrollController;
 use Modules\Payroll\Http\Controllers\SalaryAdvanceController;
 use Modules\Payroll\Http\Controllers\FinalSettlementController;
 use Modules\Payroll\Http\Controllers\AdvancePaymentController;
+use Modules\Payroll\Http\Controllers\TaxDocumentationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,32 @@ Route::prefix('hr/payroll')->name('payroll.')->middleware(['auth', 'verified'])-
     Route::post('salary-advances/{salaryAdvance}/reject', [SalaryAdvanceController::class, 'reject'])
         ->middleware('permission:salary-advances.edit')
         ->name('salary-advances.reject');
+
+    // Tax Documentation routes
+    Route::prefix('tax-documentation')->name('tax-documentation.')->group(function () {
+        Route::get('/', [TaxDocumentationController::class, 'index'])
+            ->middleware('permission:tax-documentation.view')
+            ->name('index');
+        Route::get('/{taxDocument}', [TaxDocumentationController::class, 'show'])
+            ->middleware('permission:tax-documentation.view')
+            ->name('show');
+        Route::post('/generate', [TaxDocumentationController::class, 'generate'])
+            ->middleware('permission:tax-documentation.create')
+            ->name('generate');
+        Route::post('/bulk-generate', [TaxDocumentationController::class, 'bulkGenerate'])
+            ->middleware('permission:tax-documentation.create')
+            ->name('bulk-generate');
+        Route::get('/{taxDocument}/download', [TaxDocumentationController::class, 'download'])
+            ->middleware('permission:tax-documentation.view')
+            ->name('download');
+        Route::get('/export/excel', [TaxDocumentationController::class, 'exportExcel'])
+            ->middleware('permission:tax-documentation.view')
+            ->name('export.excel');
+        Route::get('/summary/{year}', [TaxDocumentationController::class, 'summary'])
+            ->middleware('permission:tax-documentation.view')
+            ->name('summary');
+    });
+
     // Final Settlement routes
     Route::prefix('final-settlements')->name('final-settlements.')->group(function () {
         Route::get('/', [FinalSettlementController::class, 'index'])

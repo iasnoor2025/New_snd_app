@@ -1,5 +1,7 @@
 <?php
 
+use Modules\Localization\Http\Controllers\LocalizationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -7,37 +9,54 @@
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group.
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-use Illuminate\Support\Facades\Route;
+Route::prefix('localization')->middleware(['auth', 'verified'])->group(function () {
+    // Main dashboard
+    Route::get('/', [LocalizationController::class, 'index'])->name('localization.index');
 
-// TODO: Temporarily comment out all routes in this file to debug EmployeeManagement API and missing LocalizationController
-// Route::prefix('localization')->name('localization.')->middleware(['web', 'auth'])->group(function () {
-//     // Main localization routes
-//     Route::get('/', 'LocalizationController@index')->name('index');
-//
-//     // Translations management
-//     Route::get('/translations', 'LocalizationController@translations')->name('translations');
-//     Route::post('/translations', 'LocalizationController@updateTranslations')->name('translations.update');
-//     Route::get('/translations/{locale}/{group}', 'LocalizationController@translationGroup')->name('translations.group');
-//     Route::post('/translations/{locale}/{group}', 'LocalizationController@updateTranslationGroup')->name('translations.group.update');
-//     Route::post('/translations/import', 'LocalizationController@importTranslations')->name('translations.import');
-//     Route::get('/translations/export/{locale?}', 'LocalizationController@exportTranslations')->name('translations.export');
-//
-//     // Locale management
-//     Route::get('/locales', 'LocalizationController@locales')->name('locales');
-//     Route::post('/locales', 'LocalizationController@storeLocale')->name('locales.store');
-//     Route::delete('/locales/{locale}', 'LocalizationController@destroyLocale')->name('locales.destroy');
-//     Route::get('/switch-locale/{locale}', 'LocalizationController@switchLocale')->name('switch-locale');
-//
-//     // Language management for user interface
-//     Route::get('/languages', 'LocalizationController@languages')->name('languages');
-//     Route::post('/languages', 'LocalizationController@storeLanguage')->name('languages.store');
-//     Route::put('/languages/{language}', 'LocalizationController@updateLanguage')->name('languages.update');
-//     Route::delete('/languages/{language}', 'LocalizationController@destroyLanguage')->name('languages.destroy');
-// });
+    // Translation management routes
+    Route::get('/translations', [LocalizationController::class, 'index'])->name('translations.index');
+    Route::get('/translations/create', [LocalizationController::class, 'create'])->name('translations.create');
+    Route::post('/translations', [LocalizationController::class, 'store'])->name('translations.store');
+    Route::get('/translations/{locale}/{group}/edit', [LocalizationController::class, 'edit'])->name('translations.edit');
+    Route::put('/translations/{locale}/{group}', [LocalizationController::class, 'update'])->name('translations.update');
+    Route::delete('/translations/{locale}/{group}/{key}', [LocalizationController::class, 'destroy'])->name('translations.destroy');
+
+    // Import/Export routes
+    Route::post('/translations/import', [LocalizationController::class, 'import'])->name('translations.import');
+    Route::get('/translations/export/{locale?}', [LocalizationController::class, 'export'])->name('translations.export');
+
+    // Utility routes
+    Route::post('/translations/scan', [LocalizationController::class, 'scanTranslations'])->name('translations.scan');
+    Route::post('/translations/clear-cache', [LocalizationController::class, 'clearCache'])->name('translations.clear-cache');
+
+    // Model translation routes (Spatie Translatable)
+    Route::prefix('model-translations')->name('model-translations.')->group(function () {
+        Route::get('/statistics', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'getStatistics'])->name('statistics');
+        Route::get('/models', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'getModels'])->name('models');
+        Route::get('/missing', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'getMissingTranslations'])->name('missing');
+        Route::get('/completion', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'getCompletion'])->name('completion');
+        Route::post('/copy', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'copyTranslations'])->name('copy');
+        Route::get('/export', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'exportTranslations'])->name('export');
+        Route::post('/import', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'importTranslations'])->name('import');
+        Route::post('/cleanup', [\Modules\Localization\Http\Controllers\ModelTranslationController::class, 'cleanupTranslations'])->name('cleanup');
+    });
+
+    // Locale management
+    Route::get('/locales', [LocalizationController::class, 'locales'])->name('localization.locales');
+    Route::post('/locales', [LocalizationController::class, 'storeLocale'])->name('localization.locales.store');
+    Route::delete('/locales/{locale}', [LocalizationController::class, 'destroyLocale'])->name('localization.locales.destroy');
+    Route::post('/switch-locale/{locale}', [LocalizationController::class, 'switchLocale'])->name('localization.switch');
+
+    // Language management
+    Route::get('/languages', [LocalizationController::class, 'languages'])->name('localization.languages');
+    Route::post('/languages', [LocalizationController::class, 'storeLanguage'])->name('localization.languages.store');
+    Route::put('/languages/{language}', [LocalizationController::class, 'updateLanguage'])->name('localization.languages.update');
+    Route::delete('/languages/{language}', [LocalizationController::class, 'destroyLanguage'])->name('localization.languages.destroy');
+});
 
 
 

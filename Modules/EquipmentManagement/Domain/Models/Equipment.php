@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\Translatable\HasTranslations;
 use App\Traits\HasMediaAttachments;
 use App\Traits\AutoLoadsRelations;
 use Modules\Core\Domain\Models\Category;
@@ -16,7 +17,7 @@ use Modules\Core\Domain\Models\Location;
 
 class Equipment extends Model implements HasMedia
 {
-    use HasFactory, HasMediaAttachments, AutoLoadsRelations;
+    use HasFactory, HasMediaAttachments, AutoLoadsRelations, HasTranslations;
 
     /**
      * The table associated with the model.
@@ -65,6 +66,13 @@ class Equipment extends Model implements HasMedia
         'efficiency_rating',
         'next_performance_review',
     ];
+
+    /**
+     * The attributes that are translatable.
+     *
+     * @var array
+     */
+    public $translatable = ['name', 'description'];
 
     /**
      * The attributes that should be cast.

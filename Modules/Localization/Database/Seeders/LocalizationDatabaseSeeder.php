@@ -11,8 +11,8 @@ class LocalizationDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     // Add Localization module specific seeders here
-        // ]);
+        $this->call([
+            LanguagesTableSeeder::class,
+        ]);
     }
 }

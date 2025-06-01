@@ -8,9 +8,9 @@ use Modules\Settings\Domain\Models\Setting;
 
 class SettingUpdated
 {
-    use Dispatchable as ;
-use SerializesModels;
-use /**
+    use Dispatchable, SerializesModels;
+
+    /**
      * The setting instance.
      *
      * @var \Modules\Settings\Domain\Models\Setting

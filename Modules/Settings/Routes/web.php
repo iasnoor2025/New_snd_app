@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Settings\Http\Controllers\SettingController;
 use Modules\Settings\Http\Controllers\CompanySettingsController;
+use Modules\Settings\Http\Controllers\NotificationSettingsController;
+use Modules\Settings\Http\Controllers\ReportSettingsController;
 use Modules\Settings\Http\Controllers\ProfileController;
 use Modules\Settings\Http\Controllers\PasswordController;
 
@@ -36,6 +38,14 @@ Route::middleware(['web', 'auth', 'verified'])->prefix('settings')->name('settin
     Route::post('/company/logo', [CompanySettingsController::class, 'updateLogo'])->name('company.logo');
     Route::post('/company/address', [CompanySettingsController::class, 'updateAddress'])->name('company.address');
     Route::post('/company/contact', [CompanySettingsController::class, 'updateContact'])->name('company.contact');
+
+    // Notification settings
+    Route::get('/notifications', [NotificationSettingsController::class, 'index'])->name('notifications');
+    Route::post('/notifications', [NotificationSettingsController::class, 'update'])->name('notifications.update');
+
+    // Report settings
+    Route::get('/reports', [ReportSettingsController::class, 'index'])->name('reports');
+    Route::post('/reports', [ReportSettingsController::class, 'update'])->name('reports.update');
 
     // User profile settings
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

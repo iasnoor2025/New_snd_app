@@ -77,7 +77,7 @@ import {
 
 interface Props extends PageProps {
   rentals: {
-    data: Rental[]; 
+    data: Rental[];
     current_page: number;
     last_page: number;
     per_page: number;
@@ -430,15 +430,6 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
               </CardDescription>
             </div>
             <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={refreshAllTotals}
-                className="mr-2"
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Refresh Totals
-              </Button>
               <Button variant="outline" size="sm" asChild>
                 <Link href={route("reports.rentals")}>
                   <FileSpreadsheet className="mr-2 h-4 w-4" />
@@ -749,39 +740,6 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end items-center space-x-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  navigateDirectly(rental.id);
-                                }}
-                                type="button"
-                              >
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Button>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        refreshRentalTotal(rental.id);
-                                      }}
-                                    >
-                                      <RefreshCw className="h-4 w-4" />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Refresh total</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
                               <CrudButtons
                                 resourceType="rentals"
                                 resourceId={rental.id}
@@ -790,28 +748,8 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                                 onView={() => {
                                   navigateDirectly(rental.id);
                                 }}
-                                hideView={true}
+                                hideView={false}
                               />
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        navigateDirectly(rental.id);
-                                      }}
-                                    >
-                                      <Eye className="h-4 w-4" />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>View details</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
                             </div>
                           </TableCell>
                         </TableRow>

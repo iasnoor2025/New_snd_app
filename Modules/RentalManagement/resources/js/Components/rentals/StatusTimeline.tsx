@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import ListErrorBoundary from '@/components/error/ListErrorBoundary';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // ShadCN UI Components
 import {
@@ -150,7 +150,7 @@ export default function StatusTimeline({ rental, className = "" }: StatusTimelin
           {activeEvents.length === 0 ? (
             <p className="text-sm text-muted-foreground">No status events yet</p>
           ) : (
-            <ListErrorBoundary>
+            <ErrorBoundary>
               <ol className="relative border-l border-muted">
                 {activeEvents.map((event, index) => (
                   <li key={event.id} className="mb-6 ml-6">
@@ -174,7 +174,7 @@ export default function StatusTimeline({ rental, className = "" }: StatusTimelin
                   </li>
                 ))}
               </ol>
-            </ListErrorBoundary>
+            </ErrorBoundary>
           )}
         </div>
       </CardContent>

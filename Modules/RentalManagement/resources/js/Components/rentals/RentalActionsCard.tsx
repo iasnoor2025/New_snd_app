@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Loader2, ChevronDown, CalendarPlus, FileText, Trash, Printer, Clock, CreditCard, Pencil, Share2, Zap } from "lucide-react";
 import { Link } from "@inertiajs/react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import ToastManager from "@/utils/toast-manager";
+import { toast } from "sonner";
 import RentalExtensionDialog from "./RentalExtensionDialog";
 
 interface RentalActionsCardProps {
@@ -55,7 +55,7 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
   // Handle quotation generation
   const handleGenerateQuotation = () => {
     if (!permissions.generate_invoice) {
-      ToastManager.error("You don't have permission to generate quotations");
+      toast.error("You don't have permission to generate quotations");
       return;
     }
 
@@ -63,7 +63,7 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
 
     // In a real app, this would be an API call
     setTimeout(() => {
-      ToastManager.success("Quotation generated successfully");
+      toast.success("Quotation generated successfully");
       setIsGeneratingQuotation(false);
       // Redirect to the quotation page
       window.location.href = `/rentals/${rental.id}/quotations`;
@@ -108,6 +108,7 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
               size="sm"
               onClick={handleGenerateQuotation}
               disabled={isGeneratingQuotation}
+            >
               {isGeneratingQuotation ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (

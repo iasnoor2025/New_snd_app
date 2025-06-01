@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, ControllerRenderProps } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -159,7 +159,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
         <CardTitle>{timesheetId ? 'Edit Timesheet' : 'Add New Timesheet'}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
+        <Form>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField

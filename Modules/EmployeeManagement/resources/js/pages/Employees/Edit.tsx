@@ -222,7 +222,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
       <Head title="Edit Employee" />
 
       <div className="container mx-auto py-6">
-        <Form {...form}>
+        <Form>
           <form id="employee-edit-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
               <TabsList>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import type { PageProps } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -260,7 +260,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
 
         <Card className="border-none shadow-lg bg-gradient-to-b from-background to-background/50 backdrop-blur-sm">
           <CardContent className="p-0">
-            <Form {...form}>
+            <Form>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Tabs defaultValue="basic" className="w-full">
                   <div className="border-b bg-muted/40">

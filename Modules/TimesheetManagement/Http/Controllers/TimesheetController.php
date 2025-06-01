@@ -11,12 +11,18 @@ use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Modules\TimesheetManagement\Domain\Models\Timesheet;
+use Modules\TimesheetManagement\Services\GeofencingService;
 use Modules\EmployeeManagement\Domain\Models\Employee;
 use Modules\ProjectManagement\Domain\Models\Project;
 use Modules\RentalManagement\Domain\Models\Rental;
 
 class TimesheetController extends Controller
 {
+    public function __construct(
+        private GeofencingService $geofencingService
+    ) {
+        // Constructor logic if needed
+    }
     /**
      * Display a listing of the resource.
      */
@@ -156,16 +162,37 @@ class TimesheetController extends Controller
                 'rental_id' => 'nullable|exists:rentals,id',
                 'description' => 'nullable|string|max:1000',
                 'tasks_completed' => 'nullable|string|max:1000',
+                'start_time' => 'nullable|date_format:H:i',
+                'end_time' => 'nullable|date_format:H:i',
             ]);
 
-            // Set default status to draft
+            // Map tasks_completed to tasks field for the model
+            if (isset($validated['tasks_completed'])) {
+                $validated['tasks'] = $validated['tasks_completed'];
+                unset($validated['tasks_completed']);
+            }
+
+            // Set default values
             $validated['status'] = Timesheet::STATUS_DRAFT;
+            $validated['start_time'] = $validated['start_time'] ?? '08:00';
+            $validated['end_time'] = $validated['end_time'] ?? null;
 
             // Begin transaction
             DB::beginTransaction();
 
             try {
                 $timesheet = Timesheet::create($validated);
+
+                // Process geofencing if location data is provided
+                if ($timesheet->start_latitude && $timesheet->start_longitude) {
+                    $geofenceResult = $this->geofencingService->processTimesheetLocation($timesheet);
+
+                    Log::info('Timesheet geofencing processed', [
+                        'timesheet_id' => $timesheet->id,
+                        'geofence_status' => $geofenceResult['status'],
+                        'employee_id' => $timesheet->employee_id
+                    ]);
+                }
 
                 // Log successful creation
                 Log::info('Timesheet created successfully', [
@@ -177,6 +204,21 @@ class TimesheetController extends Controller
 
                 DB::commit();
 
+                // Check if request is from Inertia
+                if ($request->header('X-Inertia')) {
+                    return redirect()->route('timesheets.index')
+                        ->with('success', 'Timesheet created successfully.');
+                }
+
+                // Check if request expects JSON response (AJAX)
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Timesheet created successfully.',
+                        'timesheet' => $timesheet
+                    ]);
+                }
+
                 return redirect()->route('timesheets.show', $timesheet)
                     ->with('success', 'Timesheet created successfully.');
             } catch (\Exception $e) {
@@ -186,6 +228,21 @@ class TimesheetController extends Controller
                     'trace' => $e->getTraceAsString(),
                     'validated_data' => $validated
                 ]);
+
+                if ($request->header('X-Inertia')) {
+                     return redirect()->back()
+                         ->with('error', 'Error creating timesheet: ' . $e->getMessage())
+                         ->withInput();
+                 }
+
+                 if ($request->expectsJson()) {
+                     return response()->json([
+                         'success' => false,
+                         'message' => 'Error creating timesheet: ' . $e->getMessage(),
+                         'error' => $e->getMessage()
+                     ], 500);
+                 }
+
                 throw $e;
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -193,6 +250,21 @@ class TimesheetController extends Controller
                 'errors' => $e->errors(),
                 'request_data' => $request->all()
             ]);
+
+            if ($request->header('X-Inertia')) {
+                 return redirect()->back()
+                     ->withErrors($e->validator)
+                     ->withInput();
+             }
+
+             if ($request->expectsJson()) {
+                 return response()->json([
+                     'success' => false,
+                     'message' => 'Validation failed.',
+                     'errors' => $e->errors()
+                 ], 422);
+             }
+
             return redirect()->back()
                 ->withErrors($e->validator)
                 ->withInput();
@@ -202,6 +274,21 @@ class TimesheetController extends Controller
                 'trace' => $e->getTraceAsString(),
                 'request_data' => $request->all()
             ]);
+
+            if ($request->header('X-Inertia')) {
+                 return redirect()->back()
+                     ->with('error', 'An unexpected error occurred while creating the timesheet.')
+                     ->withInput();
+             }
+
+             if ($request->expectsJson()) {
+                 return response()->json([
+                     'success' => false,
+                     'message' => 'An unexpected error occurred while creating the timesheet.',
+                     'error' => $e->getMessage()
+                 ], 500);
+             }
+
             return redirect()->back()
                 ->with('error', 'An unexpected error occurred while creating the timesheet.')
                 ->withInput();
@@ -303,7 +390,6 @@ class TimesheetController extends Controller
                 },
             ],
             'project_id' => 'nullable|exists:projects,id',
-            'rental_id' => 'nullable|exists:rentals,id',
             'description' => 'nullable|string|max:1000',
             'tasks_completed' => 'nullable|string|max:1000',
         ]);
@@ -311,7 +397,24 @@ class TimesheetController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldLatitude = $timesheet->start_latitude;
+            $oldLongitude = $timesheet->start_longitude;
+
             $timesheet->update($validated);
+
+            // Process geofencing if location data has changed
+            $locationChanged = ($oldLatitude !== $timesheet->start_latitude) ||
+                             ($oldLongitude !== $timesheet->start_longitude);
+
+            if ($locationChanged && $timesheet->start_latitude && $timesheet->start_longitude) {
+                $geofenceResult = $this->geofencingService->processTimesheetLocation($timesheet);
+
+                Log::info('Timesheet geofencing reprocessed after update', [
+                    'timesheet_id' => $timesheet->id,
+                    'geofence_status' => $geofenceResult['status'],
+                    'employee_id' => $timesheet->employee_id
+                ]);
+            }
 
             DB::commit();
 
@@ -563,6 +666,135 @@ class TimesheetController extends Controller
     }
 
     /**
+     * Store multiple timesheets in bulk.
+     */
+    public function storeBulk(Request $request)
+    {
+        try {
+            Log::info('Bulk timesheet creation request received', [
+                'request_data' => $request->all(),
+                'user_id' => auth()->id()
+            ]);
+
+            $validated = $request->validate([
+                'employee_id' => 'required|exists:employees,id',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'hours_worked' => 'required|numeric|min:0|max:24',
+                'overtime_hours' => 'nullable|numeric|min:0|max:24',
+                'project_id' => 'nullable|exists:projects,id',
+                'rental_id' => 'nullable|exists:rentals,id',
+                'description' => 'nullable|string|max:1000',
+                'tasks_completed' => 'nullable|string|max:1000',
+                'daily_overtime_hours' => 'nullable|array',
+            ]);
+
+            $startDate = Carbon::parse($validated['start_date']);
+            $endDate = Carbon::parse($validated['end_date']);
+            $dailyOvertimeHours = $validated['daily_overtime_hours'] ?? [];
+
+            // Check if date range is reasonable (max 31 days)
+            if ($startDate->diffInDays($endDate) > 31) {
+                return redirect()->back()
+                    ->withErrors(['end_date' => 'Date range cannot exceed 31 days.'])
+                    ->withInput();
+            }
+
+            DB::beginTransaction();
+
+            try {
+                $createdTimesheets = [];
+                $currentDate = $startDate->copy();
+
+                while ($currentDate->lte($endDate)) {
+                    $dateString = $currentDate->format('Y-m-d');
+
+                    // Check for existing timesheet on this date
+                    if (Timesheet::hasOverlap($validated['employee_id'], $dateString)) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withErrors(['date' => "A timesheet already exists for {$currentDate->format('M d, Y')}."])
+                            ->withInput();
+                    }
+
+                    // Get overtime hours for this specific date
+                    $overtimeHours = $dailyOvertimeHours[$dateString] ?? $validated['overtime_hours'] ?? 0;
+
+                    // Check weekly hours limit
+                    if (Timesheet::hasExceededWeeklyLimit($validated['employee_id'], $dateString, $validated['hours_worked'])) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withErrors(['hours_worked' => "Weekly hours limit would be exceeded for {$currentDate->format('M d, Y')}."])
+                            ->withInput();
+                    }
+
+                    // Check monthly overtime limit
+                    if ($overtimeHours > 0 && Timesheet::hasExceededMonthlyOvertimeLimit($validated['employee_id'], $dateString, $overtimeHours)) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withErrors(['overtime_hours' => "Monthly overtime limit would be exceeded for {$currentDate->format('M d, Y')}."])
+                            ->withInput();
+                    }
+
+                    $timesheet = Timesheet::create([
+                        'employee_id' => $validated['employee_id'],
+                        'date' => $dateString,
+                        'hours_worked' => $validated['hours_worked'],
+                        'overtime_hours' => $overtimeHours,
+                        'project_id' => $validated['project_id'],
+                        'rental_id' => $validated['rental_id'],
+                        'description' => $validated['description'],
+                        'tasks' => $validated['tasks_completed'],
+                        'status' => Timesheet::STATUS_DRAFT,
+                        'start_time' => '09:00',
+                        'end_time' => null,
+                    ]);
+
+                    $createdTimesheets[] = $timesheet;
+                    $currentDate->addDay();
+                }
+
+                DB::commit();
+
+                Log::info('Bulk timesheets created successfully', [
+                    'count' => count($createdTimesheets),
+                    'employee_id' => $validated['employee_id'],
+                    'date_range' => $validated['start_date'] . ' to ' . $validated['end_date']
+                ]);
+
+                return redirect()->route('timesheets.monthly')
+                    ->with('success', 'Bulk timesheets created successfully. ' . count($createdTimesheets) . ' timesheets were created.');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error creating bulk timesheets', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                    'validated_data' => $validated
+                ]);
+                throw $e;
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error creating bulk timesheets', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+        } catch (\Exception $e) {
+            Log::error('Unexpected error creating bulk timesheets', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+            return redirect()->back()
+                ->with('error', 'An unexpected error occurred while creating the bulk timesheets.')
+                ->withInput();
+        }
+    }
+
+    /**
      * Check for duplicate timesheet entry.
      */
     public function checkDuplicate(Request $request)
@@ -572,12 +804,12 @@ class TimesheetController extends Controller
         $timesheetId = $request->input('timesheet_id');
 
         if (!$employeeId || !$date) {
-            return response()->json(['duplicate' => false]);
+            return response()->json(['exists' => false]);
         }
 
-        $duplicate = Timesheet::hasOverlap($employeeId, $date, $timesheetId);
+        $exists = Timesheet::hasOverlap($employeeId, $date, $timesheetId);
 
-        return response()->json(['duplicate' => $duplicate]);
+        return response()->json(['exists' => $exists]);
     }
 
     /**

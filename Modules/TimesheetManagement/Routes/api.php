@@ -1,4 +1,11 @@
 <?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\TimesheetManagement\Http\Controllers\TimesheetController;
+use Modules\TimesheetManagement\Http\Controllers\TimeEntryController;
+use Modules\TimesheetManagement\Http\Controllers\GeofenceController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -10,56 +17,61 @@
 |
 */
 
-// API routes uncommented
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Modules\TimesheetManagement\Http\Controllers\TimesheetController;
-
 Route::middleware('auth:sanctum')->group(function () {
-    // Weekly timesheets
-    Route::get('/weekly-timesheets', 'Api\WeeklyTimesheetController@index');
-    Route::get('/weekly-timesheets/current', 'Api\WeeklyTimesheetController@current');
-    Route::get('/weekly-timesheets/{id}', 'Api\WeeklyTimesheetController@show');
-    Route::post('/weekly-timesheets', 'Api\WeeklyTimesheetController@store');
-    Route::put('/weekly-timesheets/{id}', 'Api\WeeklyTimesheetController@update');
-    Route::post('/weekly-timesheets/{id}/submit', 'Api\WeeklyTimesheetController@submit');
+    // Timesheet Management Routes
+    Route::apiResource('timesheets', TimesheetController::class);
+    Route::post('timesheets/bulk-upload', [TimesheetController::class, 'bulkUpload']);
+    Route::get('timesheets/{timesheet}/approval-history', [TimesheetController::class, 'approvalHistory']);
+    Route::post('timesheets/{timesheet}/approve', [TimesheetController::class, 'approve']);
+    Route::post('timesheets/{timesheet}/reject', [TimesheetController::class, 'reject']);
+    Route::get('timesheets/employee/{employee}/summary', [TimesheetController::class, 'employeeSummary']);
+    Route::get('timesheets/project/{project}/summary', [TimesheetController::class, 'projectSummary']);
+    Route::get('timesheets/reports/daily', [TimesheetController::class, 'dailyReport']);
+    Route::get('timesheets/reports/weekly', [TimesheetController::class, 'weeklyReport']);
+    Route::get('timesheets/reports/monthly', [TimesheetController::class, 'monthlyReport']);
+    Route::get('timesheets/export/pdf', [TimesheetController::class, 'exportPdf']);
+    Route::get('timesheets/export/excel', [TimesheetController::class, 'exportExcel']);
 
-    // Time entries
-    Route::get('/time-entries', 'Api\TimeEntryController@index');
-    Route::post('/time-entries', 'Api\TimeEntryController@store');
-    Route::get('/time-entries/{id}', 'Api\TimeEntryController@show');
-    Route::put('/time-entries/{id}', 'Api\TimeEntryController@update');
-    Route::delete('/time-entries/{id}', 'Api\TimeEntryController@destroy');
-    Route::post('/time-entries/bulk', 'Api\TimeEntryController@bulkStore');
+    // Time Entry Routes
+    Route::apiResource('time-entries', TimeEntryController::class);
+    Route::post('time-entries/clock-in', [TimeEntryController::class, 'clockIn']);
+    Route::post('time-entries/clock-out', [TimeEntryController::class, 'clockOut']);
+    Route::get('time-entries/active', [TimeEntryController::class, 'getActiveEntry']);
+    Route::get('time-entries/employee/{employee}/current-week', [TimeEntryController::class, 'getCurrentWeekEntries']);
+    Route::post('time-entries/{timeEntry}/break-start', [TimeEntryController::class, 'startBreak']);
+    Route::post('time-entries/{timeEntry}/break-end', [TimeEntryController::class, 'endBreak']);
 
-    // Overtime entries
-    Route::get('/overtime-entries', 'Api\OvertimeController@index');
-    Route::post('/overtime-entries', 'Api\OvertimeController@store');
+    // Geofence Management Routes
+    Route::prefix('geofences')->group(function () {
+        Route::get('/', [GeofenceController::class, 'index'])->name('geofences.index');
+        Route::post('/', [GeofenceController::class, 'store'])->name('geofences.store');
+        Route::get('/{geofence}', [GeofenceController::class, 'show'])->name('geofences.show');
+        Route::put('/{geofence}', [GeofenceController::class, 'update'])->name('geofences.update');
+        Route::delete('/{geofence}', [GeofenceController::class, 'destroy'])->name('geofences.destroy');
+        Route::post('/{geofence}/toggle-active', [GeofenceController::class, 'toggleActive'])->name('geofences.toggle-active');
 
-    // Approvals
-    Route::get('/approvals', 'Api\TimesheetApprovalController@index');
-    Route::put('/approvals/{id}/approve', 'Api\TimesheetApprovalController@approve');
-    Route::put('/approvals/{id}/reject', 'Api\TimesheetApprovalController@reject');
-
-    // Reports
-    Route::get('/reports/summary', 'Api\TimesheetReportController@summary');
-    Route::post('/reports/generate', 'Api\TimesheetReportController@generate');
-
-    // Calendar integration
-    Route::get('/calendar', 'Api\TimesheetCalendarController@index');
-    Route::get('/calendar/{year}/{month}', 'Api\TimesheetCalendarController@month');
-
-    // Projects for timesheet
-    Route::get('/projects', 'Api\TimesheetProjectController@index');
-
-    // Tasks for timesheet
-    Route::get('/tasks', 'Api\TimesheetTaskController@index');
-    Route::get('/projects/{projectId}/tasks', 'Api\TimesheetTaskController@tasksForProject');
-
-    Route::prefix('employees/{employee}')->group(function () {
-        Route::get('timesheets', [TimesheetController::class, 'apiEmployeeTimesheets']);
-        Route::get('timesheets/total-hours', [TimesheetController::class, 'apiEmployeeTimesheetTotalHours']);
+        // Geofence Validation & Analytics
+        Route::post('/validate-location', [GeofenceController::class, 'validateLocation'])->name('geofences.validate-location');
+        Route::get('/statistics', [GeofenceController::class, 'statistics'])->name('geofences.statistics');
+        Route::get('/violations', [GeofenceController::class, 'violations'])->name('geofences.violations');
+        Route::get('/work-area-coverage', [GeofenceController::class, 'workAreaCoverage'])->name('geofences.work-area-coverage');
     });
+
+    // Mobile Time Logging Routes (for mobile app integration)
+    Route::prefix('mobile')->group(function () {
+        Route::post('/time-entries/location-check', [TimeEntryController::class, 'locationCheck']);
+        Route::post('/time-entries/offline-sync', [TimeEntryController::class, 'offlineSync']);
+        Route::get('/geofences/nearby', [GeofenceController::class, 'getNearbyZones']);
+        Route::post('/location/validate', [GeofenceController::class, 'validateLocation']);
+    });
+});
+
+// Public routes (if any)
+Route::get('/timesheets/public/status', function () {
+    return response()->json([
+        'status' => 'active',
+        'module' => 'TimesheetManagement',
+        'version' => '1.0.0'
+    ]);
 });
 

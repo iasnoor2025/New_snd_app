@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm as useInertiaForm, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -39,8 +39,8 @@ import { route } from 'ziggy-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Timesheets', href: '/timesheets' },
-  { title: 'Create', href: '/timesheets/create' }
+  { title: 'Timesheets', href: '/hr/timesheets' },
+  { title: 'Create', href: '/hr/timesheets/create' }
 ];
 
 // Define interfaces
@@ -75,12 +75,25 @@ interface Props extends PageProps {
 const formSchema = z.object({
   employee_id: z.string().min(1, { message: "Employee is required" }),
   date: z.string().min(1, { message: "Date is required" }),
-  hours_worked: z.string().min(1, { message: "Hours worked is required" }),
-  overtime_hours: z.string().optional(),
+  hours_worked: z.string().min(1, { message: "Hours worked is required" }).refine(
+    (val) => {
+      const num = parseFloat(val);
+      return !isNaN(num) && num >= 0.5 && num <= 24;
+    },
+    { message: "Hours worked must be between 0.5 and 24" }
+  ),
+  overtime_hours: z.string().optional().refine(
+    (val) => {
+      if (!val || val === '') return true;
+      const num = parseFloat(val);
+      return !isNaN(num) && num >= 0 && num <= 24;
+    },
+    { message: "Overtime hours must be between 0 and 24" }
+  ),
   project_id: z.string().optional(),
   rental_id: z.string().optional(),
-  description: z.string().optional(),
-  tasks_completed: z.string().optional(),
+  description: z.string().max(1000, { message: "Description must not exceed 1000 characters" }).optional(),
+  tasks_completed: z.string().max(1000, { message: "Tasks completed must not exceed 1000 characters" }).optional(),
   bulk_mode: z.boolean().optional(),
   start_date: z.string().optional(),
   end_date: z.string().optional(),
@@ -116,11 +129,20 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
   useEffect(() => {
     // Set default employee if available
     if (employees.length > 0) {
-      form.setValue('employee_id', employees[0].id.toString());
+      const employeeId = employees[0].id.toString();
+      form.setValue('employee_id', employeeId);
+      setData('employee_id', employeeId);
     }
 
-    // Set default hours worked
-    form.setValue('hours_worked', '8');
+    // Set default hours worked and overtime
+    if (!form.getValues('hours_worked')) {
+      form.setValue('hours_worked', '8');
+      setData('hours_worked', '8');
+    }
+    if (!form.getValues('overtime_hours')) {
+      form.setValue('overtime_hours', '0');
+      setData('overtime_hours', '0');
+    }
   }, []);
 
   // Check URL parameters for bulk mode and month
@@ -168,168 +190,205 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
   // Update Inertia form data when React Hook Form values change
   useEffect(() => {
     const subscription = form.watch((value) => {
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.employee_id) setData('employee_id', value.employee_id);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.date) setData('date', value.date);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.hours_worked) setData('hours_worked', value.hours_worked);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.overtime_hours) setData('overtime_hours', value.overtime_hours);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.project_id) setData('project_id', value.project_id === 'none' ? '' : value.project_id);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.rental_id) setData('rental_id', value.rental_id === 'none' ? '' : value.rental_id);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.description) setData('description', value.description);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.tasks_completed) setData('tasks_completed', value.tasks_completed);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.bulk_mode !== undefined) setData('bulk_mode', value.bulk_mode);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.start_date) setData('start_date', value.start_date);
-      // @ts-ignore - Ignoring type errors for setData
-      if (value.end_date) setData('end_date', value.end_date);
+      setData({
+        ...data,
+        employee_id: value.employee_id || '',
+        date: value.date || '',
+        hours_worked: value.hours_worked || '8',
+        overtime_hours: value.overtime_hours || '0',
+        project_id: value.project_id === 'none' ? '' : (value.project_id || ''),
+        rental_id: value.rental_id === 'none' ? '' : (value.rental_id || ''),
+        description: value.description || '',
+        tasks_completed: value.tasks_completed || '',
+        bulk_mode: value.bulk_mode || false,
+        start_date: value.start_date || '',
+        end_date: value.end_date || ''
+      });
     });
 
     return () => subscription.unsubscribe();
-  }, [form.watch]);
+  }, [form.watch, data]);
 
   // Update daily_overtime_hours in Inertia form data
   useEffect(() => {
     if (customOvertimePerDay) {
-      // @ts-ignore - Ignoring type errors for setData
-      setData('daily_overtime_hours', dailyOvertimeHours);
+      setData({
+        ...data,
+        daily_overtime_hours: dailyOvertimeHours
+      });
     }
-  }, [dailyOvertimeHours, customOvertimePerDay]);
+  }, [dailyOvertimeHours, customOvertimePerDay, data]);
+
+  const checkDuplicate = async (employeeId: string, date: string) => {
+    try {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+      const response = await fetch(route('timesheets.check-duplicate'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': csrfToken || '',
+        },
+        body: JSON.stringify({
+          employee_id: employeeId,
+          date: date,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.exists || false;
+    } catch (error) {
+      console.error('Error checking duplicate:', error);
+      // Return false to allow submission if check fails
+      return false;
+    }
+  };
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Manually trigger validation for required fields
-      const isValid = await form.trigger(['employee_id', 'hours_worked']);
-
-      // If validation fails, don't proceed with submission
+      // Validate form
+      const isValid = await form.trigger();
       if (!isValid) {
-        toast.error("Please fill in all required fields");
+        toast.error('Please fix the validation errors');
         return;
       }
 
-      // Prepare the data object
-      const formData = {
-        employee_id: values.employee_id,
-        date: values.date,
-        hours_worked: values.hours_worked,
-        overtime_hours: values.overtime_hours || '0',
-        project_id: values.project_id === 'none' ? '' : (values.project_id || ''),
-        rental_id: values.rental_id === 'none' ? '' : (values.rental_id || ''),
-        description: values.description || '',
-        tasks_completed: values.tasks_completed || '',
-      };
-
-      // Check for duplicate timesheet entry
-      if (!values.bulk_mode) {
-        try {
-          const response = await fetch(route('api.timesheets.check-duplicate'), { // TODO: Fix this
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-            },
-            body: JSON.stringify({
-              employee_id: values.employee_id,
-              date: values.date,
-            }),
-          });
-
-          const result = await response.json();
-
-          if (result.exists) {
-            toast.error("A timesheet already exists for this employee on this date.");
-            form.setError('date', {
-              type: 'manual',
-              message: 'A timesheet already exists for this employee on this date.'
-            });
-            return;
-          }
-        } catch (error) {
-          console.error('Error checking duplicate:', error);
-          toast.error("Error checking for duplicate timesheet");
-          return;
-        }
-      }
-
-      if (values.bulk_mode) {
-        // Set bulk mode specific data
-        const bulkData = {
-          employee_id: values.employee_id,
-          start_date: values.start_date,
-          end_date: values.end_date,
-          hours_worked: values.hours_worked,
-          overtime_hours: values.overtime_hours || '0',
-          project_id: values.project_id === 'none' ? '' : (values.project_id || ''),
-          rental_id: values.rental_id === 'none' ? '' : (values.rental_id || ''),
-          description: values.description || '',
-          tasks_completed: values.tasks_completed || '',
-          daily_overtime_hours: customOvertimePerDay ? dailyOvertimeHours : {},
-        };
-
-        // Ensure we have valid start and end dates
-        if (!values.start_date || !values.end_date) {
-          toast.error("Start date and end date are required for bulk mode");
+      if (isBulkMode) {
+        // Bulk mode validation
+        if (!startDate || !endDate) {
+          toast.error('Please select both start and end dates for bulk entry');
+          form.setError('start_date', { type: 'manual', message: 'Start date is required' });
+          form.setError('end_date', { type: 'manual', message: 'End date is required' });
           return;
         }
 
-        // Submit the form using Inertia's post method
-        router.post(route('timesheets.store-bulk'), bulkData, {
-          preserveState: true,
-          preserveScroll: true,
+        if (startDate > endDate) {
+          toast.error('End date must be after start date');
+          form.setError('end_date', { type: 'manual', message: 'End date must be after start date' });
+          return;
+        }
+
+        // Check if employee is selected
+        if (!values.employee_id) {
+          toast.error('Please select an employee');
+          form.setError('employee_id', { type: 'manual', message: 'Employee is required' });
+          return;
+        }
+
+        // Submit bulk timesheet
+        post(route('timesheets.store-bulk'), {
           onSuccess: () => {
-            toast.success("Bulk timesheets created successfully");
-            form.reset();
-            router.visit(route('timesheets.monthly'));
-          },
-          onError: (errors) => {
-            toast.error("Failed to create bulk timesheets. Please check the form for errors.");
-            Object.entries(errors).forEach(([field, message]) => {
-              form.setError(field as any, { type: 'manual', message: message as string });
-            });
-          }
-        });
-      } else {
-        // Regular single timesheet submission using Inertia's post method
-        router.post(route('timesheets.store'), formData, {
-          preserveState: true,
-          preserveScroll: true,
-          onSuccess: () => {
-            toast.success("Timesheet created successfully");
+            toast.success('Timesheets created successfully!');
             form.reset();
             router.visit(route('timesheets.index'));
           },
           onError: (errors) => {
-            toast.error("Failed to create timesheet. Please check the form for errors.");
-            Object.entries(errors).forEach(([field, message]) => {
-              form.setError(field as any, { type: 'manual', message: message as string });
+            console.error('Bulk submission errors:', errors);
+            // Handle validation errors
+            Object.keys(errors).forEach((key) => {
+              const errorMessage = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+              form.setError(key as any, {
+                type: 'manual',
+                message: errorMessage,
+              });
             });
+
+            // Show first error message
+            const firstError = Object.values(errors)[0];
+            const message = Array.isArray(firstError) ? firstError[0] : firstError;
+            toast.error(message || 'Please check the form for errors');
+          },
+        });
+      } else {
+        // Single mode validation
+        if (!values.employee_id) {
+          toast.error('Please select an employee');
+          form.setError('employee_id', { type: 'manual', message: 'Employee is required' });
+          return;
+        }
+
+        if (!values.date) {
+          toast.error('Please select a date');
+          form.setError('date', { type: 'manual', message: 'Date is required' });
+          return;
+        }
+
+        if (!values.hours_worked) {
+          toast.error('Please enter hours worked');
+          form.setError('hours_worked', { type: 'manual', message: 'Hours worked is required' });
+          return;
+        }
+
+        // Check for duplicates first
+        try {
+          const isDuplicate = await checkDuplicate(values.employee_id, values.date);
+          if (isDuplicate) {
+            toast.error('A timesheet for this employee and date already exists');
+            form.setError('date', { type: 'manual', message: 'Timesheet already exists for this date' });
+            return;
           }
+        } catch (error) {
+          console.warn('Duplicate check failed:', error);
+          // Continue with submission if duplicate check fails
+        }
+
+        // Submit single timesheet
+        post(route('timesheets.store'), {
+          onSuccess: () => {
+            toast.success('Timesheet created successfully!');
+            form.reset();
+            router.visit(route('timesheets.index'));
+          },
+          onError: (errors) => {
+            console.error('Single submission errors:', errors);
+            // Handle validation errors
+            Object.keys(errors).forEach((key) => {
+              const errorMessage = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+              form.setError(key as any, {
+                type: 'manual',
+                message: errorMessage,
+              });
+            });
+
+            // Show first error message
+            const firstError = Object.values(errors)[0];
+            const message = Array.isArray(firstError) ? firstError[0] : firstError;
+            toast.error(message || 'Please check the form for errors');
+          },
         });
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("An unexpected error occurred while submitting the form");
+      console.error('Form submission error:', error);
+      toast.error('An error occurred while submitting the form');
     }
   };
 
   const onDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);
     if (date) {
-      form.setValue('date', date.toISOString().split('T')[0]);
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      form.setValue('date', formattedDate);
+      setData({
+        ...data,
+        date: formattedDate
+      });
     }
   };
 
   const onStartDateSelect = (date: Date | undefined) => {
     setStartDate(date);
     if (date) {
-      form.setValue('start_date', date.toISOString().split('T')[0]);
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      form.setValue('start_date', formattedDate);
+      setData({
+        ...data,
+        start_date: formattedDate
+      });
 
       // If bulk mode is enabled and we have a start date and end date, generate daily overtime hours
       if (isBulkMode && endDate) {
@@ -341,7 +400,12 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
   const onEndDateSelect = (date: Date | undefined) => {
     setEndDate(date);
     if (date) {
-      form.setValue('end_date', date.toISOString().split('T')[0]);
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      form.setValue('end_date', formattedDate);
+      setData({
+        ...data,
+        end_date: formattedDate
+      });
 
       // If bulk mode is enabled and we have a start date and end date, generate daily overtime hours
       if (isBulkMode && startDate) {
@@ -382,8 +446,26 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
     // @ts-ignore - Ignoring type errors for setData
     setData('bulk_mode', enabled);
 
-    if (enabled && startDate && endDate) {
-      generateDailyOvertimeHours(startDate, endDate);
+    if (enabled) {
+      // Clear single date when switching to bulk mode
+      setSelectedDate(undefined);
+      form.setValue('date', '');
+      setData('date', '');
+      form.clearErrors('date');
+
+      if (startDate && endDate) {
+        generateDailyOvertimeHours(startDate, endDate);
+      }
+    } else {
+      // Clear bulk dates when switching to single mode
+      setStartDate(undefined);
+      setEndDate(undefined);
+      form.setValue('start_date', '');
+      form.setValue('end_date', '');
+      setData('start_date', '');
+      setData('end_date', '');
+      setDailyOvertimeHours({});
+      form.clearErrors(['start_date', 'end_date']);
     }
   };
 
@@ -438,8 +520,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
             </Button>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6" noValidate>
+            <Form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6" noValidate>
                 <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''} />
                 {inertiaErrors.employee_id && (
                   <div className="text-red-500 text-sm">
@@ -483,13 +564,13 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           name="start_date"
                           render={({ field }) => (
                             <FormItem className="flex flex-col">
-                              <FormLabel>Start Date</FormLabel>
+                              <FormLabel>Start Date <span className="text-red-500">*</span></FormLabel>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <FormControl>
                                     <Button
                                       variant="outline"
-                                      className="w-full pl-3 text-left font-normal"
+                                      className={`w-full pl-3 text-left font-normal ${form.formState.errors.start_date ? "border-red-500" : ""}`}
                                     >
                                       <CalendarIcon className="mr-2 h-4 w-4" />
                                       {startDate ? format(startDate, 'PPP') : <span>Pick a start date</span>}
@@ -502,10 +583,14 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                                     selected={startDate}
                                     onSelect={onStartDateSelect}
                                     initialFocus
+                                    disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
                                   />
                                 </PopoverContent>
                               </Popover>
                               <FormMessage />
+                              {inertiaErrors.start_date && (
+                                <p className="text-sm text-red-500">{inertiaErrors.start_date}</p>
+                              )}
                             </FormItem>
                           )}
                         />
@@ -515,13 +600,13 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           name="end_date"
                           render={({ field }) => (
                             <FormItem className="flex flex-col">
-                              <FormLabel>End Date</FormLabel>
+                              <FormLabel>End Date <span className="text-red-500">*</span></FormLabel>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <FormControl>
                                     <Button
                                       variant="outline"
-                                      className="w-full pl-3 text-left font-normal"
+                                      className={`w-full pl-3 text-left font-normal ${form.formState.errors.end_date ? "border-red-500" : ""}`}
                                     >
                                       <CalendarIcon className="mr-2 h-4 w-4" />
                                       {endDate ? format(endDate, 'PPP') : <span>Pick an end date</span>}
@@ -534,10 +619,20 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                                     selected={endDate}
                                     onSelect={onEndDateSelect}
                                     initialFocus
+                                    disabled={(date) => {
+                                      const today = new Date();
+                                      const minDate = new Date('1900-01-01');
+                                      if (date > today || date < minDate) return true;
+                                      if (startDate && date < startDate) return true;
+                                      return false;
+                                    }}
                                   />
                                 </PopoverContent>
                               </Popover>
                               <FormMessage />
+                              {inertiaErrors.end_date && (
+                                <p className="text-sm text-red-500">{inertiaErrors.end_date}</p>
+                              )}
                             </FormItem>
                           )}
                         />
@@ -715,13 +810,16 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     name="employee_id"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Employee</FormLabel>
+                        <FormLabel>Employee <span className="text-red-500">*</span></FormLabel>
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setData('employee_id', value);
+                          }}
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className={form.formState.errors.employee_id ? "border-red-500" : undefined}>
                               <SelectValue placeholder="Select employee" />
                             </SelectTrigger>
                           </FormControl>
@@ -734,6 +832,9 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           </SelectContent>
                         </Select>
                         <FormMessage />
+                        {inertiaErrors.employee_id && (
+                          <p className="text-sm text-red-500">{inertiaErrors.employee_id}</p>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -743,7 +844,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     name="date"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Date</FormLabel>
+                        <FormLabel>Date <span className="text-red-500">*</span></FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -763,11 +864,13 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                               selected={selectedDate}
                               onSelect={onDateSelect}
                               initialFocus
+                              disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
                             />
                           </PopoverContent>
                         </Popover>
-                        {isBulkMode && (
-                          <FormMessage />
+                        <FormMessage />
+                        {inertiaErrors.date && (
+                          <p className="text-sm text-red-500">{inertiaErrors.date}</p>
                         )}
                       </FormItem>
                     )}
@@ -778,17 +881,18 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     name="hours_worked"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hours Worked</FormLabel>
+                        <FormLabel>Hours Worked <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             step="0.5"
-                            min="0"
+                            min="0.5"
                             max="24"
                             placeholder="8"
                             className={form.formState.errors.hours_worked ? "border-red-500" : undefined}
                             onChange={(e) => {
                               field.onChange(e);
+                              setData('hours_worked', e.target.value);
                               // Clear error when value is entered
                               if (e.target.value) {
                                 form.clearErrors('hours_worked');
@@ -799,6 +903,9 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           />
                         </FormControl>
                         <FormMessage />
+                        {inertiaErrors.hours_worked && (
+                          <p className="text-sm text-red-500">{inertiaErrors.hours_worked}</p>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -810,9 +917,23 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormItem>
                         <FormLabel>Overtime Hours</FormLabel>
                         <FormControl>
-                          <Input type="number" step="0.5" min="0" max="24" placeholder="0" {...field} />
+                          <Input
+                            type="number"
+                            step="0.5"
+                            min="0"
+                            max="24"
+                            placeholder="0"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              setData('overtime_hours', e.target.value);
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
+                        {inertiaErrors.overtime_hours && (
+                          <p className="text-sm text-red-500">{inertiaErrors.overtime_hours}</p>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -824,7 +945,10 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormItem>
                         <FormLabel>Project (Optional)</FormLabel>
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setData('project_id', value);
+                          }}
                           defaultValue={field.value || 'none'}
                         >
                           <FormControl>
@@ -842,6 +966,9 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           </SelectContent>
                         </Select>
                         <FormMessage />
+                        {inertiaErrors.project_id && (
+                          <p className="text-sm text-red-500">{inertiaErrors.project_id}</p>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -853,7 +980,10 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormItem>
                         <FormLabel>Rental Equipment (Optional)</FormLabel>
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setData('rental_id', value);
+                          }}
                           defaultValue={field.value || 'none'}
                         >
                           <FormControl>
@@ -871,6 +1001,9 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           </SelectContent>
                         </Select>
                         <FormMessage />
+                        {inertiaErrors.rental_id && (
+                          <p className="text-sm text-red-500">{inertiaErrors.rental_id}</p>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -884,12 +1017,23 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormLabel>Description (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Brief description of work performed"
+                          placeholder="Brief description of work performed (max 1000 characters)"
                           className="min-h-[80px]"
+                          maxLength={1000}
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setData('description', e.target.value);
+                          }}
                         />
                       </FormControl>
+                      <div className="text-sm text-gray-500 text-right">
+                        {field.value?.length || 0}/1000
+                      </div>
                       <FormMessage />
+                      {inertiaErrors.description && (
+                        <p className="text-sm text-red-500">{inertiaErrors.description}</p>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -902,12 +1046,23 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormLabel>Tasks Completed (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="List of tasks completed during this time"
+                          placeholder="List of tasks completed during this time (max 1000 characters)"
                           className="min-h-[120px]"
+                          maxLength={1000}
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setData('tasks_completed', e.target.value);
+                          }}
                         />
                       </FormControl>
+                      <div className="text-sm text-gray-500 text-right">
+                        {field.value?.length || 0}/1000
+                      </div>
                       <FormMessage />
+                      {inertiaErrors.tasks_completed && (
+                        <p className="text-sm text-red-500">{inertiaErrors.tasks_completed}</p>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -921,7 +1076,6 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     {isBulkMode ? 'Submit Bulk Timesheets' : 'Submit Timesheet'}
                   </Button>
                 </div>
-              </form>
             </Form>
           </CardContent>
         </Card>

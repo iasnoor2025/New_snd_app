@@ -19,15 +19,15 @@ class LocalizationServiceProvider extends ServiceProvider
 
     /**
      * Boot the application events.
-     *
-     * @return void;
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->registerMiddleware();
+        $this->registerCommands();
 
         $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/web.php'));
 
@@ -37,12 +37,21 @@ class LocalizationServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void;
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+
+        // Register services
+        $this->app->singleton('localization.helper', function ($app) {
+            return new \Modules\Localization\Helpers\LocalizationHelper();
+        });
+
+        $this->app->singleton('localization.translation', function ($app) {
+            return new \Modules\Localization\Services\TranslationService();
+        });
+
+        $this->app->singleton(\Modules\Localization\Services\SpatieTranslatableService::class);
 
         if (file_exists(module_path($this->moduleName, 'Providers/EventServiceProvider.php'))) {
             $this->app->register(EventServiceProvider::class);
@@ -62,6 +71,27 @@ class LocalizationServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             module_path($this->moduleName, 'config/config.php'), $this->moduleNameLower
         );
+    }
+
+    /**
+     * Register middleware
+     */
+    protected function registerMiddleware(): void
+    {
+        $router = $this->app['router'];
+
+        $router->aliasMiddleware('localization', \Modules\Localization\Http\Middleware\LocalizationMiddleware::class);
+
+        // Add to web middleware group
+        $router->pushMiddlewareToGroup('web', \Modules\Localization\Http\Middleware\LocalizationMiddleware::class);
+    }
+
+    /**
+     * Register console commands
+     */
+    protected function registerCommands(): void
+    {
+        // Register any console commands here if needed
     }
 
     /**

@@ -103,13 +103,48 @@ class SettingService
     }
 
     /**
-     * Update a setting.
+     * Get a setting by key.
+     *
+     * @param string $key
+     * @param string|null $group
+     * @return mixed
+     */
+    public function getSetting(string $key, ?string $group = null)
+    {
+        return $this->repository->getValue($key, null, $group);
+    }
+
+    /**
+     * Update a setting by key.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param string|null $group
+     * @return Setting|null
+     */
+    public function updateSetting(string $key, $value, ?string $group = null): ?Setting
+    {
+        $setting = $this->repository->findByKey($key, $group);
+
+        if ($setting) {
+            $data = [
+                'value' => $value,
+                'type' => $this->determineType($value)
+            ];
+            return $this->repository->update($setting->id, $data);
+        }
+
+        return null;
+    }
+
+    /**
+     * Update a setting by ID.
      *
      * @param int $id
      * @param array $data
      * @return Setting;
      */
-    public function updateSetting(int $id, array $data): Setting
+    public function updateSettingById(int $id, array $data): Setting
     {
         // If the value type changed, update the type accordingly
         if (isset($data['value']) && !isset($data['type'])) {

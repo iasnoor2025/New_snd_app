@@ -73,8 +73,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     });
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                     control={form.control}
                     name="name"
@@ -325,12 +324,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 <Button type="submit" className="w-full">
                     {initialData ? 'Update Project' : 'Create Project'}
                 </Button>
-            </form>
         </Form>
     );
 };
-
-</Input>
-</Input>
-</Input>
 

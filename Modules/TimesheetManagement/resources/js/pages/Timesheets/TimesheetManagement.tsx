@@ -71,7 +71,7 @@ const TimesheetManagement: React.FC = () => {
   };
 
   const handleCreateTimesheet = () => {
-    navigate('/timesheets/create');
+    navigate('/hr/timesheets/create');
   };
 
   const handleBulkApprove = async (timesheetIds: number[]) => {

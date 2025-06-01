@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from '@inertiajs/react';
+import route from 'ziggy-js';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import { EmployeeTimesheet } from '../../types/timesheet';
@@ -229,14 +231,18 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
+                        <Link href={route('timesheets.show', timesheet.id)}>
+                          <DropdownMenuItem>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href={route('timesheets.edit', timesheet.id)}>
+                          <DropdownMenuItem>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                        </Link>
                         {timesheet.status === 'pending' && (
           <>
             <DropdownMenuItem onClick={() => handleApprove(timesheet.id)}>

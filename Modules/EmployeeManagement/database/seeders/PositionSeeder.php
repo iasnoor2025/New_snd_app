@@ -10,7 +10,9 @@ class PositionSeeder extends Seeder
 {
     public function run()
     {
-        $department = Department::where('name', 'General')->first();
+        // For translatable fields stored as JSON, we need to search within the JSON
+        $department = Department::where('name', 'like', '%General%')->first();
+
         if (!$department) {
             throw new \Exception('Department "General" not found.');
         }

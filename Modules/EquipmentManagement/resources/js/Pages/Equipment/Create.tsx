@@ -109,7 +109,7 @@ const CreateEquipmentForm = ({
 }: CreateEquipmentFormProps) => {
   // Keep the form component as it is, no changes needed except container styling
   return (
-    <Form {...form}>
+    <Form>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {Object.keys(serverErrors).length > 0 && (
           <Alert variant="destructive">
