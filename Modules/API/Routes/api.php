@@ -29,36 +29,27 @@ Route::group(['prefix' => 'v1'], function () {
     ]);
 
     // Timesheet routes
-    // TODO: Uncomment when TimesheetController exists
-    // Route::apiResource('timesheets', 'Modules\TimesheetManagement\Http\Controllers\API\TimesheetController');
+    Route::apiResource('timesheets', 'Modules\TimesheetManagement\Http\Controllers\Api\TimesheetController');
 
     // Payroll routes
-    // TODO: Uncomment when PayrollController exists
-    // Route::apiResource('payrolls', 'Modules\Payroll\Http\Controllers\API\PayrollController');
-    // TODO: Uncomment when AdvanceController exists
-    // Route::apiResource('advances', 'Modules\Payroll\Http\Controllers\API\AdvanceController');
-    // TODO: Uncomment when SettlementController exists
-    // Route::apiResource('settlements', 'Modules\Payroll\Http\Controllers\API\SettlementController');
+    Route::apiResource('payrolls', 'Modules\Payroll\Http\Controllers\Api\PayrollController');
+    Route::apiResource('advances', 'Modules\Payroll\Http\Controllers\Api\AdvanceController');
+    Route::apiResource('settlements', 'Modules\Payroll\Http\Controllers\Api\SettlementController');
 
     // Project routes
-    // TODO: Uncomment when ProjectController exists
-    // Route::apiResource('projects', 'Modules\Project\Http\Controllers\API\ProjectController');
+    Route::apiResource('projects', 'Modules\ProjectManagement\Http\Controllers\Api\ProjectController');
 
     // Rental routes
-    // TODO: Uncomment when RentalController exists
-    // Route::apiResource('rentals', 'Modules\Rental\Http\Controllers\API\RentalController');
+    Route::apiResource('rentals', 'Modules\RentalManagement\Http\Controllers\Api\RentalController');
 
     // Equipment routes
-    // TODO: Uncomment when EquipmentController exists
-    // Route::apiResource('equipment', 'Modules\EquipmentManagement\Http\Controllers\API\EquipmentController');
+    Route::apiResource('equipment', 'Modules\EquipmentManagement\Http\Controllers\Api\EquipmentController');
 
     // Settings routes
-    // TODO: Uncomment when SettingController exists
-    // Route::apiResource('settings', 'Modules\Settings\Http\Controllers\API\SettingController');
+    Route::apiResource('settings', 'Modules\Settings\Http\Controllers\Api\SettingController');
 
     // Notification routes
-    // TODO: Uncomment when NotificationController exists
-    // Route::apiResource('notifications', 'Modules\Notifications\Http\Controllers\API\NotificationController');
+    Route::apiResource('notifications', 'Modules\Notifications\Http\Controllers\Api\NotificationController');
 
     // Report routes
     // TODO: Uncomment when ReportController exists

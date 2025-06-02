@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\API\Http\Controllers\APIController;
 use Modules\API\Http\Controllers\ApiTokenController;
-// TODO: Uncomment when ApiDocsController exists
-// use Modules\API\Http\Controllers\ApiDocsController;
+use Modules\API\Http\Controllers\ApiDocsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +28,13 @@ Route::get('/stats', [APIController::class, 'stats'])->name('api.stats');
 Route::get('/stats/usage', [APIController::class, 'usageStats'])->name('api.stats.usage');
 Route::get('/stats/endpoints', [APIController::class, 'endpointStats'])->name('api.stats.endpoints');
 Route::get('/stats/export', [APIController::class, 'exportStats'])->name('api.stats.export');
+
+// API Documentation routes
+Route::get('/docs', [ApiDocsController::class, 'index'])->name('api.docs.index');
+Route::get('/docs/json', [ApiDocsController::class, 'json'])->name('api.docs.json');
+Route::get('/docs/openapi', [ApiDocsController::class, 'openapi'])->name('api.docs.openapi');
+Route::get('/docs/{module}/{endpoint}', [ApiDocsController::class, 'endpoint'])->name('api.docs.endpoint');
+Route::post('/docs/test', [ApiDocsController::class, 'test'])->name('api.docs.test');
 
 Route::middleware(['can:manage api settings'])->group(function() {
     Route::get('/settings', [APIController::class, 'settings'])->name('api.settings');
