@@ -55,7 +55,7 @@ export const Index: FC<Props> = ({ rental }) => {
                             <TableBody>
                                 {rental.items.map((item) => (
                                     <TableRow key={item.id}>
-                                        <TableCell>{getTranslation(item.equipment.name, locale)}</TableCell>
+                                        <TableCell>{item.equipment.name}</TableCell>
                                         <TableCell>{item.operator?.name || 'N/A'}</TableCell>
                                         <TableCell>{formatCurrency(item.rate)}</TableCell>
                                         <TableCell>{item.days}</TableCell>

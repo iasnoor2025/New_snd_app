@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Check, X, Calendar, Edit, User, DollarSign, TrendingUp, FileText, Clock } from 'lucide-react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { PageProps } from '@/types';
+import { getTranslation } from '@/utils/translation';
 
 interface Employee {
     id: number;
@@ -230,7 +231,7 @@ export default function Show({ increment }: Props) {
                                         </div>
                                         <div>
                                             <label className="text-sm font-medium text-gray-500">Position</label>
-                                            <p className="text-lg font-medium">{increment.employee.position.title}</p>
+                                            <p className="text-lg font-medium">{increment.employee.position.name}</p>
                                         </div>
                                         <div>
                                             <label className="text-sm font-medium text-gray-500">Email</label>

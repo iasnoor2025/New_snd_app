@@ -172,8 +172,8 @@ export function getAllTranslations(
  */
 export function switchLocale(locale: string, preserveState: boolean = true): void {
   router.post(
-    route('localization.switch'),
-    { locale },
+    route('localization.switch', locale),
+    {},
     {
       preserveState,
       preserveScroll: true,

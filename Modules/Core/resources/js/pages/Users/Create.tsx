@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
 import { Input } from '../../../../../../resources/js/components/ui/input';
@@ -8,6 +8,7 @@ import { route } from 'ziggy-js';
 import { toast } from 'sonner';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
 import { Head } from '@inertiajs/react';
+import { getTranslation } from '../../../../../../resources/js/utils/translation';
 
 interface Role {
   id: number;
@@ -99,7 +100,7 @@ const CreateUser: React.FC<Props> = ({ roles, success, error }) => {
                 </SelectTrigger>
                 <SelectContent>
                   {roles.map(role => (
-                    <SelectItem key={role.id} value={String(role.id)}>{role.name}</SelectItem>
+                    <SelectItem key={role.id} value={String(role.id)}>{role.display_name || role.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

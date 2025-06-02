@@ -102,7 +102,7 @@ export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
                 <TableBody>
                     {fuel.map((item) => (
                         <TableRow key={item.id}>
-                            <TableCell>{getTranslation(item.equipment.name, locale)}</TableCell>
+                            <TableCell>{item.equipment.name}</TableCell>
                             <TableCell>{item.fuel_type}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell>{formatCurrency(item.unit_price)}</TableCell>

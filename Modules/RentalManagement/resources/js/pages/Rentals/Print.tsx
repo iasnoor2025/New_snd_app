@@ -57,7 +57,7 @@ export default function Print({ rental }: Props) {
       dataIndex: ['equipment', 'name'],
       key: 'equipment',
       render: (_: string, record: RentalItem & { equipment: Equipment }) => (
-        `${getTranslation(record.equipment.name, locale)} (${record.equipment.model})`
+        `${record.equipment.name} (${record.equipment.model})`
       ),
     },
     {
@@ -145,7 +145,7 @@ export default function Print({ rental }: Props) {
             <tbody>
               {rental.rental_items?.map((item) => (
                 <tr key={item.id}>
-                  <td className="border p-2">{getTranslation(item.equipment?.name, locale)} ({item.equipment?.model})</td>
+                  <td className="border p-2">{item.equipment?.name} ({item.equipment?.model})</td>
                   <td className="border p-2">{item.equipment?.serial_number}</td>
                   <td className="border p-2 text-right">{item.quantity}</td>
                   <td className="border p-2 text-right">{item.rate_type}</td>

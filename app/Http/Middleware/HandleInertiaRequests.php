@@ -62,6 +62,50 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'locale' => app()->getLocale(),
+            'availableLocales' => array_keys(config('localization.languages.available', ['en' => 'English'])),
+            'localeConfig' => [
+                'current' => app()->getLocale(),
+                'available' => array_keys(config('localization.languages.available', ['en' => 'English'])),
+                'rtl' => in_array(app()->getLocale(), ['ar', 'he', 'fa', 'ur']),
+                'fallback' => config('app.fallback_locale', 'en'),
+            ],
+            'translations' => $this->getTranslations($request),
         ];
+    }
+
+    /**
+     * Get translations for the current locale
+     *
+     * @param Request $request
+     * @return array
+     */
+    private function getTranslations(Request $request): array
+    {
+        $locale = app()->getLocale();
+        $translations = [];
+
+        // Load common translation files
+        $files = ['auth', 'pagination', 'passwords', 'validation'];
+
+        foreach ($files as $file) {
+            $filePath = resource_path("lang/{$locale}/{$file}.php");
+            if (file_exists($filePath)) {
+                $fileTranslations = include $filePath;
+                if (is_array($fileTranslations)) {
+                    $translations = array_merge($translations, $fileTranslations);
+                }
+            }
+        }
+
+        // Load JSON translations if they exist
+        $jsonPath = resource_path("lang/{$locale}.json");
+        if (file_exists($jsonPath)) {
+            $jsonTranslations = json_decode(file_get_contents($jsonPath), true);
+            if (is_array($jsonTranslations)) {
+                $translations = array_merge($translations, $jsonTranslations);
+            }
+        }
+
+        return $translations;
     }
 }

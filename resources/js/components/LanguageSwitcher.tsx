@@ -5,14 +5,14 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, Globe, Check } from 'lucide-react';
-import { Button } from '@/Components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/Components/ui/dropdown-menu';
-import { Badge } from '@/Components/ui/badge';
+} from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import useTranslation from '@/hooks/useTranslation';
 
@@ -38,7 +38,9 @@ function getFlagEmoji(locale: string): string {
     'ru': '🇷🇺',
     'zh': '🇨🇳',
     'ja': '🇯🇵',
-    'ko': '🇰🇷'
+    'hi': '🇮🇳',
+    'bn': '🇧🇩',
+    'ur': '🇵🇰'
   };
 
   return flags[locale] || '🌐';

@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ArrowLeft, Calculator } from 'lucide-react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { PageProps } from '@/types';
+import { getTranslation } from '@/utils/translation';
 
 interface Employee {
     id: number;
@@ -255,7 +256,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                             </div>
                                             <div>
                                                 <span className="text-gray-600">Position:</span>
-                                                <span className="ml-2 font-medium">{selectedEmployee.position.title}</span>
+                                                <span className="ml-2 font-medium">{selectedEmployee.position.name}</span>
                                             </div>
                                         </div>
                                     </div>

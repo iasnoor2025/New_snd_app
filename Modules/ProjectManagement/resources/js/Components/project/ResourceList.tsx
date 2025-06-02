@@ -234,7 +234,7 @@ export default function ResourceList({
             case 'equipment':
                 return (
                     <>
-                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name ? getTranslation(resource.equipment.name, locale) : 'N/A'}</TableCell>
+                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.usage_hours || '0'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.hourly_rate)}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.maintenance_cost)}</TableCell>
@@ -256,7 +256,7 @@ export default function ResourceList({
             case 'fuel':
                 return (
                     <>
-                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name ? getTranslation(resource.equipment.name, locale) : 'N/A'}</TableCell>
+                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name || 'N/A'}</TableCell>
                         <TableCell className="max-w-[20%]">{resource.type || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.quantity || '0'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.unit_price)}</TableCell>

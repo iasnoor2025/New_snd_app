@@ -132,16 +132,16 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
 
   const getEventBadge = (event: string) => {
     const eventConfig = {
-      'created': { variant: 'default', color: 'bg-green-100 text-green-800', label: t('created') },
-      'updated': { variant: 'secondary', color: 'bg-blue-100 text-blue-800', label: t('updated') },
-      'deleted': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: t('deleted') },
-      'restored': { variant: 'outline', color: 'bg-purple-100 text-purple-800', label: t('restored') },
-      'login': { variant: 'default', color: 'bg-green-100 text-green-800', label: t('login') },
-      'logout': { variant: 'secondary', color: 'bg-gray-100 text-gray-800', label: t('logout') },
-      'failed_login': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: t('failed_login') },
-      'password_changed': { variant: 'outline', color: 'bg-yellow-100 text-yellow-800', label: t('password_changed') },
-      'permission_granted': { variant: 'default', color: 'bg-green-100 text-green-800', label: t('permission_granted') },
-      'permission_revoked': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: t('permission_revoked') }
+      'created': { variant: 'default', color: 'bg-green-100 text-green-800', label: 'Created' },
+      'updated': { variant: 'secondary', color: 'bg-blue-100 text-blue-800', label: 'Updated' },
+      'deleted': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: 'Deleted' },
+      'restored': { variant: 'outline', color: 'bg-purple-100 text-purple-800', label: 'Restored' },
+      'login': { variant: 'default', color: 'bg-green-100 text-green-800', label: 'Login' },
+      'logout': { variant: 'secondary', color: 'bg-gray-100 text-gray-800', label: 'Logout' },
+      'failed_login': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: 'Failed Login' },
+      'password_changed': { variant: 'outline', color: 'bg-yellow-100 text-yellow-800', label: 'Password Changed' },
+      'permission_granted': { variant: 'default', color: 'bg-green-100 text-green-800', label: 'Permission Granted' },
+      'permission_revoked': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: 'Permission Revoked' }
     };
 
     const config = eventConfig[event] || { variant: 'default', color: 'bg-gray-100 text-gray-800', label: event };
@@ -263,7 +263,7 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Database className="h-5 w-5" />
-                {t('audit_logs')} ({logs.total || 0})
+                Audit Logs ({logs.total || 0})
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -273,14 +273,14 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-16">{t('id')}</TableHead>
-                          <TableHead className="min-w-40">{t('date_time')}</TableHead>
-                          <TableHead className="min-w-32">{t('user')}</TableHead>
-                          <TableHead className="min-w-24">{t('event')}</TableHead>
-                          <TableHead className="min-w-32">{t('model')}</TableHead>
-                          <TableHead className="w-24">{t('model_id')}</TableHead>
-                          <TableHead className="min-w-32">{t('ip_address')}</TableHead>
-                          <TableHead className="w-32">{t('actions')}</TableHead>
+                          <TableHead className="w-16">ID</TableHead>
+                <TableHead className="min-w-40">Date & Time</TableHead>
+                <TableHead className="min-w-32">User</TableHead>
+                <TableHead className="min-w-24">Event</TableHead>
+                <TableHead className="min-w-32">Model</TableHead>
+                <TableHead className="w-24">Model ID</TableHead>
+                <TableHead className="min-w-32">IP Address</TableHead>
+                <TableHead className="w-32">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -299,7 +299,7 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
                               <div className="flex items-center gap-2">
                                 <User className="h-4 w-4 text-gray-400" />
                                 <span className="text-sm">
-                                  {log.causer?.name || t('system')}
+                                  {log.causer?.name || 'System'}
                                 </span>
                               </div>
                             </TableCell>
@@ -322,7 +322,7 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
                                   className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm"
                                 >
                                   <Eye className="h-4 w-4" />
-                                  {t('view')}
+                                  View
                                 </Link>
                               </div>
                             </TableCell>
@@ -341,15 +341,15 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
               ) : (
                 <div className="text-center py-12">
                   <Database className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 text-lg mb-2">{t('no_audit_logs_found')}</p>
-                  <p className="text-gray-400 text-sm">{t('try_adjusting_filters')}</p>
+                  <p className="text-gray-500 text-lg mb-2">No audit logs found</p>
+                <p className="text-gray-400 text-sm">Try adjusting your search filters</p>
                   {Object.values(formData).some(value => value !== '') && (
                     <Button
                       variant="outline"
                       onClick={resetFilters}
                       className="mt-4"
                     >
-                      {t('clear_filters')}
+                      Clear Filters
                     </Button>
                   )}
                 </div>

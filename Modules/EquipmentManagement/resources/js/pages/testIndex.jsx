@@ -6,6 +6,7 @@ import { Button } from '@/Modules/EquipmentManagement/Resources/js/Components/ui
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/table';
 import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/badge';
 import { formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/date';
+import { getTranslation } from '@/utils/translation';
 
 const Index = ({ equipment }) => {
   const getStatusBadge = (status) => {

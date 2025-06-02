@@ -37,6 +37,7 @@ import CrudButtons from '@/components/shared/CrudButtons';
 import Permission from '@/components/Permission';
 import { debounce } from 'lodash';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { getTranslation } from '@/utils/translation';
 
 const breadcrumbs = [
   { title: 'Dashboard', href: '/dashboard' },

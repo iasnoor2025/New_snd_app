@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { getTranslation } from '@/utils/translation';
@@ -89,13 +90,28 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             <div className="flex flex-wrap gap-2">
                                 {auth.user?.roles?.length ? (
                                     auth.user.roles.map((role) => (
-                                        <Badge key={typeof role.name === 'string' ? role.name : JSON.stringify(role.name)} variant="secondary">
-                                            {typeof role.name === 'string' ? role.name : getTranslation(role.name, locale)}
+                                        <Badge key={role.name} variant="secondary">
+                                            {role.name}
                                         </Badge>
                                     ))
                                 ) : (
                                     <span className="text-sm text-muted-foreground">No roles assigned</span>
                                 )}
+                            </div>
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label>Language Preference</Label>
+                            <div className="flex items-center gap-2">
+                                <LanguageSwitcher
+                                    variant="default"
+                                    showFlag={true}
+                                    showLabel={true}
+                                    className="w-fit"
+                                />
+                                <span className="text-sm text-muted-foreground">
+                                    Choose your preferred language for the interface
+                                </span>
                             </div>
                         </div>
 
