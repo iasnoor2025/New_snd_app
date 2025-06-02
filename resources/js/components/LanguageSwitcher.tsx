@@ -60,13 +60,12 @@ export function LanguageSwitcher({
 
     setIsLoading(true);
     try {
-      switchLocale(newLocale, true);
+      switchLocale(newLocale);
     } catch (error) {
       console.error('Failed to switch locale:', error);
-    } finally {
-      // Reset loading state after a delay to allow for page update
-      setTimeout(() => setIsLoading(false), 1000);
+      setIsLoading(false);
     }
+    // Note: Loading state will be reset by page reload
   };
 
   if (availableLocales.length <= 1) {

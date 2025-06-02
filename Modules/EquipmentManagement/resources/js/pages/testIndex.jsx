@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/inertia-react';
+import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Modules/EquipmentManagement/Resources/js/Layouts/AppLayout';
 import Pagination from '@/Modules/EquipmentManagement/Resources/js/Components/Pagination';
 import { Button } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/button';

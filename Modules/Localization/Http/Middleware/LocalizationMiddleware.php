@@ -61,8 +61,11 @@ class LocalizationMiddleware
         }
 
         // 4. Check user preference (if authenticated)
-        if (auth()->check() && auth()->user()->locale) {
-            return auth()->user()->locale;
+        if (auth()->check()) {
+            $userLocale = auth()->user()->locale;
+            if ($userLocale) {
+                return $userLocale;
+            }
         }
 
         // 5. Check Accept-Language header

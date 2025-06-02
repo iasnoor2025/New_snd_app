@@ -99,3 +99,4 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
 };
 
 export default PWAMenuItem;
+

@@ -457,3 +457,5 @@ const CustomerAvatarUploader = ({ customer, onAvatarUpdate }) => {
 };
 
 export default CustomerAvatarUploader;
+
+

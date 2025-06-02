@@ -26,7 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
-        'last_login_at'
+        'last_login_at',
+        'locale'
     ];
 
     /**
@@ -51,7 +52,8 @@ class User extends Authenticatable
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
         'is_customer' => 'boolean',
-        'password_changed_at' => 'datetime'
+        'password_changed_at' => 'datetime',
+        'locale' => 'string'
     ];
 
     /**

@@ -21,7 +21,7 @@ class LocalizationController extends Controller
     public function index()
     {
         $currentLocale = App::getLocale();
-        $availableLocales = config('localization.languages.available', []);
+        $availableLocales = $this->getAvailableLocalesWithNames();
         $defaultLocale = config('localization.languages.default', 'en');
 
         // Get translation statistics
@@ -51,7 +51,7 @@ class LocalizationController extends Controller
 
         $translations = $this->getTranslations($locale, $group, $search);
         $translationGroups = $this->getTranslationGroups();
-        $availableLocales = config('localization.languages.available', []);
+        $availableLocales = $this->getAvailableLocalesWithNames();
 
         return Inertia::render('Localization/Translations', [
             'translations' => $translations,
@@ -98,7 +98,7 @@ class LocalizationController extends Controller
     public function translationGroup($locale, $group)
     {
         $translations = $this->getTranslations($locale, $group);
-        $availableLocales = config('localization.languages.available', []);
+        $availableLocales = $this->getAvailableLocalesWithNames();
         $translationGroups = $this->getTranslationGroups();
 
         return Inertia::render('Localization/TranslationGroup', [
@@ -197,7 +197,7 @@ class LocalizationController extends Controller
      */
     public function locales()
     {
-        $availableLocales = config('localization.languages.available', []);
+        $availableLocales = $this->getAvailableLocalesWithNames();
         $defaultLocale = config('localization.languages.default', 'en');
         $currentLocale = App::getLocale();
 
@@ -251,7 +251,8 @@ class LocalizationController extends Controller
      */
     public function switchLocale($locale)
     {
-        $availableLocales = array_keys(config('localization.languages.available', []));
+        // Get available locales from database instead of config
+        $availableLocales = $this->getAvailableLocales();
 
         if (!in_array($locale, $availableLocales)) {
             return redirect()->back()->withErrors(['locale' => 'Invalid locale.']);
@@ -260,7 +261,44 @@ class LocalizationController extends Controller
         Session::put('locale', $locale);
         App::setLocale($locale);
 
+        // Update user preference if authenticated
+        if (auth()->check()) {
+            auth()->user()->update(['locale' => $locale]);
+        }
+
         return redirect()->back()->with('message', 'Language switched successfully.');
+    }
+
+    /**
+     * Get available locales from database
+     */
+    private function getAvailableLocales()
+    {
+        try {
+            return \DB::table('languages')
+                ->where('enabled', true)
+                ->pluck('code')
+                ->toArray();
+        } catch (\Exception $e) {
+            // Fallback to config if database is not available
+            return array_keys(config('localization.languages.available', []));
+        }
+    }
+
+    /**
+     * Get available locales with names from database
+     */
+    private function getAvailableLocalesWithNames()
+    {
+        try {
+            return \DB::table('languages')
+                ->where('enabled', true)
+                ->pluck('name', 'code')
+                ->toArray();
+        } catch (\Exception $e) {
+            // Fallback to config if database is not available
+            return config('localization.languages.available', []);
+        }
     }
 
     /**
@@ -270,7 +308,7 @@ class LocalizationController extends Controller
      */
     public function languages()
     {
-        $languages = config('localization.languages.available', []);
+        $languages = $this->getAvailableLocalesWithNames();
         $defaultLanguage = config('localization.languages.default', 'en');
 
         return Inertia::render('Localization/Languages', [

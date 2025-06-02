@@ -105,10 +105,10 @@ export function useLocaleConfig(): {
 /**
  * Get translated value using the current locale from Inertia
  * @param translatableField - The translatable field
+ * @param locale - The current locale (must be passed from a React component)
  * @returns The translated string
  */
-export function t(translatableField: string | Record<string, string> | null | undefined): string {
-  const locale = useLocale();
+export function t(translatableField: string | Record<string, string> | null | undefined, locale: string = 'en'): string {
   return getTranslation(translatableField, locale);
 }
 
@@ -166,18 +166,24 @@ export function getAllTranslations(
 }
 
 /**
- * Switch application locale
- * @param locale - The locale to switch to
+ * Switch the application locale
+ * @param locale - Target locale
  * @param preserveState - Whether to preserve current state
  */
-export function switchLocale(locale: string, preserveState: boolean = true): void {
+export function switchLocale(locale: string, preserveState: boolean = false): void {
   router.post(
     route('localization.switch', locale),
     {},
     {
-      preserveState,
-      preserveScroll: true,
-      only: ['locale', 'localeConfig', 'translations']
+      preserveState: false,
+      preserveScroll: false,
+      onSuccess: () => {
+        // Force a full page reload to ensure all locale data is updated
+        window.location.reload();
+      },
+      onError: (errors) => {
+        console.error('Failed to switch locale:', errors);
+      }
     }
   );
 }
@@ -259,10 +265,9 @@ export function isRTLLocale(locale: string): boolean {
 
 /**
  * Get text direction for locale
- * @param locale - The locale code
+ * @param locale - The locale code (required)
  * @returns 'rtl' or 'ltr'
  */
-export function getTextDirection(locale?: string): 'rtl' | 'ltr' {
-  const currentLocale = locale || useLocale();
-  return isRTLLocale(currentLocale) ? 'rtl' : 'ltr';
+export function getTextDirection(locale: string): 'rtl' | 'ltr' {
+  return isRTLLocale(locale) ? 'rtl' : 'ltr';
 }

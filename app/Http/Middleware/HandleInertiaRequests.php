@@ -62,15 +62,32 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'locale' => app()->getLocale(),
-            'availableLocales' => array_keys(config('localization.languages.available', ['en' => 'English'])),
+            'availableLocales' => $this->getAvailableLocales(),
             'localeConfig' => [
                 'current' => app()->getLocale(),
-                'available' => array_keys(config('localization.languages.available', ['en' => 'English'])),
+                'available' => $this->getAvailableLocales(),
                 'rtl' => in_array(app()->getLocale(), ['ar', 'he', 'fa', 'ur']),
                 'fallback' => config('app.fallback_locale', 'en'),
             ],
             'translations' => $this->getTranslations($request),
         ];
+    }
+
+    /**
+     * Get available locales from database
+     *
+     * @return array
+     */
+    private function getAvailableLocales(): array
+    {
+        try {
+            return \Modules\Localization\Models\Language::where('enabled', true)
+                ->pluck('code')
+                ->toArray();
+        } catch (\Exception $e) {
+            // Fallback to config if database is not available
+            return array_keys(config('localization.languages.available', ['en' => 'English']));
+        }
     }
 
     /**

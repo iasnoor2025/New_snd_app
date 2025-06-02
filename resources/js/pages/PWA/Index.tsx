@@ -254,3 +254,5 @@ const PWAIndex: React.FC<PWAIndexProps> = ({ stats }) => {
 };
 
 export default PWAIndex;
+
+

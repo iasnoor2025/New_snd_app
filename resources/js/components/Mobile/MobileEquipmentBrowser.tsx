@@ -538,3 +538,5 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
 };
 
 export default MobileEquipmentBrowser;
+
+

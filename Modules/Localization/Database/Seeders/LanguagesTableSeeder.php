@@ -26,154 +26,10 @@ class LanguagesTableSeeder extends Seeder
                 'sort_order' => 1,
                 'metadata' => json_encode([
                     'country_code' => 'US',
-                    'currency' => 'USD',
+                    'currency' => 'SAR',
                     'date_format' => 'MM/DD/YYYY',
                     'time_format' => '12',
-                    'timezone' => 'America/New_York'
-                ])
-            ],
-            [
-                'code' => 'es',
-                'name' => 'Spanish',
-                'native_name' => 'Español',
-                'direction' => 'ltr',
-                'enabled' => true,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'es',
-                'sort_order' => 2,
-                'metadata' => json_encode([
-                    'country_code' => 'ES',
-                    'currency' => 'EUR',
-                    'date_format' => 'DD/MM/YYYY',
-                    'time_format' => '24',
-                    'timezone' => 'Europe/Madrid'
-                ])
-            ],
-            [
-                'code' => 'fr',
-                'name' => 'French',
-                'native_name' => 'Français',
-                'direction' => 'ltr',
-                'enabled' => true,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'fr',
-                'sort_order' => 3,
-                'metadata' => json_encode([
-                    'country_code' => 'FR',
-                    'currency' => 'EUR',
-                    'date_format' => 'DD/MM/YYYY',
-                    'time_format' => '24',
-                    'timezone' => 'Europe/Paris'
-                ])
-            ],
-            [
-                'code' => 'de',
-                'name' => 'German',
-                'native_name' => 'Deutsch',
-                'direction' => 'ltr',
-                'enabled' => true,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'de',
-                'sort_order' => 4,
-                'metadata' => json_encode([
-                    'country_code' => 'DE',
-                    'currency' => 'EUR',
-                    'date_format' => 'DD.MM.YYYY',
-                    'time_format' => '24',
-                    'timezone' => 'Europe/Berlin'
-                ])
-            ],
-            [
-                'code' => 'it',
-                'name' => 'Italian',
-                'native_name' => 'Italiano',
-                'direction' => 'ltr',
-                'enabled' => false,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'it',
-                'sort_order' => 5,
-                'metadata' => json_encode([
-                    'country_code' => 'IT',
-                    'currency' => 'EUR',
-                    'date_format' => 'DD/MM/YYYY',
-                    'time_format' => '24',
-                    'timezone' => 'Europe/Rome'
-                ])
-            ],
-            [
-                'code' => 'pt',
-                'name' => 'Portuguese',
-                'native_name' => 'Português',
-                'direction' => 'ltr',
-                'enabled' => false,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'pt',
-                'sort_order' => 6,
-                'metadata' => json_encode([
-                    'country_code' => 'PT',
-                    'currency' => 'EUR',
-                    'date_format' => 'DD/MM/YYYY',
-                    'time_format' => '24',
-                    'timezone' => 'Europe/Lisbon'
-                ])
-            ],
-            [
-                'code' => 'ru',
-                'name' => 'Russian',
-                'native_name' => 'Русский',
-                'direction' => 'ltr',
-                'enabled' => false,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'ru',
-                'sort_order' => 7,
-                'metadata' => json_encode([
-                    'country_code' => 'RU',
-                    'currency' => 'RUB',
-                    'date_format' => 'DD.MM.YYYY',
-                    'time_format' => '24',
-                    'timezone' => 'Europe/Moscow'
-                ])
-            ],
-            [
-                'code' => 'zh',
-                'name' => 'Chinese (Simplified)',
-                'native_name' => '简体中文',
-                'direction' => 'ltr',
-                'enabled' => false,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'cn',
-                'sort_order' => 8,
-                'metadata' => json_encode([
-                    'country_code' => 'CN',
-                    'currency' => 'CNY',
-                    'date_format' => 'YYYY/MM/DD',
-                    'time_format' => '24',
-                    'timezone' => 'Asia/Shanghai'
-                ])
-            ],
-            [
-                'code' => 'ja',
-                'name' => 'Japanese',
-                'native_name' => '日本語',
-                'direction' => 'ltr',
-                'enabled' => false,
-                'is_default' => false,
-                'completion_percentage' => 0,
-                'flag_icon' => 'jp',
-                'sort_order' => 9,
-                'metadata' => json_encode([
-                    'country_code' => 'JP',
-                    'currency' => 'JPY',
-                    'date_format' => 'YYYY/MM/DD',
-                    'time_format' => '24',
-                    'timezone' => 'Asia/Tokyo'
+                    'timezone' => 'Asia/Riyadh'
                 ])
             ],
             [
@@ -181,7 +37,7 @@ class LanguagesTableSeeder extends Seeder
                 'name' => 'Arabic',
                 'native_name' => 'العربية',
                 'direction' => 'rtl',
-                'enabled' => false,
+                'enabled' => true,
                 'is_default' => false,
                 'completion_percentage' => 0,
                 'flag_icon' => 'sa',
@@ -199,17 +55,53 @@ class LanguagesTableSeeder extends Seeder
                 'name' => 'Hindi',
                 'native_name' => 'हिन्दी',
                 'direction' => 'ltr',
-                'enabled' => false,
+                'enabled' => true,
                 'is_default' => false,
                 'completion_percentage' => 0,
                 'flag_icon' => 'in',
                 'sort_order' => 11,
                 'metadata' => json_encode([
                     'country_code' => 'IN',
-                    'currency' => 'INR',
+                    'currency' => 'SAR',
                     'date_format' => 'DD/MM/YYYY',
                     'time_format' => '12',
-                    'timezone' => 'Asia/Kolkata'
+                    'timezone' => 'Asia/Riyadh'
+                ])
+            ],
+            [
+                'code' => 'bn',
+                'name' => 'Bengali',
+                'native_name' => 'বাংলা',
+                'direction' => 'ltr',
+                'enabled' => true,
+                'is_default' => false,
+                'completion_percentage' => 0,
+                'flag_icon' => 'bd',
+                'sort_order' => 12,
+                'metadata' => json_encode([
+                    'country_code' => 'BD',
+                    'currency' => 'SAR',
+                    'date_format' => 'DD/MM/YYYY',
+                    'time_format' => '12',
+                    'timezone' => 'Asia/Riyadh'
+                ])
+            ],
+            [
+                'code' => 'ur',
+                'name' => 'Urdu',
+                'native_name' => 'اردو',
+                'direction' => 'rtl',
+                'enabled' => true,
+                'is_default' => false,
+                'completion_percentage' => 0,
+                'flag_icon' => 'pk',
+                'sort_order' => 13,
+                'metadata' => json_encode([
+                    'country_code' => 'SA',
+                    'currency' => 'SAR',
+                    'date_format' => 'DD/MM/YYYY',
+                    'time_format' => '12',
+                    'timezone' => 'Asia/Riyadh'
                 ])
             ]
         ];

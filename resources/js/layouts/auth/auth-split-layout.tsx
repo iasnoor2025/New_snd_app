@@ -43,3 +43,5 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
         </div>
     );
 }
+
+

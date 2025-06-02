@@ -393,3 +393,5 @@ const AvatarPage = ({ auth }) => {
 };
 
 export default AvatarPage;
+
+

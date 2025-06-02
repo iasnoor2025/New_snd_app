@@ -625,3 +625,5 @@ const EmployeeAvatarUploader = ({ employee, className, onAvatarUpdate }) => {
 };
 
 export default EmployeeAvatarUploader;
+
+

@@ -615,3 +615,5 @@ const AvatarUploader = ({ user, className, onAvatarUpdate }) => {
 };
 
 export default AvatarUploader;
+
+
