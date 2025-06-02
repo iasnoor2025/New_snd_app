@@ -13,8 +13,5 @@ interface EmployeeAdvanceRepositoryInterface extends BaseRepositoryInterface
     public function findUpcomingDeductions(): array;
     public function findOverdueDeductions(): array;
     public function findById(int $id): ?EmployeeAdvance;
-    public function create(array $data): EmployeeAdvance;
-    public function update(int $id, array $data): EmployeeAdvance;
-    public function delete(int $id): bool;
 }
 

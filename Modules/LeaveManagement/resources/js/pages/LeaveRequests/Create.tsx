@@ -142,17 +142,17 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     setSubmitting(true);
 
-    // Convert leave_type to type as expected by the backend
+    // Use the correct field name as expected by the updated controller
     const formData = {
       ...values,
-      type: values.leave_type,
+      // leave_type is already the correct field name
     };
 
-    router.post(route('leave-requests.store'), formData, {
+    router.post(route('leaves.requests.store'), formData, {
       onSuccess: () => {
         ToastService.success("Leave request created successfully");
         form.reset();
-        router.visit(route('leave-requests.index'));
+        router.visit(route('leaves.requests.index'));
       },
       onError: (errors) => {
         ToastService.error("Failed to create leave request");
@@ -193,8 +193,8 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
         <Breadcrumb
           segments={[
             { title: "Dashboard", href: route('dashboard') },
-            { title: "Leave Requests", href: route('leave-requests.index') },
-            { title: "Create", href: route('leave-requests.create') }
+            { title: "Leave Requests", href: route('leaves.requests.index') },
+            { title: "Create", href: route('leaves.requests.create') }
           ]}
           className="mb-6"
         >
@@ -202,10 +202,10 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leave-requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leave-requests.create')}>Create</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.create')}>Create</BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
 
@@ -214,7 +214,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
             <ClipboardList className="h-8 w-8 mr-2 text-primary" />
             <h1 className="text-2xl font-bold">Create Leave Request</h1>
           </div>
-          <Link href={route('leave-requests.index')}>
+          <Link href={route('leaves.requests.index')}>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Leave Requests
@@ -397,7 +397,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between border-t px-6 py-4">
-                <Link href={route('leave-requests.index')}>
+                <Link href={route('leaves.requests.index')}>
                   <Button variant="outline" type="button">Cancel</Button>
                 </Link>
                 <Button

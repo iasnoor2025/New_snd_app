@@ -4,10 +4,14 @@ namespace Modules\LeaveManagement\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Modules\LeaveManagement\Domain\Models\LeaveRequest;
+use Modules\LeaveManagement\Domain\Models\Leave;
+use Modules\LeaveManagement\Actions\ApproveLeaveAction;
+use Modules\LeaveManagement\Actions\RejectLeaveAction;
 use Modules\EmployeeManagement\Domain\Models\Employee;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 
 class LeaveApprovalController extends Controller
@@ -119,12 +123,12 @@ class LeaveApprovalController extends Controller
     /**
      * Approve a leave request.
      */
-    public function approve(Request $request, $id)
+    public function approve(Request $request, $id, ApproveLeaveAction $approveLeaveAction)
     {
-        $leaveRequest = LeaveRequest::findOrFail($id);
+        $leaveRequest = Leave::findOrFail($id);
+        $user = Auth::user();
 
         // Check if user can approve this request
-        $user = Auth::user();
         if (!$user->hasRole(['admin', 'hr'])) {
             if ($user->hasRole('manager')) {
                 $subordinateIds = Employee::where('manager_id', $user->employee->id)
@@ -146,38 +150,33 @@ class LeaveApprovalController extends Controller
             'approval_notes' => 'nullable|string|max:500'
         ]);
 
-        DB::transaction(function () use ($leaveRequest, $request, $user) {
-            $leaveRequest->update([
-                'status' => 'approved',
+        try {
+            // Use the ApproveLeaveAction for better business logic handling
+            $approvedLeave = $approveLeaveAction->execute($leaveRequest, [
                 'approved_by' => $user->employee->id,
-                'approved_at' => now(),
-                'approval_notes' => $request->approval_notes
+                'approval_notes' => $request->approval_notes,
             ]);
 
-            // Log the approval activity
-            activity()
-                ->performedOn($leaveRequest)
-                ->causedBy($user)
-                ->withProperties([
-                    'action' => 'approved',
-                    'notes' => $request->approval_notes
-                ])
-                ->log('Leave request approved');
-        });
-
-        return redirect()->route('leaves.approvals.index')
-            ->with('success', 'Leave request approved successfully.');
+            return redirect()->route('leaves.approvals.index')
+                ->with('success', 'Leave request approved successfully.');
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors());
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to approve leave request: ' . $e->getMessage());
+        }
     }
 
     /**
      * Reject a leave request.
      */
-    public function reject(Request $request, $id)
+    public function reject(Request $request, $id, RejectLeaveAction $rejectLeaveAction)
     {
-        $leaveRequest = LeaveRequest::findOrFail($id);
+        $leaveRequest = Leave::findOrFail($id);
+        $user = Auth::user();
 
         // Check if user can reject this request
-        $user = Auth::user();
         if (!$user->hasRole(['admin', 'hr'])) {
             if ($user->hasRole('manager')) {
                 $subordinateIds = Employee::where('manager_id', $user->employee->id)
@@ -199,27 +198,22 @@ class LeaveApprovalController extends Controller
             'rejection_reason' => 'required|string|max:500'
         ]);
 
-        DB::transaction(function () use ($leaveRequest, $request, $user) {
-            $leaveRequest->update([
-                'status' => 'rejected',
+        try {
+            // Use the RejectLeaveAction for better business logic handling
+            $rejectedLeave = $rejectLeaveAction->execute($leaveRequest, [
                 'rejected_by' => $user->employee->id,
-                'rejected_at' => now(),
-                'rejection_reason' => $request->rejection_reason
+                'rejection_reason' => $request->rejection_reason,
             ]);
 
-            // Log the rejection activity
-            activity()
-                ->performedOn($leaveRequest)
-                ->causedBy($user)
-                ->withProperties([
-                    'action' => 'rejected',
-                    'reason' => $request->rejection_reason
-                ])
-                ->log('Leave request rejected');
-        });
-
-        return redirect()->route('leaves.approvals.index')
-            ->with('success', 'Leave request rejected.');
+            return redirect()->route('leaves.approvals.index')
+                ->with('success', 'Leave request rejected.');
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors());
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to reject leave request: ' . $e->getMessage());
+        }
     }
 
     /**

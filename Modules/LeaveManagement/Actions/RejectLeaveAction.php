@@ -3,17 +3,16 @@
 namespace Modules\LeaveManagement\Actions;
 
 use Modules\LeaveManagement\Domain\Models\Leave;
-use Modules\EmployeeManagement\Domain\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class ApproveLeaveAction
+class RejectLeaveAction
 {
     /**
-     * Approve a leave request
+     * Reject a leave request
      *
      * @param int $leaveId
      * @param array $data
@@ -25,48 +24,49 @@ class ApproveLeaveAction
         return DB::transaction(function () use ($leaveId, $data) {
             $leave = Leave::findOrFail($leaveId);
 
-            // Only allow approval for pending leaves
+            // Only allow rejection for pending leaves
             if ($leave->status !== 'pending') {
                 throw ValidationException::withMessages([
-                    'status' => 'Only pending leave requests can be approved.'
+                    'status' => 'Only pending leave requests can be rejected.'
                 ]);
             }
 
-            // Check if approver has permission (basic check)
-            $approver = Auth::user();
-            if (!$approver) {
+            // Check if rejector has permission (basic check)
+            $rejector = Auth::user();
+            if (!$rejector) {
                 throw ValidationException::withMessages([
-                    'approver' => 'Authentication required for approval.'
+                    'rejector' => 'Authentication required for rejection.'
+                ]);
+            }
+
+            // Rejection reason is typically required
+            if (empty($data['rejection_reason'])) {
+                throw ValidationException::withMessages([
+                    'rejection_reason' => 'Rejection reason is required.'
                 ]);
             }
 
             // Update leave status
             $leave->update([
-                'status' => 'approved',
-                'approved_by' => $approver->id,
-                'approved_date' => Carbon::now(),
-                'approval_comments' => $data['approval_comments'] ?? null
+                'status' => 'rejected',
+                'rejected_by' => $rejector->id,
+                'rejected_date' => Carbon::now(),
+                'rejection_reason' => $data['rejection_reason'],
+                'rejection_comments' => $data['rejection_comments'] ?? null
             ]);
-
-            // Optional: Update employee leave balance if tracking
-            $employee = $leave->employee;
-            if ($employee && isset($employee->leave_balance)) {
-                $newBalance = max(0, $employee->leave_balance - $leave->duration_days);
-                $employee->update(['leave_balance' => $newBalance]);
-            }
 
             return $leave->fresh();
         });
     }
 
     /**
-     * Bulk approve multiple leave requests
+     * Bulk reject multiple leave requests
      *
      * @param array $leaveIds
      * @param array $data
      * @return array
      */
-    public function bulkApprove(array $leaveIds, array $data = []): array
+    public function bulkReject(array $leaveIds, array $data = []): array
     {
         $results = [];
 
@@ -87,5 +87,3 @@ class ApproveLeaveAction
         return $results;
     }
 }
-
-

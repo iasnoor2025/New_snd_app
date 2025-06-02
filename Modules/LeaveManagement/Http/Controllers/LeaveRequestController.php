@@ -4,8 +4,12 @@ namespace Modules\LeaveManagement\Http\Controllers;
 
 use Modules\EmployeeManagement\Domain\Models\Employee;
 use Modules\LeaveManagement\Domain\Models\LeaveRequest;
+use Modules\LeaveManagement\Domain\Models\Leave;
+use Modules\LeaveManagement\Actions\CreateLeaveAction;
+use Modules\LeaveManagement\Actions\UpdateLeaveAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class LeaveRequestController extends Controller
@@ -63,7 +67,7 @@ class LeaveRequestController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, CreateLeaveAction $createLeaveAction)
     {
         $user = Auth::user();
 
@@ -71,7 +75,7 @@ class LeaveRequestController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'type' => 'required|in:annual,vacation,sick,personal,maternity,hajj,umrah,unpaid,other',
+            'leave_type' => 'required|in:annual,vacation,sick,personal,maternity,hajj,umrah,unpaid,other',
             'reason' => 'required|string',
         ]);
 
@@ -82,18 +86,28 @@ class LeaveRequestController extends Controller
             }
         }
 
-        // Create leave request
-        $leaveRequest = LeaveRequest::create([
-            'employee_id' => $request->employee_id,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'leave_type' => $request->type,
-            'status' => 'pending',
-            'reason' => $request->reason,
-        ]);
+        try {
+            // Use the CreateLeaveAction for better business logic handling
+            $leave = $createLeaveAction->execute([
+                'employee_id' => $request->employee_id,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'leave_type' => $request->leave_type,
+                'reason' => $request->reason,
+                'requested_by' => $user->id,
+            ]);
 
-        return redirect()->route('leave-requests.index')
-            ->with('success', 'Leave request submitted successfully.');
+            return redirect()->route('leaves.requests.index')
+                ->with('success', 'Leave request submitted successfully.');
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to create leave request: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -106,7 +120,7 @@ class LeaveRequestController extends Controller
         // Check if user has permission to view this leave request
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
             if ($user->employee->id != $leaveRequest->employee_id) {
-                return redirect()->route('leave-requests.index')
+                return redirect()->route('leaves.requests.index')
                     ->with('error', 'You do not have permission to view this leave request.');
             }
         }
@@ -128,14 +142,14 @@ class LeaveRequestController extends Controller
         // Check if user has permission to edit this leave request
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
             if ($user->employee->id != $leaveRequest->employee_id) {
-                return redirect()->route('leave-requests.index')
+                return redirect()->route('leaves.requests.index')
                     ->with('error', 'You do not have permission to edit this leave request.');
             }
         }
 
         // Only pending leave requests can be edited
         if ($leaveRequest->status !== 'pending') {
-            return redirect()->route('leave-requests.index')
+            return redirect()->route('leaves.requests.index')
                 ->with('error', 'Only pending leave requests can be edited.');
         }
 
@@ -158,43 +172,50 @@ class LeaveRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LeaveRequest $leaveRequest)
+    public function update(Request $request, LeaveRequest $leaveRequest, UpdateLeaveAction $updateLeaveAction)
     {
         $user = Auth::user();
 
         // Check if user has permission to update this leave request
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
             if ($user->employee->id != $leaveRequest->employee_id) {
-                return redirect()->route('leave-requests.index')
-                    ->with('error', 'You do not have permission to update this leave request.');
+                return redirect()->back()->with('error', 'You do not have permission to update this leave request.');
             }
         }
 
-        // Only pending leave requests can be updated
+        // Only allow updates if status is pending
         if ($leaveRequest->status !== 'pending') {
-            return redirect()->route('leave-requests.index')
-                ->with('error', 'Only pending leave requests can be updated.');
+            return redirect()->back()->with('error', 'Cannot update leave request that has already been processed.');
         }
 
         $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'start_date' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'type' => 'required|in:annual,vacation,sick,personal,maternity,hajj,umrah,unpaid,other',
+            'leave_type' => 'required|in:annual,vacation,sick,personal,maternity,hajj,umrah,unpaid,other',
             'reason' => 'required|string',
         ]);
 
-        // Update leave request
-        $leaveRequest->update([
-            'employee_id' => $request->employee_id,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'leave_type' => $request->type,
-            'reason' => $request->reason,
-        ]);
+        try {
+            // Use the UpdateLeaveAction for better business logic handling
+            $updatedLeave = $updateLeaveAction->execute($leaveRequest, [
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'leave_type' => $request->leave_type,
+                'reason' => $request->reason,
+                'updated_by' => $user->id,
+            ]);
 
-        return redirect()->route('leave-requests.index')
-            ->with('success', 'Leave request updated successfully.');
+            return redirect()->route('leaves.requests.index')
+                ->with('success', 'Leave request updated successfully.');
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to update leave request: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -207,14 +228,14 @@ class LeaveRequestController extends Controller
         // Check if user has permission to delete this leave request
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
             if ($user->employee->id != $leaveRequest->employee_id) {
-                return redirect()->route('leave-requests.index')
+                return redirect()->route('leaves.requests.index')
                     ->with('error', 'You do not have permission to delete this leave request.');
             }
         }
 
         // Only pending leave requests can be deleted by non-admin users
         if (!$user->isAdmin() && $leaveRequest->status !== 'pending') {
-            return redirect()->route('leave-requests.index')
+            return redirect()->route('leaves.requests.index')
                 ->with('error', 'Only pending leave requests can be deleted.');
         }
 
@@ -225,7 +246,7 @@ class LeaveRequestController extends Controller
 
         $leaveRequest->delete();
 
-        return redirect()->route('leave-requests.index')
+        return redirect()->route('leaves.requests.index')
             ->with('success', 'Leave request deleted successfully.');
     }
 
@@ -238,13 +259,13 @@ class LeaveRequestController extends Controller
 
         // Check if user has permission to approve leave requests
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
-            return redirect()->route('leave-requests.index')
+            return redirect()->route('leaves.requests.index')
                 ->with('error', 'You do not have permission to approve leave requests.');
         }
 
         // Only pending leave requests can be approved
         if ($leaveRequest->status !== 'pending') {
-            return redirect()->route('leave-requests.index')
+            return redirect()->route('leaves.requests.index')
                 ->with('error', 'Only pending leave requests can be approved.');
         }
 
@@ -258,7 +279,7 @@ class LeaveRequestController extends Controller
         // Update employee status to on_leave
         $leaveRequest->employee->update(['status' => 'on_leave']);
 
-        return redirect()->route('leave-requests.index')
+        return redirect()->route('leaves.requests.index')
             ->with('success', 'Leave request approved successfully.');
     }
 
@@ -271,13 +292,13 @@ class LeaveRequestController extends Controller
 
         // Check if user has permission to reject leave requests
         if (!$user->isAdmin() && !$user->hasRole('manager')) {
-            return redirect()->route('leave-requests.index')
+            return redirect()->route('leaves.requests.index')
                 ->with('error', 'You do not have permission to reject leave requests.');
         }
 
         // Only pending leave requests can be rejected
         if ($leaveRequest->status !== 'pending') {
-            return redirect()->route('leave-requests.index')
+            return redirect()->route('leaves.requests.index')
                 ->with('error', 'Only pending leave requests can be rejected.');
         }
 
@@ -292,7 +313,7 @@ class LeaveRequestController extends Controller
             'approved_at' => now(),
         ]);
 
-        return redirect()->route('leave-requests.index')
+        return redirect()->route('leaves.requests.index')
             ->with('success', 'Leave request rejected successfully.');
     }
 }

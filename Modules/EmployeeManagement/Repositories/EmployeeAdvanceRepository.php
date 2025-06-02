@@ -78,22 +78,7 @@ class EmployeeAdvanceRepository extends BaseRepository implements EmployeeAdvanc
             ->find($id);
     }
 
-    public function create(array $data): EmployeeAdvance
-    {
-        return $this->model->create($data);
-    }
-
-    public function update(int $id, array $data): EmployeeAdvance
-    {
-        $advance = $this->model->findOrFail($id);
-        $advance->update($data);
-        return $advance;
-    }
-
-    public function delete(int $id): bool
-    {
-        return $this->model->destroy($id) > 0;
-    }
+    // Inherited create, update, delete methods from BaseRepository
 }
 
 

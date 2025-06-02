@@ -78,11 +78,11 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
   const handleDelete = () => {
     console.log('Attempting to delete leave request:', leaveRequest.id);
     if (confirm('Are you sure you want to delete this leave request?')) {
-      router.delete(route('leave-requests.destroy', leaveRequest.id), {
-        onSuccess: () => {
-          console.log('Delete successful');
-          toast.success('Leave request deleted successfully');
-          router.visit(route('leave-requests.index'));
+      router.delete(route('leaves.requests.destroy', leaveRequest.id), {
+      onSuccess: () => {
+        console.log('Delete successful');
+        toast.success('Leave request deleted successfully');
+        router.visit(route('leaves.requests.index'));
         },
         onError: (errors) => {
           console.error('Delete failed:', errors);
@@ -93,7 +93,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
   };
 
   const handleApprove = () => {
-    router.put(route('leave-requests.approve', leaveRequest.id), {}, {
+    router.put(route('leaves.requests.approve', leaveRequest.id), {}, {
       onSuccess: () => {
         toast.success('Leave request approved successfully');
       },
@@ -104,7 +104,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
   };
 
   const handleReject = () => {
-    router.put(route('leave-requests.reject', leaveRequest.id), {}, {
+    router.put(route('leaves.requests.reject', leaveRequest.id), {}, {
       onSuccess: () => {
         toast.success('Leave request rejected successfully');
       },
@@ -116,7 +116,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
   const handleReturn = () => {
     setIsSubmitting(true);
-    router.put(route('leave-requests.return', leaveRequest.id), {
+    router.put(route('leaves.requests.return', leaveRequest.id), {
       return_date: returnDate,
       notes: returnNotes,
     }, {
@@ -149,7 +149,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leave-requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <BreadcrumbLink>View</BreadcrumbLink>
@@ -162,7 +162,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
             <h1 className="text-2xl font-bold">Leave Request Details</h1>
           </div>
           <div className="flex space-x-2">
-            <Link href={route('leave-requests.index')}>
+            <Link href={route('leaves.requests.index')}>
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Leave Requests
@@ -170,7 +170,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
             </Link>
 
             {hasPermission('leave-requests.edit') && (
-              <Link href={route('leave-requests.edit', leaveRequest.id)}>
+              <Link href={route('leaves.requests.edit', leaveRequest.id)}>
                 <Button variant="outline" className="text-blue-600">
                   <Edit className="mr-2 h-4 w-4" />
                   Edit

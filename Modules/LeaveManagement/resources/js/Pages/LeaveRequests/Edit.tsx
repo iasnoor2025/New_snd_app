@@ -113,20 +113,20 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     setProcessing(true);
 
-    // Convert leave_type to type as expected by the backend
+    // Use the correct field names as expected by the updated controller
     const formData = {
       employee_id: values.employee_id,
       start_date: values.start_date,
       end_date: values.end_date,
-      type: values.leave_type,
+      leave_type: values.leave_type, // Use leave_type instead of type
       reason: values.reason,
       notes: values.notes,
     };
 
-    router.put(route('leave-requests.update', leaveRequest.id), formData, {
+    router.put(route('leaves.requests.update', leaveRequest.id), formData, {
       onSuccess: () => {
         ToastService.success('Leave request updated successfully');
-        router.visit(route('leave-requests.index'));
+        router.visit(route('leaves.requests.index'));
       },
       onError: (errors: { error?: string; errors?: Record<string, string[]> }) => {
         ToastService.error(errors.error || 'Failed to update leave request');
@@ -153,8 +153,8 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
         <Breadcrumb
           segments={[
             { title: "Dashboard", href: route('dashboard') },
-            { title: "Leave Requests", href: route('leave-requests.index') },
-            { title: "Edit", href: route('leave-requests.edit', leaveRequest.id) }
+            { title: "Leave Requests", href: route('leaves.requests.index') },
+            { title: "Edit", href: route('leaves.requests.edit', leaveRequest.id) }
           ]}
           className="mb-6"
         >
@@ -162,10 +162,10 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leave-requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leave-requests.edit', leaveRequest.id)}>Edit</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.edit', leaveRequest.id)}>Edit</BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
 
@@ -174,7 +174,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
             <CalendarDays className="h-8 w-8 mr-2 text-primary" />
             <h1 className="text-2xl font-bold">Edit Leave Request</h1>
           </div>
-          <Link href={route('leave-requests.index')}>
+          <Link href={route('leaves.requests.index')}>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Leave Requests
@@ -357,7 +357,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                 )}
               </CardContent>
               <CardFooter className="flex justify-between border-t p-6">
-                <Link href={route('leave-requests.index')}>
+                <Link href={route('leaves.requests.index')}>
                   <Button variant="outline" type="button">Cancel</Button>
                 </Link>
                 <Button type="submit" disabled={processing} className="bg-blue-600 hover:bg-blue-700">

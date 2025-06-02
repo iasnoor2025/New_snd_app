@@ -71,7 +71,7 @@ export default function OverdueLeaveReturns({ overdueRequests }: Props) {
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leave-requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <BreadcrumbLink>Overdue Returns</BreadcrumbLink>
@@ -82,7 +82,7 @@ export default function OverdueLeaveReturns({ overdueRequests }: Props) {
           <div className="flex items-center">
             <h1 className="text-2xl font-bold">Overdue Leave Returns</h1>
           </div>
-          <Link href={route('leave-requests.index')}>
+          <Link href={route('leaves.requests.index')}>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Leave Requests
@@ -132,7 +132,7 @@ export default function OverdueLeaveReturns({ overdueRequests }: Props) {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => router.get(route('leave-requests.show', request.id))}
+                                onClick={() => router.get(route('leaves.requests.show', request.id))}
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>

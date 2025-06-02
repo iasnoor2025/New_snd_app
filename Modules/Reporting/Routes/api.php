@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Reporting\Http\Controllers\Api\ReportApiController;
-use Modules\Reporting\Http\Controllers\Api\ProjectReportApiController;
-use Modules\Reporting\Http\Controllers\Api\AnalyticsApiController;
-use Modules\Reporting\Http\Controllers\Api\ReportBuilderApiController;
+// Controllers commented out until implementation
+// use Modules\Reporting\Http\Controllers\Api\ReportApiController;
+// use Modules\Reporting\Http\Controllers\Api\ProjectReportApiController;
+// use Modules\Reporting\Http\Controllers\Api\AnalyticsApiController;
+// use Modules\Reporting\Http\Controllers\Api\ReportBuilderApiController;
 
 /*
 |--------------------------------------------------------------------------
