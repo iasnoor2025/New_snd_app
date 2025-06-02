@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/RentalManagement/Resources/js/Components/ui/table';
 import { formatCurrency } from '@/Modules/RentalManagement/Resources/js/lib/utils';
 import { RentalItem } from '@/Modules/RentalManagement/Resources/js/types/rental';
+import { getTranslation } from '@/utils/translation';
 
 interface Props {
     rental: {
@@ -14,6 +15,9 @@ interface Props {
 }
 
 export const Index: FC<Props> = ({ rental }) => {
+    const { props } = usePage();
+    const locale = props.locale || 'en';
+
     return (
         <>
             <Head title="Rental Items" />
@@ -51,7 +55,7 @@ export const Index: FC<Props> = ({ rental }) => {
                             <TableBody>
                                 {rental.items.map((item) => (
                                     <TableRow key={item.id}>
-                                        <TableCell>{item.equipment.name}</TableCell>
+                                        <TableCell>{getTranslation(item.equipment.name, locale)}</TableCell>
                                         <TableCell>{item.operator?.name || 'N/A'}</TableCell>
                                         <TableCell>{formatCurrency(item.rate)}</TableCell>
                                         <TableCell>{item.days}</TableCell>

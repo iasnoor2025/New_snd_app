@@ -1,5 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Modules\AuditCompliance\Http\Controllers\AuditLogController;
+use Modules\AuditCompliance\Http\Controllers\DataRetentionController;
+use Modules\AuditCompliance\Http\Controllers\ComplianceReportController;
+use Modules\AuditCompliance\Http\Controllers\GdprController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -7,39 +13,58 @@
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group.
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-use Illuminate\Support\Facades\Route;
-use Modules\AuditCompliance\Http\Controllers\AuditLogController;
+Route::group(['middleware' => ['auth']], function () {
+    // Audit Logs
+    Route::resource('audit-compliance', AuditLogController::class)->names('auditcompliance');
 
-Route::prefix('audit')->name('audit.')->middleware(['web', 'auth'])->group(function () {
-    // Main dashboards
-    Route::get('/', [AuditLogController::class, 'index'])->name('index');
-    Route::get('/dashboard', [AuditLogController::class, 'dashboard'])->name('dashboard');
+    // Data Retention
+    Route::prefix('audit-compliance/data-retention')->name('auditcompliance.data-retention.')->group(function () {
+        Route::get('/', [DataRetentionController::class, 'index'])->name('index');
+        Route::get('/create', [DataRetentionController::class, 'create'])->name('create');
+        Route::post('/', [DataRetentionController::class, 'store'])->name('store');
+        Route::get('/{policy}', [DataRetentionController::class, 'show'])->name('show');
+        Route::get('/{policy}/edit', [DataRetentionController::class, 'edit'])->name('edit');
+        Route::put('/{policy}', [DataRetentionController::class, 'update'])->name('update');
+        Route::delete('/{policy}', [DataRetentionController::class, 'destroy'])->name('destroy');
+        Route::post('/{policy}/execute', [DataRetentionController::class, 'execute'])->name('execute');
+        Route::post('/execute-all', [DataRetentionController::class, 'executeAll'])->name('execute-all');
+        Route::get('/stats/overview', [DataRetentionController::class, 'stats'])->name('stats');
+    });
 
-    // Audit logs
-    Route::get('/logs', [AuditLogController::class, 'index'])->name('logs');
-    Route::get('/logs/{auditLog}', [AuditLogController::class, 'show'])->name('logs.show');
-    Route::get('/logs/filter', [AuditLogController::class, 'filter'])->name('logs.filter');
-    Route::get('/logs/user/{user}', [AuditLogController::class, 'userActivity'])->name('logs.user');
-    Route::get('/logs/model/{model}/{id}', [AuditLogController::class, 'modelChanges'])->name('logs.model');
+    // Compliance Reports
+    Route::prefix('audit-compliance/reports')->name('auditcompliance.reports.')->group(function () {
+        Route::get('/', [ComplianceReportController::class, 'index'])->name('index');
+        Route::get('/create', [ComplianceReportController::class, 'create'])->name('create');
+        Route::post('/', [ComplianceReportController::class, 'store'])->name('store');
+        Route::get('/{report}', [ComplianceReportController::class, 'show'])->name('show');
+        Route::delete('/{report}', [ComplianceReportController::class, 'destroy'])->name('destroy');
+        Route::get('/{report}/download', [ComplianceReportController::class, 'download'])->name('download');
+        Route::get('/{report}/export-csv', [ComplianceReportController::class, 'exportCsv'])->name('export-csv');
+        Route::post('/quick-report', [ComplianceReportController::class, 'quickReport'])->name('quick-report');
+        Route::get('/stats/overview', [ComplianceReportController::class, 'stats'])->name('stats');
+    });
 
-    // Reports
-    Route::get('/reports', [AuditLogController::class, 'reports'])->name('reports');
-    Route::get('/reports/activity', [AuditLogController::class, 'activityReport'])->name('reports.activity');
-    Route::get('/reports/changes', [AuditLogController::class, 'changesReport'])->name('reports.changes');
-    Route::get('/reports/user-activity', [AuditLogController::class, 'userActivityReport'])->name('reports.user-activity');
-    Route::get('/reports/export', [AuditLogController::class, 'export'])->name('reports.export');
-    Route::post('/reports/generate', [AuditLogController::class, 'generateReport'])->name('reports.generate');
+    // GDPR Management
+    Route::prefix('audit-compliance/gdpr')->name('auditcompliance.gdpr.')->group(function () {
+        Route::get('/', [GdprController::class, 'index'])->name('index');
+        Route::get('/requests', [GdprController::class, 'requests'])->name('requests');
+        Route::post('/requests', [GdprController::class, 'createRequest'])->name('requests.store');
+        Route::get('/requests/{request}', [GdprController::class, 'showRequest'])->name('requests.show');
+        Route::post('/requests/{request}/export', [GdprController::class, 'processExport'])->name('requests.export');
+        Route::post('/requests/{request}/delete', [GdprController::class, 'processDeletion'])->name('requests.delete');
+        Route::post('/requests/{request}/rectify', [GdprController::class, 'processRectification'])->name('requests.rectify');
+        Route::post('/requests/{request}/assign', [GdprController::class, 'assignRequest'])->name('requests.assign');
+        Route::post('/requests/{request}/reject', [GdprController::class, 'rejectRequest'])->name('requests.reject');
+        Route::get('/requests/{request}/download', [GdprController::class, 'downloadExport'])->name('requests.download');
 
-    // Compliance monitoring
-    Route::middleware(['can:manage compliance'])->group(function() {
-        Route::get('/compliance', [AuditLogController::class, 'compliance'])->name('compliance');
-        Route::get('/compliance/settings', [AuditLogController::class, 'complianceSettings'])->name('compliance.settings');
-        Route::post('/compliance/settings', [AuditLogController::class, 'updateComplianceSettings'])->name('compliance.settings.update');
-        Route::get('/compliance/alerts', [AuditLogController::class, 'complianceAlerts'])->name('compliance.alerts');
+        Route::get('/consents', [GdprController::class, 'consents'])->name('consents');
+        Route::post('/consents', [GdprController::class, 'recordConsent'])->name('consents.store');
+        Route::post('/consents/withdraw', [GdprController::class, 'withdrawConsent'])->name('consents.withdraw');
+        Route::get('/consents/history', [GdprController::class, 'consentHistory'])->name('consents.history');
     });
 });
 

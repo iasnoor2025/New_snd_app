@@ -12,6 +12,8 @@ import { Pencil, Trash2, UserX } from 'lucide-react';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import axios from 'axios';
+import { usePage } from '@inertiajs/react';
+import { getTranslation } from '@/utils/translation';
 
 interface Employee {
     id: number;
@@ -51,6 +53,9 @@ export default function ResourceList({
     sortState,
     getSortIcon
 }: ResourceListProps) {
+    // Extract locale from Inertia shared props
+    const { locale = 'en' } = usePage<any>().props;
+
     // Check if resources is undefined, if so use empty array
     const safeResources = resources || [];
     const [employeeData, setEmployeeData] = useState<Record<number, Employee>>(dummyEmployees);
@@ -229,7 +234,7 @@ export default function ResourceList({
             case 'equipment':
                 return (
                     <>
-                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name || 'N/A'}</TableCell>
+                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name ? getTranslation(resource.equipment.name, locale) : 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.usage_hours || '0'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.hourly_rate)}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.maintenance_cost)}</TableCell>
@@ -251,7 +256,7 @@ export default function ResourceList({
             case 'fuel':
                 return (
                     <>
-                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name || 'N/A'}</TableCell>
+                        <TableCell className="max-w-[30%] truncate">{resource.equipment?.name ? getTranslation(resource.equipment.name, locale) : 'N/A'}</TableCell>
                         <TableCell className="max-w-[20%]">{resource.type || 'N/A'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">{resource.quantity || '0'}</TableCell>
                         <TableCell className="max-w-[15%] text-right">SAR {formatCurrency(resource.unit_price)}</TableCell>

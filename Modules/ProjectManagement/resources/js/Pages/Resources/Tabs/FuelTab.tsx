@@ -6,6 +6,8 @@ import { ResourceFormModal } from '../../../Components/project/resources/Resourc
 import { useResourceFormModal } from '../../../hooks/useResourceFormModal';
 import { useResourceSubmit } from '../../../hooks/useResourceSubmit';
 import { formatCurrency } from '../../../lib/utils';
+import { usePage } from '@inertiajs/react';
+import { getTranslation } from '@/utils/translation';
 
 interface FuelTabProps {
     project: {
@@ -32,6 +34,9 @@ interface FuelTabProps {
 }
 
 export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
+    // Extract locale from Inertia shared props
+    const { locale = 'en' } = usePage<any>().props;
+
     const {
         isCreateModalOpen,
         isEditModalOpen,
@@ -97,7 +102,7 @@ export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
                 <TableBody>
                     {fuel.map((item) => (
                         <TableRow key={item.id}>
-                            <TableCell>{item.equipment.name}</TableCell>
+                            <TableCell>{getTranslation(item.equipment.name, locale)}</TableCell>
                             <TableCell>{item.fuel_type}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell>{formatCurrency(item.unit_price)}</TableCell>

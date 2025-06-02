@@ -4,6 +4,8 @@ namespace Modules\MobileBridge\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\MobileBridge\Services\NotificationService;
+use Modules\MobileBridge\Console\Commands\NotificationMaintenanceCommand;
 
 class MobileBridgeServiceProvider extends ServiceProvider
 {
@@ -20,72 +22,109 @@ class MobileBridgeServiceProvider extends ServiceProvider
     /**
      * Boot the application events.
      *
-     * @return void;
+     * @return void
      */
     public function boot()
     {
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
-    
-        // Register observers
-        $this->registerObservers();
+        $this->registerCommands();
+        $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->registerPWARoutes();
     }
 
     /**
      * Register the service provider.
      *
-     * @return void;
+     * @return void
      */
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
-    
-        if (file_exists(module_path($this->moduleName, 'Providers/EventServiceProvider.php'))) {
-            $this->app->register(EventServiceProvider::class);
+        $this->registerServices();
+    }
+
+    /**
+     * Register module services.
+     *
+     * @return void
+     */
+    protected function registerServices()
+    {
+        // Register NotificationService as singleton - delay instantiation
+        $this->app->singleton(NotificationService::class, function ($app) {
+            return new NotificationService();
+        });
+
+        // Bind interface to implementation if needed
+        // $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
+    }
+
+    /**
+     * Register console commands.
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                NotificationMaintenanceCommand::class,
+            ]);
+        }
+    }
+
+    /**
+     * Register PWA routes and middleware.
+     *
+     * @return void
+     */
+    protected function registerPWARoutes()
+    {
+        // Register PWA manifest route
+        if (config('mobilebridge.pwa.enabled', true)) {
+            $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/pwa.php'));
         }
     }
 
     /**
      * Register config.
      *
-     * @return void;
+     * @return void
      */
     protected function registerConfig()
     {
         $this->publishes([
-            module_path($this->moduleName, 'config/config.php') => config_path($this->moduleNameLower . '.php')
+            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower . '.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            module_path($this->moduleName, 'config/config.php'), $this->moduleNameLower
+            module_path($this->moduleName, 'Config/config.php'), $this->moduleNameLower
         );
     }
 
     /**
      * Register views.
      *
-     * @return void;
+     * @return void
      */
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/' . $this->moduleNameLower);
 
-        $sourcePath = module_path($this->moduleName, 'resources/views');
+        $sourcePath = module_path($this->moduleName, 'Resources/views');
 
         $this->publishes([
             $sourcePath => $viewPath
         ], ['views', $this->moduleNameLower . '-module-views']);
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/' . $this->moduleNameLower;
-        }, \Config::get('view.paths')), [$sourcePath]), $this->moduleNameLower);
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
     /**
      * Register translations.
      *
-     * @return void;
+     * @return void
      */
     public function registerTranslations()
     {
@@ -95,43 +134,32 @@ class MobileBridgeServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
             $this->loadJsonTranslationsFrom($langPath);
         } else {
-            $this->loadTranslationsFrom(module_path($this->moduleName, 'resources/lang'), $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'resources/lang'));
+            $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
+            $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'Resources/lang'));
         }
     }
 
     /**
      * Get the services provided by the provider.
      *
-     * @return array;
+     * @return array
      */
-        /**
-     * Register observers.
-     *
-     * @return void;
-     */
-    protected function registerObservers()
+    public function provides()
     {
-        // Register observers here based on files in Observers directory
-        $observersPath = module_path($this->moduleName, 'Observers');
-
-        if (is_dir($observersPath)) {
-            $files = glob("$observersPath/*.php");
-
-            foreach ($files as $file) {
-                $observerClass = 'Modules\\' . $this->moduleName . '\\Observers\\' . pathinfo($file, PATHINFO_FILENAME);
-                $modelClass = 'Modules\\' . $this->moduleName . '\\Domain\Models\\' . str_replace('Observer', '', pathinfo($file, PATHINFO_FILENAME));
-
-                if (class_exists($observerClass) && class_exists($modelClass)) {
-                    $modelClass::observe($observerClass);
-                }
-            }
-        }
+        return [
+            NotificationService::class,
+        ];
     }
 
-public function provides()
+    private function getPublishableViewPaths(): array
     {
-        return [];
+        $paths = [];
+        foreach (\Config::get('view.paths') as $path) {
+            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
+                $paths[] = $path . '/modules/' . $this->moduleNameLower;
+            }
+        }
+        return $paths;
     }
 }
 

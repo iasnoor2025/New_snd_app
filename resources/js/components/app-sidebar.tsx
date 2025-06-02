@@ -195,6 +195,20 @@ export function AppSidebar() {
         }
     }, [isCustomer, isLoading]);
 
+    // Add PWA Management link for all users
+    useEffect(() => {
+        if (!isLoading) {
+            setModuleItems(prev => [
+                ...prev,
+                {
+                    title: 'PWA Management',
+                    href: '/pwa',
+                    icon: Smartphone,
+                }
+            ]);
+        }
+    }, [isLoading]);
+
     const footerNavItems: NavItem[] = [];
 
     return (

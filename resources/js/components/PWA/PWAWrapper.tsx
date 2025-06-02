@@ -1,0 +1,164 @@
+import React, { useEffect, useState } from 'react';
+import { usePWA } from '@/hooks/usePWA';
+import PWAInstallPrompt from './PWAInstallPrompt';
+import OfflineSync from './OfflineSync';
+import { pushNotificationService } from '@/services/pushNotificationService';
+import { offlineStorage } from '@/utils/offlineStorage';
+
+interface PWAWrapperProps {
+    children: React.ReactNode;
+}
+
+const PWAWrapper: React.FC<PWAWrapperProps> = ({ children }) => {
+    const {
+        isOnline,
+        isInstallable,
+        isStandalone,
+        notificationPermission,
+        serviceWorkerStatus
+    } = usePWA();
+
+    const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+    const [showOfflineSync, setShowOfflineSync] = useState(false);
+    const [initialized, setInitialized] = useState(false);
+
+    useEffect(() => {
+        initializePWA();
+    }, []);
+
+    useEffect(() => {
+        // Show install prompt if installable and not standalone
+        if (isInstallable && !isStandalone && !localStorage.getItem('pwa_install_dismissed')) {
+            const timer = setTimeout(() => {
+                setShowInstallPrompt(true);
+            }, 3000); // Show after 3 seconds
+
+            return () => clearTimeout(timer);
+        }
+    }, [isInstallable, isStandalone]);
+
+    useEffect(() => {
+        // Show offline sync when going offline or when there are pending actions
+        if (!isOnline) {
+            setShowOfflineSync(true);
+        } else {
+            // Check for pending actions when coming back online
+            checkPendingActions();
+        }
+    }, [isOnline]);
+
+    const initializePWA = async () => {
+        try {
+            // Initialize offline storage
+            await offlineStorage.init();
+
+            // Register service worker if not already registered
+            let registration: ServiceWorkerRegistration | undefined;
+            if ('serviceWorker' in navigator && serviceWorkerStatus !== 'activated') {
+                registration = await navigator.serviceWorker.register('/sw.js');
+            } else if ('serviceWorker' in navigator) {
+                registration = await navigator.serviceWorker.ready;
+            }
+
+            // Initialize push notification service with service worker registration
+            if (registration) {
+                await pushNotificationService.initialize(registration);
+            }
+
+            setInitialized(true);
+        } catch (error) {
+            console.error('Failed to initialize PWA:', error);
+        }
+    };
+
+    const checkPendingActions = async () => {
+        try {
+            const pendingActions = await offlineStorage.getPendingActions();
+            if (pendingActions.length > 0) {
+                setShowOfflineSync(true);
+                // Auto-sync pending actions
+                await offlineStorage.syncWithServer();
+            }
+        } catch (error) {
+            console.error('Failed to check pending actions:', error);
+        }
+    };
+
+    const handleInstallDismiss = () => {
+        setShowInstallPrompt(false);
+        localStorage.setItem('pwa_install_dismissed', 'true');
+    };
+
+    const handleOfflineSyncClose = () => {
+        setShowOfflineSync(false);
+    };
+
+    if (!initialized) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            {children}
+
+            {/* PWA Install Prompt */}
+            {showInstallPrompt && (
+                <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-96">
+                    <PWAInstallPrompt onDismiss={handleInstallDismiss} />
+                </div>
+            )}
+
+            {/* Offline Sync Status */}
+            {showOfflineSync && (
+                <div className="fixed top-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-96">
+                    <OfflineSync onClose={handleOfflineSyncClose} />
+                </div>
+            )}
+
+            {/* Connection Status Indicator */}
+            {!isOnline && (
+                <div className="fixed top-0 left-0 right-0 bg-yellow-500 text-white text-center py-2 z-40">
+                    <div className="flex items-center justify-center gap-2">
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium">You're offline. Some features may be limited.</span>
+                    </div>
+                </div>
+            )}
+
+            {/* Service Worker Update Notification */}
+            {serviceWorkerStatus === 'waiting' && (
+                <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-96">
+                    <div className="bg-blue-600 text-white p-4 rounded-lg shadow-lg">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h4 className="font-medium">Update Available</h4>
+                                <p className="text-sm opacity-90">A new version is ready to install.</p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    if ('serviceWorker' in navigator) {
+                                        navigator.serviceWorker.getRegistration().then(registration => {
+                                            if (registration?.waiting) {
+                                                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                                                window.location.reload();
+                                            }
+                                        });
+                                    }
+                                }}
+                                className="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
+                            >
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default PWAWrapper;

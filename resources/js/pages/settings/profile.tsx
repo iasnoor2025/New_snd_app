@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { getTranslation } from '@/utils/translation';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,7 +27,7 @@ type ProfileForm = {
 }
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, locale = 'en' } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
@@ -88,8 +89,8 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             <div className="flex flex-wrap gap-2">
                                 {auth.user?.roles?.length ? (
                                     auth.user.roles.map((role) => (
-                                        <Badge key={role.name} variant="secondary">
-                                            {role.name}
+                                        <Badge key={typeof role.name === 'string' ? role.name : JSON.stringify(role.name)} variant="secondary">
+                                            {typeof role.name === 'string' ? role.name : getTranslation(role.name, locale)}
                                         </Badge>
                                     ))
                                 ) : (

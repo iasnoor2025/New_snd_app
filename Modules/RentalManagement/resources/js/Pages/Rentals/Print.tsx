@@ -1,8 +1,9 @@
-﻿import React, { useEffect } from 'react';
-import { Head } from '@inertiajs/react';
+import React, { useEffect } from 'react';
+import { Head, usePage } from '@inertiajs/react';
 import { Descriptions, Table, Typography, Divider } from 'antd';
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
 import { Rental, RentalItem, Equipment } from '@/Modules/RentalManagement/Resources/js/types/models';
+import { getTranslation } from '@/utils/translation';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -24,6 +25,9 @@ interface Props extends PageProps {
 }
 
 export default function Print({ rental }: Props) {
+  const { props } = usePage();
+  const locale = props.locale || 'en';
+
   useEffect(() => {
     // Auto print when component mounts
     setTimeout(() => {
@@ -53,7 +57,7 @@ export default function Print({ rental }: Props) {
       dataIndex: ['equipment', 'name'],
       key: 'equipment',
       render: (_: string, record: RentalItem & { equipment: Equipment }) => (
-        `${record.equipment.name} (${record.equipment.model})`
+        `${getTranslation(record.equipment.name, locale)} (${record.equipment.model})`
       ),
     },
     {
@@ -141,7 +145,7 @@ export default function Print({ rental }: Props) {
             <tbody>
               {rental.rental_items?.map((item) => (
                 <tr key={item.id}>
-                  <td className="border p-2">{item.equipment?.name} ({item.equipment?.model})</td>
+                  <td className="border p-2">{getTranslation(item.equipment?.name, locale)} ({item.equipment?.model})</td>
                   <td className="border p-2">{item.equipment?.serial_number}</td>
                   <td className="border p-2 text-right">{item.quantity}</td>
                   <td className="border p-2 text-right">{item.rate_type}</td>

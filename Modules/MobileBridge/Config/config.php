@@ -37,6 +37,11 @@ return [
         'firebase' => [
             'server_key' => env('FIREBASE_SERVER_KEY')
         ],
+        'vapid' => [
+            'subject' => env('VAPID_SUBJECT', 'mailto:admin@example.com'),
+            'public_key' => env('VAPID_PUBLIC_KEY'),
+            'private_key' => env('VAPID_PRIVATE_KEY'),
+        ],
     ],
 
     // Offline mode settings

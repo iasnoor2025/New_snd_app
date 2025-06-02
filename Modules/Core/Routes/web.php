@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Modules\Core\Http\Controllers\UserController;
 use Modules\Core\Http\Controllers\RoleController;
 use Modules\Core\Http\Controllers\PermissionController;
+use Modules\Core\Http\Controllers\CoreController;
+use Modules\Core\Http\Controllers\SystemSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,5 +82,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['permission:permissions.delete'])->group(function () {
         Route::delete('settings/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+    });
+});
+
+// Core resource routes
+Route::group([], function () {
+    Route::resource('core', CoreController::class)->names('core');
+
+    // System Settings Routes
+    Route::prefix('system-settings')->name('system-settings.')->group(function () {
+        Route::get('/', [SystemSettingsController::class, 'index'])->name('index');
+        Route::put('/', [SystemSettingsController::class, 'update'])->name('update');
+        Route::post('/reset', [SystemSettingsController::class, 'reset'])->name('reset');
+        Route::get('/export', [SystemSettingsController::class, 'export'])->name('export');
+        Route::post('/import', [SystemSettingsController::class, 'import'])->name('import');
+        Route::get('/health', [SystemSettingsController::class, 'health'])->name('health');
     });
 });
