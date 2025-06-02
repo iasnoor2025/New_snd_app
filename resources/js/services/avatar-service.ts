@@ -1,5 +1,3 @@
-import { createHash } from 'crypto';
-
 export interface AvatarOptions {
   size?: number;
   defaultType?: 'mp' | 'identicon' | 'monsterid' | 'wavatar' | 'retro' | 'robohash' | 'blank';
@@ -29,31 +27,47 @@ export class AvatarService {
   }
 
   /**
-   * Generate MD5 hash for email (used for Gravatar)
+   * Generate hash for email (used for Gravatar)
+   * Uses a browser-compatible hash function
    */
   private generateEmailHash(email: string): string {
-    if (typeof window !== 'undefined') {
-      // Browser environment - use Web Crypto API
-      return this.generateEmailHashBrowser(email);
-    }
-    // Node.js environment (SSR)
-    return createHash('md5').update(email.toLowerCase().trim()).digest('hex');
+    const cleanEmail = email.toLowerCase().trim();
+    return this.generateSimpleHash(cleanEmail);
   }
 
   /**
-   * Generate email hash in browser environment
+   * Generate simple hash for email (browser-compatible)
    */
-  private generateEmailHashBrowser(email: string): string {
-    // Simple MD5 implementation for browser
-    // In production, you might want to use a proper crypto library
-    const cleanEmail = email.toLowerCase().trim();
+  private generateSimpleHash(email: string): string {
     let hash = 0;
-    for (let i = 0; i < cleanEmail.length; i++) {
-      const char = cleanEmail.charCodeAt(i);
+    for (let i = 0; i < email.length; i++) {
+      const char = email.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
-    return Math.abs(hash).toString(16);
+    // Convert to positive hex string with consistent length
+    return Math.abs(hash).toString(16).padStart(8, '0');
+  }
+
+  /**
+   * Generate email hash using Web Crypto API (for future async implementation)
+   */
+  private async generateEmailHashAsync(email: string): Promise<string> {
+    const cleanEmail = email.toLowerCase().trim();
+
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
+      try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(cleanEmail);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 32);
+      } catch (error) {
+        console.warn('Web Crypto API failed, falling back to simple hash:', error);
+      }
+    }
+
+    return this.generateSimpleHash(cleanEmail);
   }
 
   /**

@@ -533,6 +533,10 @@ class Employee extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
+        // Register avatar conversions from HasAvatar trait
+        $this->registerAvatarMediaConversions($media);
+
+        // Employee-specific conversions
         $this->addMediaConversion('thumb')
             ->width(100)
             ->height(100)
@@ -542,6 +546,11 @@ class Employee extends Model implements HasMedia
             ->width(400)
             ->height(400)
             ->performOnCollections('profile_image');
+
+        $this->addMediaConversion('document-preview')
+            ->width(300)
+            ->height(300)
+            ->performOnCollections('documents');
     }
 
     /**

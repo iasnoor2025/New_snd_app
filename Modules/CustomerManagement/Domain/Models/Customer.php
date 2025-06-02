@@ -134,11 +134,31 @@ class Customer extends Model implements HasMedia
      */
     public function registerMediaCollections(): void
     {
+        // Register avatar collection from HasAvatar trait
+        parent::registerMediaCollections();
+
+        // Register customer-specific collections
         $this->addMediaCollection('documents')
             ->useDisk('private');
 
         $this->addMediaCollection('photos')
             ->useDisk('public');
+    }
+
+    /**
+     * Register media conversions for the model
+     */
+    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        // Register avatar conversions from HasAvatar trait
+        $this->registerAvatarMediaConversions($media);
+
+        // Add any customer-specific conversions here if needed
+        // Example:
+        // $this->addMediaConversion('document-thumb')
+        //     ->width(200)
+        //     ->height(200)
+        //     ->performOnCollections('documents');
     }
 }
 

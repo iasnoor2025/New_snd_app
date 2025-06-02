@@ -25,8 +25,9 @@ trait HasAvatar
 
     /**
      * Register media conversions for avatar
+     * This method will be called automatically if the model doesn't override it
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerAvatarMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->width(150)
@@ -48,6 +49,21 @@ trait HasAvatar
             ->sharpen(10)
             ->quality(90)
             ->performOnCollections('avatars');
+    }
+
+    /**
+     * Register media conversions for avatar
+     * This method handles the collision with InteractsWithMedia trait
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        // Call parent method if it exists (from InteractsWithMedia)
+        if (method_exists(parent::class, 'registerMediaConversions')) {
+            parent::registerMediaConversions($media);
+        }
+
+        // Register avatar-specific conversions
+        $this->registerAvatarMediaConversions($media);
     }
 
     /**

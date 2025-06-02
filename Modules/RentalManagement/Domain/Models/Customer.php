@@ -91,10 +91,15 @@ class Customer extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')
+        // Register avatar conversions from HasAvatar trait
+        $this->registerAvatarMediaConversions($media);
+
+        // Add customer-specific conversions
+        $this->addMediaConversion('document-thumb')
             ->width(200)
             ->height(200)
-            ->nonQueued();
+            ->nonQueued()
+            ->performOnCollections('documents');
     }
 
     /**

@@ -48,4 +48,13 @@ class User extends CoreUser implements HasMedia
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Register media conversions for the model
+     */
+    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        // Register avatar conversions from HasAvatar trait
+        $this->registerAvatarMediaConversions($media);
+    }
 }

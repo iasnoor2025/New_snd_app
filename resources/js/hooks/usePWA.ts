@@ -32,11 +32,32 @@ interface PWAActions {
 
 interface UsePWAReturn extends PWAState, PWAActions {}
 
+// Enhanced online detection function
+const checkOnlineStatus = async (): Promise<boolean> => {
+  if (!navigator.onLine) {
+    return false;
+  }
+
+  try {
+    // Try to fetch a small resource from the same origin
+    const response = await fetch('/up', {
+      method: 'HEAD',
+      cache: 'no-cache',
+      timeout: 5000
+    } as any);
+    return response.ok;
+  } catch {
+    // If fetch fails, still consider online if navigator.onLine is true
+    // This prevents false offline detection in development
+    return navigator.onLine;
+  }
+};
+
 const usePWA = (): UsePWAReturn => {
   const [state, setState] = useState<PWAState>({
     isInstalled: false,
     isInstallable: false,
-    isOnline: navigator.onLine,
+    isOnline: true, // Default to true to prevent false offline detection
     isStandalone: false,
     notificationPermission: 'Notification' in window ? Notification.permission : 'denied',
     hasServiceWorker: 'serviceWorker' in navigator,
@@ -57,6 +78,12 @@ const usePWA = (): UsePWAReturn => {
       isInstalled,
       isStandalone: isStandalone || isInWebAppiOS
     }));
+  }, []);
+
+  // Enhanced online status check
+  const updateOnlineStatus = useCallback(async () => {
+    const isOnline = await checkOnlineStatus();
+    setState(prev => ({ ...prev, isOnline }));
   }, []);
 
   // Register service worker
@@ -307,32 +334,29 @@ const usePWA = (): UsePWAReturn => {
 
   // Setup event listeners
   useEffect(() => {
-    // Check installation status
+    // Initial checks
     checkInstallationStatus();
-
-    // Register service worker
+    updateOnlineStatus();
     registerServiceWorker();
 
-    // Listen for beforeinstallprompt event
+    // Handle beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setState(prev => ({ ...prev, isInstallable: true }));
     };
 
-    // Listen for app installation
+    // Handle app installed event
     const handleAppInstalled = () => {
-      setState(prev => ({
-        ...prev,
-        isInstalled: true,
-        isInstallable: false
-      }));
       setDeferredPrompt(null);
+      setState(prev => ({ ...prev, isInstallable: false, isInstalled: true }));
+      console.log('PWA was installed');
     };
 
     // Listen for online/offline events
-    const handleOnline = () => {
-      setState(prev => ({ ...prev, isOnline: true }));
+    const handleOnline = async () => {
+      const isOnline = await checkOnlineStatus();
+      setState(prev => ({ ...prev, isOnline }));
     };
 
     const handleOffline = () => {
@@ -352,6 +376,9 @@ const usePWA = (): UsePWAReturn => {
     window.addEventListener('offline', handleOffline);
     mediaQuery.addEventListener('change', handleDisplayModeChange);
 
+    // Periodic online status check (every 30 seconds)
+    const onlineCheckInterval = setInterval(updateOnlineStatus, 30000);
+
     // Cleanup
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -359,8 +386,9 @@ const usePWA = (): UsePWAReturn => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
       mediaQuery.removeEventListener('change', handleDisplayModeChange);
+      clearInterval(onlineCheckInterval);
     };
-  }, [checkInstallationStatus, registerServiceWorker]);
+  }, [checkInstallationStatus, registerServiceWorker, updateOnlineStatus]);
 
   // Monitor notification permission changes
   useEffect(() => {
