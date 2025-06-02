@@ -13,6 +13,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Traits\HasMediaAttachments;
 use App\Traits\AutoLoadsRelations;
+use App\Traits\HasAvatar;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,9 +29,10 @@ use Modules\EmployeeManagement\Domain\Models\SalaryIncrement;
 class Employee extends Model implements HasMedia
 {
     use HasFactory;
-use Notifiable;
-use HasMediaAttachments;
-use AutoLoadsRelations, SoftDeletes;
+    use Notifiable;
+    use HasMediaAttachments;
+    use AutoLoadsRelations, SoftDeletes;
+    use HasAvatar;
 
     /**
      * The attributes that are mass assignable.

@@ -46,6 +46,17 @@
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
+  'laravolt/avatar' => 
+  array (
+    'aliases' => 
+    array (
+      'Avatar' => 'Laravolt\\Avatar\\Facade',
+    ),
+    'providers' => 
+    array (
+      0 => 'Laravolt\\Avatar\\ServiceProvider',
+    ),
+  ),
   'nesbot/carbon' => 
   array (
     'providers' => 

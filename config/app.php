@@ -158,6 +158,7 @@ return [
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
+        App\Providers\AvatarServiceProvider::class,
         App\Providers\PermissionMiddlewareServiceProvider::class,
         Modules\Payroll\Providers\PayrollServiceProvider::class,
     ],

@@ -4,16 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Core\Domain\Models\User as CoreUser; 
+use Modules\Core\Domain\Models\User as CoreUser;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Permission;
+use App\Traits\HasAvatar;
+use Spatie\MediaLibrary\HasMedia;
 
-class User extends CoreUser
+class User extends CoreUser implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasAvatar;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +26,7 @@ class User extends CoreUser
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**

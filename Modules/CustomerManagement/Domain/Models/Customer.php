@@ -11,6 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Traits\AutoLoadsRelations;
+use App\Traits\HasAvatar;
 use Modules\RentalManagement\Domain\Models\Rental;
 use Modules\RentalManagement\Domain\Models\Invoice;
 use Modules\RentalManagement\Domain\Models\Payment;
@@ -21,6 +22,7 @@ class Customer extends Model implements HasMedia
     use InteractsWithMedia;
     use LogsActivity;
     use AutoLoadsRelations;
+    use HasAvatar;
 
     /**
      * The table associated with the model.

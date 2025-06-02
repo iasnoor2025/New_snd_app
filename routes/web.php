@@ -43,4 +43,8 @@ Route::redirect('/roles', '/settings/roles');
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/modules.php';
+require __DIR__.'/avatar.php';
+require __DIR__.'/employee-avatar.php';
+require __DIR__.'/customer-avatar.php';
+require __DIR__.'/profile.php';
 require base_path('Modules/Payroll/Routes/web.php');
