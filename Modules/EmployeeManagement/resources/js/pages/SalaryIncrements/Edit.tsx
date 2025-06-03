@@ -225,7 +225,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                                 <SelectItem key={employee.id} value={employee.id.toString()}>
                                                     {employee.first_name} {employee.last_name} - {employee.employee_id}
                                                     <span className="text-sm text-gray-500 ml-2">
-                                                        ({employee.department.name})
+                                                        ({getTranslation(employee.department.name)})
                                                     </span>
                                                 </SelectItem>
                                             ))}
@@ -252,11 +252,11 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                             </div>
                                             <div>
                                                 <span className="text-gray-600">Department:</span>
-                                                <span className="ml-2 font-medium">{selectedEmployee.department.name}</span>
+                                                <span className="ml-2 font-medium">{getTranslation(selectedEmployee.department.name)}</span>
                                             </div>
                                             <div>
                                                 <span className="text-gray-600">Position:</span>
-                                                <span className="ml-2 font-medium">{selectedEmployee.position.name}</span>
+                                                <span className="ml-2 font-medium">{getTranslation(selectedEmployee.position.name)}</span>
                                             </div>
                                         </div>
                                     </div>

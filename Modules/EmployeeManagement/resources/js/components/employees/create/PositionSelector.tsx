@@ -1,5 +1,6 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectContent,
@@ -14,6 +15,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Plus, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import axios from 'axios';
+import { getTranslation } from '@/utils/translation';
 
 interface Position {
   id: number;
@@ -30,6 +32,7 @@ interface PositionSelectorProps {
 }
 
 const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCreated }: PositionSelectorProps) => {
+  const { t } = useTranslation(['employees', 'common']);
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [loading, setLoading] = useState(false);
   const [addingNew, setAddingNew] = useState(false);
@@ -50,7 +53,7 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
         throw new Error('Invalid response format from positions API');
       }
     } catch (error: any) {
-      toast.error('Failed to fetch positions. Please try again.');
+      toast.error(t('employees:error_fetching_positions'));
     } finally {
       setLoading(false);
     }
@@ -72,20 +75,20 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
 
   const handleError = (error: any) => {
     if (error.response?.status === 401) {
-      toast.error('Your session has expired. Please log in again.');
+      toast.error(t('common:session_expired'));
       window.location.href = '/login';
       return;
     }
     if (error.response?.data?.message) {
       toast.error(error.response.data.message);
     } else {
-      toast.error('An unexpected error occurred. Please try again.');
+      toast.error(t('common:unexpected_error'));
     }
   };
 
   const handleAddPosition = async () => {
     if (!newPositionName.trim()) {
-      toast.error('Position name is required');
+      toast.error(t('employees:position_name_required'));
       return;
     }
     if (loading) return;
@@ -104,9 +107,9 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
       if (onPositionCreated) {
         onPositionCreated(response.data);
       }
-      toast.success('Position created successfully');
+      toast.success(t('employees:position_created_success'));
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to create position';
+      const errorMessage = error.response?.data?.message || t('employees:error_creating_position');
       const validationErrors = error.response?.data?.errors;
       if (validationErrors) {
         Object.values(validationErrors).forEach((messages: any) => {
@@ -124,7 +127,7 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
 
   const handleUpdatePosition = async () => {
     if (!editingPositionId || !newPositionName.trim()) {
-      toast.error('Position name is required');
+      toast.error(t('employees:position_name_required'));
       return;
     }
     setLoading(true);
@@ -138,14 +141,14 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
         setPositions(prev => prev.map(p =>
           p.id === editingPositionId ? response.data : p
         ));
-        toast.success('Position updated successfully');
+        toast.success(t('employees:position_updated_success'));
         setNewPositionName('');
         setNewPositionDescription('');
         setEditingPositionId(null);
         setAddingNew(false);
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update position';
+      const errorMessage = error.response?.data?.message || t('employees:error_updating_position');
       const validationErrors = error.response?.data?.errors;
       if (validationErrors) {
         Object.values(validationErrors).forEach((messages: any) => {
@@ -166,7 +169,7 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
     setLoading(true);
     try {
       await axios.delete(`/api/v1/positions/${value}`);
-      toast.success('Position deleted successfully');
+      toast.success(t('employees:position_deleted_success'));
       onChange(null);
       await fetchPositions();
     } catch (error: any) {
@@ -201,16 +204,16 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
         }}
       >
         <SelectTrigger className="h-10">
-          <SelectValue placeholder="Select position" />
+          <SelectValue placeholder={t('employees:select_position')} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem key="select-none" value="none">Select a position</SelectItem>
+          <SelectItem key="select-none" value="none">{t('employees:select_a_position')}</SelectItem>
           {positions.map((position) => (
             <SelectItem
               key={`position-${position.id}`}
               value={position.id ? position.id.toString() : 'none'}
             >
-              {position.name || 'Unnamed Position'}
+              {getTranslation(position.name) || t('employees:unnamed_position')}
             </SelectItem>
           ))}
         </SelectContent>
@@ -249,14 +252,14 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Position</AlertDialogTitle>
+                <AlertDialogTitle>{t('employees:delete_position')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete the position "{positions.find(p => p.id === value)?.name}"?
-                  This action cannot be undone.
+                  {t('employees:confirm_delete_position', { name: positions.find(p => p.id === value)?.name })}
+                  {t('common:action_cannot_be_undone')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>{t('common:cancel')}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleDeletePosition}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -265,10 +268,10 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Deleting...
+                      {t('common:deleting')}
                     </>
                   ) : (
-                    'Delete'
+                    t('common:delete')
                   )}
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -296,19 +299,19 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingPositionId ? 'Edit Position' : 'Add New Position'}</DialogTitle>
+            <DialogTitle>{editingPositionId ? t('employees:edit_position') : t('employees:add_new_position')}</DialogTitle>
             <DialogDescription>
-              {editingPositionId ? 'Update the position details below.' : 'Enter the details for the new position.'}
+              {editingPositionId ? t('employees:update_position_details') : t('employees:enter_position_details')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Position Name</Label>
+              <Label htmlFor="name">{t('employees:position_name')}</Label>
               <Input
                 id="name"
                 value={newPositionName}
                 onChange={(e) => setNewPositionName(e.target.value)}
-                placeholder="Enter position name"
+                placeholder={t('employees:enter_position_name')}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -322,12 +325,12 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description (Optional)</Label>
+              <Label htmlFor="description">{t('employees:position_description_optional')}</Label>
               <Input
                 id="description"
                 value={newPositionDescription}
                 onChange={(e) => setNewPositionDescription(e.target.value)}
-                placeholder="Enter position description"
+                placeholder={t('employees:enter_position_description')}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -348,7 +351,7 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
               setNewPositionDescription('');
               setEditingPositionId(null);
             }}>
-              Cancel
+              {t('common:cancel')}
             </Button>
             <Button
               onClick={editingPositionId ? handleUpdatePosition : handleAddPosition}
@@ -357,16 +360,16 @@ const PositionSelector = ({ value, onChange, initialPositions = [], onPositionCr
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {editingPositionId ? 'Updating...' : 'Adding...'}
+                  {editingPositionId ? t('common:updating') : t('common:adding')}
                 </>
               ) : (
-                editingPositionId ? 'Update Position' : 'Add Position'
+                editingPositionId ? t('employees:update_position') : t('employees:add_position')
               )}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-      {loading && <p className="text-sm text-gray-500">Loading positions...</p>}
+      {loading && <p className="text-sm text-gray-500">{t('employees:loading_positions')}</p>}
     </div>
   );
 };

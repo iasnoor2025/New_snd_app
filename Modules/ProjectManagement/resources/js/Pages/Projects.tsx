@@ -39,6 +39,7 @@ interface ProjectsProps {
 }
 
 export default function Projects({ projects: initialProjects, managers }: ProjectsProps) {
+    const { t } = useTranslation(['projects', 'common']);
     const [projects, setProjects] = useState<Project[]>(initialProjects);
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -61,9 +62,9 @@ export default function Projects({ projects: initialProjects, managers }: Projec
             const newProject = await response.json();
             setProjects([...projects, newProject]);
             setIsCreateDialogOpen(false);
-            toast.success('Project created successfully');
+            toast.success(t('projects:project_created_success'));
         } catch (error) {
-            toast.error('Failed to create project');
+            toast.error(t('projects:error_creating_project'));
         }
     };
 
@@ -87,14 +88,14 @@ export default function Projects({ projects: initialProjects, managers }: Projec
             setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p));
             setIsEditDialogOpen(false);
             setSelectedProject(null);
-            toast.success('Project updated successfully');
+            toast.success(t('projects:project_updated_success'));
         } catch (error) {
-            toast.error('Failed to update project');
+            toast.error(t('projects:error_updating_project'));
         }
     };
 
     const handleDelete = async (projectId: number) => {
-        if (!confirm('Are you sure you want to delete this project?')) return;
+        if (!confirm(t('projects:confirm_delete_project'))) return;
 
         try {
             const response = await fetch(`/api/projects/${projectId}`, {
@@ -106,9 +107,9 @@ export default function Projects({ projects: initialProjects, managers }: Projec
             }
 
             setProjects(projects.filter(p => p.id !== projectId));
-            toast.success('Project deleted successfully');
+            toast.success(t('projects:project_deleted_success'));
         } catch (error) {
-            toast.error('Failed to delete project');
+            toast.error(t('projects:error_deleting_project'));
         }
     };
 

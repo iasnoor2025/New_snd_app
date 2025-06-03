@@ -29,6 +29,7 @@ import { Badge } from '../../../../../resources/js/components/ui/badge';
 import { Separator } from '../../../../../resources/js/components/ui/separator';
 import { Progress } from '../../../../../resources/js/components/ui/progress';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import TaskList, { ProjectTask } from '../Components/project/TaskList';
 import TaskDialog from '../Components/project/TaskDialog';
 import { ProjectProgress } from '../Components/project/ProjectProgress';
@@ -222,6 +223,7 @@ function TaskDialogWrapper({
 }
 
 export default function Show({ project, manpower = [], equipment = [], materials = [], fuel = [], expenses = [], tasks = [], taskStats = { total: 0, completed: 0, inProgress: 0, pending: 0, overdue: 0, percentage: 0 }, assignableUsers = [] }: Props) {
+    const { t } = useTranslation(['projects', 'common']);
     const [editingResource, setEditingResource] = useState<Resource | null>(null);
     const [editingResourceType, setEditingResourceType] = useState<ResourceType | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -284,7 +286,7 @@ export default function Show({ project, manpower = [], equipment = [], materials
             [type]: resource.id
         }), {
             onSuccess: () => {
-                toast.success('Resource deleted successfully');
+                toast.success(t('projects:resource_deleted_success'));
             }
         });
     };
@@ -357,10 +359,10 @@ export default function Show({ project, manpower = [], equipment = [], materials
             completion_percentage: status === 'completed' ? 100 : task.completion_percentage
         }, {
             onSuccess: () => {
-                toast.success('Task updated successfully');
+                toast.success(t('projects:task_updated_success'));
             },
             onError: () => {
-                toast.error('Failed to update task');
+                toast.error(t('projects:error_updating_task'));
             }
         });
     };
@@ -371,10 +373,10 @@ export default function Show({ project, manpower = [], equipment = [], materials
             status: percentage === 100 ? 'completed' : task.status
         }, {
             onSuccess: () => {
-                toast.success('Task updated successfully');
+                toast.success(t('projects:task_updated_success'));
             },
             onError: () => {
-                toast.error('Failed to update task');
+                toast.error(t('projects:error_updating_task'));
             }
         });
     };
@@ -399,11 +401,11 @@ export default function Show({ project, manpower = [], equipment = [], materials
             preserveState: false,
             preserveScroll: false,
             onSuccess: () => {
-                toast.success('Task deleted successfully');
+                toast.success(t('projects:task_deleted_success'));
             },
             onError: (errors: any) => {
                 console.error('Delete errors:', errors);
-                toast.error('Failed to delete task');
+                toast.error(t('projects:error_deleting_task'));
             }
         });
     };
@@ -445,10 +447,10 @@ export default function Show({ project, manpower = [], equipment = [], materials
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
 
-            toast.success('Report generated successfully');
+            toast.success(t('projects:report_generated_success'));
         } catch (error) {
             console.error('Error generating report:', error);
-            toast.error('Failed to generate report');
+            toast.error(t('projects:error_generating_report'));
         } finally {
             setIsGeneratingReport(false);
         }

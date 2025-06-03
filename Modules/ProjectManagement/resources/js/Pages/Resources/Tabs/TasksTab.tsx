@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { useProjectResources } from '../../../hooks/useProjectResources';
 import { TaskStatus } from '../../../types/projectResources';
 import TaskList, { ProjectTask } from '../../../Components/project/TaskList';
@@ -19,6 +20,7 @@ interface TasksTabProps {
 }
 
 export default function TasksTab({ project, tasks, assignableUsers }: TasksTabProps) {
+    const { t } = useTranslation(['projects', 'common']);
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<ProjectTask | null>(null);
@@ -45,11 +47,11 @@ export default function TasksTab({ project, tasks, assignableUsers }: TasksTabPr
 
         try {
             await router.delete(route('projects.tasks.destroy', [project.id, taskToDelete.id]));
-            toast.success('Task deleted successfully');
+            toast.success(t('projects:task_deleted_success'));
             setDeleteModalOpen(false);
             setTaskToDelete(null);
         } catch (error) {
-            toast.error('Failed to delete task');
+            toast.error(t('projects:error_deleting_task'));
         }
     }, [project.id, taskToDelete]);
 
@@ -58,9 +60,9 @@ export default function TasksTab({ project, tasks, assignableUsers }: TasksTabPr
             await router.put(route('projects.tasks.status', { project: project.id, task: task.id }), {
                 status: event.target.value
             });
-            toast.success('Task status updated successfully');
+            toast.success(t('projects:task_status_updated_success'));
         } catch (error) {
-            toast.error('Failed to update task status');
+            toast.error(t('projects:error_updating_task_status'));
         }
     }, [project.id]);
 
@@ -69,9 +71,9 @@ export default function TasksTab({ project, tasks, assignableUsers }: TasksTabPr
             await router.put(route('projects.tasks.update', [project.id, task.id]), {
                 completion_percentage: percentage
             });
-            toast.success('Task completion updated successfully');
+            toast.success(t('projects:task_completion_updated_success'));
         } catch (error) {
-            toast.error('Failed to update task completion');
+            toast.error(t('projects:error_updating_task_completion'));
         }
     }, [project.id]);
 

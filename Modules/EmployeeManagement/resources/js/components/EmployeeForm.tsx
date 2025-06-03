@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +17,7 @@ import { DatePicker } from '../../../resources/js/components/ui/date-picker';
 import { AlertCircle, Loader2, Save, Plus, Trash } from 'lucide-react';
 import DocumentManager from '../../../resources/js/components/DocumentManager';
 import { Employee, Department, Position } from '../types/employee';
+import { getTranslation } from '@/utils/translation';
 
 interface EmployeeFormProps {
   employee?: Employee;
@@ -358,7 +359,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                       <SelectItem value="">None</SelectItem>
                       {positions.map((position) => (
                         <SelectItem key={position.id} value={position.id.toString()}>
-                          {position.name}
+                          {getTranslation(position.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -378,7 +379,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                       <SelectItem value="">None</SelectItem>
                       {departments.map((department) => (
                         <SelectItem key={department.id} value={department.id.toString()}>
-                          {department.name}
+                          {getTranslation(department.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>

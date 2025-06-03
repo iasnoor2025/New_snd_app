@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Employee, Department, Position } from '../../types/employee';
 import useLoadingState from '../../hooks/useLoadingState';
+import { getTranslation } from '@/utils/translation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -386,7 +387,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                       <SelectItem value="">None</SelectItem>
                       {positions.map((position) => (
                         <SelectItem key={position.id} value={position.id.toString()}>
-                          {position.name}
+                          {getTranslation(position.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -405,7 +406,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                       <SelectItem value="">None</SelectItem>
                       {departments.map((department) => (
                         <SelectItem key={department.id} value={department.id.toString()}>
-                          {department.name}
+                          {getTranslation(department.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>

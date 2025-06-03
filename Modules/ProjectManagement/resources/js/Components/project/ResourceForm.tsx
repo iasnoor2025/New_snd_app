@@ -23,6 +23,7 @@ import { z } from 'zod';
 import { route } from 'ziggy-js';
 import { ToastService } from '@/components/shared/ToastManager';
 import { DatePicker } from '@/components/ui/date-picker';
+import { useTranslation } from 'react-i18next';
 
 interface Employee {
     id: number;
@@ -174,6 +175,7 @@ const dummyEmployees: Employee[] = [
 
 // Create a wrapped component to handle errors
 function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initialData }: ResourceFormProps): React.ReactElement {
+    const { t } = useTranslation(['projects', 'common']);
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -1337,7 +1339,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                     disabled={processing || isLoading}
                     className="min-w-[100px]"
                 >
-                    {isLoading ? 'Saving...' : initialData?.id ? 'Update' : 'Save'}
+                    {isLoading ? t('common:saving') : initialData?.id ? t('common:update') : t('common:save')}
                 </Button>
             </div>
         </form>

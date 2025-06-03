@@ -17,6 +17,7 @@ import { Calendar } from '../../../../../../resources/js/components/ui/calendar'
 import { format } from 'date-fns';
 import { CalendarIcon, Filter, X } from 'lucide-react';
 import { cn } from '../../../../../../resources/js/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface ResourceFiltersProps {
     type: 'manpower' | 'equipment' | 'material' | 'fuel' | 'expense';
@@ -38,6 +39,7 @@ export default function ResourceFilters({
     onFilterChange,
     onReset
 }: ResourceFiltersProps) {
+    const { t } = useTranslation();
     const handleDateChange = (date: Date | undefined, field: 'startDate' | 'endDate') => {
         onFilterChange({ ...filters, [field]: date })
     };
@@ -49,48 +51,48 @@ export default function ResourceFilters({
 
     const getSortOptions = () => {
         const commonOptions = [
-            { value: 'created_at-desc', label: 'Newest First' },
-            { value: 'created_at-asc', label: 'Oldest First' },
+            { value: 'created_at-desc', label: t('projects:newest_first') },
+            { value: 'created_at-asc', label: t('projects:oldest_first') },
         ];
 
         switch (type) {
             case 'manpower':
                 return [
                     ...commonOptions,
-                    { value: 'hours-desc', label: 'Most Hours' },
-                    { value: 'hours-asc', label: 'Least Hours' },
-                    { value: 'cost-desc', label: 'Highest Cost' },
-                    { value: 'cost-asc', label: 'Lowest Cost' },
+                    { value: 'hours-desc', label: t('projects:most_hours') },
+                    { value: 'hours-asc', label: t('projects:least_hours') },
+                    { value: 'cost-desc', label: t('projects:highest_cost') },
+                    { value: 'cost-asc', label: t('projects:lowest_cost') },
                 ];
             case 'equipment':
                 return [
                     ...commonOptions,
-                    { value: 'hours-desc', label: 'Most Hours' },
-                    { value: 'hours-asc', label: 'Least Hours' },
-                    { value: 'cost-desc', label: 'Highest Cost' },
-                    { value: 'cost-asc', label: 'Lowest Cost' },
+                    { value: 'hours-desc', label: t('projects:most_hours') },
+                    { value: 'hours-asc', label: t('projects:least_hours') },
+                    { value: 'cost-desc', label: t('projects:highest_cost') },
+                    { value: 'cost-asc', label: t('projects:lowest_cost') },
                 ];
             case 'material':
                 return [
                     ...commonOptions,
-                    { value: 'quantity-desc', label: 'Highest Quantity' },
-                    { value: 'quantity-asc', label: 'Lowest Quantity' },
-                    { value: 'cost-desc', label: 'Highest Cost' },
-                    { value: 'cost-asc', label: 'Lowest Cost' },
+                    { value: 'quantity-desc', label: t('projects:highest_quantity') },
+                    { value: 'quantity-asc', label: t('projects:lowest_quantity') },
+                    { value: 'cost-desc', label: t('projects:highest_cost') },
+                    { value: 'cost-asc', label: t('projects:lowest_cost') },
                 ];
             case 'fuel':
                 return [
                     ...commonOptions,
-                    { value: 'quantity-desc', label: 'Highest Quantity' },
-                    { value: 'quantity-asc', label: 'Lowest Quantity' },
-                    { value: 'cost-desc', label: 'Highest Cost' },
-                    { value: 'cost-asc', label: 'Lowest Cost' },
+                    { value: 'quantity-desc', label: t('projects:highest_quantity') },
+                    { value: 'quantity-asc', label: t('projects:lowest_quantity') },
+                    { value: 'cost-desc', label: t('projects:highest_cost') },
+                    { value: 'cost-asc', label: t('projects:lowest_cost') },
                 ];
             case 'expense':
                 return [
                     ...commonOptions,
-                    { value: 'amount-desc', label: 'Highest Amount' },
-                    { value: 'amount-asc', label: 'Lowest Amount' },
+                    { value: 'amount-desc', label: t('projects:highest_amount') },
+                    { value: 'amount-asc', label: t('projects:lowest_amount') },
                 ];
             default:
                 return commonOptions;
@@ -101,7 +103,7 @@ export default function ResourceFilters({
         <div className="flex flex-wrap items-center gap-4 p-4 border rounded-lg">
             {/* Search Input */}
             <Input
-                placeholder="Search resources..."
+                placeholder={t('projects:search_resources')}
                 value={filters.search || ''}
                 onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
                 className="max-w-xs"
@@ -122,7 +124,7 @@ export default function ResourceFilters({
                             {filters.startDate ? (
                                 format(filters.startDate, "PPP")
                             ) : (
-                                <span>Start Date</span>
+                                <span>{t('projects:start_date')}</span>
                             )}
                         </Button>
                     </PopoverTrigger>
@@ -136,7 +138,7 @@ export default function ResourceFilters({
                     </PopoverContent>
                 </Popover>
 
-                <span className="text-muted-foreground">to</span>
+                <span className="text-muted-foreground">{t('common:to')}</span>
 
                 <Popover>
                     <PopoverTrigger asChild>
@@ -151,7 +153,7 @@ export default function ResourceFilters({
                             {filters.endDate ? (
                                 format(filters.endDate, "PPP")
                             ) : (
-                                <span>End Date</span>
+                                <span>{t('projects:end_date')}</span>
                             )}
                         </Button>
                     </PopoverTrigger>
@@ -172,7 +174,7 @@ export default function ResourceFilters({
                 onValueChange={handleSortChange}
             >
                 <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Sort by" />
+                    <SelectValue placeholder={t('projects:sort_by')} />
                 </SelectTrigger>
                 <SelectContent>
                     {getSortOptions().map((option) => (
@@ -190,7 +192,7 @@ export default function ResourceFilters({
                 className="ml-auto"
             >
                 <X className="h-4 w-4 mr-2" />
-                Reset Filters
+                {t('projects:reset_filters')}
             </Button>
         </div>
     );

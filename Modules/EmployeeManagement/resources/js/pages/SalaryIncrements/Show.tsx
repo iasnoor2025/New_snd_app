@@ -227,11 +227,11 @@ export default function Show({ increment }: Props) {
                                         </div>
                                         <div>
                                             <label className="text-sm font-medium text-gray-500">Department</label>
-                                            <p className="text-lg font-medium">{increment.employee.department.name}</p>
+                                            <p className="text-lg font-medium">{getTranslation(increment.employee.department.name)}</p>
                                         </div>
                                         <div>
                                             <label className="text-sm font-medium text-gray-500">Position</label>
-                                            <p className="text-lg font-medium">{increment.employee.position.name}</p>
+                                            <p className="text-lg font-medium">{getTranslation(increment.employee.position.name)}</p>
                                         </div>
                                         <div>
                                             <label className="text-sm font-medium text-gray-500">Email</label>

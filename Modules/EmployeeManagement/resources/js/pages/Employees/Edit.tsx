@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { Input } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/select';
+import { getTranslation } from '@/utils/translation';
 import SalaryInfoTab from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/employees/create/tabs/SalaryInfoTab';
 
 // Define form schema
@@ -421,7 +422,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                               <SelectContent>
                                 {positions.map((position) => (
                                   <SelectItem key={position.id} value={position.id.toString()}>
-                                    {position.name}
+                                    {getTranslation(position.name)}
                                   </SelectItem>
                                 ))}
                               </SelectContent>

@@ -1,6 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -61,6 +62,7 @@ interface CalculationResult {
 }
 
 export const FinalSettlementCalculator: React.FC = () => {
+  const { t } = useTranslation(['employees', 'common']);
   const [loading, setLoading] = useState(false);
   const [calculating, setCalculating] = useState(false);
   const [generating, setGenerating] = useState(false);
@@ -88,7 +90,7 @@ export const FinalSettlementCalculator: React.FC = () => {
       setEmployees(response.data.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
-      toast.error('Failed to load employees');
+      toast.error(t('employees:error_loading_employees'));
     } finally {
       setLoading(false);
     }
@@ -117,7 +119,7 @@ export const FinalSettlementCalculator: React.FC = () => {
 
   const calculateSettlement = async () => {
     if (!selectedEmployeeId || !lastWorkingDate) {
-      toast.error('Please select an employee and specify the last working date');
+      toast.error(t('employees:select_employee_and_date'));
       return;
     }
 
@@ -143,14 +145,14 @@ export const FinalSettlementCalculator: React.FC = () => {
       })
 
       setCalculationResult(response.data.data);
-      toast.success('Final settlement calculated successfully');
+      toast.success(t('employees:settlement_calculated_success'));
     } catch (error: any) {
       console.error('Error calculating settlement:', error);
 
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(error.response.data.message);
       } else {
-        toast.error('Failed to calculate settlement. Please try again.');
+        toast.error(t('employees:error_calculating_settlement'));
       }
     } finally {
       setCalculating(false);
@@ -159,7 +161,7 @@ export const FinalSettlementCalculator: React.FC = () => {
 
   const generateSettlementDocument = async () => {
     if (!calculationResult || !selectedEmployeeId || !lastWorkingDate) {
-      toast.error('Please calculate the settlement first');
+      toast.error(t('employees:calculate_settlement_first'));
       return;
     }
 
@@ -197,10 +199,10 @@ export const FinalSettlementCalculator: React.FC = () => {
       link.click();
       document.body.removeChild(link);
 
-      toast.success('Settlement document generated successfully');
+      toast.success(t('employees:settlement_document_generated_success'));
     } catch (error) {
       console.error('Error generating settlement document:', error);
-      toast.error('Failed to generate settlement document');
+      toast.error(t('employees:error_generating_settlement'));
     } finally {
       setGenerating(false);
     }

@@ -8,6 +8,8 @@ import { Toaster } from 'sonner';
 // Import Ziggy configuration
 import { Ziggy } from './ziggy';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -284,10 +286,12 @@ createInertiaApp({
         const root = createRoot(el);
         const queryClient = new QueryClient();
         root.render(
-            <QueryClientProvider client={queryClient}>
-                <App {...props} />
-                <Toaster richColors position="top-right" />
-            </QueryClientProvider>
+            <I18nextProvider i18n={i18n}>
+                <QueryClientProvider client={queryClient}>
+                    <App {...props} />
+                    <Toaster richColors position="top-right" />
+                </QueryClientProvider>
+            </I18nextProvider>
         );
     },
     progress: {

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -14,6 +14,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { getTranslation } from '@/utils/translation';
 // import { User, Position } from '@/types/models';
 
 const positionSchema = z.object({
@@ -209,7 +210,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                         <SelectContent>
                           {positionsState.filter(p => p && typeof p.id === 'number' && typeof p.name === 'string').map((position) => (
                             <SelectItem key={position.id} value={position.id.toString()}>
-                              {position.name}
+                              {getTranslation(position.name)}
                             </SelectItem>
                           ))}
                         </SelectContent>

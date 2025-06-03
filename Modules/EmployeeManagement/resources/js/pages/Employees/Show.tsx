@@ -4,6 +4,7 @@ import { PageProps, BreadcrumbItem } from '../../types';
 import AdminLayout from '../../layouts/AdminLayout';
 import { Employee as BaseEmployee } from '../../types/models';
 import { route } from 'ziggy-js';
+import { getTranslation } from '@/utils/translation';
 import { Breadcrumb } from '../../../../../../resources/js/components/ui/breadcrumb';
 import {
   Card,
@@ -853,7 +854,7 @@ export default function Show({
                 {employee?.first_name || ''} {employee?.middle_name ? `${employee.middle_name} ` : ''}{employee?.last_name || ''}
               </h1>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <span>{typeof employee?.position === 'object' && employee?.position !== null ? employee.position.name : employee?.position}</span>
+                <span>{typeof employee?.position === 'object' && employee?.position !== null ? getTranslation(employee.position.name) : employee?.position}</span>
                 <span className="text-xs">â€¢</span>
                 <span>ID: {employee?.employee_id || 'N/A'}</span>
                 {employee?.status && getStatusBadge(employee.status)}
@@ -1175,7 +1176,7 @@ export default function Show({
                         </div>
                         <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Position</dt>
-                          <dd className="text-sm">{typeof employee.position === 'object' && employee.position !== null ? employee.position.name : employee.position}</dd>
+                          <dd className="text-sm">{typeof employee.position === 'object' && employee.position !== null ? getTranslation(employee.position.name) : employee.position}</dd>
                         </div>
                         <div className="flex justify-between border-b pb-2">
                           <dt className="text-sm font-medium">Department</dt>

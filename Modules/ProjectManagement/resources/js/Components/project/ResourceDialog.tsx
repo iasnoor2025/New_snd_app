@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { XIcon } from 'lucide-react';
 import ResourceForm from './ResourceForm';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { useTranslation } from 'react-i18next';
 
 export type ResourceType = 'manpower' | 'equipment' | 'material' | 'fuel' | 'expense';
 
@@ -22,9 +23,11 @@ export default function ResourceDialog({
     initialData = null,
     onSuccess = () => {}
 }: ResourceDialogProps) {
+    const { t } = useTranslation(['projects']);
+
     const title = initialData
-        ? `Edit ${initialType.charAt(0).toUpperCase() + initialType.slice(1)}`
-        : `Add ${initialType.charAt(0).toUpperCase() + initialType.slice(1)}`;
+        ? t(`edit_${initialType}`, { defaultValue: t('edit_resource') })
+        : t(`add_${initialType}`, { defaultValue: t('add_resource') });
 
     // Only render the dialog when it's actually open
     if (!isOpen) {
@@ -72,12 +75,14 @@ export default function ResourceDialog({
                 <div
                     className="bg-white rounded-lg shadow-lg max-w-[500px] w-full relative"
                     onClick={e => e.stopPropagation()}
+                >
                     {/* Close button */}
                     <button
                         className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
                         onClick={() => onOpenChange(false)}
+                    >
                         <XIcon className="h-4 w-4" />
-                        <span className="sr-only">Close</span>
+                        <span className="sr-only">{t('common:close')}</span>
                     </button>
 
                     {/* Header */}
@@ -85,8 +90,8 @@ export default function ResourceDialog({
                         <h2 className="text-lg font-semibold">{title}</h2>
                         <p className="text-sm text-gray-500 mt-1">
                             {initialData
-                                ? `Update the details for this ${initialType} resource.`
-                                : `Add a new ${initialType} resource to the project.`}
+                                ? t('update_resource')
+                                : t('add_new_resource')}
                         </p>
                     </div>
 

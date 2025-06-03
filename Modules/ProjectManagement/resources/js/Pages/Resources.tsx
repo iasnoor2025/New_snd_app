@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -543,27 +544,28 @@ function TaskDialogWrapper({
 
 // The main component wrapper
 const ResourcesPage = ({ project, manpower = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, equipment = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, materials = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, fuel = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, expenses = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, tasks = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, assignableUsers = [], type = 'manpower', page = 1 }: ResourcesPageProps) => {
+    const { t } = useTranslation(['projects', 'common']);
     // Wrap the entire component with an ErrorBoundary to prevent blank page
     return (
         <AdminLayout
-            title="Resources"
+            title={t('projects:resources')}
             breadcrumbs={[
-                { title: 'Dashboard', href: '/dashboard' },
-                { title: 'Projects', href: '/projects' },
+                { title: t('common:dashboard'), href: '/dashboard' },
+                { title: t('projects:projects'), href: '/projects' },
                 { title: project.name, href: `/projects/${project.id}` },
-                { title: 'Resources', href: `/projects/${project.id}/resources` }
+                { title: t('projects:resources'), href: `/projects/${project.id}/resources` }
             ]}
         >
             <ErrorBoundary fallback={
                 <div className="container mx-auto py-10 text-center">
-                    <h2 className="text-2xl font-bold mb-4">Something went wrong</h2>
-                    <p className="mb-4">We encountered an error while loading the resources page.</p>
+                    <h2 className="text-2xl font-bold mb-4">{t('projects:something_went_wrong')}</h2>
+                    <p className="mb-4">{t('projects:error_loading_resources')}</p>
                     <div className="flex justify-center gap-4">
                         <Button onClick={() => window.location.reload()}>
-                            Reload Page
+                            {t('projects:reload_page')}
                         </Button>
                         <Button variant="outline" onClick={() => window.history.back()}>
-                            Go Back
+                            {t('projects:go_back')}
                         </Button>
                     </div>
                 </div>
@@ -589,6 +591,7 @@ export default ResourcesPage;
 
 // Main component implementation
 function Resources({ project, manpower = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, equipment = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, materials = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, fuel = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, expenses = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, tasks = { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 }, assignableUsers = [], type = 'manpower', page = 1 }: ResourcesPageProps) {
+    const { t } = useTranslation(['projects', 'common']);
     // Keep debug logging for future troubleshooting
     console.log('Resources component - rendering start', {
         projectInfo: { id: project?.id, name: project?.name },
@@ -854,10 +857,10 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                 });
 
                 // Show success message
-                toast.success(`The task status has been changed from "${oldStatus}" to "${newStatus}".`);
+                toast.success(t('projects:task_status_changed', { oldStatus: t(`projects:${oldStatus}`), newStatus: t(`projects:${newStatus}`) }));
             }).catch((error) => {
                 // Show error message
-                toast.error('There was an error updating the task status. Please try again.');
+                toast.error(t('projects:error_updating_task_status'));
             });
         };
 
@@ -888,9 +891,9 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     }
                 });
 
-                toast.success(`Task completion has been updated to ${percentage}%.`);
+                toast.success(t('projects:task_completion_updated', { percentage }));
             }).catch(() => {
-                toast.error("Failed to update task completion. Please try again.");
+                toast.error(t('projects:error_updating_task_completion'));
             });
         };
 
@@ -911,8 +914,8 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     );
                     setTasks(updatedTasks);
 
-                    toast.success(`Task updated`, {
-                        description: `The task has been successfully updated.`
+                    toast.success(t('projects:task_updated'), {
+                        description: t('projects:task_updated_description')
                     });
                 } else {
                     axios.get(route('projects.tasks.index', { project: project.id }))
@@ -921,7 +924,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                 setTasks(response.data);
                             }
 
-                            toast.success(`The task has been successfully added.`);
+                            toast.success(t('projects:task_added_success'));
                         })
                         .catch(error => {
                             console.error('Error fetching updated tasks:', error);
@@ -936,7 +939,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                             setTasks(page.props.tasks as Resource[]);
                         }
 
-                        toast.success(`The task has been successfully ${editingTask ? 'updated' : 'added'}.`);
+                        toast.success(editingTask ? t('projects:task_updated_success') : t('projects:task_added_success'));
                     }
                 });
             }
@@ -967,14 +970,14 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
 
             axios.delete(url)
                 .then(() => {
-                    toast.success("The resource has been successfully deleted.");
+                    toast.success(t('projects:resource_deleted_success'));
                     setDeleteConfirmOpen(false);
                     setResourceToDelete(null);
                     router.reload({ only: [type] });
                 })
                 .catch((error) => {
                     console.error('Error deleting resource:', error);
-                    toast.error("Failed to delete the resource. Please try again.");
+                    toast.error(t('projects:error_deleting_resource'));
                     setDeleteConfirmOpen(false);
                     setResourceToDelete(null);
                 });
@@ -1154,7 +1157,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
 
         return (
             <ErrorBoundary>
-                <Head title={`${project.name} - Resources`} />
+                <Head title={`${project.name} - ${t('projects:resources')}`} />
 
                 <div className="container mx-auto py-6 space-y-6">
                     {/* Header section with clean modern styling */}
@@ -1163,10 +1166,10 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                             <div className="space-y-1">
                                 <CardTitle className="text-xl flex items-center">
                                     <Layers className="h-5 w-5 mr-2 text-blue-500" />
-                                    Resources
+                                    {t('projects:resources')}
                                 </CardTitle>
                                 <CardDescription>
-                                    Manage all resources for this project
+                                    {t('projects:project_resources')}
                                 </CardDescription>
                             </div>
 
@@ -1174,7 +1177,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                 <Button variant="outline" size="sm" asChild>
                                     <Link href={route('projects.show', project.id)}>
                                         <ArrowLeft className="h-4 w-4 mr-2" />
-                                        Back to Project
+                                        {t('common:back')} {t('common:to')} {t('projects:project')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -1182,7 +1185,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                     onClick={handleAddResource}
                                 >
                                     <Plus className="h-4 w-4 mr-2" />
-                                    Add Resource
+                                    {t('projects:add_resource')}
                                 </Button>
                             </div>
                         </div>
@@ -1214,7 +1217,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                 >
                                     <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-4">
                                         <TabsTrigger value="manpower" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
-                                            <span className="truncate">Manpower</span>
+                                            <span className="truncate">{t('projects:manpower')}</span>
                                             {getResourceCount('manpower') > 0 && (
                                                 <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('manpower')}
@@ -1222,7 +1225,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             )}
                                         </TabsTrigger>
                                         <TabsTrigger value="equipment" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
-                                            <span className="truncate">Equipment</span>
+                                            <span className="truncate">{t('projects:equipment')}</span>
                                             {getResourceCount('equipment') > 0 && (
                                                 <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('equipment')}
@@ -1230,7 +1233,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             )}
                                         </TabsTrigger>
                                         <TabsTrigger value="material" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
-                                            <span className="truncate">Materials</span>
+                                            <span className="truncate">{t('projects:materials')}</span>
                                             {getResourceCount('material') > 0 && (
                                                 <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('material')}
@@ -1238,7 +1241,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             )}
                                         </TabsTrigger>
                                         <TabsTrigger value="fuel" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
-                                            <span className="truncate">Fuel</span>
+                                            <span className="truncate">{t('projects:fuel')}</span>
                                             {getResourceCount('fuel') > 0 && (
                                                 <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('fuel')}
@@ -1246,7 +1249,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             )}
                                         </TabsTrigger>
                                         <TabsTrigger value="expense" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
-                                            <span className="truncate">Expenses</span>
+                                            <span className="truncate">{t('projects:expenses')}</span>
                                             {getResourceCount('expense') > 0 && (
                                                 <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('expense')}
@@ -1254,7 +1257,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             )}
                                         </TabsTrigger>
                                         <TabsTrigger value="tasks" className="flex items-center justify-center gap-2 text-xs lg:text-sm">
-                                            <span className="truncate">Tasks</span>
+                                            <span className="truncate">{t('projects:tasks')}</span>
                                             {getResourceCount('tasks') > 0 && (
                                                 <Badge variant="secondary" className="h-4 px-1.5 text-xs min-w-[1.5rem] flex items-center justify-center">
                                                     {getResourceCount('tasks')}
@@ -1306,7 +1309,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             </ErrorBoundary>
                                         ) : (
                                             <div className="py-10 text-center">
-                                                <p className="text-muted-foreground">No material resources found{filters.search && ' matching your search'}</p>
+                                                <p className="text-muted-foreground">{t('projects:no_resources_found', {type: t('projects:material')})}{filters.search && t('projects:matching_your_search')}</p>
                                             </div>
                                         )}
                                     </TabsContent>
@@ -1322,7 +1325,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             </ErrorBoundary>
                                         ) : (
                                             <div className="py-10 text-center">
-                                                <p className="text-muted-foreground">No fuel resources found{filters.search && ' matching your search'}</p>
+                                                <p className="text-muted-foreground">{t('projects:no_resources_found', {type: t('projects:fuel')})}{filters.search && t('projects:matching_your_search')}</p>
                                             </div>
                                         )}
                                     </TabsContent>
@@ -1338,7 +1341,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             </ErrorBoundary>
                                         ) : (
                                             <div className="py-10 text-center">
-                                                <p className="text-muted-foreground">No expense resources found{filters.search && ' matching your search'}</p>
+                                                <p className="text-muted-foreground">{t('projects:no_resources_found', {type: t('projects:expense')})}{filters.search && t('projects:matching_your_search')}</p>
                                             </div>
                                         )}
                                     </TabsContent>
@@ -1355,7 +1358,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                             </ErrorBoundary>
                                         ) : (
                                             <div className="py-10 text-center">
-                                                <p className="text-muted-foreground">No tasks found{filters.search && ' matching your search'}</p>
+                                                <p className="text-muted-foreground">{t('projects:no_tasks_found')}{filters.search && t('projects:matching_your_search')}</p>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
@@ -1365,7 +1368,7 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                                                     className="mt-2"
                                                 >
                                                     <Plus className="h-4 w-4 mr-2" />
-                                                    Add your first task
+                                                    {t('projects:add_first_task')}
                                                 </Button>
                                             </div>
                                         )}
@@ -1453,17 +1456,25 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
                     <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>Delete {resourceToDelete?.type === 'tasks' ? 'Task' : 'Resource'}</DialogTitle>
+                                <DialogTitle>
+                                    {resourceToDelete?.type === 'tasks'
+                                        ? t('projects:delete_task')
+                                        : t('projects:delete_resource')
+                                    }
+                                </DialogTitle>
                                 <DialogDescription>
-                                    Are you sure you want to delete this {resourceToDelete?.type === 'tasks' ? 'task' : resourceToDelete?.type + ' resource'}? This action cannot be undone.
+                                    {resourceToDelete?.type === 'tasks'
+                                        ? t('projects:confirm_delete_task')
+                                        : t('projects:confirm_delete_resource', {type: resourceToDelete?.type ? t(`projects:${resourceToDelete.type}`) : ''})
+                                    }
                                 </DialogDescription>
                             </DialogHeader>
                             <DialogFooter>
                                 <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
-                                    Cancel
+                                    {t('common:cancel')}
                                 </Button>
                                 <Button variant="destructive" onClick={handleDeleteConfirmed}>
-                                    Delete
+                                    {t('common:delete')}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>
@@ -1475,14 +1486,14 @@ function Resources({ project, manpower = { data: [], current_page: 1, last_page:
         console.error('Error in Resources component:', error);
         return (
             <div className="container mx-auto py-10 text-center">
-                <h2 className="text-2xl font-bold mb-4">Something went wrong</h2>
-                <p className="mb-4">We encountered an error while loading the resources page. Error: {error instanceof Error ? error.message : String(error)}</p>
+                <h2 className="text-2xl font-bold mb-4">{t('projects:something_went_wrong')}</h2>
+                <p className="mb-4">{t('projects:error_loading_resources')} Error: {error instanceof Error ? error.message : String(error)}</p>
                 <div className="flex justify-center gap-4">
                     <Button onClick={() => window.location.reload()}>
-                        Reload Page
+                        {t('projects:reload_page')}
                     </Button>
                     <Button variant="outline" onClick={() => window.history.back()}>
-                        Go Back
+                        {t('projects:go_back')}
                     </Button>
                 </div>
             </div>

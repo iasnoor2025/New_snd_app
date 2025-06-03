@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -11,6 +11,7 @@ import { router } from '@inertiajs/react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface PersonalInfoTabProps {
   form: UseFormReturn<any>
@@ -34,6 +35,7 @@ const countries = [
 ];
 
 export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
+  const { t } = useTranslation(['employees', 'common']);
   const [lastFileNumber, setLastFileNumber] = useState<number>(0);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -55,7 +57,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
           }
         } else {
           console.error('Invalid response format:', response.data);
-          toast.error("Could not retrieve last employee number. Using default value.");
+          toast.error(t('employees:employee_number_retrieval_error'));
           setLastFileNumber(0);
           // Set default value when response is invalid
           if (!form.getValues('file_number')) {
@@ -64,7 +66,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
         }
       } catch (error) {
         console.error('Error fetching last file number:', error);
-        toast.error("Failed to fetch employee number. Using default value.");
+        toast.error(t('employees:employee_number_fetch_error'));
         // Set default value on error
         setLastFileNumber(0);
         if (!form.getValues('file_number')) {

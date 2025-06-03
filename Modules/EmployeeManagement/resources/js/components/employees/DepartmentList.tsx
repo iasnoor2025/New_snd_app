@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Department } from '../../types/employee';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import { getTranslation } from '@/utils/translation';
 import {
   Table,
   TableBody,
@@ -261,7 +262,7 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
               ) : (
                 filteredDepartments.map((department) => (
                   <TableRow key={department.id}>
-                    <TableCell className="font-medium">{department.name}</TableCell>
+                    <TableCell className="font-medium">{getTranslation(department.name)}</TableCell>
                     <TableCell>{department.code || '-'}</TableCell>
                     <TableCell>
                       <div className="max-w-xs truncate">
