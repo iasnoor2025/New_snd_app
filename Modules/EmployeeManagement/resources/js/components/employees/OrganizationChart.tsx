@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import useLoadingState from '../../hooks/useLoadingState';
 import { OrgChartNode } from '../../types/employee';
@@ -58,6 +59,8 @@ export const OrganizationChart: React.FC<OrganizationChartProps> = ({ initialDat
 
   // Vertical tree-like organization chart
   const renderVerticalTree = () => {
+  const { t } = useTranslation('employee');
+
     if (orgData.length === 0) {
       return (
         <div className="py-8 text-center text-gray-500">
@@ -93,7 +96,7 @@ export const OrganizationChart: React.FC<OrganizationChartProps> = ({ initialDat
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Organization Chart</CardTitle>
+        <CardTitle>{t('ttl_organization_chart')}</CardTitle>
       </CardHeader>
       <CardContent>
         {error && (

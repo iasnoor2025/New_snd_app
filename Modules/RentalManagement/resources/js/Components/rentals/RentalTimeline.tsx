@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { format, isBefore, isAfter, isSameDay, differenceInDays } from 'date-fns';
 import { Rental } from '@/types/models';
 import { Separator } from '@/components/ui/separator';
@@ -21,6 +22,8 @@ interface RentalTimelineProps {
  * Component to display a timeline of rental events
  */
 const RentalTimeline = ({ rental }: RentalTimelineProps) => {
+  const { t } = useTranslation('rental');
+
   // Format date for display
   const formatDate = (dateString: string | undefined | null) => {
     if (!dateString) return '';

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -15,6 +16,8 @@ interface ExpenseTabProps {
 }
 
 export function ExpenseTab({ project, expenses }: ExpenseTabProps) {
+  const { t } = useTranslation('project');
+
     const {
         isCreateModalOpen,
         isEditModalOpen,
@@ -62,7 +65,7 @@ export function ExpenseTab({ project, expenses }: ExpenseTabProps) {
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
-                <Button onClick={openCreateModal}>Add Expense</Button>
+                <Button onClick={openCreateModal}>{t('ttl_add_expense')}</Button>
             </div>
 
             <Table>
@@ -108,7 +111,7 @@ export function ExpenseTab({ project, expenses }: ExpenseTabProps) {
             <ResourceFormModal
                 isOpen={isCreateModalOpen}
                 onClose={closeCreateModal}
-                title="Add Expense"
+                title={t('ttl_add_expense')}
                 type="expense"
                 projectId={project.id}
                 onSuccess={handleCreateSuccess}
@@ -117,7 +120,7 @@ export function ExpenseTab({ project, expenses }: ExpenseTabProps) {
             <ResourceFormModal
                 isOpen={isEditModalOpen}
                 onClose={closeEditModal}
-                title="Edit Expense"
+                title={t('ttl_edit_expense')}
                 type="expense"
                 projectId={project.id}
                 initialData={selectedResource}

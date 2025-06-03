@@ -1,227 +1,68 @@
-/**
- * Language Switcher Component
- * Provides UI for switching between available locales
- */
-
-import React, { useState } from 'react';
-import { ChevronDown, Globe, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button } from '../components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import useTranslation from '@/hooks/useTranslation';
+} from '../components/ui/dropdown-menu';
+import { Globe } from 'lucide-react';
 
-interface LanguageSwitcherProps {
-  variant?: 'default' | 'compact' | 'minimal';
-  showFlag?: boolean;
-  showLabel?: boolean;
-  className?: string;
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
+  dir: 'ltr' | 'rtl';
 }
 
-/**
- * Get flag emoji for locale
- */
-function getFlagEmoji(locale: string): string {
-  const flags: Record<string, string> = {
-    'en': '🇺🇸',
-    'ar': '🇸🇦',
-    'hi': '🇮🇳',
-    'bn': '🇧🇩',
-    'ur': '🇵🇰'
-  };
+const languages: Language[] = [
+  { code: 'en', name: 'English', flag: '🇺🇸', dir: 'ltr' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦', dir: 'rtl' },
+];
 
-  return flags[locale] || '🌐';
-}
+const LanguageSwitcher: React.FC = () => {
+  const { i18n } = useTranslation();
 
-export function LanguageSwitcher({
-  variant = 'default',
-  showFlag = true,
-  showLabel = true,
-  className
-}: LanguageSwitcherProps) {
-  const {
-    locale,
-    availableLocales,
-    switchLocale,
-    getDisplayName,
-    isRTL,
-    __
-  } = useTranslation();
+  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
-  const [isLoading, setIsLoading] = useState(false);
+  const changeLanguage = (languageCode: string) => {
+    const selectedLanguage = languages.find(lang => lang.code === languageCode);
+    if (selectedLanguage) {
+      i18n.changeLanguage(languageCode);
 
-  const handleLocaleChange = async (newLocale: string) => {
-    if (newLocale === locale || isLoading) return;
+      // Update document direction for RTL support
+      document.documentElement.dir = selectedLanguage.dir;
+      document.documentElement.lang = languageCode;
 
-    setIsLoading(true);
-    try {
-      switchLocale(newLocale);
-    } catch (error) {
-      console.error('Failed to switch locale:', error);
-      setIsLoading(false);
+      // Store language preference
+      localStorage.setItem('i18nextLng', languageCode);
     }
-    // Note: Loading state will be reset by page reload
   };
 
-  if (availableLocales.length <= 1) {
-    return null;
-  }
-
-  const currentFlag = getFlagEmoji(locale);
-  const currentDisplayName = getDisplayName(locale);
-  const direction = isRTL() ? 'rtl' : 'ltr';
-
-  if (variant === 'minimal') {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn(
-              "h-8 w-8 p-0",
-              isLoading && "opacity-50 cursor-not-allowed",
-              className
-            )}
-            disabled={isLoading}
-          >
-            <Globe className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          {availableLocales.map((availableLocale) => (
-            <DropdownMenuItem
-              key={availableLocale}
-              onClick={() => handleLocaleChange(availableLocale)}
-              className={cn(
-                "flex items-center justify-between cursor-pointer",
-                availableLocale === locale && "bg-accent"
-              )}
-            >
-              <div className="flex items-center space-x-2">
-                <span className="text-lg">{getFlagEmoji(availableLocale)}</span>
-                <span>{getDisplayName(availableLocale)}</span>
-              </div>
-              {availableLocale === locale && (
-                <Check className="h-4 w-4 text-primary" />
-              )}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  }
-
-  if (variant === 'compact') {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn(
-              "h-8 px-2 text-xs",
-              isLoading && "opacity-50 cursor-not-allowed",
-              className
-            )}
-            disabled={isLoading}
-            dir={direction}
-          >
-            {showFlag && <span className="mr-1">{currentFlag}</span>}
-            <span className="uppercase font-medium">{locale}</span>
-            <ChevronDown className="ml-1 h-3 w-3" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
-          {availableLocales.map((availableLocale) => (
-            <DropdownMenuItem
-              key={availableLocale}
-              onClick={() => handleLocaleChange(availableLocale)}
-              className={cn(
-                "flex items-center justify-between cursor-pointer",
-                availableLocale === locale && "bg-accent"
-              )}
-            >
-              <div className="flex items-center space-x-2">
-                <span>{getFlagEmoji(availableLocale)}</span>
-                <span className="uppercase text-xs font-medium">{availableLocale}</span>
-              </div>
-              {availableLocale === locale && (
-                <Check className="h-3 w-3 text-primary" />
-              )}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  }
-
-  // Default variant
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            "flex items-center space-x-2",
-            isLoading && "opacity-50 cursor-not-allowed",
-            className
-          )}
-          disabled={isLoading}
-          dir={direction}
-        >
-          {showFlag && <span className="text-lg">{currentFlag}</span>}
-          {showLabel && <span>{currentDisplayName}</span>}
-          <ChevronDown className="h-4 w-4" />
+        <Button variant="outline" size="sm" className="gap-2">
+          <Globe className="h-4 w-4" />
+          <span className="hidden sm:inline">{currentLanguage.flag} {currentLanguage.name}</span>
+          <span className="sm:hidden">{currentLanguage.flag}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
-          {__('Select Language')}
-        </div>
-        {availableLocales.map((availableLocale) => {
-          const isCurrentLocale = availableLocale === locale;
-          const isRTLLocale = isRTL(availableLocale);
-
-          return (
-            <DropdownMenuItem
-              key={availableLocale}
-              onClick={() => handleLocaleChange(availableLocale)}
-              className={cn(
-                "flex items-center justify-between cursor-pointer py-2",
-                isCurrentLocale && "bg-accent"
-              )}
-            >
-              <div className="flex items-center space-x-3">
-                <span className="text-lg">{getFlagEmoji(availableLocale)}</span>
-                <div className="flex flex-col">
-                  <span className="font-medium">{getDisplayName(availableLocale)}</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs text-muted-foreground uppercase">
-                      {availableLocale}
-                    </span>
-                    {isRTLLocale && (
-                      <Badge variant="secondary" className="text-xs px-1 py-0">
-                        RTL
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {isCurrentLocale && (
-                <Check className="h-4 w-4 text-primary" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+      <DropdownMenuContent align="end">
+        {languages.map((language) => (
+          <DropdownMenuItem
+            key={language.code}
+            onClick={() => changeLanguage(language.code)}
+            className={`cursor-pointer ${i18n.language === language.code ? 'bg-accent' : ''}`}
+          >
+            <span className="mr-2">{language.flag}</span>
+            {language.name}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
 
 export default LanguageSwitcher;

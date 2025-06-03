@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, router } from '@inertiajs/react';
 import {
   Card,
@@ -61,6 +62,8 @@ interface Props {
 }
 
 export default function FinalSettlementTab({ employee, settlements }: Props) {
+  const { t } = useTranslation('employee');
+
   const { toast } = useToast();
   const { hasPermission } = usePermission();
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
@@ -108,7 +111,7 @@ export default function FinalSettlementTab({ employee, settlements }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Final Settlement</h2>
+        <h2 className="text-2xl font-bold">{t('final_settlement')}</h2>
         {hasPermission('final-settlements.create') && (
           <Button asChild>
             <Link href={route('employees.final-settlements.create', { employee: employee.id })}>
@@ -162,7 +165,7 @@ export default function FinalSettlementTab({ employee, settlements }: Props) {
                 <div className="space-y-4">
                   {settlement.approved_by && (
                     <div>
-                      <h3 className="font-medium">Approved By</h3>
+                      <h3 className="font-medium">{t('approved_by')}</h3>
                       <p>{settlement.approved_by.name}</p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(settlement.approved_at!), 'PPP')}
@@ -171,7 +174,7 @@ export default function FinalSettlementTab({ employee, settlements }: Props) {
                   )}
                   {settlement.rejection_reason && (
                     <div>
-                      <h3 className="font-medium">Rejection Reason</h3>
+                      <h3 className="font-medium">{t('lbl_rejection_reason')}</h3>
                       <p className="whitespace-pre-wrap">{settlement.rejection_reason}</p>
                     </div>
                   )}
@@ -203,19 +206,19 @@ export default function FinalSettlementTab({ employee, settlements }: Props) {
       <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject Final Settlement</DialogTitle>
+            <DialogTitle>{t('ttl_reject_final_settlement')}</DialogTitle>
             <DialogDescription>
               Please provide a reason for rejecting this final settlement.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="reason">Reason for Rejection</Label>
+              <Label htmlFor="reason">{t('lbl_reason_for_rejection')}</Label>
               <Textarea
                 id="reason"
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="Enter the reason for rejection..."
+                placeholder={t('ph_enter_the_reason_for_rejection')}
                 className="min-h-[100px]"
               />
             </div>

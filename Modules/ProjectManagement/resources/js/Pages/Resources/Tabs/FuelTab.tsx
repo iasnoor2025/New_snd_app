@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -34,6 +35,8 @@ interface FuelTabProps {
 }
 
 export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
+  const { t } = useTranslation('project');
+
     // Extract locale from Inertia shared props
     const { locale = 'en' } = usePage<any>().props;
 
@@ -84,17 +87,17 @@ export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
-                <Button onClick={openCreateModal}>Add Fuel</Button>
+                <Button onClick={openCreateModal}>{t('ttl_add_fuel')}</Button>
             </div>
 
             <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Equipment</TableHead>
-                        <TableHead>Fuel Type</TableHead>
+                        <TableHead>{t('lbl_fuel_type')}</TableHead>
                         <TableHead>Quantity</TableHead>
-                        <TableHead>Unit Price</TableHead>
-                        <TableHead>Total Cost</TableHead>
+                        <TableHead>{t('lbl_unit_price')}</TableHead>
+                        <TableHead>{t('th_total_cost')}</TableHead>
                         <TableHead>Date</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
@@ -134,7 +137,7 @@ export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
             <ResourceFormModal
                 isOpen={isCreateModalOpen}
                 onClose={closeCreateModal}
-                title="Add Fuel"
+                title={t('ttl_add_fuel')}
                 type="fuel"
                 projectId={Number(project.id)}
                 onSuccess={handleCreateSuccess}
@@ -143,7 +146,7 @@ export function FuelTab({ project, fuel, projectEquipment }: FuelTabProps) {
             <ResourceFormModal
                 isOpen={isEditModalOpen}
                 onClose={closeEditModal}
-                title="Edit Fuel"
+                title={t('ttl_edit_fuel')}
                 type="fuel"
                 projectId={Number(project.id)}
                 initialData={selectedResource}

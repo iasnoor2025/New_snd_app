@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -14,6 +15,8 @@ const ResourcePagination: React.FC<ResourcePaginationProps> = ({
     onPageChange,
 }) => {
     const generatePageNumbers = () => {
+  const { t } = useTranslation('project');
+
         const pages = [];
         const maxVisiblePages = 5;
         let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));

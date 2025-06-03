@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { format, parseISO, isSameMonth } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -155,7 +156,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h2 className="text-2xl font-bold">Timesheet Summary</h2>
+        <h2 className="text-2xl font-bold">{t('timesheet_summary')}</h2>
         <div className="flex flex-wrap items-center gap-2">
           {showEmployeeSelector && employees.length > 0 && (
             <select
@@ -163,7 +164,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
               value={selectedEmployeeId}
               onChange={(e) => setSelectedEmployeeId(Number(e.target.value))}
             >
-              <option value="">Select Employee</option>
+              <option value="">{t('lbl_select_employee')}</option>
               {employees.map((employee) => (
                 <option key={employee.id} value={employee.id}>
                   {employee.name}
@@ -204,7 +205,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Regular Hours</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{t('regular_hours')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -214,7 +215,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Overtime Hours</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{t('overtime_hours')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -224,7 +225,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Hours</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{t('th_total_hours')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -236,7 +237,7 @@ export const TimesheetSummary: React.FC<TimesheetSummaryProps> = ({
 
           <Card>
             <CardHeader>
-              <CardTitle>Monthly Timesheet Records</CardTitle>
+              <CardTitle>{t('ttl_monthly_timesheet_records')}</CardTitle>
             </CardHeader>
             <CardContent>
               {DailyTimesheetRecords ? (

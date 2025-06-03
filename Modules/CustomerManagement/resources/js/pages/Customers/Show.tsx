@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import type { PageProps, Customer } from '../../types/index.d';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -19,6 +20,8 @@ interface Props extends PageProps {
 
 const ShowCustomer: React.FC<Props> = ({ customer }) => {
   const getStatusBadge = (status: string) => {
+  const { t } = useTranslation('customer');
+
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       active: 'default',
       inactive: 'secondary',
@@ -27,12 +30,12 @@ const ShowCustomer: React.FC<Props> = ({ customer }) => {
   };
 
   return (
-    <AdminLayout title="Customer Details" breadcrumbs={breadcrumbs}>
-      <Head title="Customer Details" />
+    <AdminLayout title={t('ttl_customer_details')} breadcrumbs={breadcrumbs}>
+      <Head title={t('ttl_customer_details')} />
       <div className="flex justify-center mt-8">
         <Card className="w-full max-w-xl">
           <CardHeader>
-            <CardTitle>Customer Details</CardTitle>
+            <CardTitle>{t('ttl_customer_details')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="mb-4"><strong>Name:</strong> {customer.name}</div>

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '../js/i18n/rtl.css';
 
 @plugin 'tailwindcss-animate';
 

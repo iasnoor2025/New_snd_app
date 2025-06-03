@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import { Badge } from '../../../../../../resources/js/components/ui/badge';
@@ -58,6 +59,8 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
   const formatCurrency = (amount: number) => `$${amount.toLocaleString()}`;
 
   const getProjectStatusBadge = (status: string) => {
+  const { t } = useTranslation('project');
+
     const variants: Record<string, string> = {
       planning: 'secondary',
       in_progress: 'default',
@@ -121,7 +124,7 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
               <CardContent>
                 <div className="grid grid-cols-2 gap-6 mb-6">
                   <div>
-                    <h3 className="text-sm font-medium mb-2">Date Range</h3>
+                    <h3 className="text-sm font-medium mb-2">{t('date_range')}</h3>
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <span>{formatDate(project.start_date)} - {project.actual_end_date ? formatDate(project.actual_end_date) : formatDate(project.expected_end_date)}</span>
@@ -135,7 +138,7 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
 
                 <div className="space-y-2 mb-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">Overall Progress</h3>
+                    <h3 className="text-sm font-medium">{t('overall_progress')}</h3>
                     <span className="text-sm">{calculateOverallProgress()}%</span>
                   </div>
                   <Progress value={calculateOverallProgress()} className="h-2" />
@@ -144,7 +147,7 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
             </Card>
 
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold tracking-tight">Project Phases</h2>
+              <h2 className="text-xl font-semibold tracking-tight">{t('project_phases')}</h2>
               <Button onClick={() => {
                 setPhaseOrder(getNextPhaseOrder());
                 setShowAddPhaseDialog(true);
@@ -182,15 +185,15 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
                       <p className="text-muted-foreground mb-4">{phase.description}</p>
                       <div className="grid grid-cols-3 gap-6 mb-4">
                         <div>
-                          <p className="text-sm font-medium">Start Date</p>
+                          <p className="text-sm font-medium">{t('lbl_start_date')}</p>
                           <p className="text-sm">{formatDate(phase.start_date)}</p>
                         </div>
                         <div>
-                          <p className="text-sm font-medium">Expected End Date</p>
+                          <p className="text-sm font-medium">{t('expected_end_date')}</p>
                           <p className="text-sm">{formatDate(phase.expected_end_date)}</p>
                         </div>
                         <div>
-                          <p className="text-sm font-medium">Actual End Date</p>
+                          <p className="text-sm font-medium">{t('actual_end_date')}</p>
                           <p className="text-sm">{formatDate(phase.actual_end_date || '')}</p>
                         </div>
                       </div>
@@ -238,19 +241,19 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
             <Dialog open={showAddPhaseDialog} onOpenChange={setShowAddPhaseDialog}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add New Phase</DialogTitle>
+                  <DialogTitle>{t('ttl_add_new_phase')}</DialogTitle>
                   <DialogDescription>
                     Create a new phase for this project.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">Phase Name</Label>
+                    <Label htmlFor="name">{t('lbl_phase_name')}</Label>
                     <Input
                       id="name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Enter phase name"
+                      placeholder={t('ph_enter_phase_name')}
                     />
                   </div>
                   <div>
@@ -259,12 +262,12 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
                       id="description"
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Enter phase description"
+                      placeholder={t('ph_enter_phase_description')}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="start_date">Start Date</Label>
+                      <Label htmlFor="start_date">{t('lbl_start_date')}</Label>
                       <Input
                         id="start_date"
                         type="date"
@@ -273,7 +276,7 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
                       />
                     </div>
                     <div>
-                      <Label htmlFor="expected_end_date">Expected End Date</Label>
+                      <Label htmlFor="expected_end_date">{t('expected_end_date')}</Label>
                       <Input
                         id="expected_end_date"
                         type="date"
@@ -310,19 +313,19 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
             <Dialog open={showEditPhaseDialog} onOpenChange={setShowEditPhaseDialog}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Edit Phase</DialogTitle>
+                  <DialogTitle>{t('ttl_edit_phase')}</DialogTitle>
                   <DialogDescription>
                     Update the phase details.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="edit_name">Phase Name</Label>
+                    <Label htmlFor="edit_name">{t('lbl_phase_name')}</Label>
                     <Input
                       id="edit_name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Enter phase name"
+                      placeholder={t('ph_enter_phase_name')}
                     />
                   </div>
                   <div>
@@ -331,12 +334,12 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
                       id="edit_description"
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Enter phase description"
+                      placeholder={t('ph_enter_phase_description')}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="edit_start_date">Start Date</Label>
+                      <Label htmlFor="edit_start_date">{t('lbl_start_date')}</Label>
                       <Input
                         id="edit_start_date"
                         type="date"
@@ -345,7 +348,7 @@ const ProjectPhaseManagement: React.FC<ProjectPhaseManagementProps> = ({ project
                       />
                     </div>
                     <div>
-                      <Label htmlFor="edit_expected_end_date">Expected End Date</Label>
+                      <Label htmlFor="edit_expected_end_date">{t('expected_end_date')}</Label>
                       <Input
                         id="edit_expected_end_date"
                         type="date"

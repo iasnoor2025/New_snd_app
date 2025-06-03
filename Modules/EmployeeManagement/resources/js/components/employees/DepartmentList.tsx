@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Department } from '../../types/employee';
 import { Button } from '../ui/button';
@@ -89,6 +90,8 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
   };
 
   const applyFilters = () => {
+  const { t } = useTranslation('employee');
+
     let filtered = [...departments];
 
     // Apply search query
@@ -201,7 +204,7 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
               type="text"
-              placeholder="Search departments..."
+              placeholder={t('ph_search_departments')}
               className="w-full pl-9"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -213,10 +216,10 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
               value={statusFilter}
               onValueChange={setStatusFilter}
               <SelectTrigger className="w-[130px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t('ph_status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t('opt_all_status')}</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
               </SelectContent>
@@ -329,7 +332,7 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Department Name <span className="text-red-500">*</span></Label>
+                <Label htmlFor="name">{t('lbl_department_name')} <span className="text-red-500">*</span></Label>
                 <Input
                   id="name"
                   value={currentDepartment.name || ''}
@@ -339,7 +342,7 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="code">Department Code</Label>
+                <Label htmlFor="code">{t('lbl_department_code')}</Label>
                 <Input
                   id="code"
                   value={currentDepartment.code || ''}
@@ -365,7 +368,7 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
                     is_active: value === 'active'
                   })}
                   <SelectTrigger id="is_active">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t('ph_select_status')} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
@@ -388,7 +391,7 @@ export const DepartmentList: React.FC<DepartmentListProps> = ({ initialDepartmen
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Department</DialogTitle>
+            <DialogTitle>{t('ttl_delete_department')}</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this department? This action cannot be undone.
             </DialogDescription>

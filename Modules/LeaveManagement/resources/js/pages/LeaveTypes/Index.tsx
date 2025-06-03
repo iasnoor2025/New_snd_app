@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
@@ -108,6 +109,8 @@ const LeaveTypesIndex: React.FC = () => {
   });
 
   const handleFilter = () => {
+  const { t } = useTranslation('leave');
+
     router.get(route('leaves.types.index'), {
       ...Object.fromEntries(
         Object.entries(filterForm).filter(([_, value]) => value !== '')
@@ -178,13 +181,13 @@ const LeaveTypesIndex: React.FC = () => {
 
   return (
     <AdminLayout>
-      <Head title="Leave Types" />
+      <Head title={t('leave_types')} />
 
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Leave Types</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('leave_types')}</h1>
             <p className="text-muted-foreground">
               Manage different types of leave available to employees
             </p>
@@ -201,7 +204,7 @@ const LeaveTypesIndex: React.FC = () => {
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Types</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_total_types')}</CardTitle>
               <SettingsIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -214,7 +217,7 @@ const LeaveTypesIndex: React.FC = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Types</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_active_types')}</CardTitle>
               <PowerIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -229,7 +232,7 @@ const LeaveTypesIndex: React.FC = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Paid Types</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_paid_types')}</CardTitle>
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -244,7 +247,7 @@ const LeaveTypesIndex: React.FC = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Approval Required</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_approval_required')}</CardTitle>
               <ClockIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -273,7 +276,7 @@ const LeaveTypesIndex: React.FC = () => {
                 <div className="relative">
                   <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search leave types..."
+                    placeholder={t('ph_search_leave_types')}
                     value={filterForm.search}
                     onChange={(e) => setFilterForm(prev => ({ ...prev, search: e.target.value }))}
                     className="pl-10"
@@ -288,10 +291,10 @@ const LeaveTypesIndex: React.FC = () => {
                   onValueChange={(value) => setFilterForm(prev => ({ ...prev, status: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All statuses" />
+                    <SelectValue placeholder={t('opt_all_statuses_2')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Statuses</SelectItem>
+                    <SelectItem value="">{t('opt_all_statuses')}</SelectItem>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
@@ -299,7 +302,7 @@ const LeaveTypesIndex: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Sort By</label>
+                <label className="text-sm font-medium mb-2 block">{t('lbl_sort_by')}</label>
                 <Select
                   value={`${filterForm.sort_by}-${filterForm.sort_order}`}
                   onValueChange={(value) => {
@@ -315,8 +318,8 @@ const LeaveTypesIndex: React.FC = () => {
                     <SelectItem value="name-desc">Name (Z-A)</SelectItem>
                     <SelectItem value="max_days_per_year-asc">Max Days (Low-High)</SelectItem>
                     <SelectItem value="max_days_per_year-desc">Max Days (High-Low)</SelectItem>
-                    <SelectItem value="created_at-desc">Newest First</SelectItem>
-                    <SelectItem value="created_at-asc">Oldest First</SelectItem>
+                    <SelectItem value="created_at-desc">{t('opt_newest_first')}</SelectItem>
+                    <SelectItem value="created_at-asc">{t('opt_oldest_first')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -336,7 +339,7 @@ const LeaveTypesIndex: React.FC = () => {
         {/* Leave Types Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Leave Types</CardTitle>
+            <CardTitle>{t('leave_types')}</CardTitle>
             <CardDescription>
               Configure and manage different types of leave
             </CardDescription>
@@ -396,7 +399,7 @@ const LeaveTypesIndex: React.FC = () => {
                           </Badge>
                           {leaveType.requires_approval && (
                             <Badge variant="outline" className="text-xs">
-                              Approval Required
+                              {t('ttl_approval_required')}
                             </Badge>
                           )}
                         </div>
@@ -435,7 +438,7 @@ const LeaveTypesIndex: React.FC = () => {
                       <TableCell>
                         <div className="flex flex-col gap-1 text-xs">
                           {leaveType.carry_forward && (
-                            <span className="text-green-600">Carry Forward</span>
+                            <span className="text-green-600">{t('carry_forward')}</span>
                           )}
                           {leaveType.notice_days_required && (
                             <span className="text-blue-600">
@@ -461,7 +464,7 @@ const LeaveTypesIndex: React.FC = () => {
                             <DropdownMenuItem asChild>
                               <Link href={route('leaves.types.show', leaveType.id)}>
                                 <EyeIcon className="h-4 w-4 mr-2" />
-                                View Details
+                                {t('employee:ttl_view_details')}
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
@@ -533,7 +536,7 @@ const LeaveTypesIndex: React.FC = () => {
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete Leave Type</DialogTitle>
+              <DialogTitle>{t('ttl_delete_leave_type')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete this leave type? This action cannot be undone.
                 All associated leave requests will be affected.

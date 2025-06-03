@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import { FileText, Loader2 } from "lucide-react";
 import { usePermission } from "@/hooks/usePermission";
@@ -20,6 +21,8 @@ export default function QuotationGenerator({
   variant = "default",
   size = "default"
 }: QuotationGeneratorProps) {
+  const { t } = useTranslation('rental');
+
   const { hasPermission } = usePermission();
   const [isGenerating, setIsGenerating] = useState(false);
   const canGenerateQuotation = hasPermission('rentals.edit');

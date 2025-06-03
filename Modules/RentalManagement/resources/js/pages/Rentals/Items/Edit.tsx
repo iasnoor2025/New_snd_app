@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
@@ -29,19 +30,21 @@ export const Edit: FC<Props> = ({ rental, item, equipment, operators }) => {
     });
 
     const handleSubmit = (e: React.FormEvent) => {
+  const { t } = useTranslation('rental');
+
         e.preventDefault();
         put(`/rentals/${rental.id}/items/${item.id}`);
     };
 
     return (
         <>
-            <Head title="Edit Rental Item" />
+            <Head title={t('ttl_edit_rental_item')} />
 
             <div className="container mx-auto py-6">
                 <div className="max-w-2xl mx-auto">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Edit Rental Item</CardTitle>
+                            <CardTitle>{t('ttl_edit_rental_item')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,7 +55,7 @@ export const Edit: FC<Props> = ({ rental, item, equipment, operators }) => {
                                         onValueChange={(value) => setData('equipment_id', value)}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select equipment" />
+                                            <SelectValue placeholder={t('ph_select_equipment')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {equipment.map((item) => (
@@ -74,7 +77,7 @@ export const Edit: FC<Props> = ({ rental, item, equipment, operators }) => {
                                         onValueChange={(value) => setData('operator_id', value)}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select operator" />
+                                            <SelectValue placeholder={t('ph_select_operator')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {operators.map((operator) => (
@@ -105,13 +108,13 @@ export const Edit: FC<Props> = ({ rental, item, equipment, operators }) => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="rate_type">Rate Type</Label>
+                                        <Label htmlFor="rate_type">{t('lbl_rate_type')}</Label>
                                         <Select
                                             value={data.rate_type}
                                             onValueChange={(value) => setData('rate_type', value)}
                                         >
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select rate type" />
+                                                <SelectValue placeholder={t('ph_select_rate_type')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="daily">Daily</SelectItem>

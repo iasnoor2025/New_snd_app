@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -78,6 +79,8 @@ interface Props extends PageProps {
 }
 
 export default function MonthlyTimesheets({ auth, timesheets = [], employees = [] }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedEmployee, setSelectedEmployee] = useState<string>('all');
@@ -341,14 +344,14 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
   };
 
   return (
-    <AdminLayout title="Monthly Timesheets" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
-      <Head title="Monthly Timesheets" />
+    <AdminLayout title={t('monthly_timesheets')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+      <Head title={t('monthly_timesheets')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
             <CalendarIcon className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Monthly Timesheets</h1>
+            <h1 className="text-2xl font-bold">{t('monthly_timesheets')}</h1>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -382,7 +385,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
               }}
             >
               <FileTextIcon className="mr-2 h-4 w-4" />
-              Pay Slip
+              {t('pay_slip')}
             </Button>
 
             <Button variant="outline" size="sm" className="w-full sm:w-auto"
@@ -415,15 +418,15 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
           <CardHeader>
             <div className="flex justify-between items-center">
               <div>
-                <CardTitle>Monthly View</CardTitle>
+                <CardTitle>{t('ttl_monthly_view')}</CardTitle>
                 <CardDescription>
                   View and manage timesheets for the entire month with overtime
                 </CardDescription>
               </div>
               <Tabs defaultValue="month" onValueChange={(value) => setViewMode(value as 'week' | 'month')}>
                 <TabsList>
-                  <TabsTrigger value="week">Week View</TabsTrigger>
-                  <TabsTrigger value="month">Full Month</TabsTrigger>
+                  <TabsTrigger value="week">{t('week_view')}</TabsTrigger>
+                  <TabsTrigger value="month">{t('full_month')}</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -482,10 +485,10 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   onValueChange={handleEmployeeSelect}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All Employees" />
+                    <SelectValue placeholder={t('all_employees')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Employees</SelectItem>
+                    <SelectItem value="all">{t('all_employees')}</SelectItem>
                     {employees.map((employee) => (
                       <SelectItem key={employee.id} value={employee.id.toString()}>
                         {employee.first_name} {employee.last_name}
@@ -501,7 +504,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
                   <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     type="search"
-                    placeholder="Search timesheets..."
+                    placeholder={t('ph_search_timesheets')}
                     className="pl-8"
                   />
                 </div>
@@ -665,7 +668,7 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <FileTextIcon className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium">No timesheets found</h3>
+                <h3 className="text-lg font-medium">{t('no_timesheets_found')}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   No timesheet data available for the selected month and employee.
                 </p>
@@ -682,11 +685,11 @@ export default function MonthlyTimesheets({ auth, timesheets = [], employees = [
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center">
                   <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-                  <span>Regular Hours</span>
+                  <span>{t('lbl_regular_hours')}</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 rounded-full bg-purple-600 mr-2"></div>
-                  <span>Overtime Hours</span>
+                  <span>{t('lbl_overtime_hours')}</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 rounded-full bg-red-600 mr-2"></div>

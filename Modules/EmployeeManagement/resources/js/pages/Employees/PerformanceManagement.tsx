@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { router } from '@inertiajs/react';
 import { PerformanceReview } from '../../types/performance';
 import PerformanceReviewList from '../../components/employees/PerformanceReviewList';
@@ -9,6 +10,8 @@ import { Button } from '../../components/ui/button';
 import { Plus, ArrowLeft } from 'lucide-react';
 
 export default function PerformanceManagement({ employeeId }: { employeeId?: string }) {
+  const { t } = useTranslation('employee');
+
   const [activeTab, setActiveTab] = useState('list');
   const [currentReview, setCurrentReview] = useState<PerformanceReview | undefined>(undefined);
 
@@ -51,7 +54,7 @@ export default function PerformanceManagement({ employeeId }: { employeeId?: str
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           {renderBreadcrumbs()}
-          <h1 className="text-3xl font-bold tracking-tight">Performance Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('performance_management')}</h1>
           <p className="text-muted-foreground">
             {activeTab === 'list'
               ? 'View and manage employee performance reviews'

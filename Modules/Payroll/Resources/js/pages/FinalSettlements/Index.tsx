@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
 import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
@@ -61,6 +62,8 @@ interface Props extends PageProps {
 }
 
 export default function Index({ auth, settlements, filters }: Props) {
+  const { t } = useTranslation('payroll');
+
     const { hasPermission } = usePermission();
 
     const getStatusBadge = (status: string) => {
@@ -79,13 +82,13 @@ export default function Index({ auth, settlements, filters }: Props) {
     };
 
     return (
-        <AdminLayout title="Final Settlements" requiredPermission="final-settlements.view">
-            <Head title="Final Settlements" />
+        <AdminLayout title={t('ttl_final_settlements')} requiredPermission="final-settlements.view">
+            <Head title={t('ttl_final_settlements')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-2xl font-bold">Final Settlements</CardTitle>
+                        <CardTitle className="text-2xl font-bold">{t('ttl_final_settlements')}</CardTitle>
                         {hasPermission('final-settlements.create') && (
                             <Button asChild>
                                 <Link href={route('final-settlements.create')}>
@@ -101,7 +104,7 @@ export default function Index({ auth, settlements, filters }: Props) {
                                 <div>
                                     <Input
                                         type="text"
-                                        placeholder="Search by employee..."
+                                        placeholder={t('ph_search_by_employee')}
                                         value={filters.search}
                                         onChange={(e) => {
                                             const url = new URL(window.location.href);
@@ -120,10 +123,10 @@ export default function Index({ auth, settlements, filters }: Props) {
                                         }}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Filter by status" />
+                                            <SelectValue placeholder={t('ph_filter_by_status')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">All Statuses</SelectItem>
+                                            <SelectItem value="">{t('opt_all_statuses')}</SelectItem>
                                             <SelectItem value="pending">Pending</SelectItem>
                                             <SelectItem value="approved">Approved</SelectItem>
                                             <SelectItem value="rejected">Rejected</SelectItem>
@@ -160,11 +163,11 @@ export default function Index({ auth, settlements, filters }: Props) {
                                     <TableHeader>
                                         <TableRow>
                                             <TableHead>Employee</TableHead>
-                                            <TableHead>Last Working Day</TableHead>
-                                            <TableHead>Total Payable</TableHead>
+                                            <TableHead>{t('last_working_day')}</TableHead>
+                                            <TableHead>{t('lbl_total_payable')}</TableHead>
                                             <TableHead>Status</TableHead>
-                                            <TableHead>Created At</TableHead>
-                                            <TableHead>Approved By</TableHead>
+                                            <TableHead>{t('created_at')}</TableHead>
+                                            <TableHead>{t('approved_by')}</TableHead>
                                             <TableHead>Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -220,7 +223,7 @@ export default function Index({ auth, settlements, filters }: Props) {
                                                                 settlement.id
                                                             )}
                                                         >
-                                                            View Details
+                                                            {t('employee:ttl_view_details')}
                                                         </Link>
                                                     </Button>
                                                 </TableCell>

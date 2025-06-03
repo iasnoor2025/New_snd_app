@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -73,6 +74,8 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
 
   // Calculate rating category
   const getRatingCategory = (rating: number) => {
+  const { t } = useTranslation('employee');
+
     const category = PERFORMANCE_RATING_CATEGORIES.find(
       cat => rating >= cat.min && rating <= cat.max;
     );
@@ -264,7 +267,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Review Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Review Information</h3>
+            <h3 className="text-lg font-medium">{t('review_information')}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -278,7 +281,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       onValueChange={(value) => field.onChange(parseInt(value))}
                       disabled={!!employeeId || isLoading}
                       <SelectTrigger id="employee_id">
-                        <SelectValue placeholder="Select employee" />
+                        <SelectValue placeholder={t('ph_select_employee')} />
                       </SelectTrigger>
                       <SelectContent>
                         {employees.map((employee) => (
@@ -306,7 +309,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       onValueChange={(value) => field.onChange(parseInt(value))}
                       disabled={isLoading}
                       <SelectTrigger id="reviewer_id">
-                        <SelectValue placeholder="Select reviewer" />
+                        <SelectValue placeholder={t('ph_select_reviewer')} />
                       </SelectTrigger>
                       <SelectContent>
                         {reviewers.map((user) => (
@@ -326,7 +329,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="review_date">Review Date <span className="text-red-500">*</span></Label>
+                <Label htmlFor="review_date">{t('lbl_review_date')} <span className="text-red-500">*</span></Label>
                 <Controller
                   name="review_date"
                   control={control}
@@ -343,7 +346,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="review_period_start">Period Start <span className="text-red-500">*</span></Label>
+                <Label htmlFor="review_period_start">{t('lbl_period_start')} <span className="text-red-500">*</span></Label>
                 <Controller
                   name="review_period_start"
                   control={control}
@@ -360,7 +363,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="review_period_end">Period End <span className="text-red-500">*</span></Label>
+                <Label htmlFor="review_period_end">{t('lbl_period_end')} <span className="text-red-500">*</span></Label>
                 <Controller
                   name="review_period_end"
                   control={control}
@@ -381,7 +384,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
           {/* Performance Ratings */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">Performance Ratings</h3>
+              <h3 className="text-lg font-medium">{t('performance_ratings')}</h3>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Overall:</span>
                 {getRatingBadge(overallRating)}
@@ -391,7 +394,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label htmlFor="job_knowledge_rating">Job Knowledge</Label>
+                  <Label htmlFor="job_knowledge_rating">{t('lbl_job_knowledge')}</Label>
                   <span className="text-sm">{watch('job_knowledge_rating')}/5</span>
                 </div>
                 <Controller
@@ -411,7 +414,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label htmlFor="work_quality_rating">Work Quality</Label>
+                  <Label htmlFor="work_quality_rating">{t('lbl_work_quality')}</Label>
                   <span className="text-sm">{watch('work_quality_rating')}/5</span>
                 </div>
                 <Controller
@@ -521,7 +524,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                   id="strength-input"
                   value={strengthInput}
                   onChange={(e) => setStrengthInput(e.target.value)}
-                  placeholder="Enter strength"
+                  placeholder={t('ph_enter_strength')}
                   className="flex-1"
                 />
                 <Button type="button" onClick={handleAddStrength} size="sm" className="flex items-center gap-1">
@@ -546,13 +549,13 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
 
             {/* Weaknesses */}
             <div className="space-y-2">
-              <Label htmlFor="weaknesses">Areas for Improvement</Label>
+              <Label htmlFor="weaknesses">{t('lbl_areas_for_improvement')}</Label>
               <div className="flex gap-2">
                 <Input
                   id="weakness-input"
                   value={weaknessInput}
                   onChange={(e) => setWeaknessInput(e.target.value)}
-                  placeholder="Enter area for improvement"
+                  placeholder={t('ph_enter_area_for_improvement')}
                   className="flex-1"
                 />
                 <Button type="button" onClick={handleAddWeakness} size="sm" className="flex items-center gap-1">
@@ -583,7 +586,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                   id="goal-input"
                   value={goalInput}
                   onChange={(e) => setGoalInput(e.target.value)}
-                  placeholder="Enter goal or objective"
+                  placeholder={t('ph_enter_goal_or_objective')}
                   className="flex-1"
                 />
                 <Button type="button" onClick={handleAddGoal} size="sm" className="flex items-center gap-1">
@@ -608,12 +611,12 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
 
             {/* Comments */}
             <div className="space-y-2">
-              <Label htmlFor="comments">Additional Comments</Label>
+              <Label htmlFor="comments">{t('lbl_additional_comments')}</Label>
               <Textarea
                 id="comments"
                 {...register('comments')}
                 rows={4}
-                placeholder="Enter any additional comments or notes"
+                placeholder={t('ph_enter_any_additional_comments_or_notes')}
               />
             </div>
           </div>

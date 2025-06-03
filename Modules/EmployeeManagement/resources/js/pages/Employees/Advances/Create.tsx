@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -28,6 +29,8 @@ interface Props extends PageProps {
 }
 
 export default function Create({ auth, employee }: Props) {
+  const { t } = useTranslation('employee');
+
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [paymentDate, setPaymentDate] = useState('');
@@ -97,8 +100,8 @@ export default function Create({ auth, employee }: Props) {
   };
 
   return (
-    <AdminLayout title="Create Advance Payment" breadcrumbs={breadcrumbs} requiredPermission="employees.edit">
-      <Head title="Create Advance Payment" />
+    <AdminLayout title={t('ttl_create_advance_payment')} breadcrumbs={breadcrumbs} requiredPermission="employees.edit">
+      <Head title={t('ttl_create_advance_payment')} />
 
       <div className="flex h-full flex-1 flex-col gap-6 p-4 md:gap-8 md:p-8">
         <div className="flex items-center gap-4">
@@ -115,7 +118,7 @@ export default function Create({ auth, employee }: Props) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Create Advance Payment</CardTitle>
+            <CardTitle>{t('ttl_create_advance_payment')}</CardTitle>
             <CardDescription>
               Create a new advance payment request for {employee.first_name} {employee.last_name}
             </CardDescription>
@@ -140,7 +143,7 @@ export default function Create({ auth, employee }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="payment-date">Payment Date</Label>
+                  <Label htmlFor="payment-date">{t('lbl_payment_date')}</Label>
                   <Input
                     id="payment-date"
                     type="date"

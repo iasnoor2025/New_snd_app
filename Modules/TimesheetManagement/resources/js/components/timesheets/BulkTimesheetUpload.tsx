@@ -1,4 +1,5 @@
 ﻿import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -112,6 +113,8 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
   };
 
   const downloadTemplate = () => {
+  const { t } = useTranslation('timesheet');
+
     // Create a template CSV content
     const csvContent = [
       'employee_id,date,regular_hours,overtime_hours,project_id,location,notes',;
@@ -141,7 +144,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-medium">Upload Timesheets</h3>
+                  <h3 className="text-lg font-medium">{t('upload_timesheets')}</h3>
                   <p className="text-sm text-gray-500">
                     Upload a CSV file containing timesheet data
                   </p>
@@ -158,7 +161,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="file">Select CSV File</Label>
+                  <Label htmlFor="file">{t('lbl_select_csv_file')}</Label>
                   <Input
                     id="file"
                     type="file"
@@ -175,7 +178,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
                 {uploadError && (
                   <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Upload Error</AlertTitle>
+                    <AlertTitle>{t('ttl_upload_error')}</AlertTitle>
                     <AlertDescription>{uploadError}</AlertDescription>
                   </Alert>
                 )}
@@ -200,7 +203,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
                     </>
                   ) : (
                       <Upload className="h-4 w-4" />
-                      Upload Timesheets
+                      {t('upload_timesheets')}
                     </>
                   )}
                 </Button>
@@ -213,7 +216,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-medium">Format Instructions</h3>
+                <h3 className="text-lg font-medium">{t('format_instructions')}</h3>
                 <p className="text-sm text-gray-500">
                   Ensure your CSV file follows this format
                 </p>
@@ -268,7 +271,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-medium">Upload Results</h3>
+                <h3 className="text-lg font-medium">{t('upload_results')}</h3>
                 {uploadSummary.failed === 0 ? (
                   <CheckCircle className="h-5 w-5 text-green-500" />
                 ) : (
@@ -278,7 +281,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-md">
-                  <p className="text-sm text-gray-500">Total Records</p>
+                  <p className="text-sm text-gray-500">{t('total_records')}</p>
                   <p className="text-2xl font-bold">{uploadSummary.total}</p>
                 </div>
                 <div className="bg-green-50 p-4 rounded-md">

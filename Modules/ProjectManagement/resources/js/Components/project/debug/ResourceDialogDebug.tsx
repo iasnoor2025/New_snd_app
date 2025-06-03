@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import ResourceForm from '../ResourceForm';
@@ -6,6 +7,8 @@ import ResourceForm from '../ResourceForm';
 type ResourceType = 'manpower' | 'equipment' | 'material' | 'fuel' | 'expense';
 
 export default function ResourceDialogDebug({ projectId = 1 }: { projectId: number }) {
+  const { t } = useTranslation('project');
+
     // Tab selection
     const [selectedType, setSelectedType] = useState<ResourceType>('manpower');
 
@@ -55,7 +58,7 @@ export default function ResourceDialogDebug({ projectId = 1 }: { projectId: numb
     return (
         <div className="p-4 space-y-4">
             <div className="space-y-2">
-                <h2 className="text-xl font-bold">Resource Dialog Debug</h2>
+                <h2 className="text-xl font-bold">{t('resource_dialog_debug')}</h2>
                 <p>Current tab: {selectedType}</p>
             </div>
 
@@ -83,8 +86,8 @@ export default function ResourceDialogDebug({ projectId = 1 }: { projectId: numb
             <Dialog open={manpowerOpen} onOpenChange={setManpowerOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Add Manpower</DialogTitle>
-                        <DialogDescription>Add a new manpower resource</DialogDescription>
+                        <DialogTitle>{t('ttl_add_manpower')}</DialogTitle>
+                        <DialogDescription>{t('add_a_new_manpower_resource')}</DialogDescription>
                     </DialogHeader>
                     <ResourceForm
                         type="manpower"
@@ -98,8 +101,8 @@ export default function ResourceDialogDebug({ projectId = 1 }: { projectId: numb
             <Dialog open={equipmentOpen} onOpenChange={setEquipmentOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Add Equipment</DialogTitle>
-                        <DialogDescription>Add a new equipment resource</DialogDescription>
+                        <DialogTitle>{t('ttl_add_equipment')}</DialogTitle>
+                        <DialogDescription>{t('add_a_new_equipment_resource')}</DialogDescription>
                     </DialogHeader>
                     <ResourceForm
                         type="equipment"
@@ -113,8 +116,8 @@ export default function ResourceDialogDebug({ projectId = 1 }: { projectId: numb
             <Dialog open={materialOpen} onOpenChange={setMaterialOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Add Material</DialogTitle>
-                        <DialogDescription>Add a new material resource</DialogDescription>
+                        <DialogTitle>{t('ttl_add_material')}</DialogTitle>
+                        <DialogDescription>{t('add_a_new_material_resource')}</DialogDescription>
                     </DialogHeader>
                     <ResourceForm
                         type="material"
@@ -128,8 +131,8 @@ export default function ResourceDialogDebug({ projectId = 1 }: { projectId: numb
             <Dialog open={fuelOpen} onOpenChange={setFuelOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Add Fuel</DialogTitle>
-                        <DialogDescription>Add a new fuel resource</DialogDescription>
+                        <DialogTitle>{t('ttl_add_fuel')}</DialogTitle>
+                        <DialogDescription>{t('add_a_new_fuel_resource')}</DialogDescription>
                     </DialogHeader>
                     <ResourceForm
                         type="fuel"
@@ -143,8 +146,8 @@ export default function ResourceDialogDebug({ projectId = 1 }: { projectId: numb
             <Dialog open={expenseOpen} onOpenChange={setExpenseOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Add Expense</DialogTitle>
-                        <DialogDescription>Add a new expense resource</DialogDescription>
+                        <DialogTitle>{t('ttl_add_expense')}</DialogTitle>
+                        <DialogDescription>{t('add_a_new_expense_resource')}</DialogDescription>
                     </DialogHeader>
                     <ResourceForm
                         type="expense"

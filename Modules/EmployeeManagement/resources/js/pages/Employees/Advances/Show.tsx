@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -61,6 +62,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, employee, advance }: Props) {
+  const { t } = useTranslation('employee');
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const breadcrumbs = [;
@@ -113,15 +116,15 @@ export default function Show({ auth, employee, advance }: Props) {
       case 'rejected':
         return <Badge variant="destructive">Rejected</Badge>;
       case 'paid':
-        return <Badge className="bg-green-500 hover:bg-green-600">Fully Paid</Badge>;
+        return <Badge className="bg-green-500 hover:bg-green-600">{t('fully_paid')}</Badge>;
       default:
         return <Badge variant="secondary">Pending</Badge>;
     }
   };
 
   return (
-    <AdminLayout title="Advance Payment Details" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
-      <Head title="Advance Payment Details" />
+    <AdminLayout title={t('ttl_advance_payment_details')} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+      <Head title={t('ttl_advance_payment_details')} />
 
       <div className="flex h-full flex-1 flex-col gap-6 p-4 md:gap-8 md:p-8">
         <div className="flex items-center justify-between">
@@ -175,7 +178,7 @@ export default function Show({ auth, employee, advance }: Props) {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-lg font-semibold mb-4">Payment Information</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('payment_information')}</h3>
                 <dl className="space-y-4">
                   <div className="grid grid-cols-2 gap-2">
                     <dt className="font-medium text-muted-foreground">Amount:</dt>
@@ -211,7 +214,7 @@ export default function Show({ auth, employee, advance }: Props) {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-4">Additional Information</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('additional_information')}</h3>
                 <dl className="space-y-4">
                   <div>
                     <dt className="font-medium text-muted-foreground mb-1">Reason:</dt>
@@ -256,7 +259,7 @@ export default function Show({ auth, employee, advance }: Props) {
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete Advance Payment</DialogTitle>
+              <DialogTitle>{t('ttl_delete_advance_payment')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete this advance payment? This action cannot be undone.
               </DialogDescription>

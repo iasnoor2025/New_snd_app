@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 // import { PageProps } from '@/types'; // Uncomment and adjust if needed
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -97,6 +98,8 @@ const breadcrumbs  = [
 ];
 
 export default function Index({ auth, rentals, filters = {} }: Props) {
+  const { t } = useTranslation('rental');
+
   // const { hasPermission } = usePermission();
   const canCreateRentals = true; // Assuming canCreateRentals is always true
   const canEditRentals = true; // Assuming canEditRentals is always true
@@ -418,7 +421,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
 
   return (
     <AdminLayout title="Rentals" breadcrumbs={breadcrumbs} requiredPermission="rentals.view">
-      <Head title="Rentals Management" />
+      <Head title={t('ttl_rentals_management')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
@@ -452,7 +455,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="text"
-                      placeholder="Search by rental # or customer..."
+                      placeholder={t('ph_search_by_rental_or_customer')}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full pl-9"
@@ -482,10 +485,10 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                     name="status"
                   >
                     <SelectTrigger className="w-full" id="status">
-                      <SelectValue placeholder="Filter by status" />
+                      <SelectValue placeholder={t('ph_filter_by_status')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
@@ -498,7 +501,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                     <CalendarClock className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="date"
-                      placeholder="Start Date"
+                      placeholder={t('lbl_start_date')}
                       value={startDateFilter}
                       onChange={(e) => handleDateChange('start', e.target.value)}
                       className="w-full pl-9"
@@ -527,7 +530,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                     <CalendarClock className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="date"
-                      placeholder="End Date"
+                      placeholder={t('end_date')}
                       value={endDateFilter}
                       onChange={(e) => handleDateChange('end', e.target.value)}
                       className="w-full pl-9"
@@ -668,8 +671,8 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                     <TableHead>customer</TableHead>
                     <TableHead>Dates</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Has Operators</TableHead>
-                    <TableHead>Total Amount</TableHead>
+                    <TableHead>{t('th_has_operators')}</TableHead>
+                    <TableHead>{t('th_total_amount')}</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -797,7 +800,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm deletion</DialogTitle>
+            <DialogTitle>{t('ttl_confirm_deletion_1')}</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this rental? This action cannot be undone.
             </DialogDescription>

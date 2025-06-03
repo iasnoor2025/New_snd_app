@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
 import { Rental, RentalTimesheet } from '@/Modules/RentalManagement/Resources/js/types/models';
@@ -81,7 +82,7 @@ class ErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         <div className="p-6 border rounded-md bg-red-50 text-red-800 my-4">
-          <h3 className="font-bold mb-2">Something went wrong</h3>
+          <h3 className="font-bold mb-2">{t('something_went_wrong')}</h3>
           <p className="mb-4 text-sm">{this.state.error?.message || "An error occurred while rendering this component."}</p>
           <Button 
             size="sm" 
@@ -104,6 +105,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, rental, timesheet }: Props) {
+  const { t } = useTranslation('rental');
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -235,8 +238,8 @@ export default function Show({ auth, rental, timesheet }: Props) {
             <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
               <UserX className="h-5 w-5 text-red-600" />
               <div>
-                <p className="font-medium text-red-600">Operator Absent</p>
-                <p className="text-sm text-red-600/80">No hours recorded for this timesheet</p>
+                <p className="font-medium text-red-600">{t('operator_absent')}</p>
+                <p className="text-sm text-red-600/80">{t('no_hours_recorded_for_this_timesheet')}</p>
               </div>
             </div>
           ) : (
@@ -254,10 +257,10 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       <User className="h-4 w-4 text-muted-foreground" />
                       {timesheet.rentalItem.operator.first_name} {timesheet.rentalItem.operator.last_name}
                     </p>
-                    <Badge variant="outline" className="mt-2">Default Operator</Badge>
+                    <Badge variant="outline" className="mt-2">{t('default_operator')}</Badge>
                   </div>
                 ) : (
-                  <p className="text-muted-foreground mt-1">No operator assigned</p>
+                  <p className="text-muted-foreground mt-1">{t('no_operator_assigned')}</p>
                 )}
               </div>
 
@@ -329,7 +332,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
               <Button asChild variant="outline" size="sm">
                 <Link href={route("rentals.timesheets", rental.id)}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Timesheets
+                  {t('timesheet:back_to_timesheets')}
                 </Link>
               </Button>
               
@@ -396,7 +399,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                 <div>
                   <h1 className="text-xl font-medium tracking-tight flex items-center gap-2">
                     <Clock className="h-5 w-5 text-muted-foreground print:hidden" />
-                    Timesheet Details
+                    {t('ttl_timesheet_details')}
                   </h1>
                   <p className="text-muted-foreground text-sm mt-1">
                     For Rental #{rental.rental_number} â€¢ customer: {rental.customer?.company_name}
@@ -468,9 +471,9 @@ export default function Show({ auth, rental, timesheet }: Props) {
                     <table className="w-full text-sm">
                       <thead className="bg-muted/50">
                         <tr>
-                          <th className="px-4 py-2 text-left font-medium text-muted-foreground">Start Time</th>
-                          <th className="px-4 py-2 text-left font-medium text-muted-foreground">End Time</th>
-                          <th className="px-4 py-2 text-left font-medium text-muted-foreground">Total Hours</th>
+                          <th className="px-4 py-2 text-left font-medium text-muted-foreground">{t('lbl_start_time')}</th>
+                          <th className="px-4 py-2 text-left font-medium text-muted-foreground">{t('end_time')}</th>
+                          <th className="px-4 py-2 text-left font-medium text-muted-foreground">{t('total_hours')}</th>
                           <th className="px-4 py-2 text-left font-medium text-muted-foreground">Status</th>
                         </tr>
                       </thead>
@@ -495,14 +498,14 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   {timesheet.start_time && timesheet.end_time && (
                     <div className="mt-6">
                       <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-sm font-medium text-muted-foreground">Daily Timeline</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground">{t('daily_timeline')}</h3>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Info className="h-4 w-4 text-muted-foreground" />
                             </TooltipTrigger>
                             <TooltipContent side="top">
-                              <p className="text-xs max-w-56">Shows when the equipment was in use throughout the day</p>
+                              <p className="text-xs max-w-56">{t('shows_when_the_equipment_was_in_use_throughout_the')}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -558,7 +561,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                             <th className="px-4 py-2 text-left font-medium text-muted-foreground">Rate</th>
                             <th className="px-4 py-2 text-left font-medium text-muted-foreground">Type</th>
                             <th className="px-4 py-2 text-left font-medium text-muted-foreground">Hours</th>
-                            <th className="px-4 py-2 text-left font-medium text-muted-foreground">Total Cost</th>
+                            <th className="px-4 py-2 text-left font-medium text-muted-foreground">{t('total_cost')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -684,7 +687,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       
                       {rental.customer.contact_person && (
                         <div>
-                          <h3 className="text-sm font-medium text-muted-foreground">Contact Person</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground">{t('contact_person')}</h3>
                           <p className="font-semibold mt-1">
                             {rental.customer.contact_person}
                           </p>
@@ -727,7 +730,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-muted-foreground">Current Status</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground">{t('current_status')}</h3>
                     <div className="mt-1">
                       {getStatusBadge(timesheet.status)}
                     </div>
@@ -749,7 +752,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   
                   {timesheet.updated_at && timesheet.updated_at !== timesheet.created_at && (
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground">Last Updated</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground">{t('last_updated')}</h3>
                       <p className="text-sm mt-1">
                         {format(new Date(timesheet.updated_at), "MMM d, yyyy 'at' h:mm a")}
                       </p>
@@ -808,7 +811,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
         <Dialog open={isCompleteDialogOpen} onOpenChange={setIsCompleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Complete Timesheet</DialogTitle>
+              <DialogTitle>{t('ttl_complete_timesheet')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to mark this timesheet as completed?
                 This action cannot be undone.
@@ -833,7 +836,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete Timesheet</DialogTitle>
+              <DialogTitle>{t('ttl_delete_timesheet')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete this timesheet?
                 This action cannot be undone.

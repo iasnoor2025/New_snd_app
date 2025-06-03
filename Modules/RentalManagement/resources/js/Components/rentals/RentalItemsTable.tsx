@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { useTranslation } from 'react-i18next';
 import { RentalItem, Equipment, Employee } from "@/types/models";
 
 // Shadcn UI Components
@@ -30,6 +31,8 @@ interface Props {
 }
 
 export default function RentalItemsTable({ rentalItems, items = [], readOnly = true }: Props) {
+  const { t } = useTranslation('rental');
+
   // Format currency for display
   const formatCurrency = (amount: number) => {
     // Check for null, undefined, or NaN

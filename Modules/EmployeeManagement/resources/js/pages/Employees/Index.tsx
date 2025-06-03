@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '../../types/index';
 import AdminLayout from '../../layouts/AdminLayout';
@@ -74,6 +75,8 @@ interface Props extends PageProps {
 }
 
 export default function Index({ auth, employees, filters, departments, positions }: Props) {
+  const { t } = useTranslation('employee');
+
   const [search, setSearch] = useState(filters.search || '');
   const [status, setStatus] = useState(filters.status || 'all');
   const [department, setDepartment] = useState(filters.department || 'all');
@@ -162,8 +165,8 @@ export default function Index({ auth, employees, filters, departments, positions
   };
 
   return (
-    <AdminLayout title="Employees" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
-      <Head title="Employees" />
+    <AdminLayout title={t('ttl_employees')} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+      <Head title={t('ttl_employees')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
@@ -184,7 +187,7 @@ export default function Index({ auth, employees, filters, departments, positions
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search employees..."
+                  placeholder={t('ph_search_employees')}
                   value={search}
                   onChange={(e) => handleSearch(e.target.value)}
                   className="pl-8"
@@ -195,13 +198,13 @@ export default function Index({ auth, employees, filters, departments, positions
                 onValueChange={(value) => handleFilter('status', value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Filter by status" />
+                  <SelectValue placeholder={t('ph_filter_by_status')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
                   <SelectItem value="active">Active</SelectItem>
                   <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="on_leave">On Leave</SelectItem>
+                  <SelectItem value="on_leave">{t('on_leave')}</SelectItem>
                   <SelectItem value="terminated">Terminated</SelectItem>
                 </SelectContent>
               </Select>
@@ -210,10 +213,10 @@ export default function Index({ auth, employees, filters, departments, positions
                 onValueChange={(value) => handleFilter('department', value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Filter by department" />
+                  <SelectValue placeholder={t('ph_filter_by_department')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Departments</SelectItem>
+                  <SelectItem value="all">{t('opt_all_departments')}</SelectItem>
                   {departments?.map((dept) => dept && (
                     <SelectItem key={dept.id} value={dept.id.toString()}>
                       {dept.name}
@@ -226,10 +229,10 @@ export default function Index({ auth, employees, filters, departments, positions
                 onValueChange={(value) => handleFilter('position', value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Filter by position" />
+                  <SelectValue placeholder={t('ph_filter_by_position')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Positions</SelectItem>
+                  <SelectItem value="all">{t('opt_all_positions')}</SelectItem>
                   {positions?.map((pos) => pos && (
                     <SelectItem key={pos.id} value={pos.id.toString()}>
                       {pos.name}
@@ -245,9 +248,9 @@ export default function Index({ auth, employees, filters, departments, positions
                   <TableRow>
                     <TableHead>Employee</TableHead>
                     <TableHead>Status & Position</TableHead>
-                    <TableHead>Current Assignment</TableHead>
-                    <TableHead>Salary Info</TableHead>
-                    <TableHead>Contact Details</TableHead>
+                    <TableHead>{t('current_assignment')}</TableHead>
+                    <TableHead>{t('th_salary_info')}</TableHead>
+                    <TableHead>{t('th_contact_details')}</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -315,7 +318,7 @@ export default function Index({ auth, employees, filters, departments, positions
                               </div>
                             </>
                           ) : (
-                            <span className="text-sm text-muted-foreground">No current assignment</span>
+                            <span className="text-sm text-muted-foreground">{t('no_current_assignment')}</span>
                           )}
                         </div>
                       </TableCell>

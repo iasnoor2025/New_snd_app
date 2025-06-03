@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/ui/button';
@@ -6,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManage
 import { toast } from 'sonner';
 
 export default function QuotationTest({ auth }) {
+  const { t } = useTranslation('rental');
+
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleDirectGeneration = () => {
@@ -62,16 +65,16 @@ export default function QuotationTest({ auth }) {
 
   return (
     <AdminLayout user={auth.user}>
-      <Head title="Quotation Test" />
+      <Head title={t('ttl_quotation_test')} />
 
       <div className="container mx-auto py-6">
         <Card className="mb-4">
           <CardHeader>
-            <CardTitle>Generate Quotation Test</CardTitle>
+            <CardTitle>{t('ttl_generate_quotation_test')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-2">Direct Generation Test</h3>
+              <h3 className="text-lg font-medium mb-2">{t('direct_generation_test')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Tests window.location.href approach
               </p>
@@ -86,7 +89,7 @@ export default function QuotationTest({ auth }) {
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Inertia Generation Test</h3>
+              <h3 className="text-lg font-medium mb-2">{t('inertia_generation_test')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Tests Inertia router approach
               </p>
@@ -101,7 +104,7 @@ export default function QuotationTest({ auth }) {
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Session Storage Test</h3>
+              <h3 className="text-lg font-medium mb-2">{t('session_storage_test')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Check if session storage is working correctly
               </p>
@@ -114,7 +117,7 @@ export default function QuotationTest({ auth }) {
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Clear Session Storage</h3>
+              <h3 className="text-lg font-medium mb-2">{t('clear_session_storage')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Reset test state
               </p>
@@ -125,7 +128,7 @@ export default function QuotationTest({ auth }) {
                   toast.success("Session storage cleared");
                 }}
               >
-                Clear Session Storage
+                {t('clear_session_storage')}
               </Button>
             </div>
           </CardContent>

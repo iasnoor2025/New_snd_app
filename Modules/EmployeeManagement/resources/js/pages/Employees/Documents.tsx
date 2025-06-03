@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Table,
     TableBody,
@@ -28,6 +29,8 @@ interface Props {
 }
 
 export default function Documents({ documents }: Props) {
+  const { t } = useTranslation('employee');
+
     const getStatusBadge = (status: Document['status']) => {
         return (
             <Badge
@@ -57,7 +60,7 @@ export default function Documents({ documents }: Props) {
                         <TableHead>Type</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Description</TableHead>
-                        <TableHead>Expiry Date</TableHead>
+                        <TableHead>{t('expiry_date')}</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Notes</TableHead>
                         <TableHead className="text-right">Actions</TableHead>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, useForm } from '@inertiajs/react';
 import MainLayout from '@/Modules/TimesheetManagement/Resources/js/Layouts/MainLayout';
 import Card from '@/Modules/TimesheetManagement/Resources/js/Components/Card';
@@ -17,6 +18,8 @@ import Badge from '@/Modules/TimesheetManagement/Resources/js/Components/Badge';
 import { formatDate, formatHours } from '@/Modules/TimesheetManagement/Resources/js/utils/formatters';
 
 const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll }) => {
+  const { t } = useTranslation('timesheet');
+
   const [rejectingTimesheet, setRejectingTimesheet] = useState(null);
   const [approvingTimesheet, setApprovingTimesheet] = useState(null);
 
@@ -68,11 +71,11 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
 
   return (
     <MainLayout>
-      <Head title="Timesheet Approvals" />
+      <Head title={t('timesheet_approvals')} />
 
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900">Timesheet Approvals</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">{t('timesheet_approvals')}</h1>
 
           <Card className="mt-4">
             <Card.Header>
@@ -91,7 +94,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
                       setTimeout(handleFilterChange, 100);
                     }}
                   >
-                    <option value="">All Employees</option>
+                    <option value="">{t('all_employees')}</option>
                     {employees.map((employee) => (
                       <option key={employee.id} value={employee.id}>
                         {employee.first_name} {employee.last_name}
@@ -126,7 +129,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
 
           <Card className="mt-4">
             <Card.Header>
-              <h2 className="text-lg font-medium text-gray-900">Timesheets Pending Approval</h2>
+              <h2 className="text-lg font-medium text-gray-900">{t('timesheets_pending_approval')}</h2>
             </Card.Header>
             <Card.Body className="p-0">
               <Table>
@@ -210,7 +213,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
       >
         <div className="p-6">
           <h2 className="text-lg font-medium text-gray-900">
-            Approve Timesheet
+            {t('approve_timesheet')}
           </h2>
 
           <div className="mt-4">
@@ -251,7 +254,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
                 onClick={submitApproval}
                 disabled={approvalForm.processing}
               >
-                Approve Timesheet
+                {t('approve_timesheet')}
               </Button>
             </div>
           </div>
@@ -266,7 +269,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
       >
         <div className="p-6">
           <h2 className="text-lg font-medium text-gray-900">
-            Reject Timesheet
+            {t('reject_timesheet')}
           </h2>
 
           <div className="mt-4">
@@ -309,7 +312,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
                 onClick={submitRejection}
                 disabled={rejectionForm.processing || !rejectionForm.data.rejection_reason}
               >
-                Reject Timesheet
+                {t('reject_timesheet')}
               </Button>
             </div>
           </div>

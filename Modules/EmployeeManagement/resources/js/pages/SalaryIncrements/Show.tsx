@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -74,6 +75,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ increment }: Props) {
+  const { t } = useTranslation('employee');
+
     const formatCurrency = (amount: number | null | undefined) => {
         // Handle null, undefined, or NaN values
         const validAmount = amount == null || isNaN(Number(amount)) ? 0 : Number(amount);
@@ -133,7 +136,7 @@ export default function Show({ increment }: Props) {
 
     return (
         <AdminLayout
-            title="Salary Increment Details"
+            title={t('ttl_salary_increment_details')}
             breadcrumbs={[
                 { label: 'Salary Increments', href: route('salary-increments.index') },
                 { label: `${increment.employee.first_name} ${increment.employee.last_name}` }
@@ -148,7 +151,7 @@ export default function Show({ increment }: Props) {
                     </Link>
                     <div>
                         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                            Salary Increment Details
+                            {t('ttl_salary_increment_details')}
                         </h2>
                         <p className="text-sm text-gray-600">
                             {increment.employee.first_name} {increment.employee.last_name} - {increment.employee.employee_id}
@@ -210,19 +213,19 @@ export default function Show({ increment }: Props) {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <User className="h-5 w-5" />
-                                        Employee Information
+                                        {t('employee_information')}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Full Name</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('full_name')}</label>
                                             <p className="text-lg font-medium">
                                                 {increment.employee.first_name} {increment.employee.last_name}
                                             </p>
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Employee ID</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('employee_id')}</label>
                                             <p className="text-lg font-medium">{increment.employee.employee_id}</p>
                                         </div>
                                         <div>
@@ -238,7 +241,7 @@ export default function Show({ increment }: Props) {
                                             <p className="text-lg font-medium">{increment.employee.email}</p>
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Hire Date</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('hire_date')}</label>
                                             <p className="text-lg font-medium">{formatDate(increment.employee.hire_date)}</p>
                                         </div>
                                     </div>
@@ -250,13 +253,13 @@ export default function Show({ increment }: Props) {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <TrendingUp className="h-5 w-5" />
-                                        Increment Details
+                                        {t('ttl_increment_details')}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Increment Type</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('lbl_increment_type')}</label>
                                             <p className="text-lg font-medium">
                                                 <Badge variant="outline">
                                                     {increment.increment_type.replace('_', ' ').toUpperCase()}
@@ -264,12 +267,12 @@ export default function Show({ increment }: Props) {
                                             </p>
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Effective Date</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('lbl_effective_date')}</label>
                                             <p className="text-lg font-medium">{formatDate(increment.effective_date)}</p>
                                         </div>
                                         {increment.increment_percentage && (
                                             <div>
-                                                <label className="text-sm font-medium text-gray-500">Increment Percentage</label>
+                                                <label className="text-sm font-medium text-gray-500">{t('lbl_increment_percentage')}</label>
                                                 <p className="text-lg font-medium text-green-600">
                                                     +{increment.increment_percentage}%
                                                 </p>
@@ -277,20 +280,20 @@ export default function Show({ increment }: Props) {
                                         )}
                                         {increment.increment_amount && (
                                             <div>
-                                                <label className="text-sm font-medium text-gray-500">Increment Amount</label>
+                                                <label className="text-sm font-medium text-gray-500">{t('lbl_increment_amount')}</label>
                                                 <p className="text-lg font-medium text-green-600">
                                                     +{formatCurrency(increment.increment_amount)}
                                                 </p>
                                             </div>
                                         )}
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Total Increase</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('lbl_total_increase')}</label>
                                             <p className="text-lg font-medium text-green-600">
                                                 +{formatCurrency(increaseAmount)} (+{increasePercentage}%)
                                             </p>
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Annual Impact</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('lbl_annual_impact')}</label>
                                             <p className="text-lg font-medium text-blue-600">
                                                 +{formatCurrency(increaseAmount * 12)}
                                             </p>
@@ -311,7 +314,7 @@ export default function Show({ increment }: Props) {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* Current Salary */}
                                         <div>
-                                            <h4 className="font-medium text-gray-900 mb-3">Current Salary</h4>
+                                            <h4 className="font-medium text-gray-900 mb-3">{t('current_salary')}</h4>
                                             <div className="space-y-2">
                                                 <div className="flex justify-between">
                                                     <span className="text-gray-600">Base Salary:</span>
@@ -339,7 +342,7 @@ export default function Show({ increment }: Props) {
 
                                         {/* New Salary */}
                                         <div>
-                                            <h4 className="font-medium text-green-900 mb-3">New Salary</h4>
+                                            <h4 className="font-medium text-green-900 mb-3">{t('new_salary')}</h4>
                                             <div className="space-y-2">
                                                 <div className="flex justify-between">
                                                     <span className="text-gray-600">Base Salary:</span>
@@ -378,18 +381,18 @@ export default function Show({ increment }: Props) {
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div>
-                                        <label className="text-sm font-medium text-gray-500">Reason for Increment</label>
+                                        <label className="text-sm font-medium text-gray-500">{t('lbl_reason_for_increment')}</label>
                                         <p className="mt-1 text-gray-900 whitespace-pre-wrap">{increment.reason}</p>
                                     </div>
                                     {increment.notes && (
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Additional Notes</label>
+                                            <label className="text-sm font-medium text-gray-500">{t('lbl_additional_notes')}</label>
                                             <p className="mt-1 text-gray-900 whitespace-pre-wrap">{increment.notes}</p>
                                         </div>
                                     )}
                                     {increment.rejection_reason && (
                                         <div>
-                                            <label className="text-sm font-medium text-red-600">Rejection Reason</label>
+                                            <label className="text-sm font-medium text-red-600">{t('lbl_rejection_reason')}</label>
                                             <p className="mt-1 text-red-900 whitespace-pre-wrap bg-red-50 p-3 rounded-md">
                                                 {increment.rejection_reason}
                                             </p>
@@ -421,7 +424,7 @@ export default function Show({ increment }: Props) {
                                         <div className="flex items-start gap-3">
                                             <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                                             <div>
-                                                <p className="font-medium">Request Created</p>
+                                                <p className="font-medium">{t('request_created')}</p>
                                                 <p className="text-sm text-gray-600">{formatDate(increment.created_at)}</p>
                                                 <p className="text-sm text-gray-500">by {increment.requested_by.name}</p>
                                             </div>
@@ -472,7 +475,7 @@ export default function Show({ increment }: Props) {
                             {/* Quick Actions */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Quick Actions</CardTitle>
+                                    <CardTitle>{t('quick_actions')}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-2">
                                     <Link href={route('employees.show', increment.employee.id)} className="block">

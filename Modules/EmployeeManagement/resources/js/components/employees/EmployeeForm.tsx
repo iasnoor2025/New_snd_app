@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -171,6 +172,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
   // Handle date change
   const handleDateChange = (field: keyof EmployeeFormValues, date: Date | undefined) => {
+  const { t } = useTranslation('employee');
+
     setValue(field, date);
   };
 
@@ -194,7 +197,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
         <form onSubmit={handleSubmit(onSubmit)}>
           <Tabs defaultValue="basic">
             <TabsList className="grid grid-cols-5 mb-6">
-              <TabsTrigger value="basic">Basic Info</TabsTrigger>
+              <TabsTrigger value="basic">{t('basic_info')}</TabsTrigger>
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="employment">Employment</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -205,7 +208,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
             <TabsContent value="basic" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="file_number">File Number <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="file_number">{t('file_number')} <span className="text-red-500">*</span></Label>
                   <Input
                     id="file_number"
                     {...register('file_number')}
@@ -217,7 +220,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="employee_id">Employee ID</Label>
+                  <Label htmlFor="employee_id">{t('employee_id')}</Label>
                   <Input
                     id="employee_id"
                     {...register('employee_id')}
@@ -231,12 +234,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                     value={watch('status')}
                     onValueChange={(value) => setValue('status', value as any)}
                     <SelectTrigger id="status">
-                      <SelectValue placeholder="Select status" />
+                      <SelectValue placeholder={t('ph_select_status')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="inactive">Inactive</SelectItem>
-                      <SelectItem value="on_leave">On Leave</SelectItem>
+                      <SelectItem value="on_leave">{t('on_leave')}</SelectItem>
                       <SelectItem value="terminated">Terminated</SelectItem>
                     </SelectContent>
                   </Select>
@@ -248,7 +251,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">First Name <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="first_name">{t('lbl_first_name')} <span className="text-red-500">*</span></Label>
                   <Input
                     id="first_name"
                     {...register('first_name')}
@@ -260,7 +263,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="middle_name">Middle Name</Label>
+                  <Label htmlFor="middle_name">{t('lbl_middle_name')}</Label>
                   <Input
                     id="middle_name"
                     {...register('middle_name')}
@@ -268,7 +271,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">Last Name <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="last_name">{t('lbl_last_name')} <span className="text-red-500">*</span></Label>
                   <Input
                     id="last_name"
                     {...register('last_name')}
@@ -282,7 +285,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="date_of_birth">Date of Birth</Label>
+                  <Label htmlFor="date_of_birth">{t('date_of_birth')}</Label>
                   <DatePicker
                     value={watch('date_of_birth')}
                     onChange={(date) => handleDateChange('date_of_birth', date)}
@@ -355,7 +358,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="emergency_contact_name">Emergency Contact Name</Label>
+                  <Label htmlFor="emergency_contact_name">{t('lbl_emergency_contact_name')}</Label>
                   <Input
                     id="emergency_contact_name"
                     {...register('emergency_contact_name')}
@@ -363,7 +366,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="emergency_contact_phone">Emergency Contact Phone</Label>
+                  <Label htmlFor="emergency_contact_phone">{t('lbl_emergency_contact_phone')}</Label>
                   <Input
                     id="emergency_contact_phone"
                     {...register('emergency_contact_phone')}
@@ -381,7 +384,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                     value={watch('position_id')?.toString() || ''}
                     onValueChange={(value) => setValue('position_id', parseInt(value))}
                     <SelectTrigger id="position_id">
-                      <SelectValue placeholder="Select position" />
+                      <SelectValue placeholder={t('ph_select_position')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="">None</SelectItem>
@@ -400,7 +403,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                     value={watch('department_id')?.toString() || ''}
                     onValueChange={(value) => setValue('department_id', parseInt(value))}
                     <SelectTrigger id="department_id">
-                      <SelectValue placeholder="Select department" />
+                      <SelectValue placeholder={t('ph_select_department')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="">None</SelectItem>
@@ -424,7 +427,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="hire_date">Hire Date</Label>
+                  <Label htmlFor="hire_date">{t('hire_date')}</Label>
                   <DatePicker
                     value={watch('hire_date')}
                     onChange={(date) => handleDateChange('hire_date', date)}
@@ -434,7 +437,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="current_location">Current Location</Label>
+                  <Label htmlFor="current_location">{t('lbl_current_location')}</Label>
                   <Input
                     id="current_location"
                     {...register('current_location')}
@@ -447,7 +450,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
             <TabsContent value="documents" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="iqama_number">Iqama Number</Label>
+                  <Label htmlFor="iqama_number">{t('iqama_number')}</Label>
                   <Input
                     id="iqama_number"
                     {...register('iqama_number')}
@@ -455,7 +458,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="iqama_expiry">Iqama Expiry</Label>
+                  <Label htmlFor="iqama_expiry">{t('iqama_expiry')}</Label>
                   <DatePicker
                     value={watch('iqama_expiry')}
                     onChange={(date) => handleDateChange('iqama_expiry', date)}
@@ -465,7 +468,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="passport_number">Passport Number</Label>
+                  <Label htmlFor="passport_number">{t('lbl_passport_number')}</Label>
                   <Input
                     id="passport_number"
                     {...register('passport_number')}
@@ -473,7 +476,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="passport_expiry">Passport Expiry</Label>
+                  <Label htmlFor="passport_expiry">{t('lbl_passport_expiry')}</Label>
                   <DatePicker
                     value={watch('passport_expiry')}
                     onChange={(date) => handleDateChange('passport_expiry', date)}
@@ -483,7 +486,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="driving_license_number">Driving License</Label>
+                  <Label htmlFor="driving_license_number">{t('driving_license')}</Label>
                   <Input
                     id="driving_license_number"
                     {...register('driving_license_number')}
@@ -491,7 +494,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="driving_license_expiry">Driving License Expiry</Label>
+                  <Label htmlFor="driving_license_expiry">{t('lbl_driving_license_expiry')}</Label>
                   <DatePicker
                     value={watch('driving_license_expiry')}
                     onChange={(date) => handleDateChange('driving_license_expiry', date)}
@@ -501,7 +504,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="operator_license_number">Operator License</Label>
+                  <Label htmlFor="operator_license_number">{t('lbl_operator_license')}</Label>
                   <Input
                     id="operator_license_number"
                     {...register('operator_license_number')}
@@ -509,7 +512,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="operator_license_expiry">Operator License Expiry</Label>
+                  <Label htmlFor="operator_license_expiry">{t('lbl_operator_license_expiry')}</Label>
                   <DatePicker
                     value={watch('operator_license_expiry')}
                     onChange={(date) => handleDateChange('operator_license_expiry', date)}
@@ -519,7 +522,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               {employee?.id && (
                 <div className="mt-6 border-t pt-6">
-                  <h3 className="text-lg font-medium mb-4">Document Management</h3>
+                  <h3 className="text-lg font-medium mb-4">{t('document_management')}</h3>
                   <DocumentManager
                     modelType="employee"
                     modelId={employee.id}
@@ -533,7 +536,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
             <TabsContent value="salary" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="basic_salary">Basic Salary</Label>
+                  <Label htmlFor="basic_salary">{t('basic_salary')}</Label>
                   <Input
                     id="basic_salary"
                     type="number"
@@ -543,7 +546,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="hourly_rate">Hourly Rate</Label>
+                  <Label htmlFor="hourly_rate">{t('hourly_rate')}</Label>
                   <Input
                     id="hourly_rate"
                     type="number"
@@ -553,7 +556,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="overtime_rate_multiplier">Overtime Rate Multiplier</Label>
+                  <Label htmlFor="overtime_rate_multiplier">{t('lbl_overtime_rate_multiplier')}</Label>
                   <Input
                     id="overtime_rate_multiplier"
                     type="number"
@@ -565,7 +568,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="food_allowance">Food Allowance</Label>
+                  <Label htmlFor="food_allowance">{t('food_allowance')}</Label>
                   <Input
                     id="food_allowance"
                     type="number"
@@ -575,7 +578,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="housing_allowance">Housing Allowance</Label>
+                  <Label htmlFor="housing_allowance">{t('housing_allowance')}</Label>
                   <Input
                     id="housing_allowance"
                     type="number"
@@ -585,7 +588,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="transport_allowance">Transport Allowance</Label>
+                  <Label htmlFor="transport_allowance">{t('lbl_transport_allowance')}</Label>
                   <Input
                     id="transport_allowance"
                     type="number"
@@ -597,7 +600,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="absent_deduction_rate">Absent Deduction Rate</Label>
+                  <Label htmlFor="absent_deduction_rate">{t('absent_deduction_rate')}</Label>
                   <Input
                     id="absent_deduction_rate"
                     type="number"
@@ -607,7 +610,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="contract_hours_per_day">Contract Hours Per Day</Label>
+                  <Label htmlFor="contract_hours_per_day">{t('lbl_contract_hours_per_day')}</Label>
                   <Input
                     id="contract_hours_per_day"
                     type="number"
@@ -616,7 +619,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="contract_days_per_month">Contract Days Per Month</Label>
+                  <Label htmlFor="contract_days_per_month">{t('lbl_contract_days_per_month')}</Label>
                   <Input
                     id="contract_days_per_month"
                     type="number"
@@ -627,7 +630,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="bank_name">Bank Name</Label>
+                  <Label htmlFor="bank_name">{t('bank_name')}</Label>
                   <Input
                     id="bank_name"
                     {...register('bank_name')}
@@ -635,7 +638,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="bank_account_number">Bank Account Number</Label>
+                  <Label htmlFor="bank_account_number">{t('lbl_bank_account_number')}</Label>
                   <Input
                     id="bank_account_number"
                     {...register('bank_account_number')}
@@ -643,7 +646,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="bank_iban">Bank IBAN</Label>
+                  <Label htmlFor="bank_iban">{t('lbl_bank_iban')}</Label>
                   <Input
                     id="bank_iban"
                     {...register('bank_iban')}

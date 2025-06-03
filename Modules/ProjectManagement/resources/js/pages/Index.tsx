@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../../../../resources/js/components/ui/card';
@@ -36,6 +37,8 @@ interface Props {
 }
 
 export default function Index({ projects }: Props) {
+  const { t } = useTranslation('project');
+
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -111,13 +114,13 @@ export default function Index({ projects }: Props) {
     ];
 
     return (
-        <AdminLayout title="Projects" breadcrumbs={breadcrumbs} requiredPermission="projects.view">
+        <AdminLayout title={t('ttl_projects')} breadcrumbs={breadcrumbs} requiredPermission="projects.view">
 
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex justify-between items-center">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-                        <p className="text-muted-foreground mt-1">Manage all your projects</p>
+                        <p className="text-muted-foreground mt-1">{t('manage_all_your_projects')}</p>
                     </div>
                     <Link href={window.route('projects.create')}>
                         <Button className="flex items-center">
@@ -146,7 +149,7 @@ export default function Index({ projects }: Props) {
                                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         type="search"
-                                        placeholder="Search projects..."
+                                        placeholder={t('ph_search_projects')}
                                         className="w-[200px] pl-8"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -187,10 +190,10 @@ export default function Index({ projects }: Props) {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Project Name</TableHead>
+                                        <TableHead>{t('lbl_project_name')}</TableHead>
                                         <TableHead>Client</TableHead>
-                                        <TableHead>Start Date</TableHead>
-                                        <TableHead>End Date</TableHead>
+                                        <TableHead>{t('lbl_start_date')}</TableHead>
+                                        <TableHead>{t('end_date')}</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead>Budget</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>

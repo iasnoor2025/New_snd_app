@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +13,8 @@ interface ResourceFormProps {
 }
 
 export function ResourceForm({ form, children }: ResourceFormProps) {
+  const { t } = useTranslation('project');
+
     return (
         <Form>
             <form className="space-y-4">

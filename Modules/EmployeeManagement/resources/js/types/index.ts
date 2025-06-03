@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 export interface PageProps {
   auth: {
     user: any;

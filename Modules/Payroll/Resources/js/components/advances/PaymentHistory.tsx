@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { router } from '@inertiajs/react';
 import {
   Table,
@@ -60,6 +61,8 @@ export function PaymentHistory({
   initialPagination = { current_page: 1, last_page: 1, per_page: 5, total: 0 },
   showOnlyLast = false
 }: PaymentHistoryProps) {
+  const { t } = useTranslation('payroll');
+
   const [isLoading, setIsLoading] = useState(false);
   const [monthlyHistory, setMonthlyHistory] = useState<MonthlyHistoryItem[]>(initialMonthlyHistory);
   const [totalRepaidAmount, setTotalRepaidAmount] = useState<number>(Number(initialTotalRepaid) || 0);
@@ -137,7 +140,7 @@ export function PaymentHistory({
   if (!monthlyHistory.length) {
     return (
       <div className="text-center p-8 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">No payment records found</p>
+        <p className="text-sm text-muted-foreground">{t('no_payment_records_found')}</p>
       </div>
     );
   }
@@ -145,7 +148,7 @@ export function PaymentHistory({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Payment History</h3>
+        <h3 className="text-lg font-semibold">{t('payment_history')}</h3>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
             Total: SAR {totalRepaidAmount.toFixed(2)}
@@ -172,10 +175,10 @@ export function PaymentHistory({
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/20">
-                  <TableHead>Payment Date</TableHead>
+                  <TableHead>{t('th_payment_date')}</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Notes</TableHead>
-                  <TableHead>Recorded By</TableHead>
+                  <TableHead>{t('th_recorded_by')}</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -255,7 +258,7 @@ export function PaymentHistory({
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Payment Record</DialogTitle>
+            <DialogTitle>{t('ttl_delete_payment_record')}</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this payment record? This action cannot be undone.
             </DialogDescription>

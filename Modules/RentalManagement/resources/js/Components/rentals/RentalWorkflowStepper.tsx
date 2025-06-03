@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { RentalStatus } from '@/types/models';
 import { Check, Clock, AlertCircle } from 'lucide-react';
@@ -76,6 +77,8 @@ export function RentalWorkflowStepper({
     currentStatus,
     className,
 }: RentalWorkflowStepperProps) {
+  const { t } = useTranslation('rental');
+
     // Ensure we have a valid status - default to 'pending' if it's an empty string
     const validStatus = currentStatus || 'pending';
 

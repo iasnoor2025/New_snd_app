@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -89,6 +90,8 @@ const formSchema = z.object({
 });
 
 export default function TimesheetEdit({ auth, timesheet, employees = [], projects = [] }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const { toast } = useToast();
   const [processing, setProcessing] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -154,14 +157,14 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
   };
 
   return (
-    <AdminLayout title="Edit Timesheet" breadcrumbs={breadcrumbs} requiredPermission="timesheets.edit">
-      <Head title="Edit Timesheet" />
+    <AdminLayout title={t('edit_timesheet')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.edit">
+      <Head title={t('edit_timesheet')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div className="space-y-1">
-              <CardTitle className="text-2xl font-bold">Edit Timesheet</CardTitle>
+              <CardTitle className="text-2xl font-bold">{t('edit_timesheet')}</CardTitle>
               <CardDescription>
                 Update your work hours and tasks for {timesheet.date && format(new Date(timesheet.date), 'PPP')}
               </CardDescription>
@@ -169,7 +172,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
             <Button variant="outline" asChild>
               <Link href={route('timesheets.index')}>
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                Back to Timesheets
+                {t('back_to_timesheets')}
               </Link>
             </Button>
           </CardHeader>
@@ -190,7 +193,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select employee" />
+                              <SelectValue placeholder={t('ph_select_employee')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -220,7 +223,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                                 className="w-full pl-3 text-left font-normal"
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDate ? format(selectedDate, 'PPP') : <span>Pick a date</span>}
+                                {selectedDate ? format(selectedDate, 'PPP') : <span>{t('project:pick_a_date')}</span>}
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
@@ -243,7 +246,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     name="hours_worked"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hours Worked</FormLabel>
+                        <FormLabel>{t('lbl_hours_worked')}</FormLabel>
                         <FormControl>
                           <Input type="number" step="0.5" min="0" max="24" placeholder="8" {...field} />
                         </FormControl>
@@ -260,7 +263,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                     name="overtime_hours"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Overtime Hours</FormLabel>
+                        <FormLabel>{t('lbl_overtime_hours')}</FormLabel>
                         <FormControl>
                           <Input type="number" step="0.5" min="0" max="24" placeholder="0" {...field} />
                         </FormControl>
@@ -284,7 +287,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select project" />
+                              <SelectValue placeholder={t('ph_select_project')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -314,7 +317,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
+                                <SelectValue placeholder={t('ph_select_status')} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -339,7 +342,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                       <FormLabel>Description (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Brief description of work performed"
+                          placeholder={t('ph_brief_description_of_work_performed')}
                           className="min-h-[80px]"
                           {...field}
                         />
@@ -357,7 +360,7 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
                       <FormLabel>Tasks Completed (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="List of tasks completed during this time"
+                          placeholder={t('ph_list_of_tasks_completed_during_this_time')}
                           className="min-h-[120px]"
                           {...field}
                         />

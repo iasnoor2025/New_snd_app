@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { RentalStatus } from '@/types/models';
 import { useForm, router } from '@inertiajs/react';
@@ -78,6 +79,8 @@ export const RentalWorkflowActions: FC<RentalWorkflowActionsProps> = ({
     };
 
     const getAvailableActions = () => {
+  const { t } = useTranslation('rental');
+
         // Make sure we have a valid status (not empty string)
         const status = rental.status || 'pending'; // Default to 'pending' if status is empty
 
@@ -273,7 +276,7 @@ export const RentalWorkflowActions: FC<RentalWorkflowActionsProps> = ({
             <Modal
                 show={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                title="Create New Rental"
+                title={t('ttl_create_new_rental')}
                 <RentalForm
                     customers={customers}
                     equipment={equipment}
@@ -286,7 +289,7 @@ export const RentalWorkflowActions: FC<RentalWorkflowActionsProps> = ({
             <Modal
                 show={showEditModal}
                 onClose={() => setShowEditModal(false)}
-                title="Edit Rental"
+                title={t('ttl_edit_rental')}
                 <RentalForm
                     rental={selectedRental}
                     customers={customers}
@@ -300,7 +303,7 @@ export const RentalWorkflowActions: FC<RentalWorkflowActionsProps> = ({
             <Modal
                 show={showDetailsModal}
                 onClose={() => setShowDetailsModal(false)}
-                title="Rental Details"
+                title={t('rental_details')}
                 <RentalDetails
                     rental={selectedRental}
                     onEdit={() => {

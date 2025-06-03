@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -91,6 +92,8 @@ export const TimesheetApproval: React.FC = () => {
   }, []);
 
   const handleSelectAllChange = (checked: boolean) => {
+  const { t } = useTranslation('employee');
+
     if (checked) {
       setSelectedTimesheets(timesheets.map(timesheet => timesheet.id));
     } else {
@@ -220,7 +223,7 @@ export const TimesheetApproval: React.FC = () => {
         <CardHeader>
           <div className="flex justify-between items-center">
             <div>
-              <CardTitle>Pending Timesheet Approvals</CardTitle>
+              <CardTitle>{t('ttl_pending_timesheet_approvals')}</CardTitle>
               <CardDescription>
                 Approve or reject employee timesheet entries
               </CardDescription>
@@ -324,13 +327,13 @@ export const TimesheetApproval: React.FC = () => {
       <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject Timesheet</DialogTitle>
+            <DialogTitle>{t('ttl_reject_timesheet')}</DialogTitle>
             <DialogDescription>
               Please provide a reason for rejecting this timesheet.
             </DialogDescription>
           </DialogHeader>
           <Textarea
-            placeholder="Reason for rejection"
+            placeholder={t('ph_reason_for_rejection')}
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
             rows={4}

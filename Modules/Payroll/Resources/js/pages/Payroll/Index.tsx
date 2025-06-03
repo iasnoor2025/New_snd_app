@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm, router } from '@inertiajs/react';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
 import { PageProps } from '../../../../../../resources/js/types';
@@ -50,6 +51,8 @@ type Payroll = {
 };
 
 export default function Index({ auth, payrolls, employees, filters, hasRecords }: Props) {
+  const { t } = useTranslation('payroll');
+
     const [showModal, setShowModal] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         month: new Date().toISOString().slice(0, 7),
@@ -98,21 +101,21 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
 
     return (
         <AdminLayout
-            title="Payroll Management"
+            title={t('payroll_management')}
             breadcrumbs={[
                 { title: 'Payroll', href: route('payroll.index') },
             ]}
             requiredPermission="payrolls.view"
         >
-            <Head title="Payroll Management" />
+            <Head title={t('payroll_management')} />
 
             <div className="container mx-auto py-6">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Payroll Records</CardTitle>
+                        <CardTitle>{t('ttl_payroll_records')}</CardTitle>
                         <div className="flex gap-2">
                             <Button onClick={() => setShowModal(true)}>
-                                Generate Payroll
+                                {t('generate_payroll')}
                             </Button>
                             <Button
                                 variant="outline"
@@ -136,7 +139,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                     onValueChange={(value) => handleFilter('status', value)}
                                 >
                                     <SelectTrigger className="w-48">
-                                        <SelectValue placeholder="All Status" />
+                                        <SelectValue placeholder={t('all_status')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="pending">Pending</SelectItem>
@@ -150,7 +153,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                     onValueChange={(value) => handleFilter('employee_id', value)}
                                 >
                                     <SelectTrigger className="w-48">
-                                        <SelectValue placeholder="All Employees" />
+                                        <SelectValue placeholder={t('ph_all_employees')} />
                                     </SelectTrigger>
                                     {hasInvalidOriginalEmployee ? (
                                         <div style={{ color: 'red', padding: 8 }}>
@@ -184,11 +187,11 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                     <TableRow>
                                         <TableHead>Employee</TableHead>
                                         <TableHead>Month</TableHead>
-                                        <TableHead>Base Salary</TableHead>
+                                        <TableHead>{t('base_salary')}</TableHead>
                                         <TableHead>Overtime</TableHead>
                                         <TableHead>Bonus</TableHead>
                                         <TableHead>Deductions</TableHead>
-                                        <TableHead>Final Amount</TableHead>
+                                        <TableHead>{t('final_amount')}</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
@@ -223,7 +226,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                                         <TableRow>
                                             <TableCell colSpan={9} className="text-center py-8">
                                                 <div className="flex flex-col items-center justify-center text-muted-foreground">
-                                                    <p>No payroll records found</p>
+                                                    <p>{t('no_payroll_records_found')}</p>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -238,7 +241,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
             <Dialog open={showModal} onOpenChange={setShowModal}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Generate Payroll</DialogTitle>
+                        <DialogTitle>{t('generate_payroll')}</DialogTitle>
                         <DialogDescription>
                             Select the month for which you want to generate payroll records.
                         </DialogDescription>
@@ -246,7 +249,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
                     <form onSubmit={handleSubmit}>
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="month">Select Month</Label>
+                                <Label htmlFor="month">{t('lbl_select_month')}</Label>
                                 <Input
                                     type="month"
                                     id="month"

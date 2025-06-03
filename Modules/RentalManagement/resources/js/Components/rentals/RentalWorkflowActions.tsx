@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { RentalStatus } from '@/types/models';
 import { router } from '@inertiajs/react';
@@ -18,6 +19,8 @@ export function RentalWorkflowActions({
     className,
     canManageDocuments = false,
 }: RentalWorkflowActionsProps) {
+  const { t } = useTranslation('rental');
+
     const [isProcessing, setIsProcessing] = React.useState(false);
 
     const handleAction = (action: string) => {

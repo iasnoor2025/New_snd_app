@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,8 @@ interface DocumentsTabProps {
 }
 
 export default function DocumentsTab({ form, files, setFiles }: DocumentsTabProps) {
+  const { t } = useTranslation('employee');
+
   const handleFileChange = (key: string, file: File | null) => {
     setFiles(prev => ({
       ...prev,
@@ -45,7 +48,7 @@ export default function DocumentsTab({ form, files, setFiles }: DocumentsTabProp
                 name="iqama_number"
                 render={({ field }: any) => (
                   <FormItem>
-                    <FormLabel>Iqama Number</FormLabel>
+                    <FormLabel>{t('iqama_number')}</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter iqama number" {...field} />
                     </FormControl>
@@ -59,7 +62,7 @@ export default function DocumentsTab({ form, files, setFiles }: DocumentsTabProp
                 name="iqama_expiry"
                 render={({ field }: any) => (
                   <FormItem>
-                    <FormLabel>Iqama Expiry Date</FormLabel>
+                    <FormLabel>{t('lbl_iqama_expiry_date')}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -122,7 +125,7 @@ export default function DocumentsTab({ form, files, setFiles }: DocumentsTabProp
                 name="passport_number"
                 render={({ field }: any) => (
                   <FormItem>
-                    <FormLabel>Passport Number</FormLabel>
+                    <FormLabel>{t('lbl_passport_number')}</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter passport number" {...field} />
                     </FormControl>
@@ -136,7 +139,7 @@ export default function DocumentsTab({ form, files, setFiles }: DocumentsTabProp
                 name="passport_expiry"
                 render={({ field }: any) => (
                   <FormItem>
-                    <FormLabel>Passport Expiry Date</FormLabel>
+                    <FormLabel>{t('lbl_passport_expiry_date')}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>

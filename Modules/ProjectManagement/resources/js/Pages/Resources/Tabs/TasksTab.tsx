@@ -105,7 +105,7 @@ export default function TasksTab({ project, tasks, assignableUsers }: TasksTabPr
             <Dialog open={isDeleteModalOpen} onOpenChange={setDeleteModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Task</DialogTitle>
+                        <DialogTitle>{t('delete_task')}</DialogTitle>
                         <DialogDescription>
                             Are you sure you want to delete this task? This action cannot be undone.
                         </DialogDescription>

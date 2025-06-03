@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,6 +52,8 @@ interface Props {
 }
 
 export default function ShowLeaveType({ leaveType }: Props) {
+  const { t } = useTranslation('leave');
+
     const { can } = usePermission();
 
     const handleEdit = () => {
@@ -120,7 +123,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbLink href={route('leaves.types.index')}>Leave Types</BreadcrumbLink>
+                            <BreadcrumbLink href={route('leaves.types.index')}>{t('leave_types')}</BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
@@ -169,7 +172,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Delete Leave Type</AlertDialogTitle>
+                                        <AlertDialogTitle>{t('ttl_delete_leave_type')}</AlertDialogTitle>
                                         <AlertDialogDescription>
                                             Are you sure you want to delete "{leaveType.name}"? This action cannot be undone.
                                             {leaveType.requests_count && leaveType.requests_count > 0 && (
@@ -198,7 +201,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                         {/* Basic Details */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Basic Information</CardTitle>
+                                <CardTitle>{t('ttl_basic_information')}</CardTitle>
                                 <CardDescription>
                                     Core details and configuration of the leave type
                                 </CardDescription>
@@ -217,7 +220,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <div className="text-sm font-medium text-muted-foreground">Color Code</div>
+                                        <div className="text-sm font-medium text-muted-foreground">{t('color_code')}</div>
                                         <div className="flex items-center gap-2">
                                             <div
                                                 className="w-6 h-6 rounded border"
@@ -240,7 +243,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                         {/* Leave Configuration */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Leave Configuration</CardTitle>
+                                <CardTitle>{t('ttl_leave_configuration')}</CardTitle>
                                 <CardDescription>
                                     Rules and limits for this leave type
                                 </CardDescription>
@@ -250,7 +253,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                     <div className="flex items-center gap-3">
                                         <CalendarIcon className="h-5 w-5 text-muted-foreground" />
                                         <div>
-                                            <div className="text-sm font-medium text-muted-foreground">Maximum Days</div>
+                                            <div className="text-sm font-medium text-muted-foreground">{t('maximum_days')}</div>
                                             <div className="text-lg font-semibold">{leaveType.max_days}</div>
                                         </div>
                                     </div>
@@ -258,7 +261,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                     <div className="flex items-center gap-3">
                                         <ClockIcon className="h-5 w-5 text-muted-foreground" />
                                         <div>
-                                            <div className="text-sm font-medium text-muted-foreground">Notice Days</div>
+                                            <div className="text-sm font-medium text-muted-foreground">{t('notice_days')}</div>
                                             <div className="text-lg font-semibold">{leaveType.notice_days}</div>
                                         </div>
                                     </div>
@@ -266,7 +269,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                     <div className="flex items-center gap-3">
                                         <UsersIcon className="h-5 w-5 text-muted-foreground" />
                                         <div>
-                                            <div className="text-sm font-medium text-muted-foreground">Gender Specific</div>
+                                            <div className="text-sm font-medium text-muted-foreground">{t('gender_specific')}</div>
                                             <div className="text-lg font-semibold">{getGenderLabel(leaveType.gender_specific)}</div>
                                         </div>
                                     </div>
@@ -275,7 +278,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                         <div className="flex items-center gap-3">
                                             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
                                             <div>
-                                                <div className="text-sm font-medium text-muted-foreground">Applicable After</div>
+                                                <div className="text-sm font-medium text-muted-foreground">{t('applicable_after')}</div>
                                                 <div className="text-lg font-semibold">{leaveType.applicable_after_months} months</div>
                                             </div>
                                         </div>
@@ -286,10 +289,10 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                     <>
                                         <Separator className="my-4" />
                                         <div className="space-y-2">
-                                            <div className="text-sm font-medium">Carry Forward Settings</div>
+                                            <div className="text-sm font-medium">{t('carry_forward_settings')}</div>
                                             <div className="flex items-center gap-2">
                                                 <CheckCircleIcon className="h-4 w-4 text-green-600" />
-                                                <span className="text-sm">Carry forward enabled</span>
+                                                <span className="text-sm">{t('carry_forward_enabled')}</span>
                                                 {leaveType.carry_forward_max_days > 0 && (
                                                     <span className="text-sm text-muted-foreground">
                                                         (Max: {leaveType.carry_forward_max_days} days)
@@ -315,7 +318,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium">Requires Approval</span>
+                                    <span className="text-sm font-medium">{t('lbl_requires_approval')}</span>
                                     {leaveType.requires_approval ? (
                                         <CheckCircleIcon className="h-4 w-4 text-green-600" />
                                     ) : (
@@ -324,7 +327,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium">Paid Leave</span>
+                                    <span className="text-sm font-medium">{t('lbl_paid_leave')}</span>
                                     {leaveType.is_paid ? (
                                         <div className="flex items-center gap-1">
                                             <CreditCardIcon className="h-4 w-4 text-green-600" />
@@ -336,7 +339,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium">Active Status</span>
+                                    <span className="text-sm font-medium">{t('active_status')}</span>
                                     <Badge variant={leaveType.is_active ? 'default' : 'secondary'}>
                                         {leaveType.is_active ? 'Active' : 'Inactive'}
                                     </Badge>
@@ -348,7 +351,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                         {(leaveType.requests_count !== undefined || leaveType.active_requests_count !== undefined) && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Usage Statistics</CardTitle>
+                                    <CardTitle>{t('ttl_usage_statistics')}</CardTitle>
                                     <CardDescription>
                                         Leave requests using this type
                                     </CardDescription>
@@ -356,14 +359,14 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                 <CardContent className="space-y-4">
                                     {leaveType.requests_count !== undefined && (
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm font-medium">Total Requests</span>
+                                            <span className="text-sm font-medium">{t('th_total_requests')}</span>
                                             <Badge variant="outline">{leaveType.requests_count}</Badge>
                                         </div>
                                     )}
 
                                     {leaveType.active_requests_count !== undefined && (
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm font-medium">Active Requests</span>
+                                            <span className="text-sm font-medium">{t('active_requests')}</span>
                                             <Badge variant="default">{leaveType.active_requests_count}</Badge>
                                         </div>
                                     )}
@@ -386,7 +389,7 @@ export default function ShowLeaveType({ leaveType }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <div className="text-sm font-medium text-muted-foreground">Last Updated</div>
+                                    <div className="text-sm font-medium text-muted-foreground">{t('last_updated')}</div>
                                     <div className="text-sm">{formatDate(leaveType.updated_at)}</div>
                                 </div>
                             </CardContent>

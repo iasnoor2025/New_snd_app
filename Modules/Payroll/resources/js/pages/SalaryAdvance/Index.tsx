@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -87,6 +88,8 @@ const getStatusBadge = (status: string) => {
 };
 
 export default function Index({ auth, salaryAdvances, filters }: Props) {
+  const { t } = useTranslation('payroll');
+
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStatus, setSelectedStatus] = useState(filters.status || '');
 
@@ -108,16 +111,16 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
 
     return (
         <AdminLayout
-            title="Salary Advances"
+            title={t('salary_advances')}
             breadcrumbs={breadcrumbs}
             requiredPermission="salary-advances.view"
         >
-            <Head title="Salary Advances" />
+            <Head title={t('salary_advances')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Salary Advances</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">{t('salary_advances')}</h1>
                         <p className="text-muted-foreground">
                             Manage salary advance requests and approvals
                         </p>
@@ -125,7 +128,7 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
                     <Button asChild>
                         <Link href="/salary-advances/create">
                             <Plus className="mr-2 h-4 w-4" />
-                            Request Advance
+                            {t('employee:ttl_request_advance')}
                         </Link>
                     </Button>
                 </div>
@@ -146,7 +149,7 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
                                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         id="search"
-                                        placeholder="Search by employee name or reason..."
+                                        placeholder={t('ph_search_by_employee_name_or_reason')}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="pl-10"
@@ -157,10 +160,10 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
                                 <Label htmlFor="status">Status</Label>
                                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All statuses" />
+                                        <SelectValue placeholder={t('opt_all_statuses_1')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All statuses</SelectItem>
+                                        <SelectItem value="">{t('opt_all_statuses_1')}</SelectItem>
                                         <SelectItem value="pending">Pending</SelectItem>
                                         <SelectItem value="approved">Approved</SelectItem>
                                         <SelectItem value="rejected">Rejected</SelectItem>
@@ -183,7 +186,7 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
                 {/* Salary Advances Table */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Salary Advance Requests</CardTitle>
+                        <CardTitle>{t('ttl_salary_advance_requests')}</CardTitle>
                         <CardDescription>
                             {salaryAdvances.meta.total} total requests
                         </CardDescription>
@@ -196,8 +199,8 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
                                         <TableRow>
                                             <TableHead>Employee</TableHead>
                                             <TableHead>Amount</TableHead>
-                                            <TableHead>Advance Date</TableHead>
-                                            <TableHead>Deduction Start</TableHead>
+                                            <TableHead>{t('advance_date')}</TableHead>
+                                            <TableHead>{t('deduction_start')}</TableHead>
                                             <TableHead>Status</TableHead>
                                             <TableHead>Reason</TableHead>
                                             <TableHead>Requested</TableHead>
@@ -247,14 +250,14 @@ export default function Index({ auth, salaryAdvances, filters }: Props) {
                         ) : (
                             <div className="flex flex-col items-center justify-center py-12">
                                 <div className="text-center">
-                                    <h3 className="text-lg font-semibold">No salary advances found</h3>
+                                    <h3 className="text-lg font-semibold">{t('no_salary_advances_found')}</h3>
                                     <p className="text-muted-foreground">
                                         No salary advance requests match your current filters.
                                     </p>
                                     <Button className="mt-4" asChild>
                                         <Link href="/salary-advances/create">
                                             <Plus className="mr-2 h-4 w-4" />
-                                            Request Advance
+                                            {t('employee:ttl_request_advance')}
                                         </Link>
                                     </Button>
                                 </div>

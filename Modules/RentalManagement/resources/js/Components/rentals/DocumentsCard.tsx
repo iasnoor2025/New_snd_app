@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
@@ -78,6 +79,8 @@ export default function DocumentsCard({
   canDelete = false,
   className = ""
 }: DocumentsCardProps) {
+  const { t } = useTranslation('rental');
+
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<Document | null>(null);
@@ -156,7 +159,7 @@ export default function DocumentsCard({
         <div className="flex justify-between items-center">
           <div>
             <CardTitle>Documents</CardTitle>
-            <CardDescription>Attachments and files for this rental</CardDescription>
+            <CardDescription>{t('attachments_and_files_for_this_rental')}</CardDescription>
           </div>
           {canUpload && (
             <Button
@@ -173,7 +176,7 @@ export default function DocumentsCard({
         {documents.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-6 text-center">
             <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground mb-2">No documents uploaded yet</p>
+            <p className="text-muted-foreground mb-2">{t('no_documents_uploaded_yet')}</p>
             {canUpload && (
               <Button
                 variant="default"
@@ -181,7 +184,7 @@ export default function DocumentsCard({
                 onClick={() => setIsUploadDialogOpen(true)}
                 className="mt-2"
                 <Upload className="mr-2 h-4 w-4" />
-                Upload Document
+                {t('ttl_upload_document')}
               </Button>
             )}
           </div>
@@ -255,7 +258,7 @@ export default function DocumentsCard({
       <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Upload Document</DialogTitle>
+            <DialogTitle>{t('ttl_upload_document')}</DialogTitle>
             <DialogDescription>
               Attach a document to this rental
             </DialogDescription>
@@ -291,7 +294,7 @@ export default function DocumentsCard({
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{t('ttl_confirm_deletion')}</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this document? This action cannot be undone.
             </DialogDescription>

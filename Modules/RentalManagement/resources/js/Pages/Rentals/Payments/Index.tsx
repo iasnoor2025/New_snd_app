@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import PaymentTracker from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/rentals/PaymentTracker';
 import PaymentListing from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/payments/PaymentListing';
@@ -54,6 +55,8 @@ interface Props {
 }
 
 export default function Index({ rental, payments }: Props) {
+  const { t } = useTranslation('rental');
+
 
   const { hasPermission } = usePermission();
   const canCreateRentalpayments = hasPermission('rental-payments.create');
@@ -136,8 +139,8 @@ const [activeTab, setActiveTab] = useState<string>('tracker');
   };
 
   return (
-    <AdminLayout title="Payment Management" breadcrumbs={breadcrumbs}>
-      <Head title="Payment Management" />
+    <AdminLayout title={t('payment_management')} breadcrumbs={breadcrumbs}>
+      <Head title={t('payment_management')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex items-center justify-between">
@@ -147,7 +150,7 @@ const [activeTab, setActiveTab] = useState<string>('tracker');
                 <ArrowLeft className="h-4 w-4" />
               </Link>
             </Button>
-            <h1 className="text-2xl font-bold tracking-tight">Payment Management</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{t('payment_management')}</h1>
           </div>
           <div className="flex items-center gap-2">
             <Button asChild variant="outline">
@@ -171,7 +174,7 @@ const [activeTab, setActiveTab] = useState<string>('tracker');
                 <h3 className="text-sm font-medium text-blue-800">Payment Management for Rental #{rental.rental_number || rental.id}</h3>
                 <div className="mt-2 text-sm text-blue-700">
                   <ul className="list-disc pl-5 space-y-1">
-                    <li>Use <strong>Add Payment</strong> to record new payments received from customers</li>
+                    <li>Use <strong>{t('add_payment')}</strong> to record new payments received from customers</li>
                     <li>Total rental amount: <strong>{formatCurrency(rental.total_amount)}</strong></li>
                     <li>Rental status: <strong>{rental.status}</strong></li>
                     {rental.customer && (
@@ -185,8 +188,8 @@ const [activeTab, setActiveTab] = useState<string>('tracker');
 
           <Tabs defaultValue="tracker" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="tracker">Dashboard View</TabsTrigger>
-              <TabsTrigger value="list">Detailed List</TabsTrigger>
+              <TabsTrigger value="tracker">{t('dashboard_view')}</TabsTrigger>
+              <TabsTrigger value="list">{t('detailed_list')}</TabsTrigger>
             </TabsList>
             <TabsContent value="tracker" className="mt-4">
               <PaymentTracker

@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useState, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Employee, Equipment, Rental, RentalItem, RentalTimesheet } from "@/types/models";
 import { format } from "date-fns";
@@ -185,6 +186,8 @@ const formSchema = z.object({
 })
 
 export default function TimesheetForm({ rentals = [], rentalItems = [], operators = [], equipment = [], timesheet, rental, isEditing = false, auth }: Props) {
+  const { t } = useTranslation('rental');
+
   const [hours, setHours] = useState<number | null>(0);
   const [selectedRental, setSelectedRental] = useState<Rental | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -557,7 +560,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
       return (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>No Equipment Available</AlertTitle>
+          <AlertTitle>{t('ttl_no_equipment_available')}</AlertTitle>
           <AlertDescription>
             No active equipment is available for this rental. Please ensure equipment is properly assigned to the rental and is active.
           </AlertDescription>
@@ -570,11 +573,11 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
         value={form.data.rental_item_id?.toString() || ""}
         onValueChange={handleRentalItemChange}
         <SelectTrigger>
-          <SelectValue placeholder="Select equipment" />
+          <SelectValue placeholder={t('ph_select_equipment')} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Available Equipment</SelectLabel>
+            <SelectLabel>{t('lbl_available_equipment')}</SelectLabel>
             {validRentalItems.map((item) => (
               <SelectItem key={item.id} value={item.id.toString()}>
                 {item.equipment?.name || "Unnamed Equipment"}
@@ -667,7 +670,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div>
-              <CardTitle className="text-base">Timesheet Details</CardTitle>
+              <CardTitle className="text-base">{t('ttl_timesheet_details')}</CardTitle>
               <CardDescription>
                 {isEditing ? "Update" : "Create"} timesheet for tracking equipment usage
               </CardDescription>
@@ -676,7 +679,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
+                    <span className="sr-only">{t('open_menu')}</span>
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -737,10 +740,10 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                     }
                   }}
                   <SelectTrigger>
-                    <SelectValue placeholder="Select operator" />
+                    <SelectValue placeholder={t('ph_select_operator')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">No Operator</SelectItem>
+                    <SelectItem value="none">{t('opt_no_operator')}</SelectItem>
                     {operators.map((operator) => (
                       <SelectItem key={operator.id} value={operator.id.toString()}>
                         {operator.first_name} {operator.last_name}
@@ -767,7 +770,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                     htmlFor="operator_absent"
                     className="text-base flex items-center gap-1 cursor-pointer"
                     <UserX className="h-4 w-4 text-red-600" />
-                    Mark operator as absent
+                    {t('mark_operator_as_absent')}
                   </Label>
                   <p className="text-sm text-muted-foreground">
                     Hours will be set to 0 and no time entries will be recorded
@@ -800,7 +803,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                         {form.data.date ? (
                           format(new Date(form.data.date), "MMMM d, yyyy")
                         ) : (
-                          <span>Select a date</span>
+                          <span>{t('select_a_date')}</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -826,7 +829,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
 
               {/* Start Time */}
               <div className="space-y-2">
-                <Label htmlFor="start_time">Start Time <span className="text-destructive">*</span></Label>
+                <Label htmlFor="start_time">{t('lbl_start_time')} <span className="text-destructive">*</span></Label>
                 <div className="relative">
                   <TimePicker
                     value={form.data.start_time}
@@ -865,7 +868,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
 
               {/* End Time */}
               <div className="space-y-2">
-                <Label htmlFor="end_time">End Time <span className="text-destructive">*</span></Label>
+                <Label htmlFor="end_time">{t('end_time')} <span className="text-destructive">*</span></Label>
                 <div className="relative">
                   <TimePicker
                     value={form.data.end_time}
@@ -906,7 +909,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
             {/* Hours Used */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="hours_used">Hours Used <span className="text-destructive">*</span></Label>
+                <Label htmlFor="hours_used">{t('lbl_hours_used')} <span className="text-destructive">*</span></Label>
                 <Input
                   id="hours_used"
                   type="number"
@@ -933,7 +936,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                 onChange={(e) => form.setData("notes", e.target.value)}
                 disabled={submitting}
                 className={form.errors.notes ? "border-destructive" : ""}
-                placeholder="Enter any additional notes or comments..."
+                placeholder={t('ph_enter_any_additional_notes_or_comments')}
                 rows={3}
               />
               {form.errors.notes && (
@@ -966,7 +969,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
         <div className="space-y-1.5">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Timesheet Summary</CardTitle>
+              <CardTitle className="text-lg">{t('ttl_timesheet_summary')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -984,7 +987,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                     {operatorAbsent ? (
                       <span className="flex items-center gap-1 text-red-600">
                         <UserX className="h-3 w-3" />
-                        Operator Absent
+                        {t('operator_absent')}
                       </span>
                     ) : form.data.operator_id && form.data.operator_id !== "none" ? (
                       operators.find(op => op.id.toString() === form.data.operator_id)?.first_name + " " +
@@ -998,7 +1001,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                   <span>Time:</span>
                   <span>
                     {operatorAbsent ? (
-                      <span className="text-red-600">Not applicable</span>
+                      <span className="text-red-600">{t('not_applicable')}</span>
                     ) : (
                       `${form.data.start_time || "?"} - ${form.data.end_time || "?"}`
                     )}

@@ -115,13 +115,13 @@ export default function Projects({ projects: initialProjects, managers }: Projec
 
     return (
         <AdminLayout
-            title="Projects"
+            title={t('ttl_projects')}
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
                 { title: 'Projects', href: '/projects' }
             ]}
         >
-            <Head title="Projects" />
+            <Head title={t('ttl_projects')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -154,7 +154,7 @@ export default function Projects({ projects: initialProjects, managers }: Projec
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle>Create New Project</DialogTitle>
+                        <DialogTitle>{t('create_new_project')}</DialogTitle>
                     </DialogHeader>
                     <ProjectForm
                         onSubmit={handleCreate}
@@ -166,7 +166,7 @@ export default function Projects({ projects: initialProjects, managers }: Projec
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle>Edit Project</DialogTitle>
+                        <DialogTitle>{t('edit_project')}</DialogTitle>
                     </DialogHeader>
                     {selectedProject && (
                         <ProjectForm

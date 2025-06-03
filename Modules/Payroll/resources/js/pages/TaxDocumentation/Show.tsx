@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -89,6 +90,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ taxDocument }: Props) {
+  const { t } = useTranslation('payroll');
+
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -193,21 +196,21 @@ export default function Show({ taxDocument }: Props) {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <User className="h-5 w-5" />
-                            Employee Information
+                            {t('employee_information')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <p className="text-sm font-medium text-gray-500">Employee Name</p>
+                                <p className="text-sm font-medium text-gray-500">{t('employee_name')}</p>
                                 <p className="text-lg font-semibold">{taxDocument.employee.name}</p>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-500">Employee ID</p>
+                                <p className="text-sm font-medium text-gray-500">{t('employee_id')}</p>
                                 <p className="text-lg font-semibold">{taxDocument.employee.employee_id || taxDocument.employee.id}</p>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-500">Tax Year</p>
+                                <p className="text-sm font-medium text-gray-500">{t('lbl_tax_year')}</p>
                                 <p className="text-lg font-semibold">{taxDocument.tax_year}</p>
                             </div>
                         </div>
@@ -218,7 +221,7 @@ export default function Show({ taxDocument }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Gross Income</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('th_gross_income')}</CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -227,7 +230,7 @@ export default function Show({ taxDocument }: Props) {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Tax Withheld</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('th_tax_withheld')}</CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -236,7 +239,7 @@ export default function Show({ taxDocument }: Props) {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Net Income</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('th_net_income')}</CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -245,7 +248,7 @@ export default function Show({ taxDocument }: Props) {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Effective Tax Rate</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_effective_tax_rate')}</CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -259,8 +262,8 @@ export default function Show({ taxDocument }: Props) {
                     {/* Income Breakdown */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Income Breakdown</CardTitle>
-                            <CardDescription>Detailed breakdown of income sources</CardDescription>
+                            <CardTitle>{t('ttl_income_breakdown')}</CardTitle>
+                            <CardDescription>{t('detailed_breakdown_of_income_sources')}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
@@ -275,7 +278,7 @@ export default function Show({ taxDocument }: Props) {
                                 ))}
                                 <Separator />
                                 <div className="flex justify-between items-center font-bold">
-                                    <p>Total Gross Income</p>
+                                    <p>{t('total_gross_income')}</p>
                                     <p>{formatCurrency(taxDocument.gross_income)}</p>
                                 </div>
                             </div>
@@ -285,8 +288,8 @@ export default function Show({ taxDocument }: Props) {
                     {/* Deduction Breakdown */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Deduction Breakdown</CardTitle>
-                            <CardDescription>Detailed breakdown of deductions</CardDescription>
+                            <CardTitle>{t('ttl_deduction_breakdown')}</CardTitle>
+                            <CardDescription>{t('detailed_breakdown_of_deductions')}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
@@ -301,7 +304,7 @@ export default function Show({ taxDocument }: Props) {
                                 ))}
                                 <Separator />
                                 <div className="flex justify-between items-center font-bold">
-                                    <p>Total Deductions</p>
+                                    <p>{t('total_deductions')}</p>
                                     <p>{formatCurrency(taxDocument.total_deductions)}</p>
                                 </div>
                             </div>
@@ -324,9 +327,9 @@ export default function Show({ taxDocument }: Props) {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Month</TableHead>
-                                        <TableHead>Gross Income</TableHead>
-                                        <TableHead>Tax Withheld</TableHead>
-                                        <TableHead>Net Income</TableHead>
+                                        <TableHead>{t('th_gross_income')}</TableHead>
+                                        <TableHead>{t('th_tax_withheld')}</TableHead>
+                                        <TableHead>{t('th_net_income')}</TableHead>
                                         <TableHead>Overtime</TableHead>
                                         <TableHead>Bonus</TableHead>
                                     </TableRow>
@@ -358,18 +361,18 @@ export default function Show({ taxDocument }: Props) {
                                 <Receipt className="h-5 w-5" />
                                 Associated Payrolls
                             </CardTitle>
-                            <CardDescription>Payroll records included in this tax document</CardDescription>
+                            <CardDescription>{t('payroll_records_included_in_this_tax_document')}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Payroll Month</TableHead>
-                                        <TableHead>Base Salary</TableHead>
+                                        <TableHead>{t('lbl_payroll_month')}</TableHead>
+                                        <TableHead>{t('base_salary')}</TableHead>
                                         <TableHead>Overtime</TableHead>
                                         <TableHead>Bonus</TableHead>
                                         <TableHead>Deductions</TableHead>
-                                        <TableHead>Final Amount</TableHead>
+                                        <TableHead>{t('final_amount')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -402,11 +405,11 @@ export default function Show({ taxDocument }: Props) {
                     <CardContent>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <p className="text-sm font-medium text-gray-500">Document Number</p>
+                                <p className="text-sm font-medium text-gray-500">{t('document_number')}</p>
                                 <p className="text-lg font-semibold">{taxDocument.document_number}</p>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-500">Generated Date</p>
+                                <p className="text-sm font-medium text-gray-500">{t('generated_date')}</p>
                                 <p className="text-lg font-semibold">
                                     {taxDocument.generated_at ?
                                         format(new Date(taxDocument.generated_at), 'MMM dd, yyyy HH:mm') :

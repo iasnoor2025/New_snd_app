@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -45,6 +46,8 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
 
   // Handle extension dialog
   const openExtensionDialog = () => {
+  const { t } = useTranslation('rental');
+
     if (!canExtend) {
       ToastManager.error(`Cannot extend a ${rental.status} rental`);
       return;
@@ -82,7 +85,7 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Rental Actions</CardTitle>
+        <CardTitle>{t('ttl_rental_actions')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="grid grid-cols-2 gap-2">
@@ -90,7 +93,7 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
             <Button variant="outline" size="sm" asChild>
               <Link href={`/rentals/${rental.id}/edit`}>
                 <Pencil className="h-4 w-4 mr-2" />
-                Edit Rental
+                {t('ttl_edit_rental')}
               </Link>
             </Button>
           )}
@@ -143,7 +146,7 @@ const RentalActionsCard: React.FC<RentalActionsCardProps> = ({
             <DropdownMenuItem asChild>
               <Link href={`/rentals/${rental.id}/timesheets`}>
                 <Clock className="h-4 w-4 mr-2" />
-                View Timesheets
+                {t('employee:btn_view_timesheets')}
               </Link>
             </DropdownMenuItem>
 

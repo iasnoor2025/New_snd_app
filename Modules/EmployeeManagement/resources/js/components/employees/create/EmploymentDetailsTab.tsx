@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -27,6 +28,8 @@ interface EmploymentDetailsTabProps {
 }
 
 export function EmploymentDetailsTab({ data, positions, onSaveDraft, isSubmitting }: EmploymentDetailsTabProps) {
+  const { t } = useTranslation('employee');
+
     const handleChange = (field: keyof EmploymentDetailsData, value: any) => {
         onSaveDraft({
             ...data,
@@ -37,7 +40,7 @@ export function EmploymentDetailsTab({ data, positions, onSaveDraft, isSubmittin
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Employment Details</CardTitle>
+                <CardTitle>{t('employment_details')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -55,24 +58,24 @@ export function EmploymentDetailsTab({ data, positions, onSaveDraft, isSubmittin
                         id="department"
                         value={data.department || ''}
                         onChange={(e) => handleChange('department', e.target.value)}
-                        placeholder="Enter department"
+                        placeholder={t('ph_enter_department')}
                         disabled={isSubmitting}
                     />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="employment_status">Employment Status</Label>
+                    <Label htmlFor="employment_status">{t('lbl_employment_status')}</Label>
                     <Input
                         id="employment_status"
                         value={data.employment_status || ''}
                         onChange={(e) => handleChange('employment_status', e.target.value)}
-                        placeholder="Enter employment status"
+                        placeholder={t('ph_enter_employment_status')}
                         disabled={isSubmitting}
                     />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="hire_date">Hire Date</Label>
+                    <Label htmlFor="hire_date">{t('hire_date')}</Label>
                     <Input
                         id="hire_date"
                         type="date"

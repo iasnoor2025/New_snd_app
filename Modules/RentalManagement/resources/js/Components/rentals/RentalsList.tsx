@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Link } from "@inertiajs/react";
 import { Rental, customer } from "@/types/models";
 import { format, isAfter } from "date-fns";
@@ -61,6 +62,8 @@ interface Props {
 }
 
 export default function RentalsList({ rentals, onDelete }: Props) {
+  const { t } = useTranslation('rental');
+
   const { hasPermission } = usePermission();
   const canEditRentals = hasPermission('rentals.edit');
   const canDeleteRentals = hasPermission('rentals.delete');
@@ -134,7 +137,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
               <TableHead className="w-[20%]">customer</TableHead>
               <TableHead className="w-[20%]">Dates</TableHead>
               <TableHead className="w-[10%]">Status</TableHead>
-              <TableHead className="w-[15%]">Has Operators</TableHead>
+              <TableHead className="w-[15%]">{t('th_has_operators')}</TableHead>
               <TableHead className="w-[10%]">Total</TableHead>
               <TableHead className="text-right w-[15%]">Actions</TableHead>
             </TableRow>
@@ -205,7 +208,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8 opacity-70 group-hover:opacity-100">
                               <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">More options</span>
+                              <span className="sr-only">{t('more_options')}</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
@@ -216,7 +219,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                                   href={route("rentals.show", rental.id)}
                                   className="flex items-center w-full"
                                   <Eye className="mr-2 h-4 w-4" />
-                                  View Details
+                                  {t('employee:ttl_view_details')}
                                 </Link>
                               </DropdownMenuItem>
                             )}
@@ -226,7 +229,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                                   href={route("rentals.edit", rental.id)}
                                   className="flex items-center w-full"
                                   <Pencil className="mr-2 h-4 w-4" />
-                                  Edit Rental
+                                  {t('ttl_edit_rental')}
                                 </Link>
                               </DropdownMenuItem>
                             )}

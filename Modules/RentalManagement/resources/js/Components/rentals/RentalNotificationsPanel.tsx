@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, Bell, Wrench } from "lucide-react";
@@ -18,6 +19,8 @@ export default function RentalNotificationsPanel({
   notifications,
   className = ""
 }: RentalNotificationsPanelProps) {
+  const { t } = useTranslation('rental');
+
   return (
     <Card className={`shadow-sm ${className}`}>
       <CardHeader>
@@ -29,7 +32,7 @@ export default function RentalNotificationsPanel({
       <CardContent>
         <div className="space-y-4">
           {notifications.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No notifications</p>
+            <p className="text-muted-foreground text-sm">{t('no_notifications')}</p>
           ) : (
             notifications.map((notification, index) => (
               <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">

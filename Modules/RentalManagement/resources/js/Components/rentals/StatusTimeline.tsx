@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -40,6 +41,8 @@ interface StatusTimelineProps {
 }
 
 export default function StatusTimeline({ rental, className = "" }: StatusTimelineProps) {
+  const { t } = useTranslation('rental');
+
   const generateTimelineEvents = useCallback((): TimelineEvent[] => {
     // Ensure we have a valid rental with all the properties we need
     if (!rental) {
@@ -142,13 +145,13 @@ export default function StatusTimeline({ rental, className = "" }: StatusTimelin
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Status Timeline</CardTitle>
-        <CardDescription>Progress of your rental</CardDescription>
+        <CardTitle>{t('ttl_status_timeline')}</CardTitle>
+        <CardDescription>{t('progress_of_your_rental')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
           {activeEvents.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No status events yet</p>
+            <p className="text-sm text-muted-foreground">{t('no_status_events_yet')}</p>
           ) : (
             <ErrorBoundary>
               <ol className="relative border-l border-muted">

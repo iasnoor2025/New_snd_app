@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ColumnDef } from '@tanstack/react-table';
 import { Employee } from '@/Modules/EmployeeManagement/Resources/js/types';
 import { Badge } from '@/components/ui/badge';
@@ -75,7 +76,7 @@ export const columns: ColumnDef<Employee>[] = [
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">{t('open_menu')}</span>
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
@@ -84,7 +85,7 @@ export const columns: ColumnDef<Employee>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                             <Link href={route('employees.show', employee.id)}>
-                                View Details
+                                {t('ttl_view_details')}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>

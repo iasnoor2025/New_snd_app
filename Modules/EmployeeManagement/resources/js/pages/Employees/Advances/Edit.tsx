@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -51,6 +52,8 @@ interface Props extends PageProps {
 }
 
 export default function Edit({ auth, employee, advance }: Props) {
+  const { t } = useTranslation('employee');
+
   const [amount, setAmount] = useState(advance.amount.toString());
   const [reason, setReason] = useState(advance.reason || '');
   const [paymentDate, setPaymentDate] = useState(
@@ -110,8 +113,8 @@ export default function Edit({ auth, employee, advance }: Props) {
   };
 
   return (
-    <AdminLayout title="Edit Advance Payment" breadcrumbs={breadcrumbs} requiredPermission="employees.edit">
-      <Head title="Edit Advance Payment" />
+    <AdminLayout title={t('ttl_edit_advance_payment')} breadcrumbs={breadcrumbs} requiredPermission="employees.edit">
+      <Head title={t('ttl_edit_advance_payment')} />
 
       <div className="flex h-full flex-1 flex-col gap-6 p-4 md:gap-8 md:p-8">
         <div className="flex items-center gap-4">
@@ -128,7 +131,7 @@ export default function Edit({ auth, employee, advance }: Props) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Edit Advance Payment</CardTitle>
+            <CardTitle>{t('ttl_edit_advance_payment')}</CardTitle>
             <CardDescription>
               Update the details of the advance payment for {employee.first_name} {employee.last_name}
             </CardDescription>
@@ -150,7 +153,7 @@ export default function Edit({ auth, employee, advance }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="payment-date">Payment Date</Label>
+                  <Label htmlFor="payment-date">{t('lbl_payment_date')}</Label>
                   <Input
                     id="payment-date"
                     type="date"

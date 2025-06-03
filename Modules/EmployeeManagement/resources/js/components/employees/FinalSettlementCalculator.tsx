@@ -226,7 +226,7 @@ export const FinalSettlementCalculator: React.FC = () => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Final Settlement Calculator</CardTitle>
+          <CardTitle>{t('ttl_final_settlement_calculator')}</CardTitle>
           <CardDescription>
             Calculate the final settlement for departing employees
           </CardDescription>
@@ -240,13 +240,13 @@ export const FinalSettlementCalculator: React.FC = () => {
             <div className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="employee">Select Employee</Label>
+                  <Label htmlFor="employee">{t('lbl_select_employee')}</Label>
                   <Select
                     value={selectedEmployeeId}
                     onValueChange={handleEmployeeChange}
                     disabled={calculating}
                     <SelectTrigger id="employee">
-                      <SelectValue placeholder="Select an employee" />
+                      <SelectValue placeholder={t('ph_select_an_employee')} />
                     </SelectTrigger>
                     <SelectContent>
                       {employees.map((employee) => (
@@ -259,7 +259,7 @@ export const FinalSettlementCalculator: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Last Working Date</Label>
+                  <Label>{t('lbl_last_working_date')}</Label>
                   <DatePicker
                     date={lastWorkingDate}
                     setDate={setLastWorkingDate}
@@ -270,7 +270,7 @@ export const FinalSettlementCalculator: React.FC = () => {
 
               {selectedEmployee && (
                 <div className="bg-muted p-4 rounded-md">
-                  <h3 className="font-medium mb-2">Employee Information</h3>
+                  <h3 className="font-medium mb-2">{t('employee_information')}</h3>
                   <div className="grid gap-4 md:grid-cols-3">
                     <div>
                       <p className="text-sm text-muted-foreground">Department</p>
@@ -281,18 +281,18 @@ export const FinalSettlementCalculator: React.FC = () => {
                       <p className="font-medium">{selectedEmployee.position}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Hire Date</p>
+                      <p className="text-sm text-muted-foreground">{t('hire_date')}</p>
                       <p className="font-medium">{formatDate(selectedEmployee.hire_date)}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Monthly Salary</p>
+                      <p className="text-sm text-muted-foreground">{t('monthly_salary')}</p>
                       <p className="font-medium">{formatCurrency(selectedEmployee.salary)}</p>
                     </div>
                     {selectedEmployee.has_advances && (
                       <div className="md:col-span-2">
                         <Alert variant="warning" className="mt-2">
                           <AlertCircle className="h-4 w-4" />
-                          <AlertTitle>Outstanding Advances</AlertTitle>
+                          <AlertTitle>{t('ttl_outstanding_advances')}</AlertTitle>
                           <AlertDescription>
                             This employee has outstanding salary advances that will be deducted from the final settlement.
                           </AlertDescription>
@@ -304,7 +304,7 @@ export const FinalSettlementCalculator: React.FC = () => {
               )}
 
               <div className="space-y-4">
-                <h3 className="font-medium">Notice Period Details</h3>
+                <h3 className="font-medium">{t('notice_period_details')}</h3>
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="noticeProvided"
@@ -332,7 +332,7 @@ export const FinalSettlementCalculator: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="noticeDaysServed">Days Served in Notice Period</Label>
+                    <Label htmlFor="noticeDaysServed">{t('lbl_days_served_in_notice_period')}</Label>
                     <Input
                       id="noticeDaysServed"
                       type="number"
@@ -348,7 +348,7 @@ export const FinalSettlementCalculator: React.FC = () => {
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-medium">Additional Deductions</h3>
+                  <h3 className="font-medium">{t('additional_deductions')}</h3>
                   <Button
                     type="button"
                     variant="outline"
@@ -367,7 +367,7 @@ export const FinalSettlementCalculator: React.FC = () => {
                         id={`deduction-name-${index}`}
                         value={deduction.name}
                         onChange={(e) => updateCustomDeduction(index, 'name', e.target.value)}
-                        placeholder="e.g., Company Property Damage"
+                        placeholder={t('ph_eg_company_property_damage')}
                         disabled={calculating}
                       />
                     </div>
@@ -404,7 +404,7 @@ export const FinalSettlementCalculator: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="bonusPayment">Additional Bonus Payment</Label>
+                <Label htmlFor="bonusPayment">{t('additional_bonus_payment')}</Label>
                 <Input
                   id="bonusPayment"
                   type="number"
@@ -426,7 +426,7 @@ export const FinalSettlementCalculator: React.FC = () => {
                   id="remarks"
                   value={remarks}
                   onChange={(e) => setRemarks(e.target.value)}
-                  placeholder="Add any additional notes regarding this settlement"
+                  placeholder={t('ph_add_any_additional_notes_regarding_this_settlem')}
                   rows={3}
                   disabled={calculating}
                 />
@@ -453,7 +453,7 @@ export const FinalSettlementCalculator: React.FC = () => {
       {calculationResult && (
         <Card>
           <CardHeader>
-            <CardTitle>Settlement Calculation Results</CardTitle>
+            <CardTitle>{t('ttl_settlement_calculation_results')}</CardTitle>
             <CardDescription>
               Final settlement calculation for {selectedEmployee?.name}
             </CardDescription>
@@ -462,7 +462,7 @@ export const FinalSettlementCalculator: React.FC = () => {
             <div className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                  <h3 className="font-medium mb-3">Service Information</h3>
+                  <h3 className="font-medium mb-3">{t('service_information')}</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Years of Service:</span>
@@ -476,7 +476,7 @@ export const FinalSettlementCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <h3 className="font-medium mb-3">Salary Information</h3>
+                  <h3 className="font-medium mb-3">{t('salary_information')}</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Basic Monthly Salary:</span>
@@ -489,7 +489,7 @@ export const FinalSettlementCalculator: React.FC = () => {
               <Separator />
 
               <div>
-                <h3 className="font-medium mb-3">Settlement Components</h3>
+                <h3 className="font-medium mb-3">{t('settlement_components')}</h3>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -499,11 +499,11 @@ export const FinalSettlementCalculator: React.FC = () => {
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell>Outstanding Salary</TableCell>
+                      <TableCell>{t('outstanding_salary')}</TableCell>
                       <TableCell className="text-right">{formatCurrency(calculationResult.outstanding_salary)}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Leave Encashment</TableCell>
+                      <TableCell>{t('leave_encashment')}</TableCell>
                       <TableCell className="text-right">{formatCurrency(calculationResult.leave_encashment)}</TableCell>
                     </TableRow>
                     <TableRow>
@@ -511,11 +511,11 @@ export const FinalSettlementCalculator: React.FC = () => {
                       <TableCell className="text-right">{formatCurrency(calculationResult.gratuity_amount)}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Notice Period Compensation</TableCell>
+                      <TableCell>{t('notice_period_compensation')}</TableCell>
                       <TableCell className="text-right">{formatCurrency(calculationResult.notice_period_compensation)}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Additional Bonus Payment</TableCell>
+                      <TableCell>{t('additional_bonus_payment')}</TableCell>
                       <TableCell className="text-right">{formatCurrency(calculationResult.bonus_payments)}</TableCell>
                     </TableRow>
                   </TableBody>
@@ -566,7 +566,7 @@ export const FinalSettlementCalculator: React.FC = () => {
               <Separator />
 
               <div className="flex justify-between items-center px-2 py-4 bg-muted rounded-md">
-                <h3 className="font-medium text-lg">Total Payable Amount</h3>
+                <h3 className="font-medium text-lg">{t('total_payable_amount')}</h3>
                 <span className="font-bold text-xl">
                   {formatCurrency(calculationResult.total_payable)}
                 </span>

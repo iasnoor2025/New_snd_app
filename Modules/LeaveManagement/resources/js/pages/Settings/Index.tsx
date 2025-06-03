@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -111,6 +112,8 @@ const weekDays = [
 ];
 
 export default function Index({ settings }: Props) {
+  const { t } = useTranslation('leave');
+
     const { can } = usePermission();
     const [activeTab, setActiveTab] = useState('general');
     const [reminderDays, setReminderDays] = useState<string>(
@@ -179,13 +182,13 @@ export default function Index({ settings }: Props) {
 
     return (
         <>
-            <Head title="Leave Settings" />
+            <Head title={t('leave_settings')} />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Leave Settings</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">{t('leave_settings')}</h1>
                         <Breadcrumb className="mt-2">
                             <BreadcrumbList>
                                 <BreadcrumbItem>
@@ -237,7 +240,7 @@ export default function Index({ settings }: Props) {
                             </TabsTrigger>
                             <TabsTrigger value="carryforward" className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                Carry Forward
+                                {t('carry_forward')}
                             </TabsTrigger>
                             <TabsTrigger value="notifications" className="flex items-center gap-2">
                                 <Bell className="h-4 w-4" />
@@ -269,13 +272,13 @@ export default function Index({ settings }: Props) {
                                     {/* Leave Year Settings */}
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="leave_year_start_month">Leave Year Start Month</Label>
+                                            <Label htmlFor="leave_year_start_month">{t('lbl_leave_year_start_month')}</Label>
                                             <Select
                                                 value={data.leave_year_start_month?.toString()}
                                                 onValueChange={(value) => setData('leave_year_start_month', parseInt(value))}
                                             >
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select month" />
+                                                    <SelectValue placeholder={t('ph_select_month')} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {months.map((month) => (
@@ -291,7 +294,7 @@ export default function Index({ settings }: Props) {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="leave_year_start_day">Leave Year Start Day</Label>
+                                            <Label htmlFor="leave_year_start_day">{t('lbl_leave_year_start_day')}</Label>
                                             <Input
                                                 id="leave_year_start_day"
                                                 type="number"
@@ -310,7 +313,7 @@ export default function Index({ settings }: Props) {
 
                                     {/* Weekend Days */}
                                     <div className="space-y-3">
-                                        <Label>Weekend Days</Label>
+                                        <Label>{t('lbl_weekend_days')}</Label>
                                         <div className="flex flex-wrap gap-2">
                                             {weekDays.map((day) => (
                                                 <Badge
@@ -334,7 +337,7 @@ export default function Index({ settings }: Props) {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Public Holidays Affect Leave</Label>
+                                                <Label>{t('lbl_public_holidays_affect_leave')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Whether public holidays should be excluded from leave calculations
                                                 </p>
@@ -347,7 +350,7 @@ export default function Index({ settings }: Props) {
 
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Allow Half Day Leave</Label>
+                                                <Label>{t('lbl_allow_half_day_leave')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Allow employees to request half-day leave
                                                 </p>
@@ -360,7 +363,7 @@ export default function Index({ settings }: Props) {
 
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Allow Negative Balance</Label>
+                                                <Label>{t('lbl_allow_negative_balance')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Allow employees to take leave even with insufficient balance
                                                 </p>
@@ -407,7 +410,7 @@ export default function Index({ settings }: Props) {
                                 <CardContent className="space-y-6">
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
-                                            <Label>Auto Approve Sick Leave</Label>
+                                            <Label>{t('lbl_auto_approve_sick_leave')}</Label>
                                             <p className="text-sm text-muted-foreground">
                                                 Automatically approve sick leave requests
                                             </p>
@@ -435,7 +438,7 @@ export default function Index({ settings }: Props) {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="max_consecutive_days_without_approval">Max Consecutive Days Without Approval</Label>
+                                            <Label htmlFor="max_consecutive_days_without_approval">{t('lbl_max_consecutive_days_without_approval')}</Label>
                                             <Input
                                                 id="max_consecutive_days_without_approval"
                                                 type="number"
@@ -452,7 +455,7 @@ export default function Index({ settings }: Props) {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="approval_hierarchy_levels">Approval Hierarchy Levels</Label>
+                                            <Label htmlFor="approval_hierarchy_levels">{t('lbl_approval_hierarchy_levels')}</Label>
                                             <Input
                                                 id="approval_hierarchy_levels"
                                                 type="number"
@@ -491,7 +494,7 @@ export default function Index({ settings }: Props) {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <Calendar className="h-5 w-5" />
-                                        Carry Forward Settings
+                                        {t('carry_forward_settings')}
                                     </CardTitle>
                                     <CardDescription>
                                         Configure leave carry forward policies
@@ -500,7 +503,7 @@ export default function Index({ settings }: Props) {
                                 <CardContent className="space-y-6">
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
-                                            <Label>Enable Global Carry Forward</Label>
+                                            <Label>{t('lbl_enable_global_carry_forward')}</Label>
                                             <p className="text-sm text-muted-foreground">
                                                 Allow unused leave to be carried forward to next year
                                             </p>
@@ -515,13 +518,13 @@ export default function Index({ settings }: Props) {
                                         <>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="carry_forward_deadline_month">Carry Forward Deadline Month</Label>
+                                                    <Label htmlFor="carry_forward_deadline_month">{t('lbl_carry_forward_deadline_month')}</Label>
                                                     <Select
                                                         value={data.carry_forward_deadline_month?.toString()}
                                                         onValueChange={(value) => setData('carry_forward_deadline_month', parseInt(value))}
                                                     >
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Select month" />
+                                                            <SelectValue placeholder={t('ph_select_month')} />
                                                         </SelectTrigger>
                                                         <SelectContent>
                                                             {months.map((month) => (
@@ -537,7 +540,7 @@ export default function Index({ settings }: Props) {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="carry_forward_deadline_day">Carry Forward Deadline Day</Label>
+                                                    <Label htmlFor="carry_forward_deadline_day">{t('lbl_carry_forward_deadline_day')}</Label>
                                                     <Input
                                                         id="carry_forward_deadline_day"
                                                         type="number"
@@ -605,7 +608,7 @@ export default function Index({ settings }: Props) {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Notify Employee on Approval</Label>
+                                                <Label>{t('lbl_notify_employee_on_approval')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Send notification when leave is approved
                                                 </p>
@@ -618,7 +621,7 @@ export default function Index({ settings }: Props) {
 
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Notify Employee on Rejection</Label>
+                                                <Label>{t('lbl_notify_employee_on_rejection')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Send notification when leave is rejected
                                                 </p>
@@ -631,7 +634,7 @@ export default function Index({ settings }: Props) {
 
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Notify Manager on Request</Label>
+                                                <Label>{t('lbl_notify_manager_on_request')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Send notification to manager when leave is requested
                                                 </p>
@@ -644,7 +647,7 @@ export default function Index({ settings }: Props) {
 
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Notify HR on Long Leave</Label>
+                                                <Label>{t('lbl_notify_hr_on_long_leave')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Send notification to HR for long leave requests
                                                 </p>
@@ -673,10 +676,10 @@ export default function Index({ settings }: Props) {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="reminder_days">Reminder Days Before Expiry</Label>
+                                            <Label htmlFor="reminder_days">{t('lbl_reminder_days_before_expiry')}</Label>
                                             <Input
                                                 id="reminder_days"
-                                                placeholder="e.g., 30, 7, 1"
+                                                placeholder={t('ph_eg_30_7_1')}
                                                 value={reminderDays}
                                                 onChange={(e) => setReminderDays(e.target.value)}
                                             />
@@ -707,7 +710,7 @@ export default function Index({ settings }: Props) {
                                 <CardContent className="space-y-6">
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
-                                            <Label>Allow Probation Leave</Label>
+                                            <Label>{t('lbl_allow_probation_leave')}</Label>
                                             <p className="text-sm text-muted-foreground">
                                                 Allow employees on probation to take leave
                                             </p>
@@ -736,10 +739,10 @@ export default function Index({ settings }: Props) {
                                             </div>
 
                                             <div className="space-y-2">
-                                                <Label htmlFor="probation_leave_types">Allowed Leave Types During Probation</Label>
+                                                <Label htmlFor="probation_leave_types">{t('lbl_allowed_leave_types_during_probation')}</Label>
                                                 <Input
                                                     id="probation_leave_types"
-                                                    placeholder="e.g., sick, emergency, maternity"
+                                                    placeholder={t('ph_eg_sick_emergency_maternity')}
                                                     value={probationTypes}
                                                     onChange={(e) => setProbationTypes(e.target.value)}
                                                 />
@@ -773,7 +776,7 @@ export default function Index({ settings }: Props) {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Enable Leave Encashment</Label>
+                                                <Label>{t('lbl_enable_leave_encashment')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Allow employees to encash unused leave
                                                 </p>
@@ -802,7 +805,7 @@ export default function Index({ settings }: Props) {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="min_encashment_days">Min Encashment Days</Label>
+                                                    <Label htmlFor="min_encashment_days">{t('lbl_min_encashment_days')}</Label>
                                                     <Input
                                                         id="min_encashment_days"
                                                         type="number"
@@ -817,7 +820,7 @@ export default function Index({ settings }: Props) {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="max_encashment_days">Max Encashment Days</Label>
+                                                    <Label htmlFor="max_encashment_days">{t('lbl_max_encashment_days')}</Label>
                                                     <Input
                                                         id="max_encashment_days"
                                                         type="number"
@@ -840,7 +843,7 @@ export default function Index({ settings }: Props) {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Leave Calendar Integration</Label>
+                                                <Label>{t('lbl_leave_calendar_integration')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Integrate with external calendar systems
                                                 </p>
@@ -853,7 +856,7 @@ export default function Index({ settings }: Props) {
 
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label>Manager Override Balance</Label>
+                                                <Label>{t('lbl_manager_override_balance')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Allow managers to override leave balance restrictions
                                                 </p>

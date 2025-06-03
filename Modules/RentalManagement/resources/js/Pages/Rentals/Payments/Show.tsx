@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/RentalManagement/Resources/js/types';
 import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
@@ -47,6 +48,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, payment }: Props) {
+  const { t } = useTranslation('rental');
+
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Rentals', href: route('rentals.index') },
@@ -84,7 +87,7 @@ export default function Show({ auth, payment }: Props) {
   };
 
   return (
-    <AdminLayout title="Payment Details" breadcrumbs={breadcrumbs}>
+    <AdminLayout title={t('payment_details')} breadcrumbs={breadcrumbs}>
       <Head title={`Payment #${payment.id}`} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -95,7 +98,7 @@ export default function Show({ auth, payment }: Props) {
                 <ArrowLeft className="h-4 w-4" />
               </Link>
             </Button>
-            <h1 className="text-2xl font-bold tracking-tight">Payment Details</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{t('payment_details')}</h1>
           </div>
           <div className="flex items-center gap-2">
             {payment.receipt_path && (
@@ -118,7 +121,7 @@ export default function Show({ auth, payment }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Payment Information</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_payment_information')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
@@ -146,21 +149,21 @@ export default function Show({ auth, payment }: Props) {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Rental Information</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('rental_information')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Rental ID</span>
+                <span className="text-sm text-gray-500">{t('lbl_rental_id')}</span>
                 <Link href={route('rentals.show', payment.rental.id)} className="font-medium text-blue-600 hover:underline">
                   #{payment.rental.rental_number || payment.rental.id}
                 </Link>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Total Amount</span>
+                <span className="text-sm text-gray-500">{t('th_total_amount')}</span>
                 <span className="font-medium">{formatCurrency(payment.rental.total_amount)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Due Date</span>
+                <span className="text-sm text-gray-500">{t('due_date')}</span>
                 <span className="font-medium">
                   {payment.rental.payment_due_date
                     ? format(new Date(payment.rental.payment_due_date), "MMM dd, yyyy")
@@ -176,11 +179,11 @@ export default function Show({ auth, payment }: Props) {
 
           <Card className="md:col-span-2">
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Additional Information</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_additional_information')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Created By</span>
+                <span className="text-sm text-gray-500">{t('created_by')}</span>
                 <span className="font-medium">{payment.created_by.name}</span>
               </div>
               {payment.notes && (
@@ -191,11 +194,11 @@ export default function Show({ auth, payment }: Props) {
               )}
               {payment.receipt_path && (
                 <div className="mt-6">
-                  <h3 className="text-sm font-medium mb-2">Receipt Image</h3>
+                  <h3 className="text-sm font-medium mb-2">{t('receipt_image')}</h3>
                   <div className="border rounded-md p-2">
                     <img 
                       src={`/storage/${payment.receipt_path}`} 
-                      alt="Payment Receipt" 
+                      alt={t('payment_receipt')} 
                       className="max-h-64 object-contain mx-auto"
                     />
                   </div>

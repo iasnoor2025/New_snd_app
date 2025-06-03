@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
 import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
@@ -54,6 +55,8 @@ interface Props extends PageProps {
 }
 
 export default function Create({ auth, employee, initialData }: Props) {
+  const { t } = useTranslation('payroll');
+
     const { hasPermission } = usePermission();
 
     const { data, setData, post, processing, errors } = useForm({
@@ -74,8 +77,8 @@ export default function Create({ auth, employee, initialData }: Props) {
     };
 
     return (
-        <AdminLayout title="Create Final Settlement" breadcrumbs={breadcrumbs} requiredPermission="final-settlements.create">
-            <Head title="Create Final Settlement" />
+        <AdminLayout title={t('ttl_create_final_settlement')} breadcrumbs={breadcrumbs} requiredPermission="final-settlements.create">
+            <Head title={t('ttl_create_final_settlement')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <div className="flex items-center gap-4">
@@ -87,7 +90,7 @@ export default function Create({ auth, employee, initialData }: Props) {
                     </Button>
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">
-                            Create Final Settlement
+                            {t('ttl_create_final_settlement')}
                         </h1>
                         <p className="text-muted-foreground">
                             For {employee.first_name} {employee.last_name} (ID: {employee.employee_id})
@@ -98,13 +101,13 @@ export default function Create({ auth, employee, initialData }: Props) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Settlement Details</CardTitle>
-                            <CardDescription>Enter the final settlement details</CardDescription>
+                            <CardTitle>{t('settlement_details')}</CardTitle>
+                            <CardDescription>{t('enter_the_final_settlement_details')}</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="last_working_day">Last Working Day</Label>
+                                    <Label htmlFor="last_working_day">{t('last_working_day')}</Label>
                                     <Input
                                         id="last_working_day"
                                         type="date"
@@ -118,7 +121,7 @@ export default function Create({ auth, employee, initialData }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="leave_encashment">Leave Encashment</Label>
+                                    <Label htmlFor="leave_encashment">{t('lbl_leave_encashment')}</Label>
                                     <Input
                                         id="leave_encashment"
                                         type="number"
@@ -133,7 +136,7 @@ export default function Create({ auth, employee, initialData }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="unpaid_salary">Unpaid Salary</Label>
+                                    <Label htmlFor="unpaid_salary">{t('lbl_unpaid_salary')}</Label>
                                     <Input
                                         id="unpaid_salary"
                                         type="number"
@@ -148,7 +151,7 @@ export default function Create({ auth, employee, initialData }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="unpaid_overtime">Unpaid Overtime</Label>
+                                    <Label htmlFor="unpaid_overtime">{t('lbl_unpaid_overtime')}</Label>
                                     <Input
                                         id="unpaid_overtime"
                                         type="number"
@@ -193,7 +196,7 @@ export default function Create({ auth, employee, initialData }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="total_payable">Total Payable</Label>
+                                    <Label htmlFor="total_payable">{t('lbl_total_payable')}</Label>
                                     <Input
                                         id="total_payable"
                                         type="number"
@@ -222,7 +225,7 @@ export default function Create({ auth, employee, initialData }: Props) {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="agreement_terms">Agreement Terms</Label>
+                                <Label htmlFor="agreement_terms">{t('agreement_terms')}</Label>
                                 <Textarea
                                     id="agreement_terms"
                                     value={data.agreement_terms}

@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,8 @@ export default function OverdueSection({
   invoices,
   permissions
 }: OverdueSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("invoices");
   const [isSendingReminder, setIsSendingReminder] = React.useState(false);
   const [isPrintingInvoice, setIsPrintingInvoice] = React.useState(false);
@@ -104,7 +107,7 @@ export default function OverdueSection({
       {/* Overdue rental alert */}
       <Alert variant="destructive" className="animate-pulse">
         <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>Rental Overdue</AlertTitle>
+        <AlertTitle>{t('ttl_rental_overdue')}</AlertTitle>
         <AlertDescription>
           This rental has exceeded its expected end date by {getDaysOverdue()} days.
           Immediate action is required.
@@ -116,7 +119,7 @@ export default function OverdueSection({
         <CardHeader className="bg-red-50 border-b border-red-100">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Overdue Status</CardTitle>
+              <CardTitle>{t('ttl_overdue_status')}</CardTitle>
               <CardDescription>
                 The rental period has ended but equipment hasn't been returned
               </CardDescription>
@@ -131,7 +134,7 @@ export default function OverdueSection({
             {/* Payment status */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-medium">Payment Status</h3>
+                <h3 className="text-sm font-medium">{t('payment_status')}</h3>
                 <span className={`text-sm font-medium ${
                   getPaymentProgress() === 100 ? 'text-green-600' : 'text-red-600'
                 }`}>
@@ -149,13 +152,13 @@ export default function OverdueSection({
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="space-y-3">
                 <div>
-                  <p className="text-muted-foreground">Expected End Date</p>
+                  <p className="text-muted-foreground">{t('expected_end_date')}</p>
                   <p className="font-medium">
                     {rental.expected_end_date ? format(new Date(rental.expected_end_date), 'PPP') : 'N/A'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Rental Duration</p>
+                  <p className="text-muted-foreground">{t('rental_duration')}</p>
                   <p className="font-medium">
                     {differenceInDays(
                       new Date(rental.expected_end_date || new Date()),
@@ -166,7 +169,7 @@ export default function OverdueSection({
               </div>
               <div className="space-y-3">
                 <div>
-                  <p className="text-muted-foreground">Outstanding Balance</p>
+                  <p className="text-muted-foreground">{t('outstanding_balance')}</p>
                   <p className="font-medium text-red-600">
                     {formatCurrency(
                       invoices.data
@@ -176,7 +179,7 @@ export default function OverdueSection({
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Late Fees</p>
+                  <p className="text-muted-foreground">{t('late_fees')}</p>
                   <p className="font-medium text-red-600">
                     {formatCurrency(rental.late_fees ||
                       (getDaysOverdue() * (rental.daily_late_fee || rental.daily_rate || 25)))}
@@ -217,7 +220,7 @@ export default function OverdueSection({
       <Tabs defaultValue="invoices" onValueChange={setSelectedTab} value={selectedTab}>
         <TabsList className="mb-4">
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
-          <TabsTrigger value="items">Rental Items</TabsTrigger>
+          <TabsTrigger value="items">{t('rental_items')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="invoices">

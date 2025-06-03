@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from '@inertiajs/react';
 import axios from 'axios';
 import { Employee } from '../../types/employee';
@@ -93,6 +94,8 @@ export const EmployeeList: React.FC<EmployeeListProps> = ({ initialEmployees = [
   };
 
   const applyFilters = () => {
+  const { t } = useTranslation('employee');
+
     let filtered = [...employees];
 
     // Apply search query
@@ -163,7 +166,7 @@ export const EmployeeList: React.FC<EmployeeListProps> = ({ initialEmployees = [
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
               type="text"
-              placeholder="Search employees..."
+              placeholder={t('ph_search_employees')}
               className="w-full pl-9"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -175,13 +178,13 @@ export const EmployeeList: React.FC<EmployeeListProps> = ({ initialEmployees = [
               value={statusFilter}
               onValueChange={setStatusFilter}
               <SelectTrigger className="w-[130px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t('ph_status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t('opt_all_status')}</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
-                <SelectItem value="on_leave">On Leave</SelectItem>
+                <SelectItem value="on_leave">{t('on_leave')}</SelectItem>
                 <SelectItem value="terminated">Terminated</SelectItem>
               </SelectContent>
             </Select>
@@ -190,10 +193,10 @@ export const EmployeeList: React.FC<EmployeeListProps> = ({ initialEmployees = [
               value={departmentFilter}
               onValueChange={setDepartmentFilter}
               <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="Department" />
+                <SelectValue placeholder={t('ph_department')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Departments</SelectItem>
+                <SelectItem value="all">{t('opt_all_departments')}</SelectItem>
                 {departments.map((dept) => (
                   <SelectItem key={dept} value={dept}>
                     {dept}
@@ -253,12 +256,12 @@ export const EmployeeList: React.FC<EmployeeListProps> = ({ initialEmployees = [
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon">
                             <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">{t('open_menu')}</span>
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild>
-                            <Link href={`/employees/${employee.id}`}>View Details</Link>
+                            <Link href={`/employees/${employee.id}`}>{t('ttl_view_details')}</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link href={`/employees/${employee.id}/edit`}>Edit</Link>

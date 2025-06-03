@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import type { PageProps, Customer } from '../../types/index.d';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -42,6 +43,8 @@ const Index: React.FC<Props> = ({ customers }) => {
   });
 
   const getStatusBadge = (status: string) => {
+  const { t } = useTranslation('customer');
+
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       active: 'default',
       inactive: 'secondary',
@@ -50,8 +53,8 @@ const Index: React.FC<Props> = ({ customers }) => {
   };
 
   return (
-    <AdminLayout title="Customers" breadcrumbs={breadcrumbs}>
-      <Head title="Customers" />
+    <AdminLayout title={t('ttl_customers')} breadcrumbs={breadcrumbs}>
+      <Head title={t('ttl_customers')} />
       <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -59,25 +62,25 @@ const Index: React.FC<Props> = ({ customers }) => {
             {/* <Permission permission="customers.create"> */}
               {/* <CreateButton resourceType="customers" text="Add Customer" /> */}
               <Button asChild>
-                <Link href={route('customers.create')}>Create Customer</Link>
+                <Link href={route('customers.create')}>{t('ttl_create_customer')}</Link>
               </Button>
             {/* </Permission> */}
           </CardHeader>
           <CardContent>
             <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
               <Input
-                placeholder="Search customers..."
+                placeholder={t('ph_search_customers')}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 className="pl-8"
               />
               <select className="w-full border rounded px-2 py-1" value={status} onChange={e => setStatus(e.target.value)}>
-                <option value="all">All Statuses</option>
+                <option value="all">{t('all_statuses')}</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
               <select className="w-full border rounded px-2 py-1" value={city} onChange={e => setCity(e.target.value)}>
-                <option value="all">All Cities</option>
+                <option value="all">{t('all_cities')}</option>
                 {cities.map(city => (
                   <option key={city} value={city}>{city}</option>
                 ))}
@@ -91,7 +94,7 @@ const Index: React.FC<Props> = ({ customers }) => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
-                    <TableHead>Contact Person</TableHead>
+                    <TableHead>{t('lbl_contact_person')}</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Phone</TableHead>
                     <TableHead>City</TableHead>

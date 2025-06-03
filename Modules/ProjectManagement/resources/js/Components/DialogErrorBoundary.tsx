@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';

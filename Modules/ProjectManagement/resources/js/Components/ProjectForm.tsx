@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -79,7 +80,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Project Name</FormLabel>
+                            <FormLabel>{t('lbl_project_name')}</FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>
@@ -108,7 +109,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                         name="start_date"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Start Date</FormLabel>
+                                <FormLabel>{t('lbl_start_date')}</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -122,7 +123,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                                                 {field.value ? (
                                                     format(field.value, 'PPP')
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t('pick_a_date')}</span>
                                                 )}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
@@ -150,7 +151,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                         name="end_date"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>End Date</FormLabel>
+                                <FormLabel>{t('end_date')}</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -164,7 +165,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                                                 {field.value ? (
                                                     format(field.value, 'PPP')
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t('pick_a_date')}</span>
                                                 )}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
@@ -201,13 +202,13 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select status" />
+                                            <SelectValue placeholder={t('ph_select_status')} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
                                         <SelectItem value="active">Active</SelectItem>
                                         <SelectItem value="completed">Completed</SelectItem>
-                                        <SelectItem value="on_hold">On Hold</SelectItem>
+                                        <SelectItem value="on_hold">{t('opt_on_hold')}</SelectItem>
                                         <SelectItem value="cancelled">Cancelled</SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -228,7 +229,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select priority" />
+                                            <SelectValue placeholder={t('ph_select_priority')} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
@@ -267,14 +268,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     name="manager_id"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Project Manager</FormLabel>
+                            <FormLabel>{t('lbl_project_manager')}</FormLabel>
                             <Select
                                 onValueChange={(value) => field.onChange(parseInt(value))}
                                 defaultValue={field.value?.toString()}
                             >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select manager" />
+                                        <SelectValue placeholder={t('ph_select_manager')} />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -298,7 +299,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     name="client_name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Client Name</FormLabel>
+                            <FormLabel>{t('lbl_client_name')}</FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>
@@ -312,7 +313,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     name="client_contact"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Client Contact</FormLabel>
+                            <FormLabel>{t('lbl_client_contact')}</FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>

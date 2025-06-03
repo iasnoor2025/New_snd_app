@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -67,6 +68,8 @@ interface Props extends PageProps {
 }
 
 export default function Edit({ auth, employee, users, positions }: Props) {
+  const { t } = useTranslation('employee');
+
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('personal');
@@ -198,7 +201,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <h2 className="text-xl font-semibold">Edit Employee</h2>
+            <h2 className="text-xl font-semibold">{t('edit_employee')}</h2>
           </div>
           <Button
             type="submit"
@@ -220,15 +223,15 @@ export default function Edit({ auth, employee, users, positions }: Props) {
         </div>
       }
     >
-      <Head title="Edit Employee" />
+      <Head title={t('edit_employee')} />
 
       <div className="container mx-auto py-6">
         <Form>
           <form id="employee-edit-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
               <TabsList>
-                <TabsTrigger value="personal">Personal Information</TabsTrigger>
-                <TabsTrigger value="employment">Employment Details</TabsTrigger>
+                <TabsTrigger value="personal">{t('personal_information')}</TabsTrigger>
+                <TabsTrigger value="employment">{t('employment_details')}</TabsTrigger>
                 <TabsTrigger value="documents">Documents</TabsTrigger>
                 <TabsTrigger value="salary">Salary & Benefits</TabsTrigger>
               </TabsList>
@@ -236,10 +239,10 @@ export default function Edit({ auth, employee, users, positions }: Props) {
               <TabsContent value="personal">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
+                    <CardTitle>{t('personal_information')}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <SectionHeader title="Basic Information" />
+                    <SectionHeader title={t('ttl_basic_information')} />
                     <div className="grid gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
@@ -260,7 +263,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="first_name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>First Name</FormLabel>
+                            <FormLabel>{t('lbl_first_name')}</FormLabel>
                             <FormControl>
                               <Input placeholder="First name" {...field} />
                             </FormControl>
@@ -274,7 +277,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="last_name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Last Name</FormLabel>
+                            <FormLabel>{t('lbl_last_name')}</FormLabel>
                             <FormControl>
                               <Input placeholder="Last name" {...field} />
                             </FormControl>
@@ -291,7 +294,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                             <FormLabel>Email</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Email"
+                                placeholder={t('ph_email')}
                                 {...field}
                                 value={employee.user?.email || ''}
                               />
@@ -320,7 +323,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="date_of_birth"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Date of Birth</FormLabel>
+                            <FormLabel>{t('date_of_birth')}</FormLabel>
                             <FormControl>
                               <Input
                                 type="date"
@@ -345,7 +348,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select nationality" />
+                                  <SelectValue placeholder={t('ph_select_nationality')} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent className="max-h-[200px]">
@@ -362,14 +365,14 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                       />
                     </div>
 
-                    <SectionHeader title="Emergency Contact" />
+                    <SectionHeader title={t('emergency_contact')} />
                     <div className="grid gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
                         name="emergency_contact_name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Emergency Contact Name</FormLabel>
+                            <FormLabel>{t('lbl_emergency_contact_name')}</FormLabel>
                             <FormControl>
                               <Input {...field} placeholder="Enter emergency contact name" />
                             </FormControl>
@@ -383,7 +386,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="emergency_contact_phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Emergency Contact Phone</FormLabel>
+                            <FormLabel>{t('lbl_emergency_contact_phone')}</FormLabel>
                             <FormControl>
                               <Input {...field} placeholder="+966 50 123 4567" />
                             </FormControl>
@@ -399,10 +402,10 @@ export default function Edit({ auth, employee, users, positions }: Props) {
               <TabsContent value="employment">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Employment Details</CardTitle>
+                    <CardTitle>{t('employment_details')}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <SectionHeader title="Job Information" />
+                    <SectionHeader title={t('ttl_job_information')} />
                     <div className="grid gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
@@ -416,7 +419,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select position" />
+                                  <SelectValue placeholder={t('ph_select_position')} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -439,7 +442,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                           <FormItem>
                             <FormLabel>Department</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Enter department" />
+                              <Input {...field} placeholder={t('ph_enter_department')} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -451,7 +454,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="join_date"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Join Date</FormLabel>
+                            <FormLabel>{t('join_date')}</FormLabel>
                             <FormControl>
                               <Input
                                 type="date"
@@ -476,7 +479,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select status" />
+                                  <SelectValue placeholder={t('ph_select_status')} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -502,7 +505,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                     <CardTitle>Documents</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <SectionHeader title="Required Documents" />
+                    <SectionHeader title={t('ttl_required_documents')} />
                     <div className="grid gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
@@ -545,7 +548,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="driving_license"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Driving License</FormLabel>
+                            <FormLabel>{t('driving_license')}</FormLabel>
                             <FormControl>
                               <FileUpload
                                 field={field}
@@ -563,7 +566,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="operator_license"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Operator License</FormLabel>
+                            <FormLabel>{t('lbl_operator_license')}</FormLabel>
                             <FormControl>
                               <FileUpload
                                 field={field}
@@ -613,14 +616,14 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                       />
                     </div>
 
-                    <SectionHeader title="Document Costs" />
+                    <SectionHeader title={t('ttl_document_costs')} />
                     <div className="grid gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
                         name="iqama_cost"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Iqama Cost</FormLabel>
+                            <FormLabel>{t('lbl_iqama_cost')}</FormLabel>
                             <FormControl>
                               <Input
                                 type="number"
@@ -639,7 +642,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="driving_license_cost"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Driving License Cost</FormLabel>
+                            <FormLabel>{t('lbl_driving_license_cost')}</FormLabel>
                             <FormControl>
                               <Input
                                 type="number"
@@ -658,7 +661,7 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                         name="operator_license_cost"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Operator License Cost</FormLabel>
+                            <FormLabel>{t('lbl_operator_license_cost')}</FormLabel>
                             <FormControl>
                               <Input
                                 type="number"

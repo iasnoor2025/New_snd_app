@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm, Link } from '@inertiajs/react';
 import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../../../resources/js/components/ui/card';
@@ -51,6 +52,8 @@ interface Props {
 declare global { interface Window { route: any; } }
 
 export default function Edit({ project, customers, locations }: Props) {
+  const { t } = useTranslation('project');
+
     // Deduplicate locations based on name, city, and state
     const uniqueLocations = React.useMemo(() => {
         const seen = new Set();
@@ -103,7 +106,7 @@ export default function Edit({ project, customers, locations }: Props) {
                         Back to Project
                     </Link>
 
-                    <h1 className="text-3xl font-bold tracking-tight">Edit Project</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('edit_project')}</h1>
                     <p className="text-muted-foreground">Update project details for {project.name}</p>
                 </div>
 
@@ -111,19 +114,19 @@ export default function Edit({ project, customers, locations }: Props) {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-xl">Project Details</CardTitle>
-                        <CardDescription>Basic information about the project</CardDescription>
+                        <CardTitle className="text-xl">{t('ttl_project_details')}</CardTitle>
+                        <CardDescription>{t('basic_information_about_the_project')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name">Project Name</Label>
+                                    <Label htmlFor="name">{t('lbl_project_name')}</Label>
                                     <Input
                                         id="name"
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
-                                        placeholder="Enter project name"
+                                        placeholder={t('ph_enter_project_name')}
                                         className="w-full"
                                         required
                                     />
@@ -139,7 +142,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                         onValueChange={(value) => setData('customer_id', value)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select customer" />
+                                            <SelectValue placeholder={t('ph_select_customer')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {customers.map((customer) => (
@@ -161,7 +164,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                         onValueChange={(value) => setData('location_id', value)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select location" />
+                                            <SelectValue placeholder={t('ph_select_location')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {uniqueLocations.map((location) => (
@@ -177,7 +180,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="start_date">Start Date</Label>
+                                    <Label htmlFor="start_date">{t('lbl_start_date')}</Label>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button
@@ -191,7 +194,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                                 {data.start_date ? (
                                                     format(data.start_date, 'PPP')
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t('pick_a_date')}</span>
                                                 )}
                                             </Button>
                                         </PopoverTrigger>
@@ -224,7 +227,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                                 {data.end_date ? (
                                                     format(data.end_date, 'PPP')
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t('pick_a_date')}</span>
                                                 )}
                                             </Button>
                                         </PopoverTrigger>
@@ -249,7 +252,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                         onValueChange={(value) => setData('status', value)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select status" />
+                                            <SelectValue placeholder={t('ph_select_status')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map((status) => (
@@ -271,7 +274,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                         type="number"
                                         value={data.budget}
                                         onChange={(e) => setData('budget', e.target.value)}
-                                        placeholder="Enter project budget"
+                                        placeholder={t('ph_enter_project_budget')}
                                         className="w-full"
                                         required
                                     />
@@ -290,7 +293,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                         id="description"
                                         value={data.description}
                                         onChange={(e) => setData('description', e.target.value)}
-                                        placeholder="Enter project description"
+                                        placeholder={t('ph_enter_project_description')}
                                         rows={4}
                                         className="resize-none"
                                     />
@@ -305,7 +308,7 @@ export default function Edit({ project, customers, locations }: Props) {
                                         id="notes"
                                         value={data.notes}
                                         onChange={(e) => setData('notes', e.target.value)}
-                                        placeholder="Enter any additional notes"
+                                        placeholder={t('ph_enter_any_additional_notes')}
                                         rows={3}
                                         className="resize-none"
                                     />

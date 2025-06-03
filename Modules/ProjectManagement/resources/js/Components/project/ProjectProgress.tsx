@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -33,6 +34,8 @@ export function ProjectProgress({
   endDate,
   className,
 }: ProjectProgressProps) {
+  const { t } = useTranslation('project');
+
   // Calculate days remaining
   const daysRemaining = React.useMemo(() => {
     if (!endDate) return null;
@@ -78,7 +81,7 @@ export function ProjectProgress({
           <div className="flex h-5 w-5 items-center justify-center rounded-sm bg-blue-100">
             <CheckCircle2 className="h-3 w-3 text-blue-600" />
           </div>
-          <CardTitle className="ml-2 text-base font-medium">Project Progress</CardTitle>
+          <CardTitle className="ml-2 text-base font-medium">{t('ttl_project_progress')}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -93,7 +96,7 @@ export function ProjectProgress({
         <div className="grid grid-cols-3 gap-2">
           <div className="flex flex-col items-center justify-center rounded-md bg-blue-50 p-2">
             <span className="text-xl font-semibold text-blue-600">{inProgress}</span>
-            <span className="text-xs text-muted-foreground">In Progress</span>
+            <span className="text-xs text-muted-foreground">{t('in_progress')}</span>
           </div>
           <div className="flex flex-col items-center justify-center rounded-md bg-amber-50 p-2">
             <span className="text-xl font-semibold text-amber-600">{pending}</span>

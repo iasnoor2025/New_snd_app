@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -74,6 +75,8 @@ interface Props extends PageProps {
 }
 
 export default function Index({ auth, employee, advances, total_balance }: Props) {
+  const { t } = useTranslation('employee');
+
   const { hasPermission } = usePermission();
   const [selectedAdvance, setSelectedAdvance] = React.useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
@@ -118,8 +121,8 @@ export default function Index({ auth, employee, advances, total_balance }: Props
   console.log('Has edit permission:', hasPermission('employees.edit'));
 
   return (
-    <AdminLayout title="Employee Advances" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
-      <Head title="Employee Advances" />
+    <AdminLayout title={t('ttl_employee_advances')} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+      <Head title={t('ttl_employee_advances')} />
 
       <div className="flex h-full flex-1 flex-col gap-6 p-4 md:gap-8 md:p-8">
         <div className="flex items-center justify-between gap-4">
@@ -254,7 +257,7 @@ export default function Index({ auth, employee, advances, total_balance }: Props
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete Advance Record</DialogTitle>
+              <DialogTitle>{t('ttl_delete_advance_record')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete this advance record? This action cannot be undone.
               </DialogDescription>

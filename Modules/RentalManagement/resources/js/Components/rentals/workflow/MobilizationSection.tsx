@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,8 @@ export default function MobilizationSection({
   rentalItems,
   permissions
 }: MobilizationSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("tracking");
   const [isMarkingComplete, setIsMarkingComplete] = React.useState(false);
   const [isMapViewOpen, setIsMapViewOpen] = React.useState(false);
@@ -89,7 +92,7 @@ export default function MobilizationSection({
       {/* Mobilization alert */}
       <Alert className="bg-orange-50 border-orange-200 text-orange-800">
         <Truck className="h-4 w-4 text-orange-600" />
-        <AlertTitle>Mobilization in Progress</AlertTitle>
+        <AlertTitle>{t('ttl_mobilization_in_progress')}</AlertTitle>
         <AlertDescription>
           Equipment is currently being transported to the rental location.
         </AlertDescription>
@@ -99,8 +102,8 @@ export default function MobilizationSection({
       <Tabs defaultValue="tracking" onValueChange={setSelectedTab} value={selectedTab}>
         <TabsList className="mb-4">
           <TabsTrigger value="tracking">Tracking</TabsTrigger>
-          <TabsTrigger value="items">Equipment List</TabsTrigger>
-          <TabsTrigger value="location">Delivery Location</TabsTrigger>
+          <TabsTrigger value="items">{t('equipment_list')}</TabsTrigger>
+          <TabsTrigger value="location">{t('delivery_location')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="tracking">
@@ -108,7 +111,7 @@ export default function MobilizationSection({
             <CardHeader>
               <div className="flex justify-between items-center">
                 <div>
-                  <CardTitle>Mobilization Tracking</CardTitle>
+                  <CardTitle>{t('ttl_mobilization_tracking')}</CardTitle>
                   <CardDescription>
                     Current status of equipment transport
                   </CardDescription>
@@ -133,7 +136,7 @@ export default function MobilizationSection({
 
                 {/* Mobilization progress */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Mobilization Progress</h3>
+                  <h3 className="text-sm font-medium">{t('mobilization_progress')}</h3>
 
                   <div className="relative pl-8 space-y-6">
                     {/* Progress line */}
@@ -169,7 +172,7 @@ export default function MobilizationSection({
 
                 {/* Transport details */}
                 <div>
-                  <h3 className="text-sm font-medium mb-2">Transport Details</h3>
+                  <h3 className="text-sm font-medium mb-2">{t('transport_details')}</h3>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <p className="text-muted-foreground">Transport Type:</p>
                     <p>{rental.mobilization_data?.transport_type || 'Standard Truck'}</p>
@@ -230,7 +233,7 @@ export default function MobilizationSection({
         <TabsContent value="location">
           <Card>
             <CardHeader>
-              <CardTitle>Delivery Location</CardTitle>
+              <CardTitle>{t('delivery_location')}</CardTitle>
               <CardDescription>
                 Where the equipment is being delivered
               </CardDescription>
@@ -239,7 +242,7 @@ export default function MobilizationSection({
               {rental.location ? (
                 <div className="space-y-4">
                   <div className="bg-secondary/20 p-4 rounded-md">
-                    <h3 className="text-sm font-medium mb-2">Delivery Address</h3>
+                    <h3 className="text-sm font-medium mb-2">{t('delivery_address')}</h3>
                     <p>{rental.location.name || rental.customer.company_name}</p>
                     <p>{rental.location.address}</p>
                     <p>
@@ -259,12 +262,12 @@ export default function MobilizationSection({
                   ) : (
                     <div className="text-center py-8 bg-secondary/10 rounded-md">
                       <MapPin className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-muted-foreground">No map coordinates available</p>
+                      <p className="text-muted-foreground">{t('no_map_coordinates_available')}</p>
                     </div>
                   )}
 
                   <div>
-                    <h3 className="text-sm font-medium mb-2">Contact at Location</h3>
+                    <h3 className="text-sm font-medium mb-2">{t('contact_at_location')}</h3>
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <p className="text-muted-foreground">Contact Person:</p>
                       <p>{rental.location.contact_person || rental.customer.contact_person}</p>
@@ -277,7 +280,7 @@ export default function MobilizationSection({
               ) : (
                 <div className="text-center py-8">
                   <MapPin className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-muted-foreground">No location information available</p>
+                  <p className="text-muted-foreground">{t('no_location_information_available')}</p>
                 </div>
               )}
             </CardContent>

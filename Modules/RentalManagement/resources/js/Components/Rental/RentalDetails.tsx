@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RentalStatusBadge } from '../RentalStatusBadge';
 import { DocumentManager } from '../DocumentManager';
 import { dateTimeDisplay } from '../date-time-display';
@@ -33,7 +34,7 @@ export const RentalDetails: FC<Props> = ({ rental, onEdit }) => {
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
             <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
                 <div>
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">Rental Details</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">{t('rental_details')}</h3>
                     <p className="mt-1 max-w-2xl text-sm text-gray-500">
                         Rental #{rental.id}
                     </p>
@@ -71,15 +72,15 @@ export const RentalDetails: FC<Props> = ({ rental, onEdit }) => {
                         </dd>
                     </div>
                     <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Rental Period</dt>
+                        <dt className="text-sm font-medium text-gray-500">{t('rental_period')}</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             <div className="flex space-x-4">
                                 <div>
-                                    <p className="text-gray-500">Start Date</p>
+                                    <p className="text-gray-500">{t('lbl_start_date')}</p>
                                     <p className="font-medium">{dateTimeDisplay(rental.start_date)}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-500">End Date</p>
+                                    <p className="text-gray-500">{t('end_date')}</p>
                                     <p className="font-medium">{dateTimeDisplay(rental.end_date)}</p>
                                 </div>
                             </div>
@@ -101,7 +102,7 @@ export const RentalDetails: FC<Props> = ({ rental, onEdit }) => {
                         </dd>
                     </div>
                     <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
+                        <dt className="text-sm font-medium text-gray-500">{t('last_updated')}</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             {dateTimeDisplay(rental.updated_at)}
                         </dd>

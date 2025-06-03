@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { format, parseISO, startOfMonth, endOfMonth } from 'date-fns';
 import axios from 'axios';
 import { Payroll } from '../../types/payroll';
@@ -58,6 +59,8 @@ const PayrollManagement: React.FC = () => {
   };
 
   const handleGeneratePayroll = () => {
+  const { t } = useTranslation('payroll');
+
     setActiveTab('generate');
   };
 
@@ -154,7 +157,7 @@ const PayrollManagement: React.FC = () => {
               { title: 'Payroll Management', href: '#' },
             ]}
           />
-          <h1 className="text-3xl font-bold tracking-tight">Payroll Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('payroll_management')}</h1>
           <p className="text-muted-foreground">
             Generate and manage employee payrolls
           </p>
@@ -196,10 +199,10 @@ const PayrollManagement: React.FC = () => {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="mb-4">
-          <TabsTrigger value="list">Payroll List</TabsTrigger>
-          <TabsTrigger value="generate">Generate Payroll</TabsTrigger>
+          <TabsTrigger value="list">{t('payroll_list')}</TabsTrigger>
+          <TabsTrigger value="generate">{t('generate_payroll')}</TabsTrigger>
           <TabsTrigger value="details" disabled={!selectedPayroll}>
-            Payroll Details
+            {t('ttl_payroll_details')}
           </TabsTrigger>
         </TabsList>
 
@@ -207,7 +210,7 @@ const PayrollManagement: React.FC = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
-                <CardTitle>Payroll Records</CardTitle>
+                <CardTitle>{t('ttl_payroll_records')}</CardTitle>
                 <CardDescription>
                   View and manage employee payroll records for{' '}
                   <span className="font-medium">

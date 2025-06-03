@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -101,6 +102,8 @@ export default function Index({
     filters,
     availableYears
 }: Props) {
+  const { t } = useTranslation('payroll');
+
     const [selectedYear, setSelectedYear] = useState(filters.year?.toString() || '');
     const [selectedEmployee, setSelectedEmployee] = useState(filters.employee_id?.toString() || '');
     const [showBulkDialog, setShowBulkDialog] = useState(false);
@@ -164,14 +167,14 @@ export default function Index({
 
     return (
         <AdminLayout>
-            <Head title="Tax Documentation" />
+            <Head title={t('tax_documentation')} />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Tax Documentation</h1>
-                        <p className="text-gray-600">Generate and manage annual tax documents for employees</p>
+                        <h1 className="text-2xl font-bold text-gray-900">{t('tax_documentation')}</h1>
+                        <p className="text-gray-600">{t('generate_and_manage_annual_tax_documents_for_emplo')}</p>
                     </div>
                     <div className="flex gap-2">
                         <Button onClick={handleExport} variant="outline">
@@ -187,17 +190,17 @@ export default function Index({
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle>Bulk Generate Tax Documents</DialogTitle>
+                                    <DialogTitle>{t('ttl_bulk_generate_tax_documents')}</DialogTitle>
                                     <DialogDescription>
                                         Generate tax documents for multiple employees for a specific year.
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="space-y-4">
                                     <div>
-                                        <Label htmlFor="bulk-year">Tax Year</Label>
+                                        <Label htmlFor="bulk-year">{t('lbl_tax_year')}</Label>
                                         <Select value={bulkYear} onValueChange={setBulkYear}>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select year" />
+                                                <SelectValue placeholder={t('ph_select_year')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {availableYears.map((year) => (
@@ -215,7 +218,7 @@ export default function Index({
                                             onValueChange={(value) => setSelectedEmployees(value ? value.split(',') : [])}
                                         >
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select employees (optional)" />
+                                                <SelectValue placeholder={t('ph_select_employees_optional')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {employees.map((employee) => (
@@ -244,7 +247,7 @@ export default function Index({
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_total_documents')}</CardTitle>
                             <FileText className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -253,7 +256,7 @@ export default function Index({
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Gross Income</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('total_gross_income')}</CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -262,7 +265,7 @@ export default function Index({
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Tax Withheld</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_total_tax_withheld')}</CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -271,7 +274,7 @@ export default function Index({
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Average Tax Rate</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_average_tax_rate')}</CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -291,10 +294,10 @@ export default function Index({
                     <CardContent>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <Label htmlFor="year-filter">Tax Year</Label>
+                                <Label htmlFor="year-filter">{t('lbl_tax_year')}</Label>
                                 <Select value={selectedYear} onValueChange={setSelectedYear}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select year" />
+                                        <SelectValue placeholder={t('ph_select_year')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {availableYears.map((year) => (
@@ -309,10 +312,10 @@ export default function Index({
                                 <Label htmlFor="employee-filter">Employee</Label>
                                 <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All employees" />
+                                        <SelectValue placeholder={t('opt_all_employees')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All employees</SelectItem>
+                                        <SelectItem value="">{t('opt_all_employees')}</SelectItem>
                                         {employees.map((employee) => (
                                             <SelectItem key={employee.id} value={employee.id.toString()}>
                                                 {employee.name}
@@ -336,7 +339,7 @@ export default function Index({
                 {/* Tax Documents Table */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Tax Documents</CardTitle>
+                        <CardTitle>{t('ttl_tax_documents')}</CardTitle>
                         <CardDescription>
                             Manage tax documents for employees
                         </CardDescription>
@@ -347,11 +350,11 @@ export default function Index({
                                 <TableRow>
                                     <TableHead>Document #</TableHead>
                                     <TableHead>Employee</TableHead>
-                                    <TableHead>Tax Year</TableHead>
-                                    <TableHead>Gross Income</TableHead>
-                                    <TableHead>Tax Withheld</TableHead>
-                                    <TableHead>Net Income</TableHead>
-                                    <TableHead>Tax Rate</TableHead>
+                                    <TableHead>{t('lbl_tax_year')}</TableHead>
+                                    <TableHead>{t('th_gross_income')}</TableHead>
+                                    <TableHead>{t('th_tax_withheld')}</TableHead>
+                                    <TableHead>{t('th_net_income')}</TableHead>
+                                    <TableHead>{t('th_tax_rate')}</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead>Generated</TableHead>
                                     <TableHead>Actions</TableHead>
@@ -363,7 +366,7 @@ export default function Index({
                                         <TableCell colSpan={10} className="text-center py-8">
                                             <div className="flex flex-col items-center gap-2">
                                                 <FileText className="h-8 w-8 text-gray-400" />
-                                                <p className="text-gray-500">No tax documents found</p>
+                                                <p className="text-gray-500">{t('no_tax_documents_found')}</p>
                                                 <p className="text-sm text-gray-400">
                                                     Generate tax documents to get started
                                                 </p>

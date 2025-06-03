@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ResourceFormModal } from '../../../Components/project/resources/ResourceModal';
 import { ResourceTable } from '../../../Components/project/resources/ResourceTable';
@@ -16,6 +17,8 @@ interface EquipmentTabProps {
 }
 
 export function EquipmentTab({ project, equipments, availableEquipment }: EquipmentTabProps) {
+  const { t } = useTranslation('project');
+
     const {
         isCreateModalOpen,
         isEditModalOpen,
@@ -97,7 +100,7 @@ export function EquipmentTab({ project, equipments, availableEquipment }: Equipm
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
-                <Button onClick={openCreateModal}>Add Equipment</Button>
+                <Button onClick={openCreateModal}>{t('ttl_add_equipment')}</Button>
             </div>
 
             <ResourceTable
@@ -113,7 +116,7 @@ export function EquipmentTab({ project, equipments, availableEquipment }: Equipm
             <ResourceFormModal
                 isOpen={isCreateModalOpen}
                 onClose={closeCreateModal}
-                title="Add Equipment"
+                title={t('ttl_add_equipment')}
                 type="equipment"
                 projectId={project.id}
                 onSuccess={handleCreateSuccess}
@@ -122,7 +125,7 @@ export function EquipmentTab({ project, equipments, availableEquipment }: Equipm
             <ResourceFormModal
                 isOpen={isEditModalOpen}
                 onClose={closeEditModal}
-                title="Edit Equipment"
+                title={t('ttl_edit_equipment')}
                 type="equipment"
                 projectId={project.id}
                 initialData={selectedResource}

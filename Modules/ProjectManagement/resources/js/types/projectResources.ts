@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 export interface ProjectResource {
   id: number;
   project_id: number;

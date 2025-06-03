@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -117,6 +118,8 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
   };
 
   const formatDateTime = (dateTimeStr: string) => {
+  const { t } = useTranslation('employee');
+
     if (!dateTimeStr) return '-';
     try {
       return format(parseISO(dateTimeStr), 'MMM d, yyyy h:mm a');
@@ -185,7 +188,7 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
           {onAddNew && (
             <Button onClick={onAddNew}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Timesheet
+              {t('btn_add_timesheet')}
             </Button>
           )}
         </div>
@@ -205,10 +208,10 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>
-                  <TableHead>Clock In</TableHead>
-                  <TableHead>Clock Out</TableHead>
+                  <TableHead>{t('th_clock_in')}</TableHead>
+                  <TableHead>{t('th_clock_out')}</TableHead>
                   <TableHead>Break</TableHead>
-                  <TableHead>Regular Hours</TableHead>
+                  <TableHead>{t('regular_hours')}</TableHead>
                   <TableHead>Overtime</TableHead>
                   <TableHead>Total</TableHead>
                   <TableHead>Project</TableHead>
@@ -243,7 +246,7 @@ export const TimesheetList: React.FC<TimesheetListProps> = ({
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">{t('open_menu')}</span>
                             <Ellipsis className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>

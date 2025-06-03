@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -70,6 +71,8 @@ interface Props extends PageProps {
 }
 
 export default function Index({ increments, statistics, projectedCost, filters, employees }: Props) {
+  const { t } = useTranslation('employee');
+
     const [searchTerm, setSearchTerm] = useState(filters.search || '');
     const [statusFilter, setStatusFilter] = useState(filters.status || 'all');
     const [employeeFilter, setEmployeeFilter] = useState(filters.employee_id || 'all');
@@ -144,17 +147,17 @@ export default function Index({ increments, statistics, projectedCost, filters, 
 
     return (
         <AdminLayout
-            title="Salary Increments"
+            title={t('salary_increments')}
             breadcrumbs={breadcrumbs}
             requiredPermission="salary-increments.view"
         >
-            <Head title="Salary Increments" />
+            <Head title={t('salary_increments')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {/* Header with Action Button */}
                     <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-2xl font-bold text-gray-900">Salary Increments</h1>
+                        <h1 className="text-2xl font-bold text-gray-900">{t('salary_increments')}</h1>
                         <Link href={route('salary-increments.create')}>
                             <Button>
                                 <Plus className="h-4 w-4 mr-2" />
@@ -166,7 +169,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Total Increments</CardTitle>
+                                <CardTitle className="text-sm font-medium">{t('ttl_total_increments')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">{statistics.total_increments}</div>
@@ -174,7 +177,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                         </Card>
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
+                                <CardTitle className="text-sm font-medium">{t('ttl_pending_approval')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold text-yellow-600">{statistics.pending_increments}</div>
@@ -182,7 +185,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                         </Card>
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Total Increment Amount</CardTitle>
+                                <CardTitle className="text-sm font-medium">{t('ttl_total_increment_amount')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold text-green-600">
@@ -192,7 +195,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                         </Card>
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Salary Annual Total</CardTitle>
+                                <CardTitle className="text-sm font-medium">{t('ttl_salary_annual_total')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold text-blue-600">
@@ -211,7 +214,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                                 <div>
                                     <Input
-                                        placeholder="Search employees..."
+                                        placeholder={t('ph_search_employees')}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="w-full"
@@ -220,10 +223,10 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                 <div>
                                     <Select value={statusFilter} onValueChange={setStatusFilter}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="All Statuses" />
+                                            <SelectValue placeholder={t('opt_all_statuses')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="all">All Statuses</SelectItem>
+                                            <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
                                             <SelectItem value="pending">Pending</SelectItem>
                                             <SelectItem value="approved">Approved</SelectItem>
                                             <SelectItem value="rejected">Rejected</SelectItem>
@@ -234,10 +237,10 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                 <div>
                                     <Select value={employeeFilter} onValueChange={setEmployeeFilter}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="All Employees" />
+                                            <SelectValue placeholder={t('opt_all_employees')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="all">All Employees</SelectItem>
+                                            <SelectItem value="all">{t('opt_all_employees')}</SelectItem>
                                             {employees.map((employee) => (
                                                 <SelectItem key={employee.id} value={employee.id.toString()}>
                                                     {employee.first_name} {employee.last_name}
@@ -249,16 +252,16 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                 <div>
                                     <Select value={typeFilter} onValueChange={setTypeFilter}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="All Types" />
+                                            <SelectValue placeholder={t('opt_all_types')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="all">All Types</SelectItem>
+                                            <SelectItem value="all">{t('opt_all_types')}</SelectItem>
                                             <SelectItem value="percentage">Percentage</SelectItem>
-                                            <SelectItem value="fixed_amount">Fixed Amount</SelectItem>
+                                            <SelectItem value="fixed_amount">{t('lbl_fixed_amount')}</SelectItem>
                                             <SelectItem value="promotion">Promotion</SelectItem>
-                                            <SelectItem value="annual_review">Annual Review</SelectItem>
+                                            <SelectItem value="annual_review">{t('opt_annual_review')}</SelectItem>
                                             <SelectItem value="performance">Performance</SelectItem>
-                                            <SelectItem value="market_adjustment">Market Adjustment</SelectItem>
+                                            <SelectItem value="market_adjustment">{t('opt_market_adjustment')}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -278,7 +281,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                     {/* Increments Table */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Salary Increments</CardTitle>
+                            <CardTitle>{t('salary_increments')}</CardTitle>
                             <CardDescription>
                                 Manage employee salary increment requests
                             </CardDescription>
@@ -289,13 +292,13 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                     <TableRow>
                                         <TableHead>Employee</TableHead>
                                         <TableHead>Department</TableHead>
-                                        <TableHead>Current Salary</TableHead>
-                                        <TableHead>New Salary</TableHead>
+                                        <TableHead>{t('current_salary')}</TableHead>
+                                        <TableHead>{t('new_salary')}</TableHead>
                                         <TableHead>Increase</TableHead>
                                         <TableHead>Type</TableHead>
-                                        <TableHead>Effective Date</TableHead>
+                                        <TableHead>{t('lbl_effective_date')}</TableHead>
                                         <TableHead>Status</TableHead>
-                                        <TableHead>Requested By</TableHead>
+                                        <TableHead>{t('th_requested_by')}</TableHead>
                                         <TableHead>Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>

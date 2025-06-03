@@ -666,7 +666,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                         <div className="bg-muted/40 p-4 rounded-lg">
                             <div className="flex items-center justify-between space-y-0">
                                 <div>
-                                    <h4 className="font-medium">Link to Employee</h4>
+                                    <h4 className="font-medium">{t('link_to_employee')}</h4>
                                     <p className="text-sm text-muted-foreground">
                                         Do you want to connect this resource to an employee?
                                     </p>
@@ -676,7 +676,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         pressed={useEmployee}
                                         onPressedChange={handleUseEmployeeChange}
                                         className="bg-white border border-gray-300 hover:bg-gray-50 data-[state=on]:bg-blue-500 data-[state=on]:text-white min-w-12 h-8"
-                                        aria-label="Toggle employee link"
+                                        aria-label={t('lbl_toggle_employee_link')}
                                     />
                                 </div>
                             </div>
@@ -684,7 +684,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         {useEmployee ? (
                             <div className="space-y-2">
-                                <Label htmlFor="employee_id">Select Employee</Label>
+                                <Label htmlFor="employee_id">{t('lbl_select_employee')}</Label>
                                 <Select
                                     value={data.employee_id?.toString()}
                                     onValueChange={(value) => {
@@ -698,7 +698,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         "w-full",
                                         errors.employee_id && "border-red-500"
                                     )}>
-                                        <SelectValue placeholder="Select an employee" />
+                                        <SelectValue placeholder={t('ph_select_an_employee')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {employees && employees.length > 0 ? (
@@ -708,7 +708,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                                 </SelectItem>
                                             ))
                                         ) : (
-                                            <SelectItem value="no-employee" disabled>No employees available</SelectItem>
+                                            <SelectItem value="no-employee" disabled>{t('opt_no_employees_available')}</SelectItem>
                                         )}
                                     </SelectContent>
                                 </Select>
@@ -718,12 +718,12 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                             </div>
                         ) : (
                             <div className="space-y-2">
-                                <Label htmlFor="worker_name">Worker Name</Label>
+                                <Label htmlFor="worker_name">{t('lbl_worker_name')}</Label>
                                 <Input
                                     id="worker_name"
                                     value={data.worker_name}
                                     onChange={(e) => handleInputChange('worker_name', e.target.value)}
-                                    placeholder="Enter worker name"
+                                    placeholder={t('ph_enter_worker_name')}
                                     className={errors.worker_name ? 'border-red-500' : ''}
                                 />
                                 {errors.worker_name && (
@@ -733,12 +733,12 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                         )}
 
                         <div className="space-y-2">
-                            <Label htmlFor="job_title">Job Title</Label>
+                            <Label htmlFor="job_title">{t('lbl_job_title')}</Label>
                             <Input
                                 id="job_title"
                                 value={data.job_title}
                                 onChange={(e) => handleInputChange('job_title', e.target.value)}
-                                placeholder="Enter job title"
+                                placeholder={t('ttl_enter_job_title')}
                                 className={errors.job_title ? 'border-red-500' : ''}
                             />
                             {errors.job_title && (
@@ -748,11 +748,11 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium">Start Date</label>
+                                <label className="text-sm font-medium">{t('lbl_start_date')}</label>
                                 <DatePicker
                                     date={data.start_date ? new Date(data.start_date) : undefined}
                                     setDate={(date: Date | undefined) => handleInputChange('start_date', date?.toISOString().split('T')[0])}
-                                    placeholder="Select start date"
+                                    placeholder={t('ph_select_start_date')}
                                 />
                                 {errors.start_date && (
                                     <p className="text-sm text-red-500">{errors.start_date}</p>
@@ -763,7 +763,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                 <DatePicker
                                     date={data.end_date ? new Date(data.end_date) : undefined}
                                     setDate={(date: Date | undefined) => handleInputChange('end_date', date?.toISOString().split('T')[0])}
-                                    placeholder="Select end date"
+                                    placeholder={t('ph_select_end_date')}
                                 />
                                 {errors.end_date && (
                                     <p className="text-sm text-red-500">{errors.end_date}</p>
@@ -772,13 +772,13 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="daily_rate">Daily Rate</Label>
+                            <Label htmlFor="daily_rate">{t('lbl_daily_rate')}</Label>
                             <Input
                                 id="daily_rate"
                                 type="number"
                                 value={data.daily_rate}
                                 onChange={(e) => handleInputChange('daily_rate', Number(e.target.value))}
-                                placeholder="Enter daily rate"
+                                placeholder={t('ph_enter_daily_rate')}
                                 className={errors.daily_rate ? 'border-red-500' : ''}
                             />
                             {errors.daily_rate && (
@@ -787,7 +787,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="total_days">Total Days</Label>
+                            <Label htmlFor="total_days">{t('lbl_total_days')}</Label>
                             <Input
                                 id="total_days"
                                 type="number"
@@ -806,7 +806,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                 id="notes"
                                 value={data.notes}
                                 onChange={(e) => handleInputChange('notes', e.target.value)}
-                                placeholder="Enter any additional notes"
+                                placeholder={t('ph_enter_any_additional_notes')}
                                 className={errors.notes ? 'border-red-500' : ''}
                             />
                             {errors.notes && (
@@ -836,7 +836,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     disabled={isLoading}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select equipment" />
+                                        <SelectValue placeholder={t('ph_select_equipment')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {equipment && equipment.length > 0 ? (
@@ -846,7 +846,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                                 </SelectItem>
                                             ))
                                         ) : (
-                                            <SelectItem value="no-equipment" disabled>No equipment available</SelectItem>
+                                            <SelectItem value="no-equipment" disabled>{t('opt_no_equipment_available')}</SelectItem>
                                         )}
                                     </SelectContent>
                                 </Select>
@@ -856,14 +856,14 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="usage_hours">Usage Hours</Label>
+                                <Label htmlFor="usage_hours">{t('lbl_usage_hours')}</Label>
                                 <Input
                                     id="usage_hours"
                                     type="number"
                                     min="1"
                                     value={data.usage_hours || ''}
                                     onChange={(e) => handleInputChange('usage_hours', Number(e.target.value))}
-                                    placeholder="Enter usage hours"
+                                    placeholder={t('ph_enter_usage_hours')}
                                     className={errors.usage_hours ? 'border-red-500' : ''}
                                 />
                                 {errors.usage_hours && (
@@ -880,7 +880,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     step="0.01"
                                     value={data.hourly_rate || ''}
                                     onChange={(e) => handleInputChange('hourly_rate', Number(e.target.value))}
-                                    placeholder="Enter hourly rate"
+                                    placeholder={t('ph_enter_hourly_rate')}
                                     className={errors.hourly_rate ? 'border-red-500' : ''}
                                 />
                                 {errors.hourly_rate && (
@@ -909,7 +909,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                 id="notes"
                                 value={data.notes || ''}
                                 onChange={(e) => handleInputChange('notes', e.target.value)}
-                                placeholder="Enter any additional notes"
+                                placeholder={t('ph_enter_any_additional_notes')}
                                 className={errors.notes ? 'border-red-500' : ''}
                             />
                             {errors.notes && (
@@ -930,7 +930,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     onValueChange={(value) => handleInputChange('material_id', parseInt(value))}
                                 >
                                     <SelectTrigger className={`w-full ${errors.material_id ? 'border-red-500' : ''}`}>
-                                        <SelectValue placeholder="Select material" />
+                                        <SelectValue placeholder={t('ph_select_material')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="1">Cement</SelectItem>
@@ -955,14 +955,14 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     onValueChange={(value) => handleInputChange('unit', value)}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select unit" />
+                                        <SelectValue placeholder={t('ph_select_unit')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="pcs">Pieces</SelectItem>
                                         <SelectItem value="kg">Kilograms</SelectItem>
                                         <SelectItem value="m">Meters</SelectItem>
-                                        <SelectItem value="m2">Square Meters</SelectItem>
-                                        <SelectItem value="m3">Cubic Meters</SelectItem>
+                                        <SelectItem value="m2">{t('opt_square_meters')}</SelectItem>
+                                        <SelectItem value="m3">{t('opt_cubic_meters')}</SelectItem>
                                         <SelectItem value="l">Liters</SelectItem>
                                         <SelectItem value="box">Box</SelectItem>
                                         <SelectItem value="set">Set</SelectItem>
@@ -982,7 +982,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     type="number"
                                     value={data.quantity || ''}
                                     onChange={(e) => handleInputChange('quantity', parseFloat(e.target.value))}
-                                    placeholder="Enter quantity"
+                                    placeholder={t('ph_enter_quantity')}
                                     min="0"
                                     step="0.01"
                                     className={errors.quantity ? "border-red-500" : ""}
@@ -999,7 +999,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     type="number"
                                     value={data.unit_price || ''}
                                     onChange={(e) => handleInputChange('unit_price', parseFloat(e.target.value))}
-                                    placeholder="Enter unit price"
+                                    placeholder={t('ph_enter_unit_price')}
                                     min="0"
                                     step="0.01"
                                     className={errors.unit_price ? "border-red-500" : ""}
@@ -1012,11 +1012,11 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium">Date Used</label>
+                                <label className="text-sm font-medium">{t('lbl_date_used')}</label>
                                 <DatePicker
                                     date={data.date_used ? new Date(data.date_used) : undefined}
                                     setDate={(date: Date | undefined) => handleInputChange('date_used', date?.toISOString().split('T')[0])}
-                                    placeholder="Select date used"
+                                    placeholder={t('ph_select_date_used')}
                                 />
                                 {errors.date_used && (
                                     <p className="text-sm text-red-500">{errors.date_used}</p>
@@ -1028,7 +1028,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     id="notes"
                                     value={data.notes || ''}
                                     onChange={(e) => handleInputChange('notes', e.target.value)}
-                                    placeholder="Add any additional notes..."
+                                    placeholder={t('ph_add_any_additional_notes')}
                                     className="min-h-[100px]"
                                 />
                             </div>
@@ -1059,7 +1059,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     disabled={isLoading}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select equipment" />
+                                        <SelectValue placeholder={t('ph_select_equipment')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {equipment && equipment.length > 0 ? (
@@ -1069,7 +1069,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                                 </SelectItem>
                                             ))
                                         ) : (
-                                            <SelectItem value="no-equipment" disabled>No equipment available</SelectItem>
+                                            <SelectItem value="no-equipment" disabled>{t('opt_no_equipment_available')}</SelectItem>
                                         )}
                                     </SelectContent>
                                 </Select>
@@ -1079,13 +1079,13 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="fuel_type">Fuel Type</Label>
+                                <Label htmlFor="fuel_type">{t('lbl_fuel_type')}</Label>
                                 <Select
                                     value={data.fuel_type || ''}
                                     onValueChange={(value) => handleInputChange('fuel_type', value)}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select fuel type" />
+                                        <SelectValue placeholder={t('ph_select_fuel_type')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="diesel">Diesel</SelectItem>
@@ -1106,7 +1106,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     type="number"
                                     value={data.quantity || ''}
                                     onChange={(e) => handleInputChange('quantity', parseFloat(e.target.value))}
-                                    placeholder="Enter quantity"
+                                    placeholder={t('ph_enter_quantity')}
                                     min="0"
                                     step="0.01"
                                     className={errors.quantity ? "border-red-500" : ""}
@@ -1123,7 +1123,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     type="number"
                                     value={data.unit_price || ''}
                                     onChange={(e) => handleInputChange('unit_price', parseFloat(e.target.value))}
-                                    placeholder="Enter unit price"
+                                    placeholder={t('ph_enter_unit_price')}
                                     min="0"
                                     step="0.01"
                                     className={errors.unit_price ? "border-red-500" : ""}
@@ -1136,11 +1136,11 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium">Date Used</label>
+                                <label className="text-sm font-medium">{t('lbl_date_used')}</label>
                                 <DatePicker
                                     date={data.date_used ? new Date(data.date_used) : undefined}
                                     setDate={(date: Date | undefined) => handleInputChange('date_used', date?.toISOString().split('T')[0])}
-                                    placeholder="Select date used"
+                                    placeholder={t('ph_select_date_used')}
                                 />
                                 {errors.date_used && (
                                     <p className="text-sm text-red-500">{errors.date_used}</p>
@@ -1152,7 +1152,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                     id="notes"
                                     value={data.notes || ''}
                                     onChange={(e) => handleInputChange('notes', e.target.value)}
-                                    placeholder="Add any additional notes..."
+                                    placeholder={t('ph_add_any_additional_notes')}
                                     className="min-h-[100px]"
                                 />
                             </div>
@@ -1176,7 +1176,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                     <div className="space-y-6">
                         {/* Header Section */}
                         <div className="bg-muted/40 p-4 rounded-lg">
-                            <h3 className="text-lg font-semibold">Add New Expense</h3>
+                            <h3 className="text-lg font-semibold">{t('add_new_expense')}</h3>
                             <p className="text-sm text-muted-foreground">
                                 Fill in the details below to add a new expense to the project.
                             </p>
@@ -1195,14 +1195,14 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                             onValueChange={(value) => handleInputChange('category', value)}
                                         >
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select category" />
+                                                <SelectValue placeholder={t('ph_select_category')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="accommodation">Accommodation</SelectItem>
                                                 <SelectItem value="transportation">Transportation</SelectItem>
                                                 <SelectItem value="meals">Meals</SelectItem>
                                                 <SelectItem value="utilities">Utilities</SelectItem>
-                                                <SelectItem value="office_supplies">Office Supplies</SelectItem>
+                                                <SelectItem value="office_supplies">{t('opt_office_supplies')}</SelectItem>
                                                 <SelectItem value="other">Other</SelectItem>
                                             </SelectContent>
                                         </Select>
@@ -1244,7 +1244,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         <DatePicker
                                             date={data.date ? new Date(data.date) : undefined}
                                             setDate={(date: Date | undefined) => handleInputChange('date', date?.toISOString().split('T')[0])}
-                                            placeholder="Select date"
+                                            placeholder={t('ph_select_date')}
                                         />
                                         {errors.date && (
                                             <p className="text-sm text-red-500">{errors.date}</p>
@@ -1258,7 +1258,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                             onValueChange={(value) => handleInputChange('status', value)}
                                         >
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select status" />
+                                                <SelectValue placeholder={t('ph_select_status')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="pending">Pending</SelectItem>
@@ -1282,7 +1282,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         id="description"
                                         value={data.description || ''}
                                         onChange={(e) => handleInputChange('description', e.target.value)}
-                                        placeholder="Enter a detailed description of the expense"
+                                        placeholder={t('ph_enter_a_detailed_description_of_the_expense')}
                                         className="min-h-[120px]"
                                         required
                                     />
@@ -1298,7 +1298,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
                                         id="notes"
                                         value={data.notes || ''}
                                         onChange={(e) => handleInputChange('notes', e.target.value)}
-                                        placeholder="Add any additional notes or comments"
+                                        placeholder={t('ph_add_any_additional_notes_or_comments')}
                                         className="min-h-[100px]"
                                     />
                                     {errors.notes && (

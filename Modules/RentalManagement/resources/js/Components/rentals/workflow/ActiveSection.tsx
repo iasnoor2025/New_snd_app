@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RentalItemsCard from "@/components/rentals/RentalItemsCard";
@@ -60,6 +61,8 @@ export default function ActiveSection({
   metrics,
   permissions
 }: ActiveSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("items");
 
   // Check if rental is nearing completion (within 3 days of expected end date)
@@ -78,7 +81,7 @@ export default function ActiveSection({
       {/* Active rental alert */}
       <Alert>
         <Clock className="h-4 w-4" />
-        <AlertTitle>Active Rental</AlertTitle>
+        <AlertTitle>{t('ttl_active_rental')}</AlertTitle>
         <AlertDescription>
           This rental is currently active. Equipment is in use and the rental period is ongoing.
         </AlertDescription>
@@ -88,7 +91,7 @@ export default function ActiveSection({
       {isNearingCompletion() && (
         <Alert variant="destructive" className="mt-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Rental Ending Soon</AlertTitle>
+          <AlertTitle>{t('ttl_rental_ending_soon')}</AlertTitle>
           <AlertDescription>
             This rental is scheduled to end within the next 3 days. Consider extending if needed.
           </AlertDescription>
@@ -98,7 +101,7 @@ export default function ActiveSection({
       {/* Main Content Tabs */}
       <Tabs defaultValue="items" onValueChange={setSelectedTab} value={selectedTab}>
         <TabsList className="mb-4">
-          <TabsTrigger value="items">Rental Items</TabsTrigger>
+          <TabsTrigger value="items">{t('rental_items')}</TabsTrigger>
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
           <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -134,15 +137,15 @@ export default function ActiveSection({
         <TabsContent value="maintenance">
           <Card>
             <CardHeader>
-              <CardTitle>Maintenance Records</CardTitle>
-              <CardDescription>Equipment maintenance history</CardDescription>
+              <CardTitle>{t('ttl_maintenance_records')}</CardTitle>
+              <CardDescription>{t('equipment_maintenance_history')}</CardDescription>
             </CardHeader>
             <CardContent>
               {maintenanceRecords && maintenanceRecords.data.length > 0 ? (
                 <MaintenanceRecordList records={maintenanceRecords.data} />
               ) : (
                 <div className="text-center py-6">
-                  <p className="mt-2 text-lg font-medium">No maintenance records</p>
+                  <p className="mt-2 text-lg font-medium">{t('no_maintenance_records')}</p>
                   <p className="text-sm text-muted-foreground">
                     Maintenance records will appear here when created.
                   </p>

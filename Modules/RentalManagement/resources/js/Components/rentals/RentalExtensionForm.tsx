@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { format, addDays, differenceInDays } from 'date-fns';
 import { Calendar as CalendarIcon, CalendarPlus, User, UserX, Plus, Trash, AlertCircle, Loader2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
@@ -98,6 +99,8 @@ const RentalExtensionForm = ({
   isOpen,
   onOpenChange
 }: RentalExtensionFormProps) => {
+  const { t } = useTranslation('rental');
+
   const [newEndDate, setNewEndDate] = useState<Date | undefined>(
     currentEndDate ? addDays(new Date(currentEndDate), 7) : undefined
   );
@@ -223,7 +226,7 @@ const RentalExtensionForm = ({
       <DialogContent className="sm:max-w-[600px]">
         <form onSubmit={onSubmit}>
           <DialogHeader>
-            <DialogTitle>Request Rental Extension</DialogTitle>
+            <DialogTitle>{t('ttl_request_rental_extension')}</DialogTitle>
             <DialogDescription>
               Request an extension for this rental. Please provide a new end date and reason.
             </DialogDescription>
@@ -239,7 +242,7 @@ const RentalExtensionForm = ({
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="current-end-date">Current End Date</Label>
+              <Label htmlFor="current-end-date">{t('lbl_current_end_date')}</Label>
               <Input
                 id="current-end-date"
                 value={format(new Date(currentEndDate), 'MMMM d, yyyy')}
@@ -247,7 +250,7 @@ const RentalExtensionForm = ({
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="new-end-date">New End Date</Label>
+              <Label htmlFor="new-end-date">{t('lbl_new_end_date')}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -258,7 +261,7 @@ const RentalExtensionForm = ({
                       !newEndDate && 'text-muted-foreground'
                     )}
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {newEndDate ? format(newEndDate, 'MMMM d, yyyy') : <span>Pick a date</span>}
+                    {newEndDate ? format(newEndDate, 'MMMM d, yyyy') : <span>{t('pick_a_date')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -281,17 +284,17 @@ const RentalExtensionForm = ({
               )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="reason">Reason for Extension</Label>
+              <Label htmlFor="reason">{t('lbl_reason_for_extension')}</Label>
               <Textarea
                 id="reason"
-                placeholder="Please explain why you need to extend this rental..."
+                placeholder={t('ph_please_explain_why_you_need_to_extend_this_rent')}
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={3}
                 className={!reason.trim() ? "border-red-300 focus:ring-red-500" : ""}
               />
               {!reason.trim() && (
-                <p className="text-xs text-red-500 mt-1">Please provide a reason for the extension</p>
+                <p className="text-xs text-red-500 mt-1">{t('please_provide_a_reason_for_the_extension')}</p>
               )}
               {reason.trim().length < 10 && reason.trim().length > 0 && (
                 <p className="text-xs text-amber-500 mt-1">Reason must be at least 10 characters</p>
@@ -300,7 +303,7 @@ const RentalExtensionForm = ({
             {hasOperators && (
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Keep Current Operators</Label>
+                  <Label>{t('lbl_keep_current_operators')}</Label>
                   <div className="text-[0.8rem] text-muted-foreground">
                     Maintain the same operators for the extended period
                   </div>
@@ -315,14 +318,14 @@ const RentalExtensionForm = ({
             {/* Additional Equipment Section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label>Additional Equipment</Label>
+                <Label>{t('lbl_additional_equipment')}</Label>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={handleAddEquipment}
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Equipment
+                  {t('project:ttl_add_equipment')}
                 </Button>
               </div>
 
@@ -341,12 +344,12 @@ const RentalExtensionForm = ({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Equipment Type</Label>
+                      <Label>{t('lbl_equipment_type')}</Label>
                       <Select
                         value={item.equipment_id}
                         onValueChange={(value) => handleEquipmentChange(index, 'equipment_id', value)}
                         <SelectTrigger className={!item.equipment_id ? "border-red-300 focus:ring-red-500" : ""}>
-                          <SelectValue placeholder="Select equipment" />
+                          <SelectValue placeholder={t('ph_select_equipment')} />
                         </SelectTrigger>
                         <SelectContent>
                           {availableEquipment.map((eq) => (
@@ -374,7 +377,7 @@ const RentalExtensionForm = ({
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label>Needs Operator</Label>
+                      <Label>{t('lbl_needs_operator')}</Label>
                       <div className="text-[0.8rem] text-muted-foreground">
                         Request an operator for this equipment
                       </div>
@@ -387,12 +390,12 @@ const RentalExtensionForm = ({
 
                   {item.needs_operator && availableOperators && availableOperators.length > 0 && (
                     <div className="space-y-2">
-                      <Label>Select Operator</Label>
+                      <Label>{t('lbl_select_operator')}</Label>
                       <Select
                         value={item.operator_id?.toString() || ""}
                         onValueChange={(value) => handleEquipmentChange(index, 'operator_id', parseInt(value))}
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an operator" />
+                          <SelectValue placeholder={t('ph_select_an_operator')} />
                         </SelectTrigger>
                         <SelectContent>
                           {availableOperators.map((operator) => (

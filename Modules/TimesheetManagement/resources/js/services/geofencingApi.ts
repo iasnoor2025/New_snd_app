@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import axios, { AxiosResponse } from 'axios';
 import {
   GeofenceZone,

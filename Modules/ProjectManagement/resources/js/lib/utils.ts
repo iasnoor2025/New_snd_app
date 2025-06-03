@@ -1,7 +1,10 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useTranslation } from 'react-i18next';
 
 export function cn(...inputs: ClassValue[]) {
+  const { t } = useTranslation('project');
+
   return twMerge(clsx(inputs));
 }
 

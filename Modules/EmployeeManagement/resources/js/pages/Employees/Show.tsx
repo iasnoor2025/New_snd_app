@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '../../types';
 import AdminLayout from '../../layouts/AdminLayout';
@@ -254,7 +255,7 @@ const DocumentTab = ({ employeeId }: { employeeId: number }) => {
     return (
       <div className="rounded-md bg-red-50 p-4 border border-red-200">
         <div className="text-center">
-          <div className="text-red-600 font-medium">Document Service Error</div>
+          <div className="text-red-600 font-medium">{t('document_service_error')}</div>
           <div className="text-red-600 text-sm mt-1">
             {errorMessage || "Failed to load documents. Please try again."}
           </div>
@@ -277,7 +278,7 @@ const DocumentTab = ({ employeeId }: { employeeId: number }) => {
     return (
       <div className="text-center p-8 bg-muted/30 rounded-lg">
         <FileText className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-        <h3 className="text-lg font-medium mb-2">No Documents</h3>
+        <h3 className="text-lg font-medium mb-2">{t('no_documents')}</h3>
         <p className="text-sm text-muted-foreground mb-6">
           This employee doesn't have any documents uploaded yet.
         </p>
@@ -353,6 +354,8 @@ export default function Show({
   totalRepaid: initialTotalRepaid = 0,
   pagination: initialPagination = {}
 }: Props) {
+  const { t } = useTranslation('employee');
+
   // Add console log for debugging
   console.log('Employee data:', employee);
   console.log('Advances data:', advances);
@@ -387,16 +390,16 @@ export default function Show({
       { title: 'Employee Details', href: window.location.pathname },
     ];
     return (
-      <AdminLayout title="Employee Details" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
-        <Head title="Employee Not Found" />
+      <AdminLayout title={t('ttl_employee_details')} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+        <Head title={t('employee_not_found')} />
         <div className="flex h-full flex-1 flex-col items-center justify-center gap-6 p-4 md:gap-8 md:p-8">
           <div className="text-center">
-            <h2 className="text-lg font-semibold">Employee Not Found</h2>
+            <h2 className="text-lg font-semibold">{t('employee_not_found')}</h2>
             <p className="text-sm text-gray-500 mt-2">The requested employee could not be found.</p>
             <Button className="mt-4" asChild>
               <Link href={route('employees.index')}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Employees
+                {t('btn_back_to_employees')}
               </Link>
             </Button>
           </div>
@@ -485,7 +488,7 @@ export default function Show({
       case 'inactive':
         return <Badge variant="destructive">Inactive</Badge>;
       case 'on_leave':
-        return <Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600">On Leave</Badge>;
+        return <Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600">{t('on_leave')}</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -774,7 +777,7 @@ export default function Show({
   // Add this function to get repayment status display
   const getRepaymentStatus = (advance: Advance) => {
     if (advance.status === 'paid') {
-      return <Badge variant="outline" className="bg-green-100 text-green-800">Fully Repaid</Badge>;
+      return <Badge variant="outline" className="bg-green-100 text-green-800">{t('fully_repaid')}</Badge>;
     }
 
     if (advance.status === 'partially_repaid' || (advance.status === 'approved' && advance.repaid_amount && Number(advance.repaid_amount) > 0)) {
@@ -839,7 +842,7 @@ export default function Show({
 
   return (
     <AdminLayout title={employee ? `${employee.first_name || ''} ${employee.last_name || ''}` : 'Employee Details'} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
-      <Head title="Employee Details" />
+      <Head title={t('ttl_employee_details')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -930,7 +933,7 @@ export default function Show({
               className="flex items-center gap-2 whitespace-nowrap px-3 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all duration-200"
             >
               <User className="h-4 w-4" />
-              <span className="hidden sm:inline font-medium">Personal Info</span>
+              <span className="hidden sm:inline font-medium">{t('personal_info')}</span>
             </TabsTrigger>
             <TabsTrigger
               value="employment"
@@ -986,24 +989,24 @@ export default function Show({
               className="flex items-center gap-2 whitespace-nowrap px-3 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all duration-200"
             >
               <Receipt className="h-4 w-4" />
-              <span className="hidden sm:inline font-medium">Final Settlement</span>
+              <span className="hidden sm:inline font-medium">{t('final_settlement')}</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="personal-info" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Personal Information</CardTitle>
+                <CardTitle>{t('personal_information')}</CardTitle>
                 <CardDescription>Employee's personal and identification details</CardDescription>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-3">Contact Information</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-3">{t('contact_information')}</h3>
                       <dl className="space-y-2">
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Full Name</dt>
+                          <dt className="text-sm font-medium">{t('full_name')}</dt>
                           <dd className="text-sm">
                             {employee.first_name} {employee.middle_name ? `${employee.middle_name} ` : ''}{employee.last_name}
                           </dd>
@@ -1024,7 +1027,7 @@ export default function Show({
                         )}
                         {employee.date_of_birth && (
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Date of Birth</dt>
+                            <dt className="text-sm font-medium">{t('date_of_birth')}</dt>
                             <dd className="text-sm">{format(new Date(employee.date_of_birth), 'PPP')}</dd>
                           </div>
                         )}
@@ -1032,7 +1035,7 @@ export default function Show({
                     </div>
 
                     {/* <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-3">Emergency Contact</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-3">{t('emergency_contact')}</h3>
                       {(employee.emergency_contact_name || employee.emergency_contact_phone) ? (
                         <dl className="space-y-2">
                           {employee.emergency_contact_name && (
@@ -1049,7 +1052,7 @@ export default function Show({
                           )}
                         </dl>
                       ) : (
-                        <p className="text-sm text-muted-foreground italic">No emergency contact information</p>
+                        <p className="text-sm text-muted-foreground italic">{t('no_emergency_contact_information')}</p>
                       )}
                     </div> */}
                   </div>
@@ -1060,30 +1063,30 @@ export default function Show({
                       <dl className="space-y-2">
                         {employee.iqama_number && (
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Iqama Number</dt>
+                            <dt className="text-sm font-medium">{t('iqama_number')}</dt>
                             <dd className="text-sm">{employee.iqama_number}</dd>
                           </div>
                         )}
                         {employee.iqama_expiry && (
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Iqama Expiry</dt>
+                            <dt className="text-sm font-medium">{t('iqama_expiry')}</dt>
                             <dd className="text-sm">{format(new Date(employee.iqama_expiry), 'PPP')}</dd>
                           </div>
                         )}
                         {employee.passport_number && (
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Passport Number</dt>
+                            <dt className="text-sm font-medium">{t('lbl_passport_number')}</dt>
                             <dd className="text-sm">{employee.passport_number}</dd>
                           </div>
                         )}
                         {employee.passport_expiry && (
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Passport Expiry</dt>
+                            <dt className="text-sm font-medium">{t('lbl_passport_expiry')}</dt>
                             <dd className="text-sm">{format(new Date(employee.passport_expiry), 'PPP')}</dd>
                           </div>
                         )}
                         {!employee.iqama_number && !employee.passport_number && !employee.date_of_birth && (
-                          <p className="text-sm text-muted-foreground italic">No identification information available</p>
+                          <p className="text-sm text-muted-foreground italic">{t('no_identification_information_available')}</p>
                         )}
                       </dl>
                     </div>
@@ -1097,25 +1100,25 @@ export default function Show({
                         <dl className="space-y-2">
                           {employee.driving_license_number && (
                             <div className="flex justify-between border-b pb-2">
-                              <dt className="text-sm font-medium">Driving License</dt>
+                              <dt className="text-sm font-medium">{t('driving_license')}</dt>
                               <dd className="text-sm">{employee.driving_license_number}</dd>
                             </div>
                           )}
                           {employee.driving_license_expiry && (
                             <div className="flex justify-between border-b pb-2">
-                              <dt className="text-sm font-medium">License Expiry</dt>
+                              <dt className="text-sm font-medium">{t('license_expiry')}</dt>
                               <dd className="text-sm">{format(new Date(employee.driving_license_expiry), 'PPP')}</dd>
                             </div>
                           )}
                           {employee.operator_license_number && (
                             <div className="flex justify-between border-b pb-2">
-                              <dt className="text-sm font-medium">Operator License</dt>
+                              <dt className="text-sm font-medium">{t('lbl_operator_license')}</dt>
                               <dd className="text-sm">{employee.operator_license_number}</dd>
                             </div>
                           )}
                           {employee.operator_license_expiry && (
                             <div className="flex justify-between border-b pb-2">
-                              <dt className="text-sm font-medium">Operator License Expiry</dt>
+                              <dt className="text-sm font-medium">{t('lbl_operator_license_expiry')}</dt>
                               <dd className="text-sm">{format(new Date(employee.operator_license_expiry), 'PPP')}</dd>
                             </div>
                           )}
@@ -1145,7 +1148,7 @@ export default function Show({
                           )}
                         </dl>
                       ) : (
-                        <p className="text-sm text-muted-foreground italic">No licenses or certifications available</p>
+                        <p className="text-sm text-muted-foreground italic">{t('no_licenses_or_certifications_available')}</p>
                       )}
                     </div>
                   </div>
@@ -1157,21 +1160,21 @@ export default function Show({
           <TabsContent value="employment" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Employment Details</CardTitle>
+                <CardTitle>{t('employment_details')}</CardTitle>
                 <CardDescription>Work-related information and position details</CardDescription>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-3">Position Information</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-3">{t('position_information')}</h3>
                       <dl className="space-y-2">
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Employee ID</dt>
+                          <dt className="text-sm font-medium">{t('employee_id')}</dt>
                           <dd className="text-sm">{employee.employee_id}</dd>
                         </div>
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">File Number</dt>
+                          <dt className="text-sm font-medium">{t('file_number')}</dt>
                           <dd className="text-sm">{employee.file_number || "Not assigned"}</dd>
                         </div>
                         <div className="flex justify-between border-b pb-2">
@@ -1200,14 +1203,14 @@ export default function Show({
                     </div>
 
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-3">Employment Timeline</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-3">{t('employment_timeline')}</h3>
                       <dl className="space-y-2">
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Hire Date</dt>
+                          <dt className="text-sm font-medium">{t('hire_date')}</dt>
                           <dd className="text-sm">{employee.hire_date ? format(new Date(employee.hire_date), 'PPP') : 'Not set'}</dd>
                         </div>
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Service Period</dt>
+                          <dt className="text-sm font-medium">{t('service_period')}</dt>
                           <dd className="text-sm">
                             {(() => {
                               const hireDate = employee.hire_date ? new Date(employee.hire_date) : new Date();
@@ -1245,7 +1248,7 @@ export default function Show({
                     <h3 className="text-sm font-medium text-muted-foreground mb-3">Salary & Benefits</h3>
                     <div className="bg-muted/30 rounded-lg p-5 mb-4">
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">Basic Salary</span>
+                        <span className="text-sm font-medium">{t('basic_salary')}</span>
                         <span className="text-base font-semibold">SAR {Number(employee.basic_salary).toFixed(2)}</span>
                       </div>
                       <div className="w-full bg-muted h-1.5 rounded-full">
@@ -1255,36 +1258,36 @@ export default function Show({
 
                     <dl className="space-y-2">
                       <div className="flex justify-between border-b pb-2">
-                        <dt className="text-sm font-medium">Hourly Rate</dt>
+                        <dt className="text-sm font-medium">{t('hourly_rate')}</dt>
                         <dd className="text-sm">SAR {Number(employee.hourly_rate).toFixed(2)}</dd>
                       </div>
                       {Number(employee.food_allowance) > 0 && (
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Food Allowance</dt>
+                          <dt className="text-sm font-medium">{t('food_allowance')}</dt>
                           <dd className="text-sm">SAR {Number(employee.food_allowance).toFixed(2)}</dd>
                         </div>
                       )}
                       {Number(employee.housing_allowance) > 0 && (
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Housing Allowance</dt>
+                          <dt className="text-sm font-medium">{t('housing_allowance')}</dt>
                           <dd className="text-sm">SAR {Number(employee.housing_allowance).toFixed(2)}</dd>
                         </div>
                       )}
                       {Number(employee.transport_allowance) > 0 && (
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Transport Allowance</dt>
+                          <dt className="text-sm font-medium">{t('lbl_transport_allowance')}</dt>
                           <dd className="text-sm">SAR {Number(employee.transport_allowance).toFixed(2)}</dd>
                         </div>
                       )}
                       {Number(employee.absent_deduction_rate) > 0 && (
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Absent Deduction Rate</dt>
+                          <dt className="text-sm font-medium">{t('absent_deduction_rate')}</dt>
                           <dd className="text-sm">{Number(employee.absent_deduction_rate).toFixed(2)}%</dd>
                         </div>
                       )}
                       {(employee.overtime_rate_multiplier || employee.overtime_fixed_rate) && (
                         <div className="flex justify-between border-b pb-2">
-                          <dt className="text-sm font-medium">Overtime Rate</dt>
+                          <dt className="text-sm font-medium">{t('overtime_rate')}</dt>
                           <dd className="text-sm">
                             {employee.overtime_rate_multiplier
                               ? `${Number(employee.overtime_rate_multiplier).toFixed(2)}x regular rate`
@@ -1297,7 +1300,7 @@ export default function Show({
                     </dl>
 
                     <div className="mt-6">
-                      <h3 className="text-sm font-medium text-muted-foreground mb-3">Payroll History</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-3">{t('payroll_history')}</h3>
                       <div className="space-y-4">
                         {employee.payrolls && employee.payrolls.length > 0 ? (
                           <Table>
@@ -1305,7 +1308,7 @@ export default function Show({
                               <TableRow>
                                 <TableHead>Month</TableHead>
                                 <TableHead>Amount</TableHead>
-                                <TableHead>Paid Date</TableHead>
+                                <TableHead>{t('th_paid_date')}</TableHead>
                                 <TableHead>Status</TableHead>
                               </TableRow>
                             </TableHeader>
@@ -1337,7 +1340,7 @@ export default function Show({
                             </TableBody>
                           </Table>
                         ) : (
-                          <p className="text-sm text-muted-foreground italic">No payroll records found</p>
+                          <p className="text-sm text-muted-foreground italic">{t('no_payroll_records_found')}</p>
                         )}
                       </div>
                     </div>
@@ -1345,7 +1348,7 @@ export default function Show({
                     {Number(employee.advance_payment) > 0 && (
                       <div className="mt-4 p-3 bg-destructive/10 rounded-md border border-destructive/20">
                         <div className="flex justify-between items-center">
-                          <p className="text-sm font-medium text-destructive">Advance Payment Balance</p>
+                          <p className="text-sm font-medium text-destructive">{t('advance_payment_balance')}</p>
                           <p className="text-base font-semibold text-destructive">SAR {Number(employee.advance_payment).toFixed(2)}</p>
                         </div>
                       </div>
@@ -1362,7 +1365,7 @@ export default function Show({
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>Document Overview</CardTitle>
+                    <CardTitle>{t('ttl_document_overview')}</CardTitle>
                     <CardDescription>Employee's document status and expiry tracking</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
@@ -1378,7 +1381,7 @@ export default function Show({
                   <div className="bg-muted/30 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <FileText className="h-4 w-4 text-muted-foreground" />
-                      <h3 className="text-sm font-medium">Document Status</h3>
+                      <h3 className="text-sm font-medium">{t('document_status')}</h3>
                     </div>
                     <div className="space-y-2">
                       {(() => {
@@ -1416,15 +1419,15 @@ export default function Show({
                         return (
                           <>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">Total Documents</span>
+                              <span className="text-sm text-muted-foreground">{t('total_documents')}</span>
                               <span className="text-sm font-medium">{documents.length}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">Valid Documents</span>
+                              <span className="text-sm text-muted-foreground">{t('valid_documents')}</span>
                               <span className="text-sm font-medium text-green-600">{validDocuments.length}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">Expiring Soon</span>
+                              <span className="text-sm text-muted-foreground">{t('expiring_soon')}</span>
                               <span className="text-sm font-medium text-amber-600">{expiringSoon.length}</span>
                             </div>
                             <div className="flex items-center justify-between">
@@ -1441,7 +1444,7 @@ export default function Show({
                   <div className="bg-muted/30 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <h3 className="text-sm font-medium">Next Expiry</h3>
+                      <h3 className="text-sm font-medium">{t('next_expiry')}</h3>
                     </div>
                     <div className="space-y-2">
                       {(() => {
@@ -1457,7 +1460,7 @@ export default function Show({
                         if (documents.length === 0) {
                           return (
                             <div className="text-center py-2">
-                              <p className="text-sm text-muted-foreground">No documents with expiry dates</p>
+                              <p className="text-sm text-muted-foreground">{t('no_documents_with_expiry_dates')}</p>
                             </div>
                           );
                         }
@@ -1471,7 +1474,7 @@ export default function Show({
                         if (!nextExpiringDoc) {
                           return (
                             <div className="text-center py-2">
-                              <p className="text-sm text-muted-foreground">All documents expired</p>
+                              <p className="text-sm text-muted-foreground">{t('all_documents_expired')}</p>
                             </div>
                           );
                         }
@@ -1486,7 +1489,7 @@ export default function Show({
                               <span className="text-sm font-medium">{nextExpiringDoc.name}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">Expiry Date</span>
+                              <span className="text-sm text-muted-foreground">{t('expiry_date')}</span>
                               <span className={`text-sm font-medium ${daysRemaining <= 30 ? 'text-amber-600' : 'text-green-600'}`}>
                                 {daysRemaining} days remaining
                               </span>
@@ -1501,7 +1504,7 @@ export default function Show({
                   <div className="bg-muted/30 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Upload className="h-4 w-4 text-muted-foreground" />
-                      <h3 className="text-sm font-medium">Quick Actions</h3>
+                      <h3 className="text-sm font-medium">{t('quick_actions')}</h3>
                     </div>
                     <div className="space-y-2">
                       <Button
@@ -1558,13 +1561,13 @@ export default function Show({
 
             {/* Legal Documents Section */}
             {/* <DocumentSection
-              title="Legal Documents"
+              title={t('ttl_legal_documents')}
               description="Official identification and legal documents"
               badgeText="Required Documents"
               badgeClassName="bg-blue-50 text-blue-700 border-blue-200"
             >
               <DocumentCard
-                title="Iqama"
+                title={t('ttl_iqama')}
                 documentNumber={employee.iqama_number}
                 documentType="iqama"
                 employeeId={employee.id}
@@ -1573,7 +1576,7 @@ export default function Show({
                 documentName="IQAMA"
               />
               <DocumentCard
-                title="Passport"
+                title={t('ttl_passport')}
                 documentNumber={employee.passport_number}
                 documentType="passport"
                 employeeId={employee.id}
@@ -1585,13 +1588,13 @@ export default function Show({
 
             {/* Licenses Section */}
             {/* <DocumentSection
-              title="Licenses & Certifications"
+              title={t('ttl_licenses_certifications')}
               description="Professional licenses and certifications"
               badgeText="Professional Documents"
               badgeClassName="bg-purple-50 text-purple-700 border-purple-200"
             >
               <DocumentCard
-                title="Driving License"
+                title={t('driving_license')}
                 documentNumber={employee.driving_license_number}
                 documentType="driving_license"
                 employeeId={employee.id}
@@ -1600,7 +1603,7 @@ export default function Show({
                 documentName="Driving License"
               />
               <DocumentCard
-                title="Operator License"
+                title={t('lbl_operator_license')}
                 documentNumber={employee.operator_license_number}
                 documentType="operator_license"
                 employeeId={employee.id}
@@ -1609,7 +1612,7 @@ export default function Show({
                 documentName="Operator License"
               />
               <DocumentCard
-                title="TUV Certification"
+                title={t('ttl_tuv_certification')}
                 documentNumber={employee.tuv_certification_number}
                 documentType="tuv_certification"
                 employeeId={employee.id}
@@ -1618,7 +1621,7 @@ export default function Show({
                 documentName="TUV Certification"
               />
               <DocumentCard
-                title="SPSP License"
+                title={t('ttl_spsp_license')}
                 documentNumber={employee.spsp_license_number}
                 documentType="spsp_license"
                 employeeId={employee.id}
@@ -1631,7 +1634,7 @@ export default function Show({
             {/* Additional Documents Section */}
             {/* <Card>
               <CardHeader>
-                <CardTitle>Additional Documents</CardTitle>
+                <CardTitle>{t('ttl_additional_documents')}</CardTitle>
                 <CardDescription>
                   Upload and manage additional documents for this employee.
                 </CardDescription>
@@ -1667,7 +1670,7 @@ export default function Show({
             <Card>
               <CardHeader>
                 <CardTitle>Legal & Identification Documents</CardTitle>
-                <CardDescription>View and manage key employee documents</CardDescription>
+                <CardDescription>{t('view_and_manage_key_employee_documents')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1755,7 +1758,7 @@ export default function Show({
                   {/* Add similar blocks for Driving License, Operator License, TUV Certification, SPSP License */}
                   {/* Driving License */}
                   <div className="space-y-2">
-                    <h3 className="text-lg font-medium">Driving License</h3>
+                    <h3 className="text-lg font-medium">{t('driving_license')}</h3>
                     <div className="flex justify-between border-b pb-2">
                       <span className="text-sm font-medium">Number</span>
                       <span className="text-sm">{employee.driving_license_number || 'Not set'}</span>
@@ -1797,7 +1800,7 @@ export default function Show({
                   </div>
                   {/* Operator License */}
                   <div className="space-y-2">
-                    <h3 className="text-lg font-medium">Operator License</h3>
+                    <h3 className="text-lg font-medium">{t('lbl_operator_license')}</h3>
                     <div className="flex justify-between border-b pb-2">
                       <span className="text-sm font-medium">Number</span>
                       <span className="text-sm">{employee.operator_license_number || 'Not set'}</span>
@@ -1932,12 +1935,12 @@ export default function Show({
                 <div className="flex justify-between items-center">
                   <div>
                     <CardTitle>Assignments</CardTitle>
-                    <CardDescription>View and manage employee assignments</CardDescription>
+                    <CardDescription>{t('view_and_manage_employee_assignments')}</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     <Input
                       type="text"
-                      placeholder="Search assignments..."
+                      placeholder={t('ph_search_assignments')}
                       className="w-64"
                     />
                     <Button variant="outline" size="sm">
@@ -1969,7 +1972,7 @@ export default function Show({
                                 asChild
                               >
                                 <Link href={route('assignments.show', { assignment: assignment.id })}>
-                                  View Details
+                                  {t('ttl_view_details')}
                                 </Link>
                               </Button>
                             </div>
@@ -1986,8 +1989,8 @@ export default function Show({
           <TabsContent value="timesheets" className="mt-6">
             <Card>
               <CardHeader>
-                    <CardTitle>Timesheet Records</CardTitle>
-                    <CardDescription>View and manage employee timesheet records</CardDescription>
+                    <CardTitle>{t('ttl_timesheet_records')}</CardTitle>
+                    <CardDescription>{t('view_and_manage_employee_timesheet_records')}</CardDescription>
               </CardHeader>
               <CardContent>
                 {/* Timesheet Summary */}
@@ -1996,11 +1999,11 @@ export default function Show({
                 {hasPermission('timesheets.create') && (
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button className="mt-4 mb-4">Add Timesheet</Button>
+                      <Button className="mt-4 mb-4">{t('btn_add_timesheet')}</Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Add New Timesheet</DialogTitle>
+                        <DialogTitle>{t('ttl_add_new_timesheet')}</DialogTitle>
                       </DialogHeader>
                       <TimesheetForm employeeId={employee.id} onSuccess={() => window.location.reload()} />
                     </DialogContent>
@@ -2017,8 +2020,8 @@ export default function Show({
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Leave History</CardTitle>
-                    <CardDescription>View and manage employee leave records</CardDescription>
+                    <CardTitle>{t('ttl_leave_history')}</CardTitle>
+                    <CardDescription>{t('view_and_manage_employee_leave_records')}</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" onClick={handleViewAllLeaveRecords}>
@@ -2034,7 +2037,7 @@ export default function Show({
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card>
                       <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Total Leaves</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('ttl_total_leaves')}</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
                         <div className="text-2xl font-bold">
@@ -2044,7 +2047,7 @@ export default function Show({
                     </Card>
                     <Card>
                       <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Approved Leaves</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('ttl_approved_leaves')}</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
                         <div className="text-2xl font-bold">
@@ -2054,7 +2057,7 @@ export default function Show({
                     </Card>
                     <Card>
                       <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Pending Leaves</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('ttl_pending_leaves')}</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
                         <div className="text-2xl font-bold">
@@ -2064,7 +2067,7 @@ export default function Show({
                     </Card>
                     <Card>
                       <CardHeader className="p-4">
-                        <CardTitle className="text-sm font-medium">Rejected Leaves</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('ttl_rejected_leaves')}</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
                         <div className="text-2xl font-bold">
@@ -2077,15 +2080,15 @@ export default function Show({
                   {/* Leave Records */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>Recent Leave Requests</CardTitle>
+                      <CardTitle>{t('ttl_recent_leave_requests')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <Table>
                         <TableHeader>
                           <TableRow>
                             <TableHead>Type</TableHead>
-                            <TableHead>Start Date</TableHead>
-                            <TableHead>End Date</TableHead>
+                            <TableHead>{t('lbl_start_date')}</TableHead>
+                            <TableHead>{t('lbl_end_date')}</TableHead>
                             <TableHead>Duration</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Actions</TableHead>
@@ -2110,7 +2113,7 @@ export default function Show({
                               <TableCell>
                                 <Button variant="outline" size="sm" asChild>
                                   <Link href={route('leave-requests.show', { leaveRequest: request.id })}>
-                                    View Details
+                                    {t('ttl_view_details')}
                                   </Link>
                                 </Button>
                               </TableCell>
@@ -2137,8 +2140,8 @@ export default function Show({
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Advance Payment Management</CardTitle>
-                    <CardDescription>Track and manage employee advance payments and deductions</CardDescription>
+                    <CardTitle>{t('ttl_advance_payment_management')}</CardTitle>
+                    <CardDescription>{t('track_and_manage_employee_advance_payments_and_ded')}</CardDescription>
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -2185,7 +2188,7 @@ export default function Show({
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Record Repayment</DialogTitle>
+                          <DialogTitle>{t('ttl_record_repayment')}</DialogTitle>
                           <DialogDescription>
                             Enter the repayment amount. For partial repayments, the amount must be at least the total monthly deduction.
                           </DialogDescription>
@@ -2200,7 +2203,7 @@ export default function Show({
                                 return (
                                   <div className="text-center p-6">
                                     <AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-                                    <h3 className="text-lg font-medium mb-2">No Active Advances</h3>
+                                    <h3 className="text-lg font-medium mb-2">{t('no_active_advances')}</h3>
                                     <p className="text-sm text-muted-foreground mb-4">
                                       There are no active advances available for repayment.
                                     </p>
@@ -2234,7 +2237,7 @@ export default function Show({
                                     </div>
                                   </div>
                                   <div className="space-y-2">
-                                    <Label htmlFor="repayment-amount">Repayment Amount</Label>
+                                    <Label htmlFor="repayment-amount">{t('lbl_repayment_amount')}</Label>
                                     <Input
                                       id="repayment-amount"
                                       type="number"
@@ -2286,7 +2289,7 @@ export default function Show({
                                         handleRepayment(amount, activeAdvances);
                                       }}
                                     >
-                                      Record Repayment
+                                      {t('ttl_record_repayment')}
                                     </Button>
                                   </div>
                                 </>
@@ -2304,7 +2307,7 @@ export default function Show({
                   {/* Current Balance Card */}
                   <div className="bg-white rounded-lg border shadow-sm p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-medium text-muted-foreground">Current Balance</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground">{t('current_balance')}</h3>
                       <Badge variant="outline" className="bg-muted/50">
                         {Number(employee.advance_payment) > 0 ? 'Active' : 'No Balance'}
                       </Badge>
@@ -2325,7 +2328,7 @@ export default function Show({
                   {/* Monthly Deduction Card */}
                   <div className="bg-white rounded-lg border shadow-sm p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-medium text-muted-foreground">Monthly Deduction</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground">{t('monthly_deduction')}</h3>
                       <Badge variant="outline" className="bg-muted/50">Configurable</Badge>
                     </div>
                     <div className="space-y-4">
@@ -2409,7 +2412,7 @@ export default function Show({
                   {/* Estimated Repayment Card */}
                   <div className="bg-white rounded-lg border shadow-sm p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-medium text-muted-foreground">Estimated Repayment</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground">{t('estimated_repayment')}</h3>
                       <Badge variant="outline" className="bg-muted/50">Projected</Badge>
                     </div>
                     <div className="space-y-2">
@@ -2430,11 +2433,11 @@ export default function Show({
                 {/* Advance History Section */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Advance History</h3>
+                    <h3 className="text-lg font-semibold">{t('advance_history')}</h3>
                     <div className="flex items-center gap-2">
                       <Input
                         type="text"
-                        placeholder="Search advances..."
+                        placeholder={t('ph_search_advances')}
                         className="w-64"
                       />
                       <Button variant="outline" size="sm">
@@ -2551,7 +2554,7 @@ export default function Show({
                             <TableCell colSpan={6} className="text-center py-8">
                               <div className="flex flex-col items-center gap-2">
                                 <CreditCard className="h-8 w-8 text-muted-foreground" />
-                                <p className="text-sm text-muted-foreground">No advance records found</p>
+                                <p className="text-sm text-muted-foreground">{t('no_advance_records_found')}</p>
                               </div>
                             </TableCell>
                           </TableRow>
@@ -2564,7 +2567,7 @@ export default function Show({
                 {/* Payment History Section */}
                 <div className="mt-8 space-y-4">
                   {/* <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Payment History</h3>
+                    <h3 className="text-lg font-semibold">{t('payment_history')}</h3>
                   </div> */}
 
                   <PaymentHistory
@@ -2582,7 +2585,7 @@ export default function Show({
           <TabsContent value="final-settlements" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Final Settlement</CardTitle>
+                <CardTitle>{t('final_settlement')}</CardTitle>
                 <CardDescription>Manage employee's final settlement and clearance</CardDescription>
               </CardHeader>
               <CardContent>
@@ -2590,34 +2593,34 @@ export default function Show({
                 {/* <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
-                        <h3 className="text-sm font-medium text-muted-foreground">Settlement Details</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground">{t('settlement_details')}</h3>
                         <dl className="space-y-2">
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Last Working Day</dt>
+                            <dt className="text-sm font-medium">{t('last_working_day')}</dt>
                             <dd className="text-sm">
                               {employee.resignations?.find(r => r.status === 'approved')?.last_working_day || 'Not set'}
                             </dd>
                           </div>
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Leave Balance</dt>
+                            <dt className="text-sm font-medium">{t('leave_balance')}</dt>
                             <dd className="text-sm">
                               {employee.leave_balance || 0} days
                             </dd>
                           </div>
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Leave Encashment</dt>
+                            <dt className="text-sm font-medium">{t('leave_encashment')}</dt>
                             <dd className="text-sm">
                               SAR {employee.leave_balance * (employee.basic_salary / 30) || 0}
                             </dd>
                           </div>
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Unpaid Salary</dt>
+                            <dt className="text-sm font-medium">{t('unpaid_salary')}</dt>
                             <dd className="text-sm">
                               SAR {employee.unpaid_salary || 0}
                             </dd>
                           </div>
                           <div className="flex justify-between border-b pb-2">
-                            <dt className="text-sm font-medium">Unpaid Overtime</dt>
+                            <dt className="text-sm font-medium">{t('unpaid_overtime')}</dt>
                             <dd className="text-sm">
                               SAR {employee.unpaid_overtime || 0}
                             </dd>
@@ -2635,7 +2638,7 @@ export default function Show({
                             </dd>
                           </div>
                           <div className="flex justify-between border-b pb-2 font-semibold">
-                            <dt className="text-sm">Total Payable</dt>
+                            <dt className="text-sm">{t('total_payable')}</dt>
                             <dd className="text-sm">
                               SAR {employee.total_payable || 0}
                             </dd>
@@ -2643,7 +2646,7 @@ export default function Show({
                         </dl>
                       </div>
                       <div className="space-y-4">
-                        <h3 className="text-sm font-medium text-muted-foreground">Settlement Status</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground">{t('settlement_status')}</h3>
                         <div className="space-y-4">
                           <div className="flex items-center justify-between">
                             <span className="text-sm">Status</span>
@@ -2686,17 +2689,17 @@ export default function Show({
           <TabsContent value="resignations" className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Resignation History</CardTitle>
-                <CardDescription>View and manage resignation requests</CardDescription>
+                <CardTitle>{t('ttl_resignation_history')}</CardTitle>
+                <CardDescription>{t('view_and_manage_resignation_requests')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Last Working Day</TableHead>
+                      <TableHead>{t('last_working_day')}</TableHead>
                       <TableHead>Reason</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Submitted On</TableHead>
+                      <TableHead>{t('th_submitted_on')}</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -2723,7 +2726,7 @@ export default function Show({
                               asChild
                             >
                               <Link href={route('resignations.show', { resignation: resignation.id })}>
-                                View Details
+                                {t('ttl_view_details')}
                               </Link>
                             </Button>
                           </div>
@@ -2748,7 +2751,7 @@ export default function Show({
         <Dialog open={isAdvanceRequestDialogOpen} onOpenChange={setIsAdvanceRequestDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Request Advance</DialogTitle>
+              <DialogTitle>{t('ttl_request_advance')}</DialogTitle>
               <DialogDescription>
                 Enter the advance payment details below.
               </DialogDescription>
@@ -2763,7 +2766,7 @@ export default function Show({
                   min="0"
                   value={advanceAmount}
                   onChange={(e) => setAdvanceAmount(e.target.value)}
-                  placeholder="Enter amount"
+                  placeholder={t('ph_enter_amount')}
                 />
               </div>
               <div className="grid gap-2">
@@ -2775,7 +2778,7 @@ export default function Show({
                   min="0"
                   value={monthlyDeduction}
                   onChange={(e) => setMonthlyDeduction(e.target.value)}
-                  placeholder="Enter monthly deduction amount"
+                  placeholder={t('ph_enter_monthly_deduction_amount')}
                 />
               </div>
               <div className="grid gap-2">
@@ -2784,7 +2787,7 @@ export default function Show({
                   id="reason"
                   value={advanceReason}
                   onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAdvanceReason(e.target.value)}
-                  placeholder="Enter reason for advance"
+                  placeholder={t('ph_enter_reason_for_advance')}
                 />
               </div>
             </div>
@@ -2803,7 +2806,7 @@ export default function Show({
         <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Reject Advance Request</DialogTitle>
+              <DialogTitle>{t('ttl_reject_advance_request')}</DialogTitle>
               <DialogDescription>
                 Please provide a reason for rejecting this advance request.
               </DialogDescription>
@@ -2814,12 +2817,12 @@ export default function Show({
             }}>
               <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="rejectionReason">Rejection Reason</Label>
+                  <Label htmlFor="rejectionReason">{t('lbl_rejection_reason')}</Label>
                   <Input
                     id="rejectionReason"
                     value={rejectionReason}
                     onChange={(e) => setRejectionReason(e.target.value)}
-                    placeholder="Enter reason for rejection"
+                    placeholder={t('ph_enter_reason_for_rejection')}
                     required
                   />
                 </div>
@@ -2843,7 +2846,7 @@ export default function Show({
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete Advance Record</DialogTitle>
+              <DialogTitle>{t('ttl_delete_advance_record')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete this advance record? This action cannot be undone.
               </DialogDescription>

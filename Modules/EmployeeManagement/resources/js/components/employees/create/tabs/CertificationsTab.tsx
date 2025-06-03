@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -56,6 +57,8 @@ interface Certification {
 }
 
 export default function CertificationsTab({ form, files, setFiles, onTotalCostChange }: CertificationsTabProps) {
+  const { t } = useTranslation('employee');
+
   const [showDrivingLicense, setShowDrivingLicense] = useState(false);
   const [showOperatorLicense, setShowOperatorLicense] = useState(false);
   const [showTuvCertification, setShowTuvCertification] = useState(false);
@@ -82,7 +85,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
           name={`${prefix}.number` as const}
           render={({ field }: any) => (
             <FormItem>
-              <FormLabel>License Number</FormLabel>
+              <FormLabel>{t('lbl_license_number')}</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={`Enter ${name} number`} />
               </FormControl>
@@ -95,7 +98,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
           name={`${prefix}.expiry_date` as const}
           render={({ field }: any) => (
             <FormItem>
-              <FormLabel>Expiry Date</FormLabel>
+              <FormLabel>{t('expiry_date')}</FormLabel>
               <FormControl>
                 <Input type="date" {...field} />
               </FormControl>
@@ -125,7 +128,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
         />
 
         <FormItem>
-          <FormLabel>Document File</FormLabel>
+          <FormLabel>{t('lbl_document_file')}</FormLabel>
           <div className="flex items-center space-x-2">
             <Input
               type="file"
@@ -158,7 +161,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
           <div className="space-y-6">
             {/* Standard Certifications Section */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Standard Certifications</h3>
+              <h3 className="text-lg font-medium">{t('standard_certifications')}</h3>
 
               {/* Driving License */}
               <div className="space-y-2">
@@ -168,16 +171,16 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                   className="w-full flex items-center justify-between"
                   onClick={() => setShowDrivingLicense(!showDrivingLicense)}
                 >
-                  <span>Driving License</span>
+                  <span>{t('driving_license')}</span>
                   {showDrivingLicense ? (
                     <>
                       <EyeOff className="h-4 w-4" />
-                      <span>Hide Details</span>
+                      <span>{t('hide_details')}</span>
                     </>
                   ) : (
                     <>
                       <Eye className="h-4 w-4" />
-                      <span>Show Details</span>
+                      <span>{t('show_details')}</span>
                     </>
                   )}
                 </Button>
@@ -192,16 +195,16 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                   className="w-full flex items-center justify-between"
                   onClick={() => setShowOperatorLicense(!showOperatorLicense)}
                 >
-                  <span>Operator License</span>
+                  <span>{t('lbl_operator_license')}</span>
                   {showOperatorLicense ? (
                     <>
                       <EyeOff className="h-4 w-4" />
-                      <span>Hide Details</span>
+                      <span>{t('hide_details')}</span>
                     </>
                   ) : (
                     <>
                       <Eye className="h-4 w-4" />
-                      <span>Show Details</span>
+                      <span>{t('show_details')}</span>
                     </>
                   )}
                 </Button>
@@ -220,12 +223,12 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                   {showTuvCertification ? (
                     <>
                       <EyeOff className="h-4 w-4" />
-                      <span>Hide Details</span>
+                      <span>{t('hide_details')}</span>
                     </>
                   ) : (
                     <>
                       <Eye className="h-4 w-4" />
-                      <span>Show Details</span>
+                      <span>{t('show_details')}</span>
                     </>
                   )}
                 </Button>
@@ -244,12 +247,12 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                   {showSpspLicense ? (
                     <>
                       <EyeOff className="h-4 w-4" />
-                      <span>Hide Details</span>
+                      <span>{t('hide_details')}</span>
                     </>
                   ) : (
                     <>
                       <Eye className="h-4 w-4" />
-                      <span>Show Details</span>
+                      <span>{t('show_details')}</span>
                     </>
                   )}
                 </Button>
@@ -265,16 +268,16 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                 className="w-full flex items-center justify-between"
                 onClick={() => setShowCustomCertifications(!showCustomCertifications)}
               >
-                <span>Additional Certifications</span>
+                <span>{t('additional_certifications')}</span>
                 {showCustomCertifications ? (
                   <>
                     <EyeOff className="h-4 w-4" />
-                    <span>Hide Details</span>
+                    <span>{t('hide_details')}</span>
                   </>
                 ) : (
                   <>
                     <Eye className="h-4 w-4" />
-                    <span>Show Details</span>
+                    <span>{t('show_details')}</span>
                   </>
                 )}
               </Button>
@@ -301,7 +304,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                           name={`custom_certifications.${index}.name`}
                           render={({ field }: any) => (
                             <FormItem>
-                              <FormLabel>Certification Name</FormLabel>
+                              <FormLabel>{t('lbl_certification_name')}</FormLabel>
                               <FormControl>
                                 <Input {...field} placeholder="Enter certification name" />
                               </FormControl>
@@ -314,7 +317,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                           name={`custom_certifications.${index}.issuing_organization`}
                           render={({ field }: any) => (
                             <FormItem>
-                              <FormLabel>Issuing Organization</FormLabel>
+                              <FormLabel>{t('lbl_issuing_organization')}</FormLabel>
                               <FormControl>
                                 <Input {...field} placeholder="Enter organization name" />
                               </FormControl>
@@ -327,7 +330,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                           name={`custom_certifications.${index}.issue_date`}
                           render={({ field }: any) => (
                             <FormItem>
-                              <FormLabel>Issue Date</FormLabel>
+                              <FormLabel>{t('lbl_issue_date')}</FormLabel>
                               <FormControl>
                                 <Input type="date" {...field} />
                               </FormControl>
@@ -340,7 +343,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                           name={`custom_certifications.${index}.expiry_date`}
                           render={({ field }: any) => (
                             <FormItem>
-                              <FormLabel>Expiry Date</FormLabel>
+                              <FormLabel>{t('expiry_date')}</FormLabel>
                               <FormControl>
                                 <Input type="date" {...field} />
                               </FormControl>
@@ -353,7 +356,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                           name={`custom_certifications.${index}.credential_id`}
                           render={({ field }: any) => (
                             <FormItem>
-                              <FormLabel>Credential ID</FormLabel>
+                              <FormLabel>{t('lbl_credential_id')}</FormLabel>
                               <FormControl>
                                 <Input {...field} placeholder="Enter credential ID" />
                               </FormControl>
@@ -366,7 +369,7 @@ export default function CertificationsTab({ form, files, setFiles, onTotalCostCh
                           name={`custom_certifications.${index}.credential_url`}
                           render={({ field }: any) => (
                             <FormItem>
-                              <FormLabel>Credential URL</FormLabel>
+                              <FormLabel>{t('lbl_credential_url')}</FormLabel>
                               <FormControl>
                                 <Input {...field} placeholder="Enter credential URL" />
                               </FormControl>

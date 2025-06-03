@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/button';
 import {
@@ -37,6 +38,8 @@ import { PageProps } from '@/Modules/LeaveManagement/Resources/js/types';
 
 // Temporary inline implementation of usePermission hook
 function usePermission() {
+  const { t } = useTranslation('leave');
+
   const { props } = usePage<PageProps>();
   const auth = props?.auth || { user: null, permissions: [], hasPermission: [], hasRole: [] };
 
@@ -176,7 +179,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
   if (!isFormReady) {
     return (
       <AdminLayout>
-        <Head title="Loading..." />
+        <Head title={t('ttl_loading')} />
         <div className="container mx-auto py-6">
           <div className="flex items-center justify-center h-64">
             <p>Loading form...</p>
@@ -188,7 +191,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
 
   return (
     <AdminLayout>
-      <Head title="Create Leave Request" />
+      <Head title={t('create_leave_request')} />
       <div className="container mx-auto py-6">
         <Breadcrumb
           segments={[
@@ -202,7 +205,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>{t('ttl_leave_requests')}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <BreadcrumbLink href={route('leaves.requests.create')}>Create</BreadcrumbLink>
@@ -212,7 +215,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
             <ClipboardList className="h-8 w-8 mr-2 text-primary" />
-            <h1 className="text-2xl font-bold">Create Leave Request</h1>
+            <h1 className="text-2xl font-bold">{t('create_leave_request')}</h1>
           </div>
           <Link href={route('leaves.requests.index')}>
             <Button variant="outline">
@@ -224,7 +227,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
 
         <Card className="shadow-md">
           <CardHeader className="bg-muted/50">
-            <CardTitle>New Leave Request</CardTitle>
+            <CardTitle>{t('ttl_new_leave_request')}</CardTitle>
             <CardDescription>
               Create a new leave request for an employee
             </CardDescription>
@@ -235,7 +238,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2 border-b">
                     <span className="h-1 w-1 rounded-full bg-primary"></span>
-                    <h3 className="text-sm font-medium">Request Details</h3>
+                    <h3 className="text-sm font-medium">{t('request_details')}</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -250,7 +253,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                           >
                             <FormControl>
                               <SelectTrigger id="employee_id">
-                                <SelectValue placeholder="Select Employee" />
+                                <SelectValue placeholder={t('ph_select_employee_1')} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -271,14 +274,14 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                       name="leave_type"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Leave Type</FormLabel>
+                          <FormLabel>{t('lbl_leave_type')}</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger id="leave_type">
-                                <SelectValue placeholder="Select Leave Type" />
+                                <SelectValue placeholder={t('ph_select_leave_type')} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -300,7 +303,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2 border-b">
                     <span className="h-1 w-1 rounded-full bg-primary"></span>
-                    <h3 className="text-sm font-medium">Leave Duration</h3>
+                    <h3 className="text-sm font-medium">{t('leave_duration')}</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -308,7 +311,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                       name="start_date"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Start Date</FormLabel>
+                          <FormLabel>{t('lbl_start_date')}</FormLabel>
                           <FormControl>
                             <Input
                               type="date"
@@ -326,7 +329,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                       name="end_date"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>End Date</FormLabel>
+                          <FormLabel>{t('end_date')}</FormLabel>
                           <FormControl>
                             <Input
                               type="date"
@@ -355,7 +358,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2 border-b">
                     <span className="h-1 w-1 rounded-full bg-primary"></span>
-                    <h3 className="text-sm font-medium">Additional Information</h3>
+                    <h3 className="text-sm font-medium">{t('additional_information')}</h3>
                   </div>
                   <FormField
                     control={form.control}
@@ -365,7 +368,7 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                         <FormLabel>Reason</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Reason for leave request"
+                            placeholder={t('ph_reason_for_leave_request')}
                             rows={3}
                             id="reason"
                             {...field}
@@ -381,10 +384,10 @@ export default function LeaveRequestCreate({ employees = [], currentUserOnly = f
                     name="notes"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Additional Notes</FormLabel>
+                        <FormLabel>{t('additional_notes')}</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Any additional information or comments"
+                            placeholder={t('ph_any_additional_information_or_comments')}
                             rows={3}
                             id="notes"
                             {...field}

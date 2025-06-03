@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Table,
     TableBody,
@@ -27,6 +28,8 @@ interface Props {
 }
 
 export default function PerformanceReviews({ reviews }: Props) {
+  const { t } = useTranslation('employee');
+
     const getRatingBadge = (rating: number) => {
         let variant: 'default' | 'success' | 'warning' | 'destructive' = 'default';
         if (rating >= 4) variant = 'success';
@@ -59,12 +62,12 @@ export default function PerformanceReviews({ reviews }: Props) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Review Date</TableHead>
+                        <TableHead>{t('lbl_review_date')}</TableHead>
                         <TableHead>Reviewer</TableHead>
                         <TableHead>Rating</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Strengths</TableHead>
-                        <TableHead>Areas for Improvement</TableHead>
+                        <TableHead>{t('lbl_areas_for_improvement')}</TableHead>
                         <TableHead>Goals</TableHead>
                         <TableHead>Notes</TableHead>
                     </TableRow>

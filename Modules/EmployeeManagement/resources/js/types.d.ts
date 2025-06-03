@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 // Allow TypeScript to import from these paths
 declare module '@/components/ui/*';
 declare module '@/components/shared/*';

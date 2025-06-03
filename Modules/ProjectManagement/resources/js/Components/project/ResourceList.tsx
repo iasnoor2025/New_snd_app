@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Table,
     TableBody,
@@ -53,6 +54,8 @@ export default function ResourceList({
     sortState,
     getSortIcon
 }: ResourceListProps) {
+  const { t } = useTranslation('project');
+
     // Extract locale from Inertia shared props
     const { locale = 'en' } = usePage<any>().props;
 

@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { useTranslation } from 'react-i18next';
 import { router, useForm } from "@inertiajs/react";
 import { Rental } from "@/types/models";
 import { format } from "date-fns";
@@ -136,6 +137,8 @@ export default function RentalWorkflowStatus({
   nextPossibleStates = [],
   className = ""
 }: RentalWorkflowStatusProps) {
+  const { t } = useTranslation('rental');
+
   const { hasPermission } = usePermission();
   const canEditRentals = hasPermission('rentals.edit');
 
@@ -327,7 +330,7 @@ export default function RentalWorkflowStatus({
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>Rental Status</span>
+          <span>{t('rental_status')}</span>
           <Badge
             variant="outline"
             className={`text-sm px-3 py-1 ${currentStep.color}`}>

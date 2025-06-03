@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { Button } from '../ui/button';
@@ -158,6 +159,8 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
   };
 
   const handleFilterChange = (name: string, value: string) => {
+  const { t } = useTranslation('employee');
+
     setFilter(prev => ({
       ...prev,
       [name]: value
@@ -318,7 +321,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Timesheet Approval</CardTitle>
+              <CardTitle>{t('ttl_timesheet_approval')}</CardTitle>
               <p className="text-sm text-gray-500 mt-1">
                 {pendingEntriesCount} pending timesheet entries require approval
               </p>
@@ -350,12 +353,12 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
             <div className="rounded-md border p-4 mb-6">
               <div className="flex items-center gap-2 mb-4">
                 <Filter className="h-4 w-4 text-gray-500" />
-                <h3 className="text-sm font-medium">Filter Timesheet Entries</h3>
+                <h3 className="text-sm font-medium">{t('filter_timesheet_entries')}</h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div>
-                  <Label htmlFor="start-date-filter">Start Date</Label>
+                  <Label htmlFor="start-date-filter">{t('lbl_start_date')}</Label>
                   <Input
                     id="start-date-filter"
                     type="date"
@@ -365,7 +368,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                 </div>
 
                 <div>
-                  <Label htmlFor="end-date-filter">End Date</Label>
+                  <Label htmlFor="end-date-filter">{t('lbl_end_date')}</Label>
                   <Input
                     id="end-date-filter"
                     type="date"
@@ -380,10 +383,10 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                     value={filter.status}
                     onValueChange={(value) => handleFilterChange('status', value)}
                     <SelectTrigger>
-                      <SelectValue placeholder="All Status" />
+                      <SelectValue placeholder={t('opt_all_status')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="all">{t('opt_all_status')}</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="approved">Approved</SelectItem>
                       <SelectItem value="rejected">Rejected</SelectItem>
@@ -397,10 +400,10 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                     value={filter.employee_id}
                     onValueChange={(value) => handleFilterChange('employee_id', value)}
                     <SelectTrigger>
-                      <SelectValue placeholder="All Employees" />
+                      <SelectValue placeholder={t('opt_all_employees')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Employees</SelectItem>
+                      <SelectItem value="all">{t('opt_all_employees')}</SelectItem>
                       {employees.map((employee) => (
                         <SelectItem key={employee.id} value={employee.id.toString()}>
                           {getEmployeeName(employee)}
@@ -416,10 +419,10 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                     value={filter.project_id}
                     onValueChange={(value) => handleFilterChange('project_id', value)}
                     <SelectTrigger>
-                      <SelectValue placeholder="All Projects" />
+                      <SelectValue placeholder={t('opt_all_projects')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Projects</SelectItem>
+                      <SelectItem value="all">{t('opt_all_projects')}</SelectItem>
                       {projects.map((project) => (
                         <SelectItem key={project.id} value={project.id.toString()}>
                           {project.name}
@@ -524,7 +527,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                             <Button
                               variant="ghost"
                               size="icon"
-                              title="View Details"
+                              title={t('ttl_view_details')}
                               onClick={() => viewEntryDetails(entry)}
                               <Eye className="h-4 w-4" />
                             </Button>
@@ -533,7 +536,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  title="Approve"
+                                  title={t('ttl_approve')}
                                   onClick={() => approveEntry(entry.id)}
                                   className="text-green-600"
                                   <Check className="h-4 w-4" />
@@ -541,7 +544,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  title="Reject"
+                                  title={t('ttl_reject')}
                                   onClick={() => openRejectDialog(entry)}
                                   className="text-red-600"
                                   <X className="h-4 w-4" />
@@ -581,7 +584,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Timesheet Entry Details</DialogTitle>
+            <DialogTitle>{t('ttl_timesheet_entry_details')}</DialogTitle>
             <DialogDescription>
               Review the details of this timesheet entry.
             </DialogDescription>
@@ -667,7 +670,7 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
       <AlertDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Reject Timesheet Entry</AlertDialogTitle>
+            <AlertDialogTitle>{t('ttl_reject_timesheet_entry')}</AlertDialogTitle>
             <AlertDialogDescription>
               Please provide a reason for rejecting this timesheet entry.
               The employee will be notified of the rejection and the reason.
@@ -675,12 +678,12 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
           </AlertDialogHeader>
 
           <div className="py-4">
-            <Label htmlFor="rejection-note">Rejection Reason</Label>
+            <Label htmlFor="rejection-note">{t('lbl_rejection_reason')}</Label>
             <Textarea
               id="rejection-note"
               value={rejectionNote}
               onChange={(e) => setRejectionNote(e.target.value)}
-              placeholder="Enter reason for rejection"
+              placeholder={t('ph_enter_reason_for_rejection')}
               className="mt-1"
             />
           </div>
@@ -712,12 +715,12 @@ export const TimesheetApproval: React.FC<TimesheetApprovalProps> = ({
 
           {bulkAction === 'reject' && (
             <div className="py-4">
-              <Label htmlFor="bulk-rejection-note">Rejection Reason</Label>
+              <Label htmlFor="bulk-rejection-note">{t('lbl_rejection_reason')}</Label>
               <Textarea
                 id="bulk-rejection-note"
                 value={rejectionNote}
                 onChange={(e) => setRejectionNote(e.target.value)}
-                placeholder="Enter reason for rejection"
+                placeholder={t('ph_enter_reason_for_rejection')}
                 className="mt-1"
               />
             </div>

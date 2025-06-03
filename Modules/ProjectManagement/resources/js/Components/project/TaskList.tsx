@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle2, Clock, AlertCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
 import { Badge } from '../../../../../../resources/js/components/ui/badge';
 import { Progress } from '../../../../../../resources/js/components/ui/progress';
@@ -34,6 +35,8 @@ interface TaskListProps {
 }
 
 export default function TaskList({ tasks, onEdit, onDelete, onStatusChange, onCompletionChange }: TaskListProps) {
+  const { t } = useTranslation('project');
+
     // Debug check for the task array passed to the component
     console.log('TaskList component received tasks:', { count: tasks?.length || 0, sample: tasks?.[0] })
 
@@ -45,7 +48,7 @@ export default function TaskList({ tasks, onEdit, onDelete, onStatusChange, onCo
             case 'pending':
                 return <Badge variant="outline" className="bg-slate-100">Pending</Badge>
             case 'in_progress':
-                return <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">In Progress</Badge>
+                return <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">{t('in_progress')}</Badge>
             case 'completed':
                 return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-200">Completed</Badge>
             case 'cancelled':
@@ -78,8 +81,8 @@ export default function TaskList({ tasks, onEdit, onDelete, onStatusChange, onCo
     if (taskArray.length === 0) {
         return (
             <div className="border rounded-md p-8 text-center">
-                <p className="text-lg font-medium text-gray-900">No tasks found</p>
-                <p className="text-sm text-gray-500 mt-1">Add tasks to track project progress</p>
+                <p className="text-lg font-medium text-gray-900">{t('no_tasks_found')}</p>
+                <p className="text-sm text-gray-500 mt-1">{t('add_tasks_to_track_project_progress')}</p>
             </div>
         );
     }
@@ -125,34 +128,34 @@ export default function TaskList({ tasks, onEdit, onDelete, onStatusChange, onCo
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                        <span className="sr-only">Open menu</span>
+                                        <span className="sr-only">{t('open_menu')}</span>
                                         <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem onClick={() => onEdit(task)}>
                                         <Edit className="mr-2 h-4 w-4" />
-                                        <span>Edit Task</span>
+                                        <span>{t('edit_task')}</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => onDelete(task)}>
                                         <Trash2 className="mr-2 h-4 w-4" />
-                                        <span>Delete Task</span>
+                                        <span>{t('delete_task')}</span>
                                     </DropdownMenuItem>
                                     {task.status !== 'completed' && (
                                         <DropdownMenuItem onClick={() => onStatusChange(task, { target: { value: 'completed' } })}>
                                             <CheckCircle2 className="mr-2 h-4 w-4" />
-                                            <span>Mark as Completed</span>
+                                            <span>{t('mark_as_completed')}</span>
                                         </DropdownMenuItem>
                                     )}
                                     {task.status !== 'in_progress' && task.status !== 'completed' && (
                                         <DropdownMenuItem onClick={() => onStatusChange(task, { target: { value: 'in_progress' } })}>
                                             <Clock className="mr-2 h-4 w-4" />
-                                            <span>Mark as In Progress</span>
+                                            <span>{t('mark_as_in_progress')}</span>
                                         </DropdownMenuItem>
                                     )}
                                     {task.status !== 'pending' && (
                                         <DropdownMenuItem onClick={() => onStatusChange(task, { target: { value: 'pending' } })}>
-                                            <span>Mark as Pending</span>
+                                            <span>{t('mark_as_pending')}</span>
                                         </DropdownMenuItem>
                                     )}
                                 </DropdownMenuContent>

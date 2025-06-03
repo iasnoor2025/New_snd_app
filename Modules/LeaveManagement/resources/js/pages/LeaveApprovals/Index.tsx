@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
@@ -102,6 +103,8 @@ const LeaveApprovalsIndex: React.FC = () => {
   });
 
   const handleFilter = () => {
+  const { t } = useTranslation('leave');
+
     router.get(route('leaves.approvals.index'), {
       ...Object.fromEntries(
         Object.entries(filterForm).filter(([_, value]) => value !== '')
@@ -190,13 +193,13 @@ const LeaveApprovalsIndex: React.FC = () => {
 
   return (
     <AdminLayout>
-      <Head title="Leave Approvals" />
+      <Head title={t('leave_approvals')} />
 
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Leave Approvals</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('leave_approvals')}</h1>
             <p className="text-muted-foreground">
               Review and approve pending leave requests
             </p>
@@ -212,7 +215,7 @@ const LeaveApprovalsIndex: React.FC = () => {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Bulk Approve Leave Requests</DialogTitle>
+                    <DialogTitle>{t('ttl_bulk_approve_leave_requests')}</DialogTitle>
                     <DialogDescription>
                       You are about to approve {selectedRequests.length} leave request(s).
                       This action cannot be undone.
@@ -224,7 +227,7 @@ const LeaveApprovalsIndex: React.FC = () => {
                       <Textarea
                         value={bulkApprovalNotes}
                         onChange={(e) => setBulkApprovalNotes(e.target.value)}
-                        placeholder="Add any notes for the approval..."
+                        placeholder={t('ph_add_any_notes_for_the_approval')}
                         className="mt-1"
                       />
                     </div>
@@ -247,7 +250,7 @@ const LeaveApprovalsIndex: React.FC = () => {
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_pending_requests')}</CardTitle>
               <ClockIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -304,10 +307,10 @@ const LeaveApprovalsIndex: React.FC = () => {
                   onValueChange={(value) => setFilterForm(prev => ({ ...prev, employee_id: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All employees" />
+                    <SelectValue placeholder={t('opt_all_employees_2')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Employees</SelectItem>
+                    <SelectItem value="">{t('opt_all_employees')}</SelectItem>
                     {employees.map((employee) => (
                       <SelectItem key={employee.id} value={employee.id.toString()}>
                         {employee.first_name} {employee.last_name}
@@ -318,16 +321,16 @@ const LeaveApprovalsIndex: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Leave Type</label>
+                <label className="text-sm font-medium mb-2 block">{t('lbl_leave_type')}</label>
                 <Select
                   value={filterForm.leave_type}
                   onValueChange={(value) => setFilterForm(prev => ({ ...prev, leave_type: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All types" />
+                    <SelectValue placeholder={t('ph_all_types')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Types</SelectItem>
+                    <SelectItem value="">{t('opt_all_types')}</SelectItem>
                     {leaveTypes.map((type) => (
                       <SelectItem key={type} value={type}>
                         {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -338,7 +341,7 @@ const LeaveApprovalsIndex: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">From Date</label>
+                <label className="text-sm font-medium mb-2 block">{t('lbl_from_date')}</label>
                 <Input
                   type="date"
                   value={filterForm.date_from}
@@ -347,7 +350,7 @@ const LeaveApprovalsIndex: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">To Date</label>
+                <label className="text-sm font-medium mb-2 block">{t('lbl_to_date')}</label>
                 <Input
                   type="date"
                   value={filterForm.date_to}
@@ -370,7 +373,7 @@ const LeaveApprovalsIndex: React.FC = () => {
         {/* Pending Requests Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Pending Leave Requests</CardTitle>
+            <CardTitle>{t('ttl_pending_leave_requests')}</CardTitle>
             <CardDescription>
               Review and approve employee leave requests
             </CardDescription>
@@ -387,7 +390,7 @@ const LeaveApprovalsIndex: React.FC = () => {
                       />
                     </TableHead>
                     <TableHead>Employee</TableHead>
-                    <TableHead>Leave Type</TableHead>
+                    <TableHead>{t('lbl_leave_type')}</TableHead>
                     <TableHead>Duration</TableHead>
                     <TableHead>Days</TableHead>
                     <TableHead>Reason</TableHead>
@@ -456,7 +459,7 @@ const LeaveApprovalsIndex: React.FC = () => {
                                 </Button>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>View details</p>
+                                <p>{t('view_details')}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
@@ -474,7 +477,7 @@ const LeaveApprovalsIndex: React.FC = () => {
                                 </Button>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>Quick approve</p>
+                                <p>{t('quick_approve')}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>

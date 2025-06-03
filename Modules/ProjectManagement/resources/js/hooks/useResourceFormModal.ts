@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface UseResourceFormModalProps {
     projectId: number;
@@ -28,6 +29,8 @@ export function useResourceFormModal({
     const [isLoading, setIsLoading] = useState(false);
 
     const openCreateModal = () => {
+  const { t } = useTranslation('project');
+
         setIsCreateModalOpen(true);
     };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -185,6 +186,8 @@ const statusColors = {
 };
 
 export default function ReportsIndex() {
+  const { t } = useTranslation('leave');
+
     const { filters, data, employees, departments, leaveTypes } = usePage<PageProps>().props;
     const { can } = usePermission();
 
@@ -254,7 +257,7 @@ export default function ReportsIndex() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('th_total_requests')}</CardTitle>
                         <ClockIcon className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -290,7 +293,7 @@ export default function ReportsIndex() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Days</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('th_total_days')}</CardTitle>
                         <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -304,7 +307,7 @@ export default function ReportsIndex() {
                 {/* Leave Type Distribution */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Leave Type Distribution</CardTitle>
+                        <CardTitle>{t('ttl_leave_type_distribution')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
@@ -333,7 +336,7 @@ export default function ReportsIndex() {
                 {/* Status Distribution */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Status Distribution</CardTitle>
+                        <CardTitle>{t('ttl_status_distribution')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
@@ -352,7 +355,7 @@ export default function ReportsIndex() {
             {/* Monthly Trend */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Monthly Trend</CardTitle>
+                    <CardTitle>{t('ttl_monthly_trend')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
@@ -374,7 +377,7 @@ export default function ReportsIndex() {
     const renderDetailedReport = (detailedData: DetailedData) => (
         <Card>
             <CardHeader>
-                <CardTitle>Detailed Leave Requests</CardTitle>
+                <CardTitle>{t('ttl_detailed_leave_requests')}</CardTitle>
                 <CardDescription>
                     Showing {detailedData.pagination.total} total requests
                 </CardDescription>
@@ -385,7 +388,7 @@ export default function ReportsIndex() {
                         <TableRow>
                             <TableHead>Employee</TableHead>
                             <TableHead>Department</TableHead>
-                            <TableHead>Leave Type</TableHead>
+                            <TableHead>{t('lbl_leave_type')}</TableHead>
                             <TableHead>Duration</TableHead>
                             <TableHead>Days</TableHead>
                             <TableHead>Status</TableHead>
@@ -445,7 +448,7 @@ export default function ReportsIndex() {
     const renderBalanceReport = (balanceData: BalanceData) => (
         <Card>
             <CardHeader>
-                <CardTitle>Leave Balance Report</CardTitle>
+                <CardTitle>{t('ttl_leave_balance_report')}</CardTitle>
                 <CardDescription>
                     Current leave balances for all employees
                 </CardDescription>
@@ -456,11 +459,11 @@ export default function ReportsIndex() {
                         <TableRow>
                             <TableHead>Employee</TableHead>
                             <TableHead>Department</TableHead>
-                            <TableHead>Leave Type</TableHead>
+                            <TableHead>{t('lbl_leave_type')}</TableHead>
                             <TableHead>Allocated</TableHead>
                             <TableHead>Used</TableHead>
                             <TableHead>Remaining</TableHead>
-                            <TableHead>Carried Forward</TableHead>
+                            <TableHead>{t('th_carried_forward')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -535,7 +538,7 @@ export default function ReportsIndex() {
             {/* Monthly Trend */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Monthly Trend</CardTitle>
+                    <CardTitle>{t('ttl_monthly_trend')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
@@ -555,7 +558,7 @@ export default function ReportsIndex() {
             {/* Seasonal Analysis */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Seasonal Analysis</CardTitle>
+                    <CardTitle>{t('ttl_seasonal_analysis')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
@@ -575,7 +578,7 @@ export default function ReportsIndex() {
     const renderDepartmentReport = (departmentData: DepartmentData) => (
         <Card>
             <CardHeader>
-                <CardTitle>Department Report</CardTitle>
+                <CardTitle>{t('ttl_department_report')}</CardTitle>
                 <CardDescription>
                     Leave statistics by department
                 </CardDescription>
@@ -585,10 +588,10 @@ export default function ReportsIndex() {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Department</TableHead>
-                            <TableHead>Total Requests</TableHead>
+                            <TableHead>{t('th_total_requests')}</TableHead>
                             <TableHead>Approved</TableHead>
-                            <TableHead>Approval Rate</TableHead>
-                            <TableHead>Total Days</TableHead>
+                            <TableHead>{t('th_approval_rate')}</TableHead>
+                            <TableHead>{t('th_total_days')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -629,7 +632,7 @@ export default function ReportsIndex() {
 
     return (
         <>
-            <Head title="Leave Reports" />
+            <Head title={t('leave_reports')} />
 
             <div className="space-y-6">
                 {/* Breadcrumb */}
@@ -652,8 +655,8 @@ export default function ReportsIndex() {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Leave Reports</h1>
-                        <p className="text-muted-foreground">Comprehensive leave analytics and insights</p>
+                        <h1 className="text-3xl font-bold tracking-tight">{t('leave_reports')}</h1>
+                        <p className="text-muted-foreground">{t('comprehensive_leave_analytics_and_insights')}</p>
                     </div>
                     <div className="flex gap-2">
                         {can('leave-reports.export') && (
@@ -691,13 +694,13 @@ export default function ReportsIndex() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {/* Report Type */}
                             <div className="space-y-2">
-                                <Label htmlFor="report_type">Report Type</Label>
+                                <Label htmlFor="report_type">{t('lbl_report_type')}</Label>
                                 <Select
                                     value={localFilters.report_type}
                                     onValueChange={(value) => handleFilterChange('report_type', value)}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select report type" />
+                                        <SelectValue placeholder={t('ph_select_report_type')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="summary">Summary</SelectItem>
@@ -711,7 +714,7 @@ export default function ReportsIndex() {
 
                             {/* Date From */}
                             <div className="space-y-2">
-                                <Label>Date From</Label>
+                                <Label>{t('lbl_date_from')}</Label>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Button
@@ -722,7 +725,7 @@ export default function ReportsIndex() {
                                             )}
                                         >
                                             <CalendarIcon className="mr-2 h-4 w-4" />
-                                            {dateFrom ? format(dateFrom, "PPP") : <span>Pick a date</span>}
+                                            {dateFrom ? format(dateFrom, "PPP") : <span>{t('project:pick_a_date')}</span>}
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-auto p-0">
@@ -738,7 +741,7 @@ export default function ReportsIndex() {
 
                             {/* Date To */}
                             <div className="space-y-2">
-                                <Label>Date To</Label>
+                                <Label>{t('lbl_date_to')}</Label>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Button
@@ -749,7 +752,7 @@ export default function ReportsIndex() {
                                             )}
                                         >
                                             <CalendarIcon className="mr-2 h-4 w-4" />
-                                            {dateTo ? format(dateTo, "PPP") : <span>Pick a date</span>}
+                                            {dateTo ? format(dateTo, "PPP") : <span>{t('project:pick_a_date')}</span>}
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-auto p-0">
@@ -771,10 +774,10 @@ export default function ReportsIndex() {
                                     onValueChange={(value) => handleFilterChange('employee_id', value ? parseInt(value) : undefined)}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All employees" />
+                                        <SelectValue placeholder={t('opt_all_employees_2')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All employees</SelectItem>
+                                        <SelectItem value="">{t('opt_all_employees_2')}</SelectItem>
                                         {employees.map((employee) => (
                                             <SelectItem key={employee.value} value={employee.value.toString()}>
                                                 {employee.label}
@@ -792,10 +795,10 @@ export default function ReportsIndex() {
                                     onValueChange={(value) => handleFilterChange('department_id', value ? parseInt(value) : undefined)}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All departments" />
+                                        <SelectValue placeholder={t('opt_all_departments')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All departments</SelectItem>
+                                        <SelectItem value="">{t('opt_all_departments')}</SelectItem>
                                         {departments.map((department) => (
                                             <SelectItem key={department.value} value={department.value.toString()}>
                                                 {department.label}
@@ -807,16 +810,16 @@ export default function ReportsIndex() {
 
                             {/* Leave Type */}
                             <div className="space-y-2">
-                                <Label htmlFor="leave_type_id">Leave Type</Label>
+                                <Label htmlFor="leave_type_id">{t('lbl_leave_type')}</Label>
                                 <Select
                                     value={localFilters.leave_type_id?.toString() || ''}
                                     onValueChange={(value) => handleFilterChange('leave_type_id', value ? parseInt(value) : undefined)}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All leave types" />
+                                        <SelectValue placeholder={t('opt_all_leave_types')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All leave types</SelectItem>
+                                        <SelectItem value="">{t('opt_all_leave_types')}</SelectItem>
                                         {leaveTypes.map((leaveType) => (
                                             <SelectItem key={leaveType.value} value={leaveType.value.toString()}>
                                                 {leaveType.label}
@@ -834,10 +837,10 @@ export default function ReportsIndex() {
                                     onValueChange={(value) => handleFilterChange('status', value || undefined)}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All statuses" />
+                                        <SelectValue placeholder={t('opt_all_statuses_2')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All statuses</SelectItem>
+                                        <SelectItem value="">{t('opt_all_statuses_2')}</SelectItem>
                                         <SelectItem value="pending">Pending</SelectItem>
                                         <SelectItem value="approved">Approved</SelectItem>
                                         <SelectItem value="rejected">Rejected</SelectItem>

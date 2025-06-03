@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Table,
     TableBody,
@@ -26,6 +27,8 @@ interface Props {
 }
 
 export default function LeaveHistory({ records }: Props) {
+  const { t } = useTranslation('employee');
+
     const getStatusBadge = (status: LeaveRecord['status']) => {
         return (
             <Badge
@@ -57,8 +60,8 @@ export default function LeaveHistory({ records }: Props) {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Type</TableHead>
-                        <TableHead>Date Range</TableHead>
-                        <TableHead>Total Days</TableHead>
+                        <TableHead>{t('th_date_range')}</TableHead>
+                        <TableHead>{t('th_total_days')}</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Reason</TableHead>
                         <TableHead>Notes</TableHead>

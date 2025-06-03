@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "@inertiajs/react";
 import * as z from "zod";
@@ -135,6 +136,8 @@ const RentalForm = ({
   formData,
   steps
 }: RentalFormProps) => {
+  const { t } = useTranslation('rental');
+
   // Extract initial data based on whether we're in edit mode or create mode
   const rental = initialData.rental;
   const nextRentalNumber = initialData.rentalNumber;
@@ -519,7 +522,7 @@ const RentalForm = ({
                   }}
                 >
                   <SelectTrigger id="customer_id">
-                    <SelectValue placeholder="Select a customer" />
+                    <SelectValue placeholder={t('ph_select_a_customer')} />
                   </SelectTrigger>
                   <SelectContent>
                     {safeCustomers.map((customer) => (
@@ -535,7 +538,7 @@ const RentalForm = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="rental_number">Rental Number</Label>
+                <Label htmlFor="rental_number">{t('lbl_rental_number')}</Label>
                 <Input
                   id="rental_number"
                   value={data.rental_number}
@@ -550,7 +553,7 @@ const RentalForm = ({
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Start Date</Label>
+                <Label>{t('lbl_start_date')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -564,7 +567,7 @@ const RentalForm = ({
                       {data.start_date ? (
                         format(data.start_date, "PPP")
                       ) : (
-                        <span>Pick a date</span>
+                        <span>{t('pick_a_date')}</span>
                       )}
                     </Button>
                   </PopoverTrigger>
@@ -591,7 +594,7 @@ const RentalForm = ({
               </div>
 
               <div className="space-y-2">
-                <Label>Expected End Date</Label>
+                <Label>{t('expected_end_date')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -605,7 +608,7 @@ const RentalForm = ({
                       {data.expected_end_date ? (
                         format(data.expected_end_date, "PPP")
                       ) : (
-                        <span>Pick a date</span>
+                        <span>{t('pick_a_date')}</span>
                       )}
                     </Button>
                   </PopoverTrigger>
@@ -641,7 +644,7 @@ const RentalForm = ({
                 id="notes"
                 value={data.notes || ''}
                 onChange={(e) => setData('notes', e.target.value)}
-                placeholder="Add any additional notes here..."
+                placeholder={t('ph_add_any_additional_notes_here')}
               />
             </div>
           </div>
@@ -654,7 +657,7 @@ const RentalForm = ({
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search equipment by name, door number, or model..."
+                    placeholder={t('ph_search_equipment_by_name_door_number_or_model')}
                     value={equipmentSearch}
                     onChange={(e) => setEquipmentSearch(e.target.value)}
                     className="pl-8"
@@ -713,7 +716,7 @@ const RentalForm = ({
 
             {rentalItems.length > 0 && (
               <div className="space-y-4">
-                <h4 className="text-sm font-medium">Selected Equipment</h4>
+                <h4 className="text-sm font-medium">{t('selected_equipment')}</h4>
                 {rentalItems.map((item, index) => (
                   <Card key={index} className="p-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -741,10 +744,10 @@ const RentalForm = ({
                           }}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Select operator" />
+                            <SelectValue placeholder={t('ph_select_operator')} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="none">No Operator</SelectItem>
+                            <SelectItem value="none">{t('opt_no_operator')}</SelectItem>
                             {safeEmployees.map((employee) => (
                               <SelectItem key={employee.id} value={employee.id.toString()}>
                                 {employee.name}
@@ -783,7 +786,7 @@ const RentalForm = ({
         {currentStepState === 3 && (
           <Card>
             <CardHeader>
-              <CardTitle>Rental Summary</CardTitle>
+              <CardTitle>{t('rental_summary')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -795,7 +798,7 @@ const RentalForm = ({
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Rental Number</div>
+                    <div className="text-sm font-medium">{t('lbl_rental_number')}</div>
                     <div className="text-sm text-muted-foreground">
                       {data.rental_number}
                     </div>
@@ -804,13 +807,13 @@ const RentalForm = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="text-sm font-medium">Start Date</div>
+                    <div className="text-sm font-medium">{t('lbl_start_date')}</div>
                     <div className="text-sm text-muted-foreground">
                       {format(data.start_date, "PPP")}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Expected End Date</div>
+                    <div className="text-sm font-medium">{t('expected_end_date')}</div>
                     <div className="text-sm text-muted-foreground">
                       {format(data.expected_end_date, "PPP")}
                     </div>
@@ -820,7 +823,7 @@ const RentalForm = ({
                 <Separator />
 
                 <div className="space-y-2">
-                  <div className="text-sm font-medium">Rental Items</div>
+                  <div className="text-sm font-medium">{t('rental_items')}</div>
                   <div className="space-y-2">
                     {rentalItems.map((item, index) => (
                       <div key={index} className="flex justify-between text-sm">
@@ -952,7 +955,7 @@ const RentalForm = ({
       <div className="space-y-6">
         {/* Customer and Rental Details Section */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Customer and rental details</h3>
+          <h3 className="text-lg font-medium">{t('customer_and_rental_details')}</h3>
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="customer_id">Customer</Label>
@@ -963,7 +966,7 @@ const RentalForm = ({
                 }}
               >
                 <SelectTrigger id="customer_id">
-                  <SelectValue placeholder="Select a customer" />
+                  <SelectValue placeholder={t('ph_select_a_customer')} />
                 </SelectTrigger>
                 <SelectContent>
                   {safeCustomers.map((customer) => (
@@ -979,7 +982,7 @@ const RentalForm = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="rental_number">Rental Number</Label>
+              <Label htmlFor="rental_number">{t('lbl_rental_number')}</Label>
               <Input
                 id="rental_number"
                 value={data.rental_number}
@@ -994,7 +997,7 @@ const RentalForm = ({
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Start Date</Label>
+              <Label>{t('lbl_start_date')}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -1008,7 +1011,7 @@ const RentalForm = ({
                     {data.start_date ? (
                       format(data.start_date, "PPP")
                     ) : (
-                      <span>Pick a date</span>
+                      <span>{t('pick_a_date')}</span>
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -1035,7 +1038,7 @@ const RentalForm = ({
             </div>
 
             <div className="space-y-2">
-              <Label>Expected End Date</Label>
+              <Label>{t('expected_end_date')}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -1049,7 +1052,7 @@ const RentalForm = ({
                     {data.expected_end_date ? (
                       format(data.expected_end_date, "PPP")
                     ) : (
-                      <span>Pick a date</span>
+                      <span>{t('pick_a_date')}</span>
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -1085,20 +1088,20 @@ const RentalForm = ({
               id="notes"
               value={data.notes || ''}
               onChange={(e) => setData('notes', e.target.value)}
-              placeholder="Add any additional notes here..."
+              placeholder={t('ph_add_any_additional_notes_here')}
             />
           </div>
         </div>
 
         {/* Equipment Selection Section */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Equipment Selection</h3>
+          <h3 className="text-lg font-medium">{t('equipment_selection')}</h3>
           <Card className="p-4">
             <div className="space-y-4">
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search equipment by name, door number, or model..."
+                  placeholder={t('ph_search_equipment_by_name_door_number_or_model')}
                   value={equipmentSearch}
                   onChange={(e) => setEquipmentSearch(e.target.value)}
                   className="pl-8"
@@ -1157,7 +1160,7 @@ const RentalForm = ({
 
           {rentalItems.length > 0 && (
             <div className="space-y-4">
-              <h4 className="text-sm font-medium">Selected Equipment</h4>
+              <h4 className="text-sm font-medium">{t('selected_equipment')}</h4>
               {rentalItems.map((item, index) => (
                 <Card key={index} className="p-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -1185,10 +1188,10 @@ const RentalForm = ({
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select operator" />
+                          <SelectValue placeholder={t('ph_select_operator')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="none">No Operator</SelectItem>
+                          <SelectItem value="none">{t('opt_no_operator')}</SelectItem>
                           {safeEmployees.map((employee) => (
                             <SelectItem key={employee.id} value={employee.id.toString()}>
                               {employee.name}
@@ -1225,10 +1228,10 @@ const RentalForm = ({
 
         {/* Review Section */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Review and complete rental</h3>
+          <h3 className="text-lg font-medium">{t('review_and_complete_rental')}</h3>
           <Card>
             <CardHeader>
-              <CardTitle>Rental Summary</CardTitle>
+              <CardTitle>{t('rental_summary')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -1240,7 +1243,7 @@ const RentalForm = ({
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Rental Number</div>
+                    <div className="text-sm font-medium">{t('lbl_rental_number')}</div>
                     <div className="text-sm text-muted-foreground">
                       {data.rental_number}
                     </div>
@@ -1249,13 +1252,13 @@ const RentalForm = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="text-sm font-medium">Start Date</div>
+                    <div className="text-sm font-medium">{t('lbl_start_date')}</div>
                     <div className="text-sm text-muted-foreground">
                       {format(data.start_date, "PPP")}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Expected End Date</div>
+                    <div className="text-sm font-medium">{t('expected_end_date')}</div>
                     <div className="text-sm text-muted-foreground">
                       {format(data.expected_end_date, "PPP")}
                     </div>
@@ -1265,7 +1268,7 @@ const RentalForm = ({
                 <Separator />
 
                 <div className="space-y-2">
-                  <div className="text-sm font-medium">Rental Items</div>
+                  <div className="text-sm font-medium">{t('rental_items')}</div>
                   <div className="space-y-2">
                     {rentalItems.map((item, index) => (
                       <div key={index} className="flex justify-between text-sm">
@@ -1309,7 +1312,7 @@ const RentalForm = ({
           type="submit"
           disabled={processing}
         >
-          Create Rental
+          {t('ttl_create_rental')}
         </Button>
       </div>
     </form>

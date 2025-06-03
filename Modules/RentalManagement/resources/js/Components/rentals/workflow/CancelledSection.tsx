@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,8 @@ export default function CancelledSection({
   rentalItems,
   permissions
 }: CancelledSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("details");
   const [isDuplicating, setIsDuplicating] = React.useState(false);
 
@@ -70,7 +73,7 @@ export default function CancelledSection({
       {/* Cancelled rental alert */}
       <Alert variant="destructive">
         <X className="h-4 w-4" />
-        <AlertTitle>Rental Cancelled</AlertTitle>
+        <AlertTitle>{t('ttl_rental_cancelled')}</AlertTitle>
         <AlertDescription>
           This rental has been cancelled on {getCancellationDate()}.
         </AlertDescription>
@@ -79,8 +82,8 @@ export default function CancelledSection({
       {/* Tabs for cancelled state */}
       <Tabs defaultValue="details" onValueChange={setSelectedTab} value={selectedTab}>
         <TabsList className="mb-4">
-          <TabsTrigger value="details">Cancellation Details</TabsTrigger>
-          <TabsTrigger value="items">Rental Items</TabsTrigger>
+          <TabsTrigger value="details">{t('cancellation_details')}</TabsTrigger>
+          <TabsTrigger value="items">{t('rental_items')}</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
         </TabsList>
 
@@ -89,7 +92,7 @@ export default function CancelledSection({
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Cancellation Information</CardTitle>
+                  <CardTitle>{t('ttl_cancellation_information')}</CardTitle>
                   <CardDescription>
                     Details about the rental cancellation
                   </CardDescription>
@@ -102,7 +105,7 @@ export default function CancelledSection({
                 {/* Cancellation details */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <h3 className="font-medium mb-2">Cancellation Details</h3>
+                    <h3 className="font-medium mb-2">{t('cancellation_details')}</h3>
                     <div className="space-y-2">
                       <div className="grid grid-cols-2 gap-1">
                         <p className="text-muted-foreground">Rental Number:</p>
@@ -125,7 +128,7 @@ export default function CancelledSection({
                   </div>
 
                   <div>
-                    <h3 className="font-medium mb-2">Original Rental Information</h3>
+                    <h3 className="font-medium mb-2">{t('original_rental_information')}</h3>
                     <div className="space-y-2">
                       <div className="grid grid-cols-2 gap-1">
                         <p className="text-muted-foreground">Customer:</p>
@@ -150,7 +153,7 @@ export default function CancelledSection({
 
                 {/* Cancellation reason */}
                 <div className="space-y-2">
-                  <h3 className="font-medium">Cancellation Reason</h3>
+                  <h3 className="font-medium">{t('cancellation_reason')}</h3>
                   <div className="bg-secondary/20 p-4 rounded-md">
                     <p className="text-sm">
                       {rental.cancellation_reason ||

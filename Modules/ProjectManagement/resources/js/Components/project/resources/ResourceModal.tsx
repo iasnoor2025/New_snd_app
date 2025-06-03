@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Dialog,
     DialogContent,
@@ -85,6 +86,8 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
     })
 
     const handleSubmit = (data: any) => {
+  const { t } = useTranslation('project');
+
         onSubmit(data);
     };
 
@@ -109,7 +112,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select employee" />
+                                                        <SelectValue placeholder={t('ph_select_employee')} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
@@ -125,7 +128,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                     name="daily_rate"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Daily Rate</FormLabel>
+                                            <FormLabel>{t('lbl_daily_rate')}</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
@@ -154,7 +157,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select equipment" />
+                                                        <SelectValue placeholder={t('ph_select_equipment')} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
@@ -170,7 +173,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                     name="hourly_rate"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Hourly Rate</FormLabel>
+                                            <FormLabel>{t('lbl_hourly_rate')}</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
@@ -205,7 +208,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                     name="unit_price"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Unit Price</FormLabel>
+                                            <FormLabel>{t('lbl_unit_price')}</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
@@ -264,7 +267,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select equipment" />
+                                                        <SelectValue placeholder={t('ph_select_equipment')} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
@@ -280,14 +283,14 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                     name="fuel_type"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Fuel Type</FormLabel>
+                                            <FormLabel>{t('lbl_fuel_type')}</FormLabel>
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select fuel type" />
+                                                        <SelectValue placeholder={t('ph_select_fuel_type')} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
@@ -322,7 +325,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                     name="unit_price"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Unit Price</FormLabel>
+                                            <FormLabel>{t('lbl_unit_price')}</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
@@ -381,7 +384,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select category" />
+                                                        <SelectValue placeholder={t('ph_select_category')} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>

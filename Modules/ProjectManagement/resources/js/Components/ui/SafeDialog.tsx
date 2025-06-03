@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,8 @@ export function SafeDialog({
   className,
   contentClassName,
 }: SafeDialogProps) {
+  const { t } = useTranslation('project');
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}

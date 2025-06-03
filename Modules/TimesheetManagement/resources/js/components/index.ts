@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 // Geofencing Components
 export { default as GeofenceMapView } from './GeofenceMapView';
 export { default as GeofenceStatsDashboard } from './GeofenceStatsDashboard';

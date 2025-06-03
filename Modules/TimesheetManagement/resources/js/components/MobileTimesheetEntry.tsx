@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Card,
     CardContent,
@@ -214,6 +215,8 @@ const MobileTimesheetEntry: React.FC = () => {
     };
 
     const setupEventListeners = () => {
+  const { t } = useTranslation('timesheet');
+
         // Online/offline detection
         window.addEventListener('online', () => {
             setIsOnline(true);
@@ -541,7 +544,7 @@ const MobileTimesheetEntry: React.FC = () => {
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-bold">Mobile Timesheet</h1>
+                    <h1 className="text-2xl font-bold">{t('mobile_timesheet')}</h1>
                     <p className="text-sm text-muted-foreground">
                         {new Date().toLocaleDateString()}
                     </p>
@@ -566,7 +569,7 @@ const MobileTimesheetEntry: React.FC = () => {
                             </DialogHeader>
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <Label htmlFor="auto-sync">Auto Sync</Label>
+                                    <Label htmlFor="auto-sync">{t('lbl_auto_sync')}</Label>
                                     <Switch
                                         id="auto-sync"
                                         checked={autoSync}
@@ -574,7 +577,7 @@ const MobileTimesheetEntry: React.FC = () => {
                                     />
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <Label htmlFor="track-location">Track Location</Label>
+                                    <Label htmlFor="track-location">{t('lbl_track_location')}</Label>
                                     <Switch
                                         id="track-location"
                                         checked={trackLocation}
@@ -582,7 +585,7 @@ const MobileTimesheetEntry: React.FC = () => {
                                     />
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <Label htmlFor="high-accuracy">High Accuracy GPS</Label>
+                                    <Label htmlFor="high-accuracy">{t('lbl_high_accuracy_gps')}</Label>
                                     <Switch
                                         id="high-accuracy"
                                         checked={highAccuracy}
@@ -625,7 +628,7 @@ const MobileTimesheetEntry: React.FC = () => {
             {/* Time Tracking */}
             <Card>
                 <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">Time Tracking</CardTitle>
+                    <CardTitle className="text-lg">{t('time_tracking')}</CardTitle>
                     <CardDescription>
                         {isTracking ? 'Currently tracking time' : 'Ready to start tracking'}
                     </CardDescription>
@@ -669,7 +672,7 @@ const MobileTimesheetEntry: React.FC = () => {
             {/* Entry Form */}
             <Card>
                 <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">Timesheet Entry</CardTitle>
+                    <CardTitle className="text-lg">{t('ttl_timesheet_entry')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {/* Project Selection */}
@@ -680,7 +683,7 @@ const MobileTimesheetEntry: React.FC = () => {
                             onValueChange={(value) => setCurrentEntry(prev => ({ ...prev, project_id: parseInt(value) }))}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select project" />
+                                <SelectValue placeholder={t('ph_select_project')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {projects.map((project) => (
@@ -697,7 +700,7 @@ const MobileTimesheetEntry: React.FC = () => {
                         <Label htmlFor="description">Description *</Label>
                         <Textarea
                             id="description"
-                            placeholder="What did you work on?"
+                            placeholder={t('ph_what_did_you_work_on')}
                             value={currentEntry.description}
                             onChange={(e) => setCurrentEntry(prev => ({ ...prev, description: e.target.value }))}
                             rows={3}
@@ -716,7 +719,7 @@ const MobileTimesheetEntry: React.FC = () => {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="start-time">Start Time</Label>
+                            <Label htmlFor="start-time">{t('lbl_start_time')}</Label>
                             <Input
                                 id="start-time"
                                 type="time"
@@ -731,7 +734,7 @@ const MobileTimesheetEntry: React.FC = () => {
                         <div className="p-3 bg-muted rounded-lg">
                             <div className="flex items-center space-x-2 mb-2">
                                 <Navigation className="h-4 w-4" />
-                                <span className="text-sm font-medium">Current Location</span>
+                                <span className="text-sm font-medium">{t('current_location')}</span>
                             </div>
                             <div className="text-xs text-muted-foreground space-y-1">
                                 <div>{location.address || 'Getting address...'}</div>

@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -72,6 +73,8 @@ export default function PaymentTracker({
   onSendReminder,
   onGenerateInvoice
 }: PaymentTrackerProps) {
+  const { t } = useTranslation('rental');
+
   const [isAddPaymentDialogOpen, setIsAddPaymentDialogOpen] = useState(false);
 
   // Calculate payment metrics
@@ -145,7 +148,7 @@ export default function PaymentTracker({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Amount</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('th_total_amount')}</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -159,7 +162,7 @@ export default function PaymentTracker({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Remaining Balance</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('ttl_remaining_balance')}</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -172,7 +175,7 @@ export default function PaymentTracker({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Payment Status</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('payment_status')}</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -198,7 +201,7 @@ export default function PaymentTracker({
       {metrics.isOverdue && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Payment Overdue</AlertTitle>
+          <AlertTitle>{t('ttl_payment_overdue')}</AlertTitle>
           <AlertDescription>
             This rental is {metrics.daysOverdue} days overdue. Please take action immediately.
           </AlertDescription>
@@ -208,7 +211,7 @@ export default function PaymentTracker({
       {metrics.failedPayments.length > 0 && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Failed Payments</AlertTitle>
+          <AlertTitle>{t('ttl_failed_payments')}</AlertTitle>
           <AlertDescription>
             There are {metrics.failedPayments.length} failed payment attempts. Please review and retry.
           </AlertDescription>
@@ -219,7 +222,7 @@ export default function PaymentTracker({
       <div className="flex gap-2">
         <Button onClick={() => setIsAddPaymentDialogOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Add Payment
+          {t('add_payment')}
         </Button>
         <Button variant="outline" onClick={onSendReminder}>
           <Send className="h-4 w-4 mr-2" />
@@ -234,7 +237,7 @@ export default function PaymentTracker({
       {/* Payment History */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium">Payment History</CardTitle>
+          <CardTitle className="text-sm font-medium">{t('ttl_payment_history')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>

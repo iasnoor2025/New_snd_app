@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
 import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
@@ -52,6 +53,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, settlement }: Props) {
+  const { t } = useTranslation('payroll');
+
     const { toast } = useToast();
 
     const handlePrint = () => {
@@ -82,13 +85,13 @@ export default function Show({ auth, settlement }: Props) {
     };
 
     return (
-        <AdminLayout title="Final Settlement Details" requiredPermission="final-settlements.view">
-            <Head title="Final Settlement Details" />
+        <AdminLayout title={t('ttl_final_settlement_details')} requiredPermission="final-settlements.view">
+            <Head title={t('ttl_final_settlement_details')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-2xl font-bold">Final Settlement Details</CardTitle>
+                        <CardTitle className="text-2xl font-bold">{t('ttl_final_settlement_details')}</CardTitle>
                         <div className="flex items-center space-x-2">
                             <Button variant="outline" onClick={handlePrint}>
                                 <Printer className="mr-2 h-4 w-4" />
@@ -110,10 +113,10 @@ export default function Show({ auth, settlement }: Props) {
                         <div className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-4">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Employee Information</h3>
+                                    <h3 className="text-sm font-medium text-muted-foreground">{t('employee_information')}</h3>
                                     <dl className="space-y-2">
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Employee ID</dt>
+                                            <dt className="text-sm font-medium">{t('employee_id')}</dt>
                                             <dd className="text-sm">{settlement.employee.employee_id}</dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
@@ -123,7 +126,7 @@ export default function Show({ auth, settlement }: Props) {
                                             </dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Last Working Day</dt>
+                                            <dt className="text-sm font-medium">{t('last_working_day')}</dt>
                                             <dd className="text-sm">
                                                 {format(new Date(settlement.last_working_day), 'PPP')}
                                             </dd>
@@ -136,22 +139,22 @@ export default function Show({ auth, settlement }: Props) {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Settlement Details</h3>
+                                    <h3 className="text-sm font-medium text-muted-foreground">{t('settlement_details')}</h3>
                                     <dl className="space-y-2">
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Leave Balance</dt>
+                                            <dt className="text-sm font-medium">{t('leave_balance')}</dt>
                                             <dd className="text-sm">{settlement.employee.leave_balance} days</dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Leave Encashment</dt>
+                                            <dt className="text-sm font-medium">{t('lbl_leave_encashment')}</dt>
                                             <dd className="text-sm">SAR {settlement.leave_encashment.toFixed(2)}</dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Unpaid Salary</dt>
+                                            <dt className="text-sm font-medium">{t('lbl_unpaid_salary')}</dt>
                                             <dd className="text-sm">SAR {settlement.unpaid_salary.toFixed(2)}</dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Unpaid Overtime</dt>
+                                            <dt className="text-sm font-medium">{t('lbl_unpaid_overtime')}</dt>
                                             <dd className="text-sm">SAR {settlement.unpaid_overtime.toFixed(2)}</dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
@@ -159,7 +162,7 @@ export default function Show({ auth, settlement }: Props) {
                                             <dd className="text-sm">SAR {settlement.gratuity.toFixed(2)}</dd>
                                         </div>
                                         <div className="flex justify-between border-b pb-2 font-semibold">
-                                            <dt className="text-sm">Total Payable</dt>
+                                            <dt className="text-sm">{t('lbl_total_payable')}</dt>
                                             <dd className="text-sm">SAR {settlement.total_payable.toFixed(2)}</dd>
                                         </div>
                                     </dl>
@@ -199,7 +202,7 @@ export default function Show({ auth, settlement }: Props) {
 
                             {settlement.agreement_terms && (
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Agreement Terms</h3>
+                                    <h3 className="text-sm font-medium text-muted-foreground">{t('agreement_terms')}</h3>
                                     <p className="text-sm whitespace-pre-wrap">{settlement.agreement_terms}</p>
                                 </div>
                             )}
@@ -207,23 +210,23 @@ export default function Show({ auth, settlement }: Props) {
                             <Separator />
 
                             <div className="space-y-4">
-                                <h3 className="text-sm font-medium text-muted-foreground">Settlement Timeline</h3>
+                                <h3 className="text-sm font-medium text-muted-foreground">{t('settlement_timeline')}</h3>
                                 <dl className="space-y-2">
                                     <div className="flex justify-between border-b pb-2">
-                                        <dt className="text-sm font-medium">Created At</dt>
+                                        <dt className="text-sm font-medium">{t('created_at')}</dt>
                                         <dd className="text-sm">
                                             {format(new Date(settlement.created_at), 'PPP p')}
                                         </dd>
                                     </div>
                                     {settlement.approved_by && (
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Approved By</dt>
+                                            <dt className="text-sm font-medium">{t('approved_by')}</dt>
                                             <dd className="text-sm">{settlement.approved_by.name}</dd>
                                         </div>
                                     )}
                                     {settlement.approved_at && (
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Approved At</dt>
+                                            <dt className="text-sm font-medium">{t('approved_at')}</dt>
                                             <dd className="text-sm">
                                                 {format(new Date(settlement.approved_at), 'PPP p')}
                                             </dd>
@@ -231,7 +234,7 @@ export default function Show({ auth, settlement }: Props) {
                                     )}
                                     {settlement.completed_at && (
                                         <div className="flex justify-between border-b pb-2">
-                                            <dt className="text-sm font-medium">Completed At</dt>
+                                            <dt className="text-sm font-medium">{t('completed_at')}</dt>
                                             <dd className="text-sm">
                                                 {format(new Date(settlement.completed_at), 'PPP p')}
                                             </dd>

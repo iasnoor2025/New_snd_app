@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Card,
     CardContent,
@@ -192,6 +193,8 @@ const MobileTimesheetLogger: React.FC = () => {
     };
 
     const startLocationTracking = () => {
+  const { t } = useTranslation('timesheet');
+
         if (watchIdRef.current) {
             navigator.geolocation.clearWatch(watchIdRef.current);
         }
@@ -464,7 +467,7 @@ const MobileTimesheetLogger: React.FC = () => {
                         </div>
                         <div className="flex items-center space-x-2">
                             <Smartphone className="h-4 w-4" />
-                            <span>Mobile App</span>
+                            <span>{t('mobile_app')}</span>
                         </div>
                     </div>
                     {offlineEntries.length > 0 && (
@@ -520,7 +523,7 @@ const MobileTimesheetLogger: React.FC = () => {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                     <Shield className="h-4 w-4" />
-                                    <span className="font-medium">Geofence Status</span>
+                                    <span className="font-medium">{t('geofence_status')}</span>
                                 </div>
                                 <div className={`flex items-center space-x-1 ${getGeofenceStatusColor()}`}>
                                     {getGeofenceStatusIcon()}
@@ -559,7 +562,7 @@ const MobileTimesheetLogger: React.FC = () => {
                 <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
                         <Timer className="h-5 w-5" />
-                        <span>Time Tracking</span>
+                        <span>{t('time_tracking')}</span>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -583,7 +586,7 @@ const MobileTimesheetLogger: React.FC = () => {
                                 disabled={isTracking}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select project" />
+                                    <SelectValue placeholder={t('ph_select_project')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {projects.map((project) => (
@@ -601,7 +604,7 @@ const MobileTimesheetLogger: React.FC = () => {
                                 id="description"
                                 value={formData.description}
                                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                                placeholder="What are you working on?"
+                                placeholder={t('ph_what_are_you_working_on')}
                                 disabled={isTracking}
                                 rows={3}
                             />

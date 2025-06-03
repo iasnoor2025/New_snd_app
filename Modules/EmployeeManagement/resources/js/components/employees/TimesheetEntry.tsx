@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { Button } from '../ui/button';
@@ -147,6 +148,8 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
   };
 
   const handleFilterChange = (name: string, value: string) => {
+  const { t } = useTranslation('employee');
+
     setFilter(prev => ({
       ...prev,
       [name]: value
@@ -243,7 +246,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
       <Card className="shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle>Timesheet Entries</CardTitle>
+            <CardTitle>{t('ttl_timesheet_entries')}</CardTitle>
             <Dialog open={entryDialogOpen} onOpenChange={setEntryDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="flex items-center gap-1">
@@ -253,7 +256,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add Timesheet Entry</DialogTitle>
+                  <DialogTitle>{t('ttl_add_timesheet_entry')}</DialogTitle>
                   <DialogDescription>
                     Record your work hours for a specific date and project.
                   </DialogDescription>
@@ -266,7 +269,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                       value={currentEntry.project_id?.toString() || ""}
                       onValueChange={(value) => handleInputChange('project_id', parseInt(value))}
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
+                        <SelectValue placeholder={t('ph_select_a_project')} />
                       </SelectTrigger>
                       <SelectContent>
                         {projects.map((project) => (
@@ -305,7 +308,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid w-full items-center gap-1.5">
-                      <Label htmlFor="start-time">Start Time</Label>
+                      <Label htmlFor="start-time">{t('lbl_start_time')}</Label>
                       <Input
                         id="start-time"
                         type="time"
@@ -315,7 +318,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                     </div>
 
                     <div className="grid w-full items-center gap-1.5">
-                      <Label htmlFor="end-time">End Time</Label>
+                      <Label htmlFor="end-time">{t('lbl_end_time')}</Label>
                       <Input
                         id="end-time"
                         type="time"
@@ -338,14 +341,14 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                   </div>
 
                   <div className="rounded-md bg-gray-50 p-3">
-                    <h4 className="text-sm font-medium mb-2">Calculated Hours</h4>
+                    <h4 className="text-sm font-medium mb-2">{t('calculated_hours')}</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-xs text-gray-500">Regular Hours</p>
+                        <p className="text-xs text-gray-500">{t('regular_hours')}</p>
                         <p className="font-medium">{calculatedHours.hours_worked}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">Overtime Hours</p>
+                        <p className="text-xs text-gray-500">{t('overtime_hours')}</p>
                         <p className="font-medium">{calculatedHours.overtime_hours}</p>
                       </div>
                     </div>
@@ -355,7 +358,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                     <Label htmlFor="description">Description</Label>
                     <Input
                       id="description"
-                      placeholder="Briefly describe the work done"
+                      placeholder={t('ph_briefly_describe_the_work_done')}
                       value={currentEntry.description}
                       onChange={(e) => handleInputChange('description', e.target.value)}
                     />
@@ -382,7 +385,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <div>
-                <Label htmlFor="start-date-filter">Start Date</Label>
+                <Label htmlFor="start-date-filter">{t('lbl_start_date')}</Label>
                 <Input
                   id="start-date-filter"
                   type="date"
@@ -392,7 +395,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
               </div>
 
               <div>
-                <Label htmlFor="end-date-filter">End Date</Label>
+                <Label htmlFor="end-date-filter">{t('lbl_end_date')}</Label>
                 <Input
                   id="end-date-filter"
                   type="date"
@@ -407,10 +410,10 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                   value={filter.status}
                   onValueChange={(value) => handleFilterChange('status', value)}
                   <SelectTrigger>
-                    <SelectValue placeholder="All Status" />
+                    <SelectValue placeholder={t('opt_all_status')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="all">{t('opt_all_status')}</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="approved">Approved</SelectItem>
                     <SelectItem value="rejected">Rejected</SelectItem>
@@ -424,10 +427,10 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                   value={filter.project_id}
                   onValueChange={(value) => handleFilterChange('project_id', value)}
                   <SelectTrigger>
-                    <SelectValue placeholder="All Projects" />
+                    <SelectValue placeholder={t('opt_all_projects')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Projects</SelectItem>
+                    <SelectItem value="all">{t('opt_all_projects')}</SelectItem>
                     {projects.map((project) => (
                       <SelectItem key={project.id} value={project.id.toString()}>
                         {project.name}
@@ -504,7 +507,7 @@ export const TimesheetEntry: React.FC<TimesheetEntryProps> = ({
                           <Button
                             variant="ghost"
                             size="icon"
-                            title="View Details"
+                            title={t('ttl_view_details')}
                             disabled={true} // Implement details dialog in future
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -47,6 +48,8 @@ interface TaskFormProps {
 
 // Wrap the component in memo to prevent unnecessary re-renders
 const TaskForm = memo(function TaskForm({ projectId, initialData = null, assignableUsers = [], onSuccess }: TaskFormProps) {
+  const { t } = useTranslation('project');
+
     // Use a ref to track submission state and prevent multiple state updates
     const isSubmitting = useRef(false);
     const mounted = useRef(true);
@@ -168,7 +171,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                             <FormLabel>Description</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Task description"
+                                    placeholder={t('ph_task_description')}
                                     className="resize-none"
                                     {...field}
                                 />
@@ -192,12 +195,12 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select status" />
+                                            <SelectValue placeholder={t('ph_select_status')} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
                                         <SelectItem value="pending">Pending</SelectItem>
-                                        <SelectItem value="in_progress">In Progress</SelectItem>
+                                        <SelectItem value="in_progress">{t('in_progress')}</SelectItem>
                                         <SelectItem value="completed">Completed</SelectItem>
                                         <SelectItem value="cancelled">Cancelled</SelectItem>
                                     </SelectContent>
@@ -220,7 +223,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select priority" />
+                                            <SelectValue placeholder={t('ph_select_priority')} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
@@ -241,12 +244,12 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                     name="due_date"
                     render={({ field }: { field: any }) => (
                         <FormItem className="flex flex-col">
-                            <FormLabel>Due Date</FormLabel>
+                            <FormLabel>{t('lbl_due_date')}</FormLabel>
                             <FormControl>
                                 <DatePicker
                                     date={field.value || undefined}
                                     setDate={field.onChange}
-                                    placeholder="Select due date"
+                                    placeholder={t('ph_select_due_date')}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -259,7 +262,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                         name="completion_percentage"
                         render={({ field }: { field: any }) => (
                             <FormItem>
-                                <FormLabel>Completion Percentage</FormLabel>
+                                <FormLabel>{t('lbl_completion_percentage')}</FormLabel>
                                 <FormControl>
                                     <Input type="number" min="0" max="100" {...field} />
                                 </FormControl>
@@ -275,7 +278,7 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                         name="assigned_to_id"
                         render={({ field }: { field: any }) => (
                             <FormItem>
-                                <FormLabel>Assigned To</FormLabel>
+                                <FormLabel>{t('lbl_assigned_to')}</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
@@ -283,11 +286,11 @@ const TaskForm = memo(function TaskForm({ projectId, initialData = null, assigna
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select person" />
+                                            <SelectValue placeholder={t('ph_select_person')} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="none">Not Assigned</SelectItem>
+                                        <SelectItem value="none">{t('opt_not_assigned')}</SelectItem>
                                         {assignableUsers.map((user) => (
                                             <SelectItem key={user.id} value={user.id.toString()}>
                                                 {user.name}

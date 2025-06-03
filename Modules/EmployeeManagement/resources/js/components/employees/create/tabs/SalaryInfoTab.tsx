@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -51,6 +52,8 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
 
   // Calculate current month days
   const getCurrentMonthDays = () => {
+  const { t } = useTranslation('employee');
+
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   };
@@ -104,7 +107,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Salary Information</CardTitle>
+        <CardTitle>{t('salary_information')}</CardTitle>
       </CardHeader>
       <CardContent>
         <Alert className="mb-6">
@@ -149,7 +152,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
             name="overtime_rate_multiplier"
             render={({ field }: any) => (
               <FormItem>
-                <FormLabel>Overtime Rate Multiplier</FormLabel>
+                <FormLabel>{t('lbl_overtime_rate_multiplier')}</FormLabel>
                 <FormControl>
                   <Input type="number" min="0" step="0.1" {...field} onChange={(e) => field.onChange(Number(e.target.value) || 0)} />
                 </FormControl>
@@ -250,7 +253,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
             className="w-full flex items-center justify-between"
             onClick={() => setShowAllowances(!showAllowances)}
           >
-            <span>Additional Allowances</span>
+            <span>{t('additional_allowances')}</span>
             {showAllowances ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
         </div>
@@ -306,7 +309,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
             className="w-full flex items-center justify-between"
             onClick={() => setShowBankDetails(!showBankDetails)}
           >
-            <span>Bank Details</span>
+            <span>{t('bank_details')}</span>
             {showBankDetails ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
         </div>
@@ -318,7 +321,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
               name="bank_name"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>Bank Name</FormLabel>
+                  <FormLabel>{t('bank_name')}</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter bank name" />
                   </FormControl>
@@ -332,7 +335,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
               name="bank_account_number"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>Bank Account Number</FormLabel>
+                  <FormLabel>{t('lbl_bank_account_number')}</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter bank account number" />
                   </FormControl>
@@ -346,7 +349,7 @@ export default function SalaryInfoTab<TFormValues extends FieldValues = SalaryIn
               name="bank_iban"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>Bank IBAN</FormLabel>
+                  <FormLabel>{t('lbl_bank_iban')}</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Enter bank IBAN" />
                   </FormControl>

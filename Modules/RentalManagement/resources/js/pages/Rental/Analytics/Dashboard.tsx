@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/Components/ui/select';
@@ -81,25 +82,27 @@ interface Props {
 
 export const Dashboard: FC<Props> = ({ analytics, period }) => {
     const handlePeriodChange = (value: string) => {
+  const { t } = useTranslation('rental');
+
         window.location.href = route('rentals.analytics.index', { period: value });
     };
 
     return (
         <>
-            <Head title="Rental Analytics" />
+            <Head title={t('rental_analytics')} />
 
             <div className="container mx-auto py-6">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">Rental Analytics</h1>
+                    <h1 className="text-2xl font-bold">{t('rental_analytics')}</h1>
                     <Select value={period} onValueChange={handlePeriodChange}>
                         <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select period" />
+                            <SelectValue placeholder={t('ph_select_period')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="week">Last Week</SelectItem>
-                            <SelectItem value="month">Last Month</SelectItem>
-                            <SelectItem value="quarter">Last Quarter</SelectItem>
-                            <SelectItem value="year">Last Year</SelectItem>
+                            <SelectItem value="week">{t('opt_last_week')}</SelectItem>
+                            <SelectItem value="month">{t('opt_last_month')}</SelectItem>
+                            <SelectItem value="quarter">{t('opt_last_quarter')}</SelectItem>
+                            <SelectItem value="year">{t('opt_last_year')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -107,7 +110,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Total Revenue</CardTitle>
+                            <CardTitle>{t('total_revenue')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -118,7 +121,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Equipment Utilization</CardTitle>
+                            <CardTitle>{t('ttl_equipment_utilization')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -129,7 +132,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Customer Retention</CardTitle>
+                            <CardTitle>{t('ttl_customer_retention')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -140,7 +143,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Customer Satisfaction</CardTitle>
+                            <CardTitle>{t('ttl_customer_satisfaction')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -153,7 +156,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Active GPS Tracking</CardTitle>
+                            <CardTitle>{t('ttl_active_gps_tracking')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -167,7 +170,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Location History</CardTitle>
+                            <CardTitle>{t('ttl_location_history')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -179,7 +182,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Active Alerts</CardTitle>
+                            <CardTitle>{t('ttl_active_alerts')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -191,7 +194,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Geofence Violations</CardTitle>
+                            <CardTitle>{t('ttl_geofence_violations')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -205,7 +208,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Revenue Trends</CardTitle>
+                            <CardTitle>{t('ttl_revenue_trends')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <LineChart
@@ -219,7 +222,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Revenue by Status</CardTitle>
+                            <CardTitle>{t('ttl_revenue_by_status')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <PieChart
@@ -234,7 +237,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Equipment Locations</CardTitle>
+                            <CardTitle>{t('ttl_equipment_locations')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <MapChart
@@ -246,7 +249,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Recent Movements</CardTitle>
+                            <CardTitle>{t('ttl_recent_movements')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <MapChart
@@ -261,7 +264,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Active Alerts</CardTitle>
+                            <CardTitle>{t('ttl_active_alerts')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
@@ -289,7 +292,7 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Geofence Violations</CardTitle>
+                            <CardTitle>{t('ttl_geofence_violations')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">

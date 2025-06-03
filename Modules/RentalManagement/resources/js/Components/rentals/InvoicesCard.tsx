@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
@@ -65,6 +66,8 @@ export default function InvoicesCard({
   canCreateInvoice = false,
   className = ""
 }: InvoicesCardProps) {
+  const { t } = useTranslation('rental');
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -109,7 +112,7 @@ export default function InvoicesCard({
         <div className="flex justify-between items-center">
           <div>
             <CardTitle>Invoices</CardTitle>
-            <CardDescription>Invoice details for this rental</CardDescription>
+            <CardDescription>{t('invoice_details_for_this_rental')}</CardDescription>
           </div>
           {canCreateInvoice && (
             <Button
@@ -126,7 +129,7 @@ export default function InvoicesCard({
         {invoices.data.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-6 text-center">
             <Receipt className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground mb-2">No invoices created yet</p>
+            <p className="text-muted-foreground mb-2">{t('no_invoices_created_yet')}</p>
             {canCreateInvoice && (
               <Button
                 variant="default"

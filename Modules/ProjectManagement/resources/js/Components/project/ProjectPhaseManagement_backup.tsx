@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
@@ -174,6 +175,8 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
   };
 
   const openEditPhaseDialog = (phase: Phase) => {
+  const { t } = useTranslation('project');
+
     setSelectedPhase(phase);
     setEditName(phase.name);
     setEditDescription(phase.description);
@@ -203,7 +206,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
       case 'pending':
         return <Badge variant="outline">Pending</Badge>
       case 'in_progress':
-        return <Badge variant="secondary">In Progress</Badge>
+        return <Badge variant="secondary">{t('in_progress')}</Badge>
       case 'completed':
         return <Badge variant="success">Completed</Badge>
       default:
@@ -272,7 +275,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
               <CardContent>
                 <div className="grid grid-cols-2 gap-6 mb-6">
                   <div>
-                    <h3 className="text-sm font-medium mb-2">Date Range</h3>
+                    <h3 className="text-sm font-medium mb-2">{t('date_range')}</h3>
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <span>{formatDate(project.start_date)} - {project.actual_end_date ? formatDate(project.actual_end_date) : formatDate(project.expected_end_date)}</span>
@@ -286,7 +289,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
 
                 <div className="space-y-2 mb-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">Overall Progress</h3>
+                    <h3 className="text-sm font-medium">{t('overall_progress')}</h3>
                     <span className="text-sm">{calculateOverallProgress()}%</span>
                   </div>
                   <Progress value={calculateOverallProgress()} className="h-2" />
@@ -296,7 +299,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
           </div>
 
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold tracking-tight">Project Phases</h2>
+            <h2 className="text-xl font-semibold tracking-tight">{t('project_phases')}</h2>
             <Button onClick={() => {
               setPhaseOrder(getNextPhaseOrder());
               setShowAddPhaseDialog(true);
@@ -335,15 +338,15 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
 
                     <div className="grid grid-cols-3 gap-6 mb-4">
                       <div>
-                        <p className="text-sm font-medium">Start Date</p>
+                        <p className="text-sm font-medium">{t('lbl_start_date')}</p>
                         <p className="text-sm">{formatDate(phase.start_date)}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium">Expected End Date</p>
+                        <p className="text-sm font-medium">{t('expected_end_date')}</p>
                         <p className="text-sm">{formatDate(phase.expected_end_date)}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium">Actual End Date</p>
+                        <p className="text-sm font-medium">{t('actual_end_date')}</p>
                         <p className="text-sm">{formatDate(phase.actual_end_date)}</p>
                       </div>
                     </div>
@@ -362,7 +365,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                         onClick={() => openEditPhaseDialog(phase)}
                         className="flex items-center space-x-1"
                         <Edit className="h-4 w-4 mr-1" />
-                        Edit Phase
+                        {t('ttl_edit_phase')}
                       </Button>
 
                       {phase.status !== 'completed' && (
@@ -394,7 +397,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
           <Dialog open={showAddPhaseDialog} onOpenChange={setShowAddPhaseDialog}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Add Project Phase</DialogTitle>
+                <DialogTitle>{t('ttl_add_project_phase')}</DialogTitle>
                 <DialogDescription>
                   Create a new phase for this project
                 </DialogDescription>
@@ -402,12 +405,12 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
 
               <div className="grid gap-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Phase Name</Label>
+                  <Label htmlFor="name">{t('lbl_phase_name')}</Label>
                   <Input
                     id="name"
                     value={phaseName}
                     onChange={(e) => setPhaseName(e.target.value)}
-                    placeholder="e.g., Research & Planning"
+                    placeholder={t('ph_eg_research_planning')}
                     disabled={submitting}
                   />
                 </div>
@@ -418,7 +421,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                     id="description"
                     value={phaseDescription}
                     onChange={(e) => setPhaseDescription(e.target.value)}
-                    placeholder="Describe the objectives and activities of this phase"
+                    placeholder={t('ph_describe_the_objectives_and_activities_of_this')}
                     rows={3}
                     disabled={submitting}
                   />
@@ -426,7 +429,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Start Date</Label>
+                    <Label>{t('lbl_start_date')}</Label>
                     <DatePicker
                       date={phaseStartDate}
                       setDate={setPhaseStartDate}
@@ -435,7 +438,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Expected End Date</Label>
+                    <Label>{t('expected_end_date')}</Label>
                     <DatePicker
                       date={phaseEndDate}
                       setDate={setPhaseEndDate}
@@ -445,7 +448,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="order">Phase Order</Label>
+                  <Label htmlFor="order">{t('lbl_phase_order')}</Label>
                   <Input
                     id="order"
                     type="number"
@@ -488,7 +491,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
           <Dialog open={showEditPhaseDialog} onOpenChange={setShowEditPhaseDialog}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit Project Phase</DialogTitle>
+                <DialogTitle>{t('ttl_edit_project_phase')}</DialogTitle>
                 <DialogDescription>
                   Update details for this project phase
                 </DialogDescription>
@@ -497,7 +500,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
               {selectedPhase && (
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="edit-name">Phase Name</Label>
+                    <Label htmlFor="edit-name">{t('lbl_phase_name')}</Label>
                     <Input
                       id="edit-name"
                       value={editName}
@@ -519,7 +522,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Start Date</Label>
+                      <Label>{t('lbl_start_date')}</Label>
                       <DatePicker
                         date={editStartDate}
                         setDate={setEditStartDate}
@@ -528,7 +531,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Expected End Date</Label>
+                      <Label>{t('expected_end_date')}</Label>
                       <DatePicker
                         date={editEndDate}
                         setDate={setEditEndDate}
@@ -538,7 +541,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Actual End Date</Label>
+                    <Label>{t('actual_end_date')}</Label>
                     <DatePicker
                       date={editActualEndDate}
                       setDate={setEditActualEndDate}
@@ -557,11 +560,11 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                       disabled={submitting}
                     >
                       <SelectTrigger id="status">
-                        <SelectValue placeholder="Select status" />
+                        <SelectValue placeholder={t('ph_select_status')} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="in_progress">In Progress</SelectItem>
+                        <SelectItem value="in_progress">{t('in_progress')}</SelectItem>
                         <SelectItem value="completed">Completed</SelectItem>
                       </SelectContent>
                     </Select>

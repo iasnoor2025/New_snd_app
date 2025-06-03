@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +41,8 @@ export default function RentalAnalytics({
     equipmentUtilization: 75
   }
 }: RentalAnalyticsProps) {
+  const { t } = useTranslation('rental');
+
   const { rentalEfficiency = 85, profitMargin = 40, equipmentUtilization = 75 } = metrics;
 
   // Calculate equipment health metrics
@@ -102,7 +105,7 @@ export default function RentalAnalytics({
       {/* Equipment Health */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Equipment Health</CardTitle>
+          <CardTitle className="text-sm font-medium">{t('ttl_equipment_health')}</CardTitle>
           <Heart className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -122,7 +125,7 @@ export default function RentalAnalytics({
       {/* Financial Performance */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Financial Performance</CardTitle>
+          <CardTitle className="text-sm font-medium">{t('ttl_financial_performance')}</CardTitle>
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -144,7 +147,7 @@ export default function RentalAnalytics({
       {/* Operational Efficiency */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Operational Efficiency</CardTitle>
+          <CardTitle className="text-sm font-medium">{t('ttl_operational_efficiency')}</CardTitle>
           <Gauge className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -164,7 +167,7 @@ export default function RentalAnalytics({
       {/* Rental Progress */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Rental Progress</CardTitle>
+          <CardTitle className="text-sm font-medium">{t('rental_progress')}</CardTitle>
           <Clock className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -185,7 +188,7 @@ export default function RentalAnalytics({
       {weatherData && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Weather Impact</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('ttl_weather_impact')}</CardTitle>
             <CloudSun className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -209,7 +212,7 @@ export default function RentalAnalytics({
       {maintenanceRecords.length > 0 && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Maintenance Status</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('ttl_maintenance_status')}</CardTitle>
             <Wrench className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>

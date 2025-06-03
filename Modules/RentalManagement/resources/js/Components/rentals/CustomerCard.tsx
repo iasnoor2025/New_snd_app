@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Home, Mail, Phone, User } from "lucide-react";
@@ -21,6 +22,8 @@ interface CustomerCardProps {
 const CustomerCard: React.FC<CustomerCardProps> = ({ customer }) => {
   // Get customer initials for avatar
   const getCustomerInitials = (customerName: string) => {
+  const { t } = useTranslation('rental');
+
     if (!customerName) return "CU";
 
     return customerName
@@ -35,7 +38,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer }) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>Customer Details</span>
+          <span>{t('customer_details')}</span>
           <Avatar className="h-8 w-8">
             <AvatarFallback>{getCustomerInitials(customer.company_name || '')}</AvatarFallback>
           </Avatar>

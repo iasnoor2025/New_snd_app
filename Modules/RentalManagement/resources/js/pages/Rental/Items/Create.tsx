@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
@@ -21,13 +22,15 @@ export const Create: FC = () => {
     });
 
     const handleSubmit = (e: React.FormEvent) => {
+  const { t } = useTranslation('rental');
+
         e.preventDefault();
         post(route('rentals.items.store'));
     };
 
     return (
         <>
-            <Head title="Add Rental Item" />
+            <Head title={t('ttl_add_rental_item')} />
 
             <div className="container mx-auto py-6">
                 <Button
@@ -41,7 +44,7 @@ export const Create: FC = () => {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Add New Rental Item</CardTitle>
+                        <CardTitle>{t('ttl_add_new_rental_item')}</CardTitle>
                     </CardHeader>
 
                     <CardContent>
@@ -70,7 +73,7 @@ export const Create: FC = () => {
                                         onChange={e => setData('category', e.target.value)}
                                         required
                                     >
-                                        <option value="">Select Category</option>
+                                        <option value="">{t('select_category')}</option>
                                         <option value="equipment">Equipment</option>
                                         <option value="tools">Tools</option>
                                         <option value="vehicles">Vehicles</option>
@@ -109,7 +112,7 @@ export const Create: FC = () => {
                                         required
                                     >
                                         <option value="new">New</option>
-                                        <option value="like_new">Like New</option>
+                                        <option value="like_new">{t('like_new')}</option>
                                         <option value="good">Good</option>
                                         <option value="fair">Fair</option>
                                         <option value="poor">Poor</option>
@@ -122,7 +125,7 @@ export const Create: FC = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="serial_number">Serial Number</Label>
+                                    <Label htmlFor="serial_number">{t('lbl_serial_number')}</Label>
                                     <Input
                                         id="serial_number"
                                         value={data.serial_number}

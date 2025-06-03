@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Employee, EmployeeDocument } from '../../types/employee';
 import { Button } from '../ui/button';
@@ -122,6 +123,8 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
   };
 
   const organizeDocumentsByCategory = (docs: EmployeeDocument[]) => {
+  const { t } = useTranslation('employee');
+
     const byCategory: Record<string, EmployeeDocument[]> = {
       all: [...docs]
     };
@@ -279,7 +282,7 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
     } else if (monthDiff <= 1) {
       return (
         <Badge variant="warning" className="ml-2 bg-yellow-200 text-yellow-800 border-yellow-300">
-          Expiring Soon
+          {t('expiring_soon')}
         </Badge>
       );
     } else {
@@ -296,17 +299,17 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle>Employee Documents</CardTitle>
+            <CardTitle>{t('ttl_employee_documents')}</CardTitle>
             <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="flex items-center gap-1">
                   <Plus className="h-4 w-4" />
-                  Upload Document
+                  {t('ttl_upload_document')}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Upload Document</DialogTitle>
+                  <DialogTitle>{t('ttl_upload_document')}</DialogTitle>
                   <DialogDescription>
                     Upload a new document for this employee. Supported formats include PDF, images, and Office documents.
                   </DialogDescription>
@@ -314,7 +317,7 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
 
                 <div className="space-y-4 py-4">
                   <div className="grid w-full items-center gap-1.5">
-                    <Label htmlFor="document-file">Document File</Label>
+                    <Label htmlFor="document-file">{t('lbl_document_file')}</Label>
                     <Input
                       id="document-file"
                       type="file"
@@ -324,22 +327,22 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
                   </div>
 
                   <div className="grid w-full items-center gap-1.5">
-                    <Label htmlFor="document-name">Document Name</Label>
+                    <Label htmlFor="document-name">{t('lbl_document_name')}</Label>
                     <Input
                       id="document-name"
-                      placeholder="Enter document name"
+                      placeholder={t('ph_enter_document_name')}
                       value={currentUpload.name}
                       onChange={(e) => setCurrentUpload({...currentUpload, name: e.target.value})}
                     />
                   </div>
 
                   <div className="grid w-full items-center gap-1.5">
-                    <Label htmlFor="document-type">Document Type</Label>
+                    <Label htmlFor="document-type">{t('lbl_document_type')}</Label>
                     <Select
                       value={currentUpload.type}
                       onValueChange={(value) => setCurrentUpload({...currentUpload, type: value})}
                       <SelectTrigger>
-                        <SelectValue placeholder="Select document type" />
+                        <SelectValue placeholder={t('ph_select_document_type')} />
                       </SelectTrigger>
                       <SelectContent>
                         {DOCUMENT_CATEGORIES.map((category) => (
@@ -393,7 +396,7 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
         <CardContent>
           <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
             <TabsList className="mb-4">
-              <TabsTrigger value="all">All Documents</TabsTrigger>
+              <TabsTrigger value="all">{t('all_documents')}</TabsTrigger>
               {DOCUMENT_CATEGORIES.map((category) => (
                 <TabsTrigger
                   key={category.id}
@@ -417,9 +420,9 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
                       <TableHeader>
                         <TableRow>
                           <TableHead className="w-[50px]">Type</TableHead>
-                          <TableHead>Document Name</TableHead>
-                          <TableHead>Expiry Date</TableHead>
-                          <TableHead>Uploaded On</TableHead>
+                          <TableHead>{t('lbl_document_name')}</TableHead>
+                          <TableHead>{t('expiry_date')}</TableHead>
+                          <TableHead>{t('th_uploaded_on')}</TableHead>
                           <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -444,7 +447,7 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
                                   {getExpiryStatusBadge(document)}
                                 </div>
                               ) : (
-                                <span className="text-gray-500">No expiry</span>
+                                <span className="text-gray-500">{t('no_expiry')}</span>
                               )}
                             </TableCell>
                             <TableCell>
@@ -491,7 +494,7 @@ export const EmployeeDocumentManager: React.FC<EmployeeDocumentManagerProps> = (
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Document</AlertDialogTitle>
+            <AlertDialogTitle>{t('ttl_delete_document')}</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete "{documentToDelete?.name}"? This action cannot be undone.
             </AlertDialogDescription>

@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { format, addDays } from "date-fns";
 import { router } from "@inertiajs/react";
 import { Calendar } from "@/components/ui/calendar";
@@ -39,6 +40,8 @@ export default function RentalExtensionDialog({
   onClose,
   onSuccess
 }: RentalExtensionDialogProps) {
+  const { t } = useTranslation('rental');
+
   const [newEndDate, setNewEndDate] = useState<Date | undefined>(
     typeof currentEndDate === 'string'
       ? addDays(new Date(currentEndDate), 7)
@@ -101,7 +104,7 @@ export default function RentalExtensionDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Request Rental Extension</DialogTitle>
+          <DialogTitle>{t('ttl_request_rental_extension')}</DialogTitle>
           <DialogDescription>
             Extend the rental period by selecting a new end date.
           </DialogDescription>
@@ -110,7 +113,7 @@ export default function RentalExtensionDialog({
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="new-end-date" className="text-right col-span-1">
-                New End Date
+                {t('lbl_new_end_date')}
               </Label>
               <div className="col-span-3">
                 <Popover>
@@ -124,7 +127,7 @@ export default function RentalExtensionDialog({
                       )}
                       disabled={isSubmitting}
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {newEndDate ? format(newEndDate, "PPP") : <span>Pick a date</span>}
+                      {newEndDate ? format(newEndDate, "PPP") : <span>{t('pick_a_date')}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -151,7 +154,7 @@ export default function RentalExtensionDialog({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 className="col-span-3"
-                placeholder="Reason for extension"
+                placeholder={t('ph_reason_for_extension')}
                 rows={3}
                 disabled={isSubmitting}
               />

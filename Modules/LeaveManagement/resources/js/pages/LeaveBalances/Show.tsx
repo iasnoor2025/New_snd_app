@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
@@ -74,6 +75,8 @@ const LeaveBalanceShow: React.FC = () => {
   const { employee, balanceDetails, currentYear } = usePage<PageProps>().props;
 
   const getStatusColor = (percentage: number) => {
+  const { t } = useTranslation('leave');
+
     if (percentage >= 80) return 'text-red-600';
     if (percentage >= 60) return 'text-yellow-600';
     return 'text-green-600';
@@ -123,7 +126,7 @@ const LeaveBalanceShow: React.FC = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href={route('leaves.balances.index')}>Leave Balances</BreadcrumbLink>
+              <BreadcrumbLink href={route('leaves.balances.index')}>{t('leave_balances')}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -163,13 +166,13 @@ const LeaveBalanceShow: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center">
               <UserIcon className="h-5 w-5 mr-2" />
-              Employee Information
+              {t('employee:employee_information')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Employee ID</label>
+                <label className="text-sm font-medium text-muted-foreground">{t('lbl_employee_id')}</label>
                 <p className="text-sm font-semibold">{employee.employee_id}</p>
               </div>
               <div>
@@ -188,7 +191,7 @@ const LeaveBalanceShow: React.FC = () => {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Allocated</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_total_allocated')}</CardTitle>
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -201,7 +204,7 @@ const LeaveBalanceShow: React.FC = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Used</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_total_used')}</CardTitle>
               <ClockIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -227,7 +230,7 @@ const LeaveBalanceShow: React.FC = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Usage Rate</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_usage_rate')}</CardTitle>
               <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -242,7 +245,7 @@ const LeaveBalanceShow: React.FC = () => {
         {/* Leave Type Breakdown */}
         <Card>
           <CardHeader>
-            <CardTitle>Leave Type Breakdown</CardTitle>
+            <CardTitle>{t('ttl_leave_type_breakdown')}</CardTitle>
             <CardDescription>
               Detailed breakdown by leave type for {currentYear}
             </CardDescription>
@@ -260,7 +263,7 @@ const LeaveBalanceShow: React.FC = () => {
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>Usage Progress</span>
+                      <span>{t('usage_progress')}</span>
                       <span className={getStatusColor(detail.percentage)}>
                         {detail.percentage.toFixed(1)}%
                       </span>
@@ -285,7 +288,7 @@ const LeaveBalanceShow: React.FC = () => {
 
                   {detail.requests.length > 0 && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium mb-2">Recent Requests</h4>
+                      <h4 className="text-sm font-medium mb-2">{t('recent_requests')}</h4>
                       <div className="space-y-2">
                         {detail.requests.slice(0, 3).map((request) => (
                           <div key={request.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
@@ -330,8 +333,8 @@ const LeaveBalanceShow: React.FC = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Type</TableHead>
-                    <TableHead>Start Date</TableHead>
-                    <TableHead>End Date</TableHead>
+                    <TableHead>{t('lbl_start_date')}</TableHead>
+                    <TableHead>{t('end_date')}</TableHead>
                     <TableHead>Days</TableHead>
                     <TableHead>Reason</TableHead>
                     <TableHead>Status</TableHead>

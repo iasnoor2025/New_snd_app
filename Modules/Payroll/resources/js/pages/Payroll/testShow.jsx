@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
 import { Button } from '@/Modules/Payroll/Resources/js/Components/ui/button';
@@ -8,6 +9,8 @@ import { Badge } from '@/Modules/Payroll/Resources/js/Components/ui/badge';
 import { format } from 'date-fns';
 
 export default function Show({ auth, payroll }) {
+  const { t } = useTranslation('payroll');
+
     const { post, processing } = useForm();
 
     const handleApprove = () => {
@@ -42,16 +45,16 @@ export default function Show({ auth, payroll }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Payroll Details</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('ttl_payroll_details')}</h2>}
         >
-            <Head title="Payroll Details" />
+            <Head title={t('ttl_payroll_details')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Payroll Information</CardTitle>
+                                <CardTitle>{t('ttl_payroll_information')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
@@ -60,7 +63,7 @@ export default function Show({ auth, payroll }) {
                                         <p className="mt-1">{payroll.employee.name}</p>
                                     </div>
                                     <div>
-                                        <h3 className="text-sm font-medium text-gray-500">Payroll Month</h3>
+                                        <h3 className="text-sm font-medium text-gray-500">{t('lbl_payroll_month')}</h3>
                                         <p className="mt-1">{format(new Date(payroll.payroll_month), 'MMMM yyyy')}</p>
                                     </div>
                                     <div>
@@ -68,18 +71,18 @@ export default function Show({ auth, payroll }) {
                                         <p className="mt-1">{getStatusBadge(payroll.status)}</p>
                                     </div>
                                     <div>
-                                        <h3 className="text-sm font-medium text-gray-500">Generated At</h3>
+                                        <h3 className="text-sm font-medium text-gray-500">{t('generated_at')}</h3>
                                         <p className="mt-1">{format(new Date(payroll.generated_at), 'PPpp')}</p>
                                     </div>
                                     {payroll.approver && (
                                         <div>
-                                            <h3 className="text-sm font-medium text-gray-500">Approved By</h3>
+                                            <h3 className="text-sm font-medium text-gray-500">{t('approved_by')}</h3>
                                             <p className="mt-1">{payroll.approver.name}</p>
                                         </div>
                                     )}
                                     {payroll.payer && (
                                         <div>
-                                            <h3 className="text-sm font-medium text-gray-500">Paid By</h3>
+                                            <h3 className="text-sm font-medium text-gray-500">{t('paid_by')}</h3>
                                             <p className="mt-1">{payroll.payer.name}</p>
                                         </div>
                                     )}
@@ -89,16 +92,16 @@ export default function Show({ auth, payroll }) {
 
                         <Card>
                             <CardHeader>
-                                <CardTitle>Salary Breakdown</CardTitle>
+                                <CardTitle>{t('ttl_salary_breakdown')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
                                     <div className="flex justify-between">
-                                        <span>Base Salary</span>
+                                        <span>{t('base_salary')}</span>
                                         <span>${payroll.base_salary.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span>Overtime Amount</span>
+                                        <span>{t('overtime_amount')}</span>
                                         <span>${payroll.overtime_amount.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
@@ -111,7 +114,7 @@ export default function Show({ auth, payroll }) {
                                     </div>
                                     <div className="border-t pt-2 mt-2">
                                         <div className="flex justify-between font-bold">
-                                            <span>Net Salary</span>
+                                            <span>{t('net_salary')}</span>
                                             <span>${payroll.net_salary.toFixed(2)}</span>
                                         </div>
                                     </div>
@@ -122,7 +125,7 @@ export default function Show({ auth, payroll }) {
 
                     <Card className="mt-6">
                         <CardHeader>
-                            <CardTitle>Payroll Items</CardTitle>
+                            <CardTitle>{t('ttl_payroll_items')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Table>

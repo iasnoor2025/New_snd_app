@@ -1,4 +1,5 @@
 ﻿import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { DataTable } from '@/Modules/RentalManagement/Resources/js/Components/ui/data-table';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
@@ -26,6 +27,8 @@ export const Index: FC<Props> = ({ items, filters = { search: '', status: '', ca
     const { get } = useForm();
 
     const handleSearch = () => {
+  const { t } = useTranslation('rental');
+
         get(route('rentals.items.index', {
             search,
             status,
@@ -85,18 +88,18 @@ export const Index: FC<Props> = ({ items, filters = { search: '', status: '', ca
 
     return (
         <>
-            <Head title="Rental Items" />
+            <Head title={t('rental_items')} />
 
             <div className="container mx-auto py-6">
                 <Card>
                     <CardHeader>
                         <div className="flex items-center justify-between">
-                            <CardTitle>Rental Items</CardTitle>
+                            <CardTitle>{t('rental_items')}</CardTitle>
                             <Button
                                 onClick={() => window.location.href = route('rentals.items.create')}
                             >
                                 <Plus className="w-4 h-4 mr-2" />
-                                Add Item
+                                {t('btn_add_item')}
                             </Button>
                         </div>
                     </CardHeader>
@@ -105,7 +108,7 @@ export const Index: FC<Props> = ({ items, filters = { search: '', status: '', ca
                         <div className="flex space-x-4 mb-4">
                             <div className="flex-1">
                                 <Input
-                                    placeholder="Search items..."
+                                    placeholder={t('ph_search_items')}
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -115,7 +118,7 @@ export const Index: FC<Props> = ({ items, filters = { search: '', status: '', ca
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
                             >
-                                <option value="">All Status</option>
+                                <option value="">{t('all_status')}</option>
                                 <option value="available">Available</option>
                                 <option value="rented">Rented</option>
                                 <option value="maintenance">Maintenance</option>
@@ -124,7 +127,7 @@ export const Index: FC<Props> = ({ items, filters = { search: '', status: '', ca
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                             >
-                                <option value="">All Categories</option>
+                                <option value="">{t('all_categories')}</option>
                                 <option value="equipment">Equipment</option>
                                 <option value="tools">Tools</option>
                                 <option value="vehicles">Vehicles</option>

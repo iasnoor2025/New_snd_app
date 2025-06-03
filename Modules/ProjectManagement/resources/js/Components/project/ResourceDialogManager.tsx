@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import ResourceForm from './ResourceForm';
 import { toast } from '@/components/ui/use-toast';
@@ -25,6 +26,8 @@ export default function ResourceDialogManager({
     onClose,
     initialData = null
 }: ResourceDialogManagerProps) {
+  const { t } = useTranslation('project');
+
     // Internal state to track the actual dialog type
     const [currentType, setCurrentType] = useState<ResourceType>(resourceType);
     const [instanceId] = useState(Date.now()); // Unique ID for this dialog instance

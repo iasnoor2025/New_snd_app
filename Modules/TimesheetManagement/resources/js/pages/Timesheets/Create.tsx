@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, useForm as useInertiaForm, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -100,6 +101,8 @@ const formSchema = z.object({
 });
 
 export default function TimesheetCreate({ auth, employees = [], projects = [], rentals = [], include_rentals = false, rental_id }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
@@ -500,14 +503,14 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
   };
 
   return (
-    <AdminLayout title="Create Timesheet" breadcrumbs={breadcrumbs} requiredPermission="timesheets.create">
-      <Head title="Create Timesheet" />
+    <AdminLayout title={t('ttl_create_timesheet')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.create">
+      <Head title={t('ttl_create_timesheet')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div className="space-y-1">
-              <CardTitle className="text-2xl font-bold">Create Timesheet</CardTitle>
+              <CardTitle className="text-2xl font-bold">{t('ttl_create_timesheet')}</CardTitle>
               <CardDescription>
                 Record your work hours and tasks for a specific day
               </CardDescription>
@@ -515,7 +518,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
             <Button variant="outline" asChild>
               <Link href={route('timesheets.index')}>
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                Back to Timesheets
+                {t('back_to_timesheets')}
               </Link>
             </Button>
           </CardHeader>
@@ -550,7 +553,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel>Bulk Entry Mode</FormLabel>
+                          <FormLabel>{t('lbl_bulk_entry_mode')}</FormLabel>
                         </div>
                       </FormItem>
                     )}
@@ -564,7 +567,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           name="start_date"
                           render={({ field }) => (
                             <FormItem className="flex flex-col">
-                              <FormLabel>Start Date <span className="text-red-500">*</span></FormLabel>
+                              <FormLabel>{t('lbl_start_date')} <span className="text-red-500">*</span></FormLabel>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <FormControl>
@@ -600,7 +603,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                           name="end_date"
                           render={({ field }) => (
                             <FormItem className="flex flex-col">
-                              <FormLabel>End Date <span className="text-red-500">*</span></FormLabel>
+                              <FormLabel>{t('lbl_end_date')} <span className="text-red-500">*</span></FormLabel>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <FormControl>
@@ -648,7 +651,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>Custom Overtime Per Day</FormLabel>
+                              <FormLabel>{t('lbl_custom_overtime_per_day')}</FormLabel>
                             </div>
                           </FormItem>
                         </div>
@@ -659,14 +662,14 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                   {isBulkMode && customOvertimePerDay && startDate && endDate && (
                     <div className="md:col-span-2 border rounded-md p-4 mb-4">
                       <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-medium">Daily Overtime Hours</h3>
+                        <h3 className="text-lg font-medium">{t('daily_overtime_hours')}</h3>
                         <div className="flex items-center space-x-2">
                           <Input
                             type="number"
                             step="0.5"
                             min="0"
                             max="24"
-                            placeholder="Hours"
+                            placeholder={t('ph_hours')}
                             className="w-24"
                             id="bulk-overtime"
                           />
@@ -775,7 +778,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                             <tr className="bg-muted">
                               <th className="p-2 text-left">Date</th>
                               <th className="p-2 text-left">Day</th>
-                              <th className="p-2 text-left">Overtime Hours</th>
+                              <th className="p-2 text-left">{t('lbl_overtime_hours')}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -820,7 +823,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                         >
                           <FormControl>
                             <SelectTrigger className={form.formState.errors.employee_id ? "border-red-500" : undefined}>
-                              <SelectValue placeholder="Select employee" />
+                              <SelectValue placeholder={t('ph_select_employee')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -854,7 +857,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                                 disabled={isBulkMode}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDate ? format(selectedDate, 'PPP') : <span>Pick a date</span>}
+                                {selectedDate ? format(selectedDate, 'PPP') : <span>{t('project:pick_a_date')}</span>}
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
@@ -881,7 +884,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     name="hours_worked"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hours Worked <span className="text-red-500">*</span></FormLabel>
+                        <FormLabel>{t('lbl_hours_worked')} <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -915,7 +918,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                     name="overtime_hours"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Overtime Hours</FormLabel>
+                        <FormLabel>{t('lbl_overtime_hours')}</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -953,7 +956,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select project" />
+                              <SelectValue placeholder={t('ph_select_project')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -988,7 +991,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select rental" />
+                              <SelectValue placeholder={t('ph_select_rental')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -1017,7 +1020,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormLabel>Description (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Brief description of work performed (max 1000 characters)"
+                          placeholder={t('ph_brief_description_of_work_performed_max_1000_ch')}
                           className="min-h-[80px]"
                           maxLength={1000}
                           {...field}
@@ -1046,7 +1049,7 @@ export default function TimesheetCreate({ auth, employees = [], projects = [], r
                       <FormLabel>Tasks Completed (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="List of tasks completed during this time (max 1000 characters)"
+                          placeholder={t('ph_list_of_tasks_completed_during_this_time_max_10')}
                           className="min-h-[120px]"
                           maxLength={1000}
                           {...field}

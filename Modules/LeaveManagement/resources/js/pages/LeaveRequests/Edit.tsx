@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/button';
 import {
@@ -33,6 +34,8 @@ import { PageProps } from '@/Modules/LeaveManagement/Resources/js/types';
 
 // Temporary inline implementation of usePermission hook
 function usePermission() {
+  const { t } = useTranslation('leave');
+
   const { props } = usePage<PageProps>();
   const auth = props?.auth || { user: null, permissions: [], hasPermission: [], hasRole: [] };
 
@@ -148,7 +151,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
 
   return (
     <AdminLayout>
-      <Head title="Edit Leave Request" />
+      <Head title={t('edit_leave_request')} />
       <div className="container mx-auto py-6">
         <Breadcrumb
           segments={[
@@ -162,7 +165,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>{t('ttl_leave_requests')}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <BreadcrumbLink href={route('leaves.requests.edit', leaveRequest.id)}>Edit</BreadcrumbLink>
@@ -172,7 +175,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
             <CalendarDays className="h-8 w-8 mr-2 text-primary" />
-            <h1 className="text-2xl font-bold">Edit Leave Request</h1>
+            <h1 className="text-2xl font-bold">{t('edit_leave_request')}</h1>
           </div>
           <Link href={route('leaves.requests.index')}>
             <Button variant="outline">
@@ -184,7 +187,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
 
         <Card className="shadow-md">
           <CardHeader className="bg-muted/50">
-            <CardTitle>Edit Leave Request</CardTitle>
+            <CardTitle>{t('edit_leave_request')}</CardTitle>
             <CardDescription>
               Update the leave request details
             </CardDescription>
@@ -205,7 +208,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                           >
                             <FormControl>
                               <SelectTrigger id="employee_id">
-                                <SelectValue placeholder="Select Employee" />
+                                <SelectValue placeholder={t('ph_select_employee_1')} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -226,14 +229,14 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                       name="leave_type"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Leave Type</FormLabel>
+                          <FormLabel>{t('lbl_leave_type')}</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger id="leave_type">
-                                <SelectValue placeholder="Select Leave Type" />
+                                <SelectValue placeholder={t('ph_select_leave_type')} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -256,7 +259,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                       name="start_date"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Start Date</FormLabel>
+                          <FormLabel>{t('lbl_start_date')}</FormLabel>
                           <FormControl>
                             <Input
                               type="date"
@@ -274,7 +277,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                       name="end_date"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>End Date</FormLabel>
+                          <FormLabel>{t('end_date')}</FormLabel>
                           <FormControl>
                             <Input
                               type="date"
@@ -297,7 +300,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                       <FormLabel>Reason</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Reason for leave request"
+                          placeholder={t('ph_reason_for_leave_request')}
                           rows={3}
                           id="reason"
                           {...field}
@@ -313,10 +316,10 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                   name="notes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Additional Notes</FormLabel>
+                      <FormLabel>{t('additional_notes')}</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Any additional information or comments"
+                          placeholder={t('ph_any_additional_information_or_comments')}
                           rows={3}
                           id="notes"
                           {...field}
@@ -340,7 +343,7 @@ export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props
                         >
                           <FormControl>
                             <SelectTrigger id="status">
-                              <SelectValue placeholder="Select Status" />
+                              <SelectValue placeholder={t('ph_select_status')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>

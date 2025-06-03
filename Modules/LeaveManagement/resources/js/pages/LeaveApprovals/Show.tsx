@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import {
@@ -80,6 +81,8 @@ const LeaveApprovalShow: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleApprove = () => {
+  const { t } = useTranslation('leave');
+
     setIsProcessing(true);
     router.post(route('leaves.approvals.approve', leaveRequest.id), {
       approval_notes: approvalNotes,
@@ -155,7 +158,7 @@ const LeaveApprovalShow: React.FC = () => {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href={route('leaves.approvals.index')}>
-                Leave Approvals
+                {t('leave_approvals')}
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -195,7 +198,7 @@ const LeaveApprovalShow: React.FC = () => {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Reject Leave Request</DialogTitle>
+                    <DialogTitle>{t('ttl_reject_leave_request')}</DialogTitle>
                     <DialogDescription>
                       Are you sure you want to reject this leave request?
                       Please provide a reason for rejection.
@@ -207,7 +210,7 @@ const LeaveApprovalShow: React.FC = () => {
                       <Textarea
                         value={rejectionNotes}
                         onChange={(e) => setRejectionNotes(e.target.value)}
-                        placeholder="Please provide a reason for rejection..."
+                        placeholder={t('ph_please_provide_a_reason_for_rejection')}
                         className="mt-1"
                         required
                       />
@@ -237,7 +240,7 @@ const LeaveApprovalShow: React.FC = () => {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Approve Leave Request</DialogTitle>
+                    <DialogTitle>{t('ttl_approve_leave_request')}</DialogTitle>
                     <DialogDescription>
                       Are you sure you want to approve this leave request?
                     </DialogDescription>
@@ -248,7 +251,7 @@ const LeaveApprovalShow: React.FC = () => {
                       <Textarea
                         value={approvalNotes}
                         onChange={(e) => setApprovalNotes(e.target.value)}
-                        placeholder="Add any notes for the approval..."
+                        placeholder={t('ph_add_any_notes_for_the_approval')}
                         className="mt-1"
                       />
                     </div>
@@ -278,13 +281,13 @@ const LeaveApprovalShow: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <FileTextIcon className="h-5 w-5 mr-2" />
-                  Request Details
+                  {t('request_details')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Leave Type</label>
+                    <label className="text-sm font-medium text-muted-foreground">{t('lbl_leave_type')}</label>
                     <div className="mt-1">
                       <Badge className={getLeaveTypeColor(leaveRequest.leave_type)}>
                         {leaveRequest.leave_type.charAt(0).toUpperCase() + leaveRequest.leave_type.slice(1)}
@@ -302,7 +305,7 @@ const LeaveApprovalShow: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Start Date</label>
+                    <label className="text-sm font-medium text-muted-foreground">{t('lbl_start_date')}</label>
                     <div className="mt-1 flex items-center">
                       <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
                       <span>{formatDate(leaveRequest.start_date)}</span>
@@ -310,7 +313,7 @@ const LeaveApprovalShow: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">End Date</label>
+                    <label className="text-sm font-medium text-muted-foreground">{t('end_date')}</label>
                     <div className="mt-1 flex items-center">
                       <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
                       <span>{formatDate(leaveRequest.end_date)}</span>
@@ -411,7 +414,7 @@ const LeaveApprovalShow: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <UserIcon className="h-5 w-5 mr-2" />
-                  Employee Information
+                  {t('employee:employee_information')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -468,7 +471,7 @@ const LeaveApprovalShow: React.FC = () => {
             {isPending && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
+                  <CardTitle>{t('ttl_quick_actions')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
@@ -499,7 +502,7 @@ const LeaveApprovalShow: React.FC = () => {
                   <div className="flex items-start space-x-3">
                     <AlertCircleIcon className="h-5 w-5 text-yellow-600 mt-0.5" />
                     <div>
-                      <h4 className="font-medium text-yellow-800">Pending Approval</h4>
+                      <h4 className="font-medium text-yellow-800">{t('pending_approval')}</h4>
                       <p className="text-sm text-yellow-700 mt-1">
                         This leave request is waiting for your approval. Please review the details and take action.
                       </p>

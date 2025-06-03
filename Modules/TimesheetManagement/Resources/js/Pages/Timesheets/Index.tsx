@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -107,6 +108,8 @@ interface Props extends PageProps {
 }
 
 export default function TimesheetsIndex({ auth, timesheets, filters = { status: 'all', search: '', date_from: '', date_to: '', per_page: 15 } }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const { hasPermission } = usePermission();
   const [processing, setProcessing] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState(filters.search || '');
@@ -279,8 +282,8 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
   };
 
   return (
-    <AdminLayout title="Timesheets" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
-      <Head title="Timesheets" />
+    <AdminLayout title={t('ttl_timesheets')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+      <Head title={t('ttl_timesheets')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
@@ -324,7 +327,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                 <div className="flex flex-wrap md:flex-nowrap items-center gap-2">
                   <div className="w-full md:w-64">
                     <Input
-                      placeholder="Search by employee name..."
+                      placeholder={t('ph_search_by_employee_name')}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyDown={handleKeyPress}
@@ -334,10 +337,10 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                   <div className="w-full md:w-40">
                     <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Status" />
+                        <SelectValue placeholder={t('ph_status')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Statuses</SelectItem>
+                        <SelectItem value="all">{t('opt_all_statuses_1')}</SelectItem>
                         <SelectItem value="draft">Draft</SelectItem>
                         <SelectItem value="submitted">Submitted</SelectItem>
                         <SelectItem value="approved">Approved</SelectItem>
@@ -422,7 +425,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                     <TableRow>
                       <TableCell colSpan={canApproveTimesheet ? 8 : 7} className="h-24 text-center">
                         <div className="flex flex-col items-center justify-center space-y-2">
-                          <div className="text-lg font-medium">No timesheets found</div>
+                          <div className="text-lg font-medium">{t('no_timesheets_found')}</div>
                           <div className="text-sm text-muted-foreground">
                             Try adjusting your filters or create a new timesheet.
                           </div>
@@ -505,7 +508,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                                       </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                      <p>Approve Timesheet</p>
+                                      <p>{t('approve_timesheet')}</p>
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
@@ -542,7 +545,7 @@ export default function TimesheetsIndex({ auth, timesheets, filters = { status: 
                                       </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                      <p>Reject Timesheet</p>
+                                      <p>{t('reject_timesheet')}</p>
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>

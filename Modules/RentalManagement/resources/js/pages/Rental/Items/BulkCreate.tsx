@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
@@ -37,6 +38,8 @@ export const BulkCreate: FC = () => {
     });
 
     const addItem = () => {
+  const { t } = useTranslation('rental');
+
         setItems([
             ...items,
             {
@@ -71,7 +74,7 @@ export const BulkCreate: FC = () => {
 
     return (
         <>
-            <Head title="Bulk Add Rental Items" />
+            <Head title={t('ttl_bulk_add_rental_items')} />
 
             <div className="container mx-auto py-6">
                 <Button
@@ -86,7 +89,7 @@ export const BulkCreate: FC = () => {
                 <Card>
                     <CardHeader>
                         <div className="flex items-center justify-between">
-                            <CardTitle>Bulk Add Rental Items</CardTitle>
+                            <CardTitle>{t('ttl_bulk_add_rental_items')}</CardTitle>
                             <Button
                                 type="button"
                                 variant="outline"
@@ -143,7 +146,7 @@ export const BulkCreate: FC = () => {
                                                     onChange={e => updateItem(index, 'category', e.target.value)}
                                                     required
                                                 >
-                                                    <option value="">Select Category</option>
+                                                    <option value="">{t('select_category')}</option>
                                                     <option value="equipment">Equipment</option>
                                                     <option value="tools">Tools</option>
                                                     <option value="vehicles">Vehicles</option>
@@ -182,7 +185,7 @@ export const BulkCreate: FC = () => {
                                                     required
                                                 >
                                                     <option value="new">New</option>
-                                                    <option value="like_new">Like New</option>
+                                                    <option value="like_new">{t('like_new')}</option>
                                                     <option value="good">Good</option>
                                                     <option value="fair">Fair</option>
                                                     <option value="poor">Poor</option>
@@ -195,7 +198,7 @@ export const BulkCreate: FC = () => {
                                             </div>
 
                                             <div className="space-y-2">
-                                                <Label htmlFor={`serial_number-${index}`}>Serial Number</Label>
+                                                <Label htmlFor={`serial_number-${index}`}>{t('lbl_serial_number')}</Label>
                                                 <Input
                                                     id={`serial_number-${index}`}
                                                     value={item.serial_number}

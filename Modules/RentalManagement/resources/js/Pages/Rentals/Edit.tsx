@@ -1,4 +1,5 @@
 ﻿import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
 import { Customer, Equipment, Rental, RentalItem } from '@/Modules/RentalManagement/Resources/js/types/models';
@@ -27,6 +28,8 @@ interface Props extends PageProps {
 }
 
 export default function Edit({ auth, customers, equipment, rental, employees = [] }: Props) {
+  const { t } = useTranslation('rental');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle form submission
@@ -94,7 +97,7 @@ export default function Edit({ auth, customers, equipment, rental, employees = [
 
   return (
     <AdminLayout>
-      <Head title="Edit Rental" />
+      <Head title={t('ttl_edit_rental')} />
 
       <div className="container mx-auto py-8">
         <Card>

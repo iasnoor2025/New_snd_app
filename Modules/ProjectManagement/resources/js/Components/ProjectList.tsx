@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Table,
     TableBody,
@@ -61,8 +62,8 @@ export const ProjectList: React.FC<ProjectListProps> = ({
                         <TableHead>Status</TableHead>
                         <TableHead>Priority</TableHead>
                         <TableHead>Progress</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead>End Date</TableHead>
+                        <TableHead>{t('lbl_start_date')}</TableHead>
+                        <TableHead>{t('end_date')}</TableHead>
                         <TableHead>Budget</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>

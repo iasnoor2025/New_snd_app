@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm, ControllerRenderProps } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -189,7 +190,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
                           {...field}
                           disabled={isLoading}
                         >
-                          <option value="">Select a project</option>
+                          <option value="">{t('ph_select_a_project')}</option>
                           {projects.map((project) => (
                             <option key={project.id} value={project.id}>
                               {project.name}
@@ -210,7 +211,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
                 name="clock_in"
                 render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
-                    <FormLabel>Clock In Time</FormLabel>
+                    <FormLabel>{t('lbl_clock_in_time')}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} disabled={isLoading} />
                     </FormControl>
@@ -224,7 +225,7 @@ export const TimesheetForm: React.FC<TimesheetFormProps> = ({
                 name="clock_out"
                 render={({ field }: { field: ControllerRenderProps<TimesheetFormValues, any> }) => (
                   <FormItem>
-                    <FormLabel>Clock Out Time</FormLabel>
+                    <FormLabel>{t('lbl_clock_out_time')}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} disabled={isLoading} />
                     </FormControl>

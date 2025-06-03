@@ -7,18 +7,16 @@
 
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+
+// Add debug logging
+console.log('Starting i18n implementation helper...');
+console.log('Current working directory:', process.cwd());
 
 // Configuration
 const config = {
-  // Target directories for Phase 1
+  // Target directories for Phase 1 - using direct paths instead of glob patterns
   targetDirs: [
-    'Modules/TimesheetManagement/resources/js/**/*.{tsx,jsx}',
-    'Modules/ProjectManagement/resources/js/**/*.{tsx,jsx}',
-    'Modules/RentalManagement/resources/js/**/*.{tsx,jsx}',
-    'Modules/Payroll/resources/js/**/*.{tsx,jsx}',
-    'Modules/EmployeeManagement/resources/js/**/*.{tsx,jsx}',
-    'Modules/EquipmentManagement/resources/js/**/*.{tsx,jsx}'
+    'Modules/TimesheetManagement/resources/js'
   ],
 
   // Common patterns to detect
@@ -223,6 +221,32 @@ function generateImplementationSuggestions(fileResult) {
 }
 
 /**
+ * Recursively scan directory for JS/TS/JSX/TSX files
+ */
+function scanDirectory(dir) {
+  const files = [];
+  try {
+    const entries = fs.readdirSync(path.join(process.cwd(), dir), { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        // Recursively scan subdirectories
+        files.push(...scanDirectory(fullPath));
+      } else if (entry.isFile() && /\.(jsx?|tsx?)$/i.test(entry.name)) {
+        // Only include JS/TS/JSX/TSX files
+        files.push(fullPath);
+      }
+    }
+  } catch (error) {
+    console.error(`Error scanning directory ${dir}:`, error);
+  }
+
+  return files;
+}
+
+/**
  * Main execution
  */
 function main() {
@@ -230,13 +254,23 @@ function main() {
 
   const allFiles = [];
 
-  // Collect all target files
-  config.targetDirs.forEach(pattern => {
-    const files = glob.sync(pattern, { cwd: process.cwd() });
-    allFiles.push(...files);
-  });
+  try {
+    // Collect all target files
+    config.targetDirs.forEach(dir => {
+      console.log(`Scanning directory: ${dir}`);
+      try {
+        const files = scanDirectory(dir);
+        console.log(`Found ${files.length} files in ${dir}`);
+        allFiles.push(...files);
+      } catch (error) {
+        console.error(`Error scanning directory ${dir}:`, error);
+      }
+    });
 
-  console.log(`📁 Found ${allFiles.length} files to analyze\n`);
+    console.log(`📁 Found ${allFiles.length} files to analyze\n`);
+  } catch (error) {
+    console.error('Error collecting files:', error);
+  }
 
   const results = [];
   let totalDetections = 0;

@@ -118,7 +118,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Personal Information</CardTitle>
+        <CardTitle>{t('personal_information')}</CardTitle>
       </CardHeader>
       <CardContent>
         <Alert className="mb-6">
@@ -147,7 +147,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
                     variant="outline"
                     size="icon"
                     onClick={handleGenerateFileNumber}
-                    title="Generate File Number"
+                    title={t('ttl_generate_file_number')}
                     disabled={isGenerating}
                   >
                     <RefreshCw className={`h-4 w-4 ${isGenerating ? 'animate-spin' : ''}`} />
@@ -164,7 +164,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
             render={({ field }: any) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  First Name <span className="text-red-500 ml-1">*</span>
+                  {t('lbl_first_name')} <span className="text-red-500 ml-1">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter first name" />
@@ -180,7 +180,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
             render={({ field }: any) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Last Name <span className="text-red-500 ml-1">*</span>
+                  {t('lbl_last_name')} <span className="text-red-500 ml-1">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter last name" />
@@ -233,7 +233,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select nationality" />
+                      <SelectValue placeholder={t('ph_select_nationality')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -255,7 +255,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
             render={({ field }: any) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Date of Birth <span className="text-red-500 ml-1">*</span>
+                  {t('date_of_birth')} <span className="text-red-500 ml-1">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
@@ -298,7 +298,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
             name="emergency_contact_name"
             render={({ field }: any) => (
               <FormItem>
-                <FormLabel>Emergency Contact Name</FormLabel>
+                <FormLabel>{t('lbl_emergency_contact_name')}</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter emergency contact name" />
                 </FormControl>
@@ -312,7 +312,7 @@ export default function PersonalInfoTab({ form }: PersonalInfoTabProps) {
             name="emergency_contact_phone"
             render={({ field }: any) => (
               <FormItem>
-                <FormLabel>Emergency Contact Phone</FormLabel>
+                <FormLabel>{t('lbl_emergency_contact_phone')}</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter emergency contact phone" />
                 </FormControl>

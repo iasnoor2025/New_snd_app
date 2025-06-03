@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -94,6 +95,8 @@ interface Props extends PageProps {
 }
 
 export default function TimesheetSummary({ auth, summary, employees = [], projects = [] }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedEmployee, setSelectedEmployee] = useState<string>('');
@@ -151,21 +154,21 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
   };
 
   return (
-    <AdminLayout title="Monthly Summary" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
-      <Head title="Monthly Timesheet Summary" />
+    <AdminLayout title={t('monthly_summary')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+      <Head title={t('ttl_monthly_timesheet_summary')} />
       
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <BarChartIcon className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Monthly Summary</h1>
+            <h1 className="text-2xl font-bold">{t('monthly_summary')}</h1>
           </div>
           
           <div className="flex space-x-2">
             <Button variant="outline" asChild>
               <Link href={route('timesheets.index')}>
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                Back to Timesheets
+                {t('back_to_timesheets')}
               </Link>
             </Button>
             
@@ -179,7 +182,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total Hours</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('total_hours')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center">
@@ -194,7 +197,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total Employees</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('ttl_total_employees')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center">
@@ -254,10 +257,10 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                   onValueChange={handleEmployeeSelect}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Filter by employee" />
+                    <SelectValue placeholder={t('ph_filter_by_employee')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Employees</SelectItem>
+                    <SelectItem value="all">{t('all_employees')}</SelectItem>
                     {employees.map((employee) => (
                       <SelectItem key={employee.id} value={employee.id.toString()}>
                         {employee.first_name} {employee.last_name}
@@ -312,10 +315,10 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                   onValueChange={handleProjectSelect}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Filter by project" />
+                    <SelectValue placeholder={t('ph_filter_by_project')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Projects</SelectItem>
+                    <SelectItem value="all">{t('opt_all_projects')}</SelectItem>
                     {projects.map((project) => (
                       <SelectItem key={project.id} value={project.id.toString()}>
                         {project.name}

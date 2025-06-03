@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/layouts/AuthenticatedLayout';
@@ -38,6 +39,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, payroll }: Props) {
+  const { t } = useTranslation('payroll');
+
     const getStatusBadge = (status: string) => {
         const statusClasses = {
             pending: 'bg-yellow-100 text-yellow-800',
@@ -56,9 +59,9 @@ export default function Show({ auth, payroll }: Props) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Payroll Details</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('ttl_payroll_details')}</h2>}
         >
-            <Head title="Payroll Details" />
+            <Head title={t('ttl_payroll_details')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -108,7 +111,7 @@ export default function Show({ auth, payroll }: Props) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Payroll Information</CardTitle>
+                                <CardTitle>{t('ttl_payroll_information')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <dl className="space-y-4">
@@ -117,7 +120,7 @@ export default function Show({ auth, payroll }: Props) {
                                         <dd className="mt-1 text-sm text-gray-900">{payroll.employee.name}</dd>
                                     </div>
                                     <div>
-                                        <dt className="text-sm font-medium text-gray-500">Payroll Month</dt>
+                                        <dt className="text-sm font-medium text-gray-500">{t('lbl_payroll_month')}</dt>
                                         <dd className="mt-1 text-sm text-gray-900">
                                             {format(new Date(payroll.payroll_month), 'MMMM yyyy')}
                                         </dd>
@@ -127,13 +130,13 @@ export default function Show({ auth, payroll }: Props) {
                                         <dd className="mt-1">{getStatusBadge(payroll.status)}</dd>
                                     </div>
                                     <div>
-                                        <dt className="text-sm font-medium text-gray-500">Created At</dt>
+                                        <dt className="text-sm font-medium text-gray-500">{t('created_at')}</dt>
                                         <dd className="mt-1 text-sm text-gray-900">
                                             {format(new Date(payroll.created_at), 'PPpp')}
                                         </dd>
                                     </div>
                                     <div>
-                                        <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
+                                        <dt className="text-sm font-medium text-gray-500">{t('last_updated')}</dt>
                                         <dd className="mt-1 text-sm text-gray-900">
                                             {format(new Date(payroll.updated_at), 'PPpp')}
                                         </dd>
@@ -144,12 +147,12 @@ export default function Show({ auth, payroll }: Props) {
 
                         <Card>
                             <CardHeader>
-                                <CardTitle>Salary Details</CardTitle>
+                                <CardTitle>{t('ttl_salary_details')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <dl className="space-y-4">
                                     <div>
-                                        <dt className="text-sm font-medium text-gray-500">Base Salary</dt>
+                                        <dt className="text-sm font-medium text-gray-500">{t('base_salary')}</dt>
                                         <dd className="mt-1 text-sm text-gray-900">
                                             ${payroll.base_salary.toFixed(2)}
                                         </dd>
@@ -173,7 +176,7 @@ export default function Show({ auth, payroll }: Props) {
                                         </dd>
                                     </div>
                                     <div className="pt-4 border-t">
-                                        <dt className="text-sm font-medium text-gray-500">Final Amount</dt>
+                                        <dt className="text-sm font-medium text-gray-500">{t('final_amount')}</dt>
                                         <dd className="mt-1 text-lg font-semibold text-gray-900">
                                             ${payroll.final_amount.toFixed(2)}
                                         </dd>
@@ -186,7 +189,7 @@ export default function Show({ auth, payroll }: Props) {
                     {payroll.items.length > 0 && (
                         <Card className="mt-6">
                             <CardHeader>
-                                <CardTitle>Payroll Items</CardTitle>
+                                <CardTitle>{t('ttl_payroll_items')}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="overflow-x-auto">

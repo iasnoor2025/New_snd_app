@@ -1,10 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { ExpiryDateInputProps } from '@/types/employee';
 import { format, isBefore } from 'date-fns';
 
 export const ExpiryDateInput: React.FC<ExpiryDateInputProps> = ({ field, name }) => {
   const getExpiryDateStyle = (expiryDateStr: string | undefined | null) => {
+  const { t } = useTranslation('employee');
+
     if (!expiryDateStr) return '';
     
     const expiryDate = new Date(expiryDateStr);

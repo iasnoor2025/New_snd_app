@@ -1,4 +1,5 @@
 ﻿import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
 import { Rental, RentalTimesheet, Equipment } from '@/Modules/RentalManagement/Resources/js/types/models';
@@ -99,6 +100,8 @@ interface Props extends PageProps {
 }
 
 export default function ForRental({ auth, rental, timesheets, debug }: Props) {
+  const { t } = useTranslation('rental');
+
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
   const [isMissingDatesDialogOpen, setIsMissingDatesDialogOpen] = useState(false);
@@ -362,7 +365,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   const statCards = (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
       <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">;
-        <h3 className="text-sm font-medium text-muted-foreground">Total Hours Used</h3>;
+        <h3 className="text-sm font-medium text-muted-foreground">{t('total_hours_used')}</h3>;
         <p className="text-2xl font-bold">;
           {typeof totalHours === 'number' 
             ? totalHours.toFixed(1) 
@@ -371,7 +374,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       </div>
       
       <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">
-        <h3 className="text-sm font-medium text-muted-foreground">Total Timesheets</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{t('total_timesheets')}</h3>
         <p className="text-2xl font-bold">{timesheets.length}</p>
         {completedTimesheets.length > 0 && (
           <Badge variant="outline" className="mt-1">
@@ -435,7 +438,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <Button asChild size="sm">
                 <Link href={route("rental-timesheets.create", { rental_id: rental.id })}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Timesheet
+                  {t('employee:btn_add_timesheet')}
                 </Link>
               </Button>
               <Button 
@@ -501,7 +504,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Timesheets</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t('total_timesheets')}</p>
                     <p className="text-2xl font-bold">{timesheets.length}</p>
                   </div>
                   <Sheet className="h-8 w-8 text-muted-foreground" />
@@ -513,7 +516,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Hours</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t('total_hours')}</p>
                     <p className="text-2xl font-bold">
                       {typeof totalHours === 'number' 
                         ? totalHours.toFixed(1) 
@@ -568,7 +571,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                 <div className="relative w-full sm:w-72">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search equipment, operator..."
+                    placeholder={t('ph_search_equipment_operator')}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="pl-8"
@@ -581,10 +584,10 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                     onValueChange={(value) => setStatusFilter(value)}
                   >
                     <SelectTrigger className="w-full sm:w-44">
-                      <SelectValue placeholder="Filter by status" />
+                      <SelectValue placeholder={t('ph_filter_by_status')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
@@ -765,7 +768,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                               <div className="flex flex-col">
                                 <span className="font-medium flex items-center gap-1 text-red-600">
                                   <UserX className="h-3 w-3 text-red-600" />
-                                  <span>Operator Absent</span>
+                                  <span>{t('operator_absent')}</span>
                                 </span>
                               </div>
                             ) : timesheet.operator ? (
@@ -797,7 +800,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                             ) : (
                               <span className="text-muted-foreground text-xs flex items-center gap-1">
                                 <Info className="h-3 w-3" />
-                                <span>No operator assigned</span>
+                                <span>{t('no_operator_assigned')}</span>
                               </span>
                             )}
                           </TableCell>
@@ -861,7 +864,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                                         <UserX className="h-4 w-4 text-red-600" />
                                       </TooltipTrigger>
                                       <TooltipContent>
-                                        <p>Mark operator as absent</p>
+                                        <p>{t('mark_operator_as_absent')}</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </TooltipProvider>
@@ -935,7 +938,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         <Dialog open={isCompleteDialogOpen} onOpenChange={setIsCompleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Confirm Completion</DialogTitle>
+              <DialogTitle>{t('ttl_confirm_completion')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to mark {selectedIds.length} timesheets as completed?
                 This action cannot be undone.
@@ -961,7 +964,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         <Dialog open={isMissingDatesDialogOpen} onOpenChange={setIsMissingDatesDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Check Missing Timesheets</DialogTitle>
+              <DialogTitle>{t('ttl_check_missing_timesheets')}</DialogTitle>
               <DialogDescription>
                 This will check for any missing timesheets from the rental start date until today and create placeholder entries.
                 <p className="mt-2 text-sm">
@@ -988,7 +991,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Delete Timesheet</DialogTitle>
+              <DialogTitle>{t('ttl_delete_timesheet')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete this timesheet? 
                 This action cannot be undone.
@@ -1003,7 +1006,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                 onClick={confirmDeleteTimesheet}
               >
                 <Trash className="mr-2 h-4 w-4" />
-                Delete Timesheet
+                {t('ttl_delete_timesheet')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -1013,7 +1016,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         <Dialog open={isBulkDeleteDialogOpen} onOpenChange={setIsBulkDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Bulk Delete Timesheets</DialogTitle>
+              <DialogTitle>{t('ttl_bulk_delete_timesheets')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to delete {selectedIds.length} timesheets? 
                 This action cannot be undone.
@@ -1038,7 +1041,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         <Dialog open={isAbsentDialogOpen} onOpenChange={setIsAbsentDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Mark Operator as Absent</DialogTitle>
+              <DialogTitle>{t('ttl_mark_operator_as_absent')}</DialogTitle>
               <DialogDescription>
                 Are you sure you want to mark the operator as absent for this timesheet?
                 This will record that the equipment was not used on this date due to operator absence.
@@ -1064,7 +1067,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         {debug && debug.problemTimesheets && debug.problemTimesheets.length > 0 && (
           <Card className="mt-4">
             <CardHeader>
-              <CardTitle className="text-amber-600">Debugging Information</CardTitle>
+              <CardTitle className="text-amber-600">{t('ttl_debugging_information')}</CardTitle>
               <CardDescription>
                 Found {debug.problemTimesheets.length} problematic timesheets out of {debug.timesheetsCount} total
               </CardDescription>
@@ -1077,9 +1080,9 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                       <TableHead>ID</TableHead>
                       <TableHead>Date</TableHead>
                       <TableHead>Problem</TableHead>
-                      <TableHead>Rental Item ID</TableHead>
+                      <TableHead>{t('th_rental_item_id')}</TableHead>
                       <TableHead>Item Exists?</TableHead>
-                      <TableHead>Equipment ID</TableHead>
+                      <TableHead>{t('th_equipment_id')}</TableHead>
                       <TableHead>Equipment Exists?</TableHead>
                     </TableRow>
                   </TableHeader>

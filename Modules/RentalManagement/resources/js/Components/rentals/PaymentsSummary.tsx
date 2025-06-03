@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,8 @@ interface PaymentsSummaryProps {
 }
 
 export default function PaymentsSummary({ rental, showDetails = true }: PaymentsSummaryProps) {
+  const { t } = useTranslation('rental');
+
   const paymentProgress = rental.payment_progress || 0;
   const isOverdue = rental.payment_due_date && isAfter(new Date(), new Date(rental.payment_due_date));
   const daysOverdue = isOverdue ? differenceInDays(new Date(), new Date(rental.payment_due_date as string)) : 0;
@@ -31,17 +34,17 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Financial Summary</CardTitle>
+        <CardTitle className="text-sm font-medium">{t('financial_summary')}</CardTitle>
         <DollarSign className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium">Total Amount</span>
+            <span className="text-sm font-medium">{t('th_total_amount')}</span>
             <span className="text-xl font-bold">{formatCurrency(rental.total_amount)}</span>
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium">Amount Paid</span>
+            <span className="text-sm font-medium">{t('amount_paid')}</span>
             <span className="text-xl font-bold text-green-600">{formatCurrency(rental.total_paid || 0)}</span>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -51,7 +54,7 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
             </span>
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium">Payment Status</span>
+            <span className="text-sm font-medium">{t('payment_status')}</span>
             <div>
               <PaymentStatusBadge status={rental.payment_status || 'unpaid'} />
             </div>
@@ -60,7 +63,7 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
         
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm mb-1">
-            <span>Payment Progress</span>
+            <span>{t('payment_progress')}</span>
             <span>{Math.round(paymentProgress)}%</span>
           </div>
           <Progress value={paymentProgress} className="h-2" />

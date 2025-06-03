@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { router } from '@inertiajs/react';
 import { toast } from '@/components/ui/use-toast'; 
 
@@ -23,6 +24,8 @@ export function useResourceSubmit({
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (data: any) => {
+  const { t } = useTranslation('project');
+
         setIsSubmitting(true);
 
         router.post(`/projects/${projectId}/resources/${type}`, data, {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Card,
     CardContent,
@@ -236,6 +237,8 @@ const GeofenceViolationManager: React.FC = () => {
     };
 
     const handleFilterChange = (key: keyof ViolationFilters, value: string) => {
+  const { t } = useTranslation('timesheet');
+
         setFilters(prev => ({ ...prev, [key]: value }));
         setPagination(prev => ({ ...prev, page: 1 }));
     };
@@ -384,7 +387,7 @@ const GeofenceViolationManager: React.FC = () => {
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Geofence Violations</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('geofence_violations')}</h1>
                     <p className="text-muted-foreground">
                         Monitor and manage geofence violations across all projects
                     </p>
@@ -406,7 +409,7 @@ const GeofenceViolationManager: React.FC = () => {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Violations</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_total_violations')}</CardTitle>
                             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -445,7 +448,7 @@ const GeofenceViolationManager: React.FC = () => {
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Resolution Rate</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_resolution_rate')}</CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -475,7 +478,7 @@ const GeofenceViolationManager: React.FC = () => {
                             <div className="relative">
                                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                    placeholder="Employee, project..."
+                                    placeholder={t('ph_employee_project')}
                                     value={filters.search}
                                     onChange={(e) => handleFilterChange('search', e.target.value)}
                                     className="pl-8"
@@ -487,10 +490,10 @@ const GeofenceViolationManager: React.FC = () => {
                             <Label>Severity</Label>
                             <Select value={filters.severity} onValueChange={(value) => handleFilterChange('severity', value)}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="All severities" />
+                                    <SelectValue placeholder={t('opt_all_severities')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">All severities</SelectItem>
+                                    <SelectItem value="">{t('opt_all_severities')}</SelectItem>
                                     <SelectItem value="low">Low</SelectItem>
                                     <SelectItem value="medium">Medium</SelectItem>
                                     <SelectItem value="high">High</SelectItem>
@@ -503,10 +506,10 @@ const GeofenceViolationManager: React.FC = () => {
                             <Label>Status</Label>
                             <Select value={filters.status} onValueChange={(value) => handleFilterChange('status', value)}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="All statuses" />
+                                    <SelectValue placeholder={t('opt_all_statuses')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">All statuses</SelectItem>
+                                    <SelectItem value="">{t('opt_all_statuses')}</SelectItem>
                                     <SelectItem value="pending">Pending</SelectItem>
                                     <SelectItem value="acknowledged">Acknowledged</SelectItem>
                                     <SelectItem value="resolved">Resolved</SelectItem>
@@ -517,18 +520,18 @@ const GeofenceViolationManager: React.FC = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Violation Type</Label>
+                            <Label>{t('lbl_violation_type')}</Label>
                             <Select value={filters.violation_type} onValueChange={(value) => handleFilterChange('violation_type', value)}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="All types" />
+                                    <SelectValue placeholder={t('opt_all_types')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">All types</SelectItem>
-                                    <SelectItem value="outside_zone">Outside Zone</SelectItem>
-                                    <SelectItem value="unauthorized_zone">Unauthorized Zone</SelectItem>
-                                    <SelectItem value="time_restriction">Time Restriction</SelectItem>
-                                    <SelectItem value="accuracy_low">Low Accuracy</SelectItem>
-                                    <SelectItem value="suspicious_location">Suspicious Location</SelectItem>
+                                    <SelectItem value="">{t('opt_all_types')}</SelectItem>
+                                    <SelectItem value="outside_zone">{t('opt_outside_zone')}</SelectItem>
+                                    <SelectItem value="unauthorized_zone">{t('opt_unauthorized_zone')}</SelectItem>
+                                    <SelectItem value="time_restriction">{t('opt_time_restriction')}</SelectItem>
+                                    <SelectItem value="accuracy_low">{t('opt_low_accuracy')}</SelectItem>
+                                    <SelectItem value="suspicious_location">{t('opt_suspicious_location')}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -536,7 +539,7 @@ const GeofenceViolationManager: React.FC = () => {
 
                     <div className="grid gap-4 md:grid-cols-2 mt-4">
                         <div className="space-y-2">
-                            <Label>Date From</Label>
+                            <Label>{t('lbl_date_from')}</Label>
                             <Input
                                 type="date"
                                 value={filters.date_from}
@@ -544,7 +547,7 @@ const GeofenceViolationManager: React.FC = () => {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Date To</Label>
+                            <Label>{t('lbl_date_to')}</Label>
                             <Input
                                 type="date"
                                 value={filters.date_to}
@@ -719,7 +722,7 @@ const GeofenceViolationManager: React.FC = () => {
                     <DialogHeader>
                         <DialogTitle className="flex items-center space-x-2">
                             {selectedViolation && getViolationTypeIcon(selectedViolation.violation_type)}
-                            <span>Violation Details</span>
+                            <span>{t('violation_details')}</span>
                         </DialogTitle>
                         <DialogDescription>
                             Detailed information about the geofence violation
@@ -748,7 +751,7 @@ const GeofenceViolationManager: React.FC = () => {
                                     </div>
 
                                     <div>
-                                        <Label className="text-sm font-medium">Violation Type</Label>
+                                        <Label className="text-sm font-medium">{t('lbl_violation_type')}</Label>
                                         <div className="mt-1 flex items-center space-x-2">
                                             {getViolationTypeIcon(selectedViolation.violation_type)}
                                             <span className="capitalize">{selectedViolation.violation_type.replace('_', ' ')}</span>
@@ -776,7 +779,7 @@ const GeofenceViolationManager: React.FC = () => {
                                     </div>
 
                                     <div>
-                                        <Label className="text-sm font-medium">Detected At</Label>
+                                        <Label className="text-sm font-medium">{t('lbl_detected_at')}</Label>
                                         <div className="mt-1">
                                             <div>{new Date(selectedViolation.detected_at).toLocaleString()}</div>
                                         </div>
@@ -786,10 +789,10 @@ const GeofenceViolationManager: React.FC = () => {
 
                             {/* Location Info */}
                             <div className="space-y-4">
-                                <Label className="text-sm font-medium">Location Information</Label>
+                                <Label className="text-sm font-medium">{t('lbl_location_information')}</Label>
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="p-4 border rounded-lg">
-                                        <div className="font-medium mb-2">Actual Location</div>
+                                        <div className="font-medium mb-2">{t('actual_location')}</div>
                                         <div className="space-y-1 text-sm">
                                             <div className="font-mono">
                                                 {selectedViolation.location.latitude.toFixed(6)}, {selectedViolation.location.longitude.toFixed(6)}
@@ -805,7 +808,7 @@ const GeofenceViolationManager: React.FC = () => {
 
                                     {selectedViolation.expected_zone && (
                                         <div className="p-4 border rounded-lg">
-                                            <div className="font-medium mb-2">Expected Zone</div>
+                                            <div className="font-medium mb-2">{t('expected_zone')}</div>
                                             <div className="space-y-1 text-sm">
                                                 <div className="font-medium">{selectedViolation.expected_zone.name}</div>
                                                 <div className="font-mono">
@@ -828,11 +831,11 @@ const GeofenceViolationManager: React.FC = () => {
                             {/* Device Info */}
                             {selectedViolation.metadata && (
                                 <div className="space-y-4">
-                                    <Label className="text-sm font-medium">Device Information</Label>
+                                    <Label className="text-sm font-medium">{t('lbl_device_information')}</Label>
                                     <div className="grid gap-4 md:grid-cols-3">
                                         {selectedViolation.metadata.device_id && (
                                             <div>
-                                                <div className="text-sm font-medium">Device ID</div>
+                                                <div className="text-sm font-medium">{t('device_id')}</div>
                                                 <div className="text-sm text-muted-foreground font-mono">
                                                     {selectedViolation.metadata.device_id}
                                                 </div>
@@ -840,7 +843,7 @@ const GeofenceViolationManager: React.FC = () => {
                                         )}
                                         {selectedViolation.metadata.app_version && (
                                             <div>
-                                                <div className="text-sm font-medium">App Version</div>
+                                                <div className="text-sm font-medium">{t('app_version')}</div>
                                                 <div className="text-sm text-muted-foreground">
                                                     {selectedViolation.metadata.app_version}
                                                 </div>
@@ -848,7 +851,7 @@ const GeofenceViolationManager: React.FC = () => {
                                         )}
                                         {selectedViolation.metadata.battery_level && (
                                             <div>
-                                                <div className="text-sm font-medium">Battery Level</div>
+                                                <div className="text-sm font-medium">{t('battery_level')}</div>
                                                 <div className="text-sm text-muted-foreground">
                                                     {selectedViolation.metadata.battery_level}%
                                                 </div>
@@ -861,7 +864,7 @@ const GeofenceViolationManager: React.FC = () => {
                             {/* Actions Taken */}
                             {selectedViolation.actions_taken && selectedViolation.actions_taken.length > 0 && (
                                 <div className="space-y-4">
-                                    <Label className="text-sm font-medium">Actions Taken</Label>
+                                    <Label className="text-sm font-medium">{t('lbl_actions_taken')}</Label>
                                     <div className="space-y-2">
                                         {selectedViolation.actions_taken.map((action) => (
                                             <div key={action.id} className="p-3 border rounded-lg">
@@ -911,7 +914,7 @@ const GeofenceViolationManager: React.FC = () => {
                                 {/* Add New Note */}
                                 <div className="space-y-2">
                                     <Textarea
-                                        placeholder="Add a note about this violation..."
+                                        placeholder={t('ph_add_a_note_about_this_violation')}
                                         value={newNote}
                                         onChange={(e) => setNewNote(e.target.value)}
                                         rows={3}

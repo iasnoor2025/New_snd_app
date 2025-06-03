@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,8 @@ export default function QuotationSection({
   rentalItems,
   permissions
 }: QuotationSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("quotation");
   const [isApproving, setIsApproving] = React.useState(false);
   const [isRejecting, setIsRejecting] = React.useState(false);
@@ -84,7 +87,7 @@ export default function QuotationSection({
       {/* Quotation rental alert */}
       <Alert>
         <FileText className="h-4 w-4" />
-        <AlertTitle>Quotation Generated</AlertTitle>
+        <AlertTitle>{t('ttl_quotation_generated')}</AlertTitle>
         <AlertDescription>
           A quotation has been generated for this rental. It requires customer approval to proceed.
         </AlertDescription>
@@ -94,7 +97,7 @@ export default function QuotationSection({
       <Tabs defaultValue="quotation" onValueChange={setSelectedTab} value={selectedTab}>
         <TabsList className="mb-4">
           <TabsTrigger value="quotation">Quotation</TabsTrigger>
-          <TabsTrigger value="items">Rental Items</TabsTrigger>
+          <TabsTrigger value="items">{t('rental_items')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="quotation">
@@ -109,7 +112,7 @@ export default function QuotationSection({
                   </CardDescription>
                 </div>
                 <Badge variant="outline" className="text-yellow-600 border-yellow-400">
-                  Pending Approval
+                  {t('employee:ttl_pending_approval')}
                 </Badge>
               </div>
             </CardHeader>
@@ -118,7 +121,7 @@ export default function QuotationSection({
                 {/* Customer and rental info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Customer Information</h3>
+                    <h3 className="text-sm font-medium">{t('customer_information')}</h3>
                     <div className="text-sm">
                       <p className="font-medium">{rental.customer.company_name}</p>
                       <p>{rental.customer.contact_person}</p>
@@ -127,7 +130,7 @@ export default function QuotationSection({
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Rental Information</h3>
+                    <h3 className="text-sm font-medium">{t('rental_information')}</h3>
                     <div className="text-sm">
                       <p><span className="font-medium">Rental #:</span> {rental.rental_number}</p>
                       <p>
@@ -143,7 +146,7 @@ export default function QuotationSection({
                 {/* Quotation summary */}
                 <div className="border rounded-md">
                   <div className="bg-secondary/20 p-4 rounded-t-md border-b">
-                    <h3 className="font-medium">Quotation Summary</h3>
+                    <h3 className="font-medium">{t('quotation_summary')}</h3>
                   </div>
                   <div className="p-4 space-y-3">
                     <div className="flex justify-between text-sm">

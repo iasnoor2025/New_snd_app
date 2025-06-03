@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
@@ -20,24 +21,24 @@ export const Index: FC<Props> = ({ rental }) => {
 
     return (
         <>
-            <Head title="Rental Items" />
+            <Head title={t('rental_items')} />
 
             <div className="container mx-auto py-6">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">Rental Items</h1>
+                    <h1 className="text-2xl font-bold">{t('rental_items')}</h1>
                     <div className="space-x-2">
                         <Link href={`/rentals/${rental.id}/items/bulk-create`}>
-                            <Button variant="outline">Bulk Add Items</Button>
+                            <Button variant="outline">{t('btn_bulk_add_items')}</Button>
                         </Link>
                         <Link href={`/rentals/${rental.id}/items/create`}>
-                            <Button>Add Item</Button>
+                            <Button>{t('btn_add_item')}</Button>
                         </Link>
                     </div>
                 </div>
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Items List</CardTitle>
+                        <CardTitle>{t('ttl_items_list')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Table>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/types';
 import { Customer, Equipment } from '@/types/models';
@@ -25,6 +26,8 @@ interface Props extends PageProps {
 }
 
 export default function Create({ auth, customers = [], equipment = [], nextRentalNumber, employees = [] }: Props) {
+  const { t } = useTranslation('rental');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle form submission
@@ -156,7 +159,7 @@ export default function Create({ auth, customers = [], equipment = [], nextRenta
 
   return (
     <AdminLayout>
-      <Head title="Create Rental" />
+      <Head title={t('ttl_create_rental')} />
 
       <div className="container mx-auto py-8 space-y-8">
         <div className="flex items-center justify-between">
@@ -178,7 +181,7 @@ export default function Create({ auth, customers = [], equipment = [], nextRenta
         {/* Form Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Create New Rental</CardTitle>
+            <CardTitle>{t('ttl_create_new_rental')}</CardTitle>
           </CardHeader>
 
           <CardContent>

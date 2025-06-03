@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
 import { Button } from '@/Modules/Payroll/Resources/js/Components/ui/button';
@@ -10,6 +11,8 @@ import { Badge } from '@/Modules/Payroll/Resources/js/Components/ui/badge';
 import { format } from 'date-fns';
 
 export default function Index({ auth, payrolls, filters }) {
+  const { t } = useTranslation('payroll');
+
     const { data, setData, get } = useForm({
         month: filters.month || '',
         status: filters.status || '',
@@ -42,15 +45,15 @@ export default function Index({ auth, payrolls, filters }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Payroll Management</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('payroll_management')}</h2>}
         >
-            <Head title="Payroll Management" />
+            <Head title={t('payroll_management')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Payroll List</CardTitle>
+                            <CardTitle>{t('payroll_list')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleFilter} className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -58,13 +61,13 @@ export default function Index({ auth, payrolls, filters }) {
                                     type="month"
                                     value={data.month}
                                     onChange={e => setData('month', e.target.value)}
-                                    placeholder="Select Month"
+                                    placeholder={t('lbl_select_month')}
                                 />
                                 <Select
                                     value={data.status}
                                     onChange={e => setData('status', e.target.value)}
                                 >
-                                    <option value="">All Status</option>
+                                    <option value="">{t('all_status')}</option>
                                     <option value="pending">Pending</option>
                                     <option value="approved">Approved</option>
                                     <option value="paid">Paid</option>
@@ -74,7 +77,7 @@ export default function Index({ auth, payrolls, filters }) {
                                     type="text"
                                     value={data.employee_id}
                                     onChange={e => setData('employee_id', e.target.value)}
-                                    placeholder="Employee ID"
+                                    placeholder={t('employee_id')}
                                 />
                                 <Button type="submit">Filter</Button>
                             </form>
@@ -85,8 +88,8 @@ export default function Index({ auth, payrolls, filters }) {
                                         <TableRow>
                                             <TableHead>Employee</TableHead>
                                             <TableHead>Month</TableHead>
-                                            <TableHead>Base Salary</TableHead>
-                                            <TableHead>Net Salary</TableHead>
+                                            <TableHead>{t('base_salary')}</TableHead>
+                                            <TableHead>{t('net_salary')}</TableHead>
                                             <TableHead>Status</TableHead>
                                             <TableHead>Actions</TableHead>
                                         </TableRow>

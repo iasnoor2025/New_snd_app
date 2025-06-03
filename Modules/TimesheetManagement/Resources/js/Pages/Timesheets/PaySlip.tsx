@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -185,6 +186,8 @@ export default function PaySlip({
   calendar,
   salary_details
 }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const [isLoading, setIsLoading] = useState(false);
 
   // Inject print styles
@@ -258,12 +261,12 @@ export default function PaySlip({
   // Check if we have all the required data
   if (!employee || !month || !year || !start_date || !end_date) {
     return (
-      <AdminLayout title="Employee Pay Slip" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
-        <Head title="Employee Pay Slip" />
+      <AdminLayout title={t('ttl_employee_pay_slip')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+        <Head title={t('ttl_employee_pay_slip')} />
         <div className="flex h-full flex-1 flex-col gap-4 p-4">
           <Card>
             <CardHeader>
-              <CardTitle>Error Loading Pay Slip</CardTitle>
+              <CardTitle>{t('ttl_error_loading_pay_slip')}</CardTitle>
               <CardDescription>
                 There was an error loading the pay slip data. Please try again.
               </CardDescription>
@@ -272,7 +275,7 @@ export default function PaySlip({
               <Button variant="outline" asChild>
                 <Link href={route('employees.index')}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Employees
+                  {t('employee:btn_back_to_employees')}
                 </Link>
               </Button>
             </CardContent>
@@ -283,12 +286,12 @@ export default function PaySlip({
   }
 
   return (
-    <AdminLayout title="Employee Pay Slip" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
-      <Head title="Employee Pay Slip" />
+    <AdminLayout title={t('ttl_employee_pay_slip')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+      <Head title={t('ttl_employee_pay_slip')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="flex justify-between items-center print:hidden">
-          <h1 className="text-2xl font-bold tracking-tight">Pay Slip</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('pay_slip')}</h1>
           <div className="flex space-x-2">
             <Button variant="outline" asChild>
               <Link href={route('employees.show', { employee: employee.id })}>
@@ -312,7 +315,7 @@ export default function PaySlip({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-gray-100 rounded-md flex items-center justify-center">
-                  <img src="/logo.png" alt="Company Logo" className="w-14 h-14 object-contain" />
+                  <img src="/logo.png" alt={t('company_logo')} className="w-14 h-14 object-contain" />
                 </div>
                 <div>
                   <CardTitle className="text-xl company-name">Samhan Naser Al-Dosri Est.</CardTitle>
@@ -320,7 +323,7 @@ export default function PaySlip({
                 </div>
               </div>
               <div className="text-right">
-                <h2 className="text-lg font-semibold pay-slip-title">Employee Pay Slip</h2>
+                <h2 className="text-lg font-semibold pay-slip-title">{t('ttl_employee_pay_slip')}</h2>
                 <p className="text-sm text-muted-foreground">{month} {year}</p>
               </div>
             </div>
@@ -332,7 +335,7 @@ export default function PaySlip({
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="font-semibold">Employee Details</h3>
+                  <h3 className="font-semibold">{t('employee_details')}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="font-medium">File #:</div>
@@ -352,7 +355,7 @@ export default function PaySlip({
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Building className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="font-semibold">Work Details</h3>
+                  <h3 className="font-semibold">{t('work_details')}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="font-medium">Location:</div>
@@ -377,7 +380,7 @@ export default function PaySlip({
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="font-semibold">Salary Details</h3>
+                  <h3 className="font-semibold">{t('salary_details')}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="font-medium">Basic Salary:</div>
@@ -397,7 +400,7 @@ export default function PaySlip({
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="font-semibold">Working Hours</h3>
+                  <h3 className="font-semibold">{t('working_hours')}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="font-medium">Contract Hours:</div>
@@ -417,7 +420,7 @@ export default function PaySlip({
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="font-semibold">Other Details</h3>
+                  <h3 className="font-semibold">{t('other_details')}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="font-medium">Working Location:</div>
@@ -441,7 +444,7 @@ export default function PaySlip({
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <h3 className="font-semibold">Attendance Record</h3>
+                <h3 className="font-semibold">{t('attendance_record')}</h3>
               </div>
               
               <div className="overflow-x-auto border rounded-md">
@@ -528,7 +531,7 @@ export default function PaySlip({
             {/* Summary */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="font-semibold">Attendance Summary</h3>
+                <h3 className="font-semibold">{t('attendance_summary')}</h3>
                 <div className="grid grid-cols-2 gap-y-2 text-sm border rounded-md p-4 bg-gray-50">
                   <div className="font-medium">Total Hours:</div>
                   <div className="text-right">{total_hours}</div>
@@ -545,7 +548,7 @@ export default function PaySlip({
               </div>
               
               <div className="space-y-4">
-                <h3 className="font-semibold">Payment Summary</h3>
+                <h3 className="font-semibold">{t('payment_summary')}</h3>
                 <div className="grid grid-cols-2 gap-y-2 text-sm border rounded-md p-4 bg-gray-50">
                   <div className="font-medium">Basic Salary:</div>
                   <div className="text-right font-semibold">SAR {basicSalary.toFixed(2)}</div>
@@ -578,17 +581,17 @@ export default function PaySlip({
             <div className="grid grid-cols-3 gap-x-12 text-sm">
               <div className="text-center">
                 <p className="font-semibold mb-1">Chief-Accountant</p>
-                <p className="text-muted-foreground italic">Samir Taima</p>
+                <p className="text-muted-foreground italic">{t('samir_taima')}</p>
                 <div className="mt-8 border-t border-gray-300 pt-1">Signature</div>
               </div>
               <div className="text-center">
-                <p className="font-semibold mb-1">Verified by</p>
-                <p className="text-muted-foreground italic">Salem Samhan Al Dosri</p>
+                <p className="font-semibold mb-1">{t('verified_by')}</p>
+                <p className="text-muted-foreground italic">{t('salem_samhan_al_dosri')}</p>
                 <div className="mt-8 border-t border-gray-300 pt-1">Signature</div>
               </div>
               <div className="text-center">
-                <p className="font-semibold mb-1">Approved By</p>
-                <p className="text-muted-foreground italic">Nasser Samhan Al Dosri</p>
+                <p className="font-semibold mb-1">{t('approved_by')}</p>
+                <p className="text-muted-foreground italic">{t('nasser_samhan_al_dosri')}</p>
                 <div className="mt-8 border-t border-gray-300 pt-1">Signature</div>
               </div>
             </div>

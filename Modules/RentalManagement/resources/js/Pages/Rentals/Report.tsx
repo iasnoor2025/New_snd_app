@@ -1,4 +1,5 @@
 ﻿import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
@@ -74,6 +75,8 @@ interface Props extends PageProps {
 }
 
 export default function Report({ auth, rentals, customers, filters }: Props) {
+  const { t } = useTranslation('rental');
+
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("summary");
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -354,19 +357,19 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
   };
 
   return (
-    <AdminLayout title="Rental Reports" breadcrumbs={[
+    <AdminLayout title={t('rental_reports')} breadcrumbs={[
       { title: 'Dashboard', href: '/dashboard' },
       { title: 'Rentals', href: '/rentals' },
       { title: 'Reports', href: '/rentals/reports' }
     ]}>
-      <Head title="Rental Reports" />
+      <Head title={t('rental_reports')} />
 
       <div className="py-6 print:py-2" id="print-section">
         <div className="container mx-auto print:px-0">
           {/* Page Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Rental Reports</h1>
+              <h1 className="text-2xl font-bold tracking-tight">{t('rental_reports')}</h1>
               <p className="text-muted-foreground">
                 {getFilterSummary()}
               </p>
@@ -405,13 +408,13 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
           <Card className="mb-6 print:hidden">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Filters</CardTitle>
-              <CardDescription>Configure report parameters</CardDescription>
+              <CardDescription>{t('configure_report_parameters')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap items-end gap-3 lg:gap-4">
                 {/* Date Range Start */}
                 <div className="w-full sm:w-auto">
-                  <Label className="mb-2 block">Start Date</Label>
+                  <Label className="mb-2 block">{t('lbl_start_date')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -421,7 +424,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                         {startDate ? (
                           format(startDate, "MMM d, yyyy")
                         ) : (
-                          <span className="text-muted-foreground">Start date</span>
+                          <span className="text-muted-foreground">{t('start_date_4')}</span>
                         )}
                         {loadingOp === 'start-date' ? (
                           <Loader2 className="ml-auto h-4 w-4 animate-spin" />
@@ -443,7 +446,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
 
                 {/* Date Range End */}
                 <div className="w-full sm:w-auto">
-                  <Label className="mb-2 block">End Date</Label>
+                  <Label className="mb-2 block">{t('end_date')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -453,7 +456,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                         {endDate ? (
                           format(endDate, "MMM d, yyyy")
                         ) : (
-                          <span className="text-muted-foreground">End date</span>
+                          <span className="text-muted-foreground">{t('end_date_1')}</span>
                         )}
                         {loadingOp === 'end-date' ? (
                           <Loader2 className="ml-auto h-4 w-4 animate-spin" />
@@ -484,7 +487,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                           <Loader2 className="h-4 w-4 animate-spin" />
                         </div>
                       ) : (
-                        <SelectValue placeholder="All statuses" />
+                        <SelectValue placeholder={t('ph_all_statuses')} />
                       )}
                     </SelectTrigger>
                     <SelectContent>
@@ -507,7 +510,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                           <Loader2 className="h-4 w-4 animate-spin" />
                         </div>
                       ) : (
-                        <SelectValue placeholder="All customers" />
+                        <SelectValue placeholder={t('ph_all_customers')} />
                       )}
                     </SelectTrigger>
                     <SelectContent>
@@ -581,7 +584,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <Card>
                       <CardHeader className="pb-2">
-                        <CardDescription>Total Rentals</CardDescription>
+                        <CardDescription>{t('total_rentals')}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between">
@@ -592,7 +595,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                     </Card>
                     <Card>
                       <CardHeader className="pb-2">
-                        <CardDescription>Total Revenue</CardDescription>
+                        <CardDescription>{t('total_revenue')}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between">
@@ -603,7 +606,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                     </Card>
                     <Card>
                       <CardHeader className="pb-2">
-                        <CardDescription>Average Rental Value</CardDescription>
+                        <CardDescription>{t('average_rental_value')}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between">
@@ -614,7 +617,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                     </Card>
                     <Card>
                       <CardHeader className="pb-2">
-                        <CardDescription>Average Duration</CardDescription>
+                        <CardDescription>{t('average_duration')}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between">
@@ -629,7 +632,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                   {Object.keys(statusCounts).length > 0 && (
                     <Card>
                       <CardHeader>
-                        <CardTitle>Status Distribution</CardTitle>
+                        <CardTitle>{t('status_distribution')}</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -652,7 +655,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                 <TabsContent value="data">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Rental Details</CardTitle>
+                      <CardTitle>{t('rental_details')}</CardTitle>
                       <CardDescription>
                         Showing {rentals?.data?.length || 0} of {rentals?.total || 0} rentals
                       </CardDescription>
@@ -664,11 +667,11 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                             <TableRow>
                               <TableHead>Rental #</TableHead>
                               <TableHead>customer</TableHead>
-                              <TableHead>Start Date</TableHead>
-                              <TableHead>End Date</TableHead>
+                              <TableHead>{t('lbl_start_date')}</TableHead>
+                              <TableHead>{t('end_date')}</TableHead>
                               <TableHead>Status</TableHead>
                               <TableHead>Duration (Days)</TableHead>
-                              <TableHead className="text-right">Total Amount</TableHead>
+                              <TableHead className="text-right">{t('th_total_amount')}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -712,7 +715,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                 <TabsContent value="print">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Print Preview</CardTitle>
+                      <CardTitle>{t('ttl_print_preview')}</CardTitle>
                       <CardDescription>
                         Use the print button at the top to print this report
                       </CardDescription>
@@ -720,24 +723,24 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                     <CardContent>
                       <div className="space-y-6">
                         <div>
-                          <h2 className="text-lg font-bold mb-2">Report Summary</h2>
+                          <h2 className="text-lg font-bold mb-2">{t('report_summary')}</h2>
                           <p className="text-muted-foreground mb-4">{getFilterSummary()}</p>
 
                           <div className="grid grid-cols-2 gap-4 mb-4">
                             <div className="border rounded-md p-4">
-                              <div className="text-muted-foreground text-sm">Total Rentals</div>
+                              <div className="text-muted-foreground text-sm">{t('total_rentals')}</div>
                               <div className="text-xl font-bold">{rentals?.total || 0}</div>
                             </div>
                             <div className="border rounded-md p-4">
-                              <div className="text-muted-foreground text-sm">Total Revenue</div>
+                              <div className="text-muted-foreground text-sm">{t('total_revenue')}</div>
                               <div className="text-xl font-bold">{formatCurrency(totalAmount)}</div>
                             </div>
                             <div className="border rounded-md p-4">
-                              <div className="text-muted-foreground text-sm">Average Rental Value</div>
+                              <div className="text-muted-foreground text-sm">{t('average_rental_value')}</div>
                               <div className="text-xl font-bold">{formatCurrency(averageAmount)}</div>
                             </div>
                             <div className="border rounded-md p-4">
-                              <div className="text-muted-foreground text-sm">Average Duration</div>
+                              <div className="text-muted-foreground text-sm">{t('average_duration')}</div>
                               <div className="text-xl font-bold">{averageDuration.toFixed(1)} days</div>
                             </div>
                           </div>
@@ -746,14 +749,14 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                         <Separator />
 
                         <div>
-                          <h2 className="text-lg font-bold mb-4">Rental Details</h2>
+                          <h2 className="text-lg font-bold mb-4">{t('rental_details')}</h2>
                           <Table>
                             <TableHeader>
                               <TableRow>
                                 <TableHead>Rental #</TableHead>
                                 <TableHead>customer</TableHead>
-                                <TableHead>Start Date</TableHead>
-                                <TableHead>End Date</TableHead>
+                                <TableHead>{t('lbl_start_date')}</TableHead>
+                                <TableHead>{t('end_date')}</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Duration</TableHead>
                                 <TableHead className="text-right">Amount</TableHead>
@@ -801,31 +804,31 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
               {/* Print-optimized view (hidden in normal view, shown when printing) */}
               <div className="hidden print:block">
                 <div className="mb-8">
-                  <h1 className="text-2xl font-bold mb-2">Rental Report</h1>
+                  <h1 className="text-2xl font-bold mb-2">{t('rental_report')}</h1>
                   <p className="text-muted-foreground mb-6">{getFilterSummary()}</p>
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="border rounded-md p-4">
-                      <div className="text-muted-foreground text-sm">Total Rentals</div>
+                      <div className="text-muted-foreground text-sm">{t('total_rentals')}</div>
                       <div className="text-xl font-bold">{rentals?.total || 0}</div>
                     </div>
                     <div className="border rounded-md p-4">
-                      <div className="text-muted-foreground text-sm">Total Revenue</div>
+                      <div className="text-muted-foreground text-sm">{t('total_revenue')}</div>
                       <div className="text-xl font-bold">{formatCurrency(totalAmount)}</div>
                     </div>
                     <div className="border rounded-md p-4">
-                      <div className="text-muted-foreground text-sm">Average Rental Value</div>
+                      <div className="text-muted-foreground text-sm">{t('average_rental_value')}</div>
                       <div className="text-xl font-bold">{formatCurrency(averageAmount)}</div>
                     </div>
                     <div className="border rounded-md p-4">
-                      <div className="text-muted-foreground text-sm">Average Duration</div>
+                      <div className="text-muted-foreground text-sm">{t('average_duration')}</div>
                       <div className="text-xl font-bold">{averageDuration.toFixed(1)} days</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mb-8">
-                  <h2 className="text-lg font-bold mb-4">Status Distribution</h2>
+                  <h2 className="text-lg font-bold mb-4">{t('status_distribution')}</h2>
                   <div className="flex gap-4 mb-4">
                     {Object.entries(statusCounts).map(([status, count]) => (
                       <div key={status} className="border rounded-md p-4 flex-1">
@@ -840,14 +843,14 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
                 </div>
 
                 <div>
-                  <h2 className="text-lg font-bold mb-4">Rental Details</h2>
+                  <h2 className="text-lg font-bold mb-4">{t('rental_details')}</h2>
                   <Table>
                     <TableHeader>
                       <TableRow>
                         <TableHead>Rental #</TableHead>
                         <TableHead>customer</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead>End Date</TableHead>
+                        <TableHead>{t('lbl_start_date')}</TableHead>
+                        <TableHead>{t('end_date')}</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Duration</TableHead>
                         <TableHead className="text-right">Amount</TableHead>

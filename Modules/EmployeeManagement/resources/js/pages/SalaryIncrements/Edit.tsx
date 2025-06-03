@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -67,6 +68,8 @@ interface FormData {
 }
 
 export default function Edit({ increment, employees, incrementTypes }: Props) {
+  const { t } = useTranslation('employee');
+
     const { data, setData, put, processing, errors } = useForm<FormData>({
         employee_id: increment.employee.id.toString(),
         increment_type: increment.increment_type,
@@ -180,7 +183,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
 
     return (
         <AdminLayout
-            title="Edit Salary Increment"
+            title={t('ttl_edit_salary_increment')}
             breadcrumbs={[
                 { label: 'Salary Increments', href: route('salary-increments.index') },
                 { label: 'View', href: route('salary-increments.show', increment.id) },
@@ -194,10 +197,10 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                     </Button>
                 </Link>
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Edit Salary Increment
+                    {t('ttl_edit_salary_increment')}
                 </h2>
             </div>
-            <Head title="Edit Salary Increment" />
+            <Head title={t('ttl_edit_salary_increment')} />
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -205,7 +208,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                         {/* Employee Selection */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Employee Information</CardTitle>
+                                <CardTitle>{t('employee_information')}</CardTitle>
                                 <CardDescription>
                                     Select the employee for salary increment
                                 </CardDescription>
@@ -218,7 +221,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                         onValueChange={(value) => setData('employee_id', value)}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select an employee" />
+                                            <SelectValue placeholder={t('ph_select_an_employee')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {employees.map((employee) => (
@@ -238,7 +241,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
 
                                 {selectedEmployee && (
                                     <div className="bg-gray-50 p-4 rounded-lg">
-                                        <h4 className="font-medium mb-2">Current Employee Details</h4>
+                                        <h4 className="font-medium mb-2">{t('current_employee_details')}</h4>
                                         <div className="grid grid-cols-2 gap-4 text-sm">
                                             <div>
                                                 <span className="text-gray-600">Name:</span>
@@ -267,20 +270,20 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                         {/* Increment Details */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Increment Details</CardTitle>
+                                <CardTitle>{t('ttl_increment_details')}</CardTitle>
                                 <CardDescription>
                                     Specify the increment type and amount
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="increment_type">Increment Type</Label>
+                                    <Label htmlFor="increment_type">{t('lbl_increment_type')}</Label>
                                     <Select
                                         value={data.increment_type}
                                         onValueChange={(value) => setData('increment_type', value)}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select increment type" />
+                                            <SelectValue placeholder={t('ph_select_increment_type')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {incrementTypes.map((type) => (
@@ -296,7 +299,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                 </div>
 
                                 <div>
-                                    <Label>Calculation Method</Label>
+                                    <Label>{t('lbl_calculation_method')}</Label>
                                     <RadioGroup
                                         value={calculationMethod}
                                         onValueChange={(value: 'percentage' | 'fixed') => {
@@ -315,7 +318,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="fixed" id="fixed" />
-                                            <Label htmlFor="fixed">Fixed Amount</Label>
+                                            <Label htmlFor="fixed">{t('lbl_fixed_amount')}</Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
@@ -331,7 +334,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                             max="100"
                                             value={data.increment_percentage || ''}
                                             onChange={(e) => setData('increment_percentage', parseFloat(e.target.value) || undefined)}
-                                            placeholder="Enter percentage (e.g., 10.5)"
+                                            placeholder={t('ph_enter_percentage_eg_105')}
                                         />
                                         {errors.increment_percentage && (
                                             <p className="text-sm text-red-600 mt-1">{errors.increment_percentage}</p>
@@ -347,7 +350,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                             min="0"
                                             value={data.increment_amount || ''}
                                             onChange={(e) => setData('increment_amount', parseFloat(e.target.value) || undefined)}
-                                            placeholder="Enter fixed amount (e.g., 5000)"
+                                            placeholder={t('ph_enter_fixed_amount_eg_5000')}
                                         />
                                         {errors.increment_amount && (
                                             <p className="text-sm text-red-600 mt-1">{errors.increment_amount}</p>
@@ -356,7 +359,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                 )}
 
                                 <div>
-                                    <Label htmlFor="effective_date">Effective Date</Label>
+                                    <Label htmlFor="effective_date">{t('lbl_effective_date')}</Label>
                                     <Input
                                         id="effective_date"
                                         type="date"
@@ -387,7 +390,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         {/* Current Salary */}
                                         <div>
-                                            <h4 className="font-medium text-gray-900 mb-3">Current Salary</h4>
+                                            <h4 className="font-medium text-gray-900 mb-3">{t('current_salary')}</h4>
                                             <div className="space-y-2 text-sm">
                                                 <div className="flex justify-between">
                                                     <span>Base Salary:</span>
@@ -414,7 +417,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
 
                                         {/* New Salary */}
                                         <div>
-                                            <h4 className="font-medium text-green-900 mb-3">New Salary</h4>
+                                            <h4 className="font-medium text-green-900 mb-3">{t('new_salary')}</h4>
                                             <div className="space-y-2 text-sm">
                                                 <div className="flex justify-between">
                                                     <span>Base Salary:</span>
@@ -441,7 +444,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
 
                                         {/* Increase Summary */}
                                         <div>
-                                            <h4 className="font-medium text-blue-900 mb-3">Increase Summary</h4>
+                                            <h4 className="font-medium text-blue-900 mb-3">{t('increase_summary')}</h4>
                                             <div className="space-y-2 text-sm">
                                                 <div className="flex justify-between">
                                                     <span>Increase Amount:</span>
@@ -484,12 +487,12 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="reason">Reason for Increment</Label>
+                                    <Label htmlFor="reason">{t('lbl_reason_for_increment')}</Label>
                                     <Textarea
                                         id="reason"
                                         value={data.reason}
                                         onChange={(e) => setData('reason', e.target.value)}
-                                        placeholder="Explain the reason for this salary increment..."
+                                        placeholder={t('ph_explain_the_reason_for_this_salary_increment')}
                                         rows={3}
                                     />
                                     {errors.reason && (
@@ -503,7 +506,7 @@ export default function Edit({ increment, employees, incrementTypes }: Props) {
                                         id="notes"
                                         value={data.notes}
                                         onChange={(e) => setData('notes', e.target.value)}
-                                        placeholder="Any additional notes or comments..."
+                                        placeholder={t('ph_any_additional_notes_or_comments')}
                                         rows={2}
                                     />
                                     {errors.notes && (

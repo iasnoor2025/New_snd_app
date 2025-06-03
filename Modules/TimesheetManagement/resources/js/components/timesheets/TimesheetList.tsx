@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from '@inertiajs/react';
 import route from 'ziggy-js';
 import axios from 'axios';
@@ -63,6 +64,8 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
   const [processing, setProcessing] = useState(false);
 
   const handleToggleSelect = (id: number) => {
+  const { t } = useTranslation('timesheet');
+
     setSelectedTimesheets((prev) =>
       prev.includes(id)
         ? prev.filter((timesheetId) => timesheetId !== id)
@@ -219,7 +222,7 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
                   </TableCell>
                   <TableCell>
                     {timesheet.project?.name || (
-                      <span className="text-gray-400">Not assigned</span>
+                      <span className="text-gray-400">{t('not_assigned')}</span>
                     )}
                   </TableCell>
                   <TableCell>{getStatusBadge(timesheet.status)}</TableCell>
@@ -234,7 +237,7 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
                         <Link href={route('timesheets.show', timesheet.id)}>
                           <DropdownMenuItem>
                             <Eye className="mr-2 h-4 w-4" />
-                            View Details
+                            {t('employee:ttl_view_details')}
                           </DropdownMenuItem>
                         </Link>
                         <Link href={route('timesheets.edit', timesheet.id)}>
@@ -269,18 +272,18 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
       <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject Timesheet</DialogTitle>
+            <DialogTitle>{t('reject_timesheet')}</DialogTitle>
             <DialogDescription>
               Please provide a reason for rejecting this timesheet. The employee will be notified.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <Label htmlFor="reject-reason">Reason for rejection</Label>
+            <Label htmlFor="reject-reason">{t('lbl_reason_for_rejection')}</Label>
             <Textarea
               id="reject-reason"
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="Please specify why this timesheet is being rejected..."
+              placeholder={t('ph_please_specify_why_this_timesheet_is_being_reje')}
               className="mt-2"
               rows={4}
             />

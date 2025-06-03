@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm, router } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -54,6 +55,8 @@ interface Props {
 }
 
 export default function EditLeaveType({ leaveType }: Props) {
+  const { t } = useTranslation('leave');
+
     const { can } = usePermission();
 
     const { data, setData, put, processing, errors, reset } = useForm<FormData>({
@@ -118,7 +121,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbLink href={route('leaves.types.index')}>Leave Types</BreadcrumbLink>
+                            <BreadcrumbLink href={route('leaves.types.index')}>{t('leave_types')}</BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
@@ -133,8 +136,8 @@ export default function EditLeaveType({ leaveType }: Props) {
                         <ArrowLeftIcon className="h-4 w-4" />
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Edit Leave Type</h1>
-                        <p className="text-muted-foreground">Update the leave type information</p>
+                        <h1 className="text-3xl font-bold tracking-tight">{t('edit_leave_type')}</h1>
+                        <p className="text-muted-foreground">{t('update_the_leave_type_information')}</p>
                     </div>
                 </div>
 
@@ -145,7 +148,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                         <div className="lg:col-span-2">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Basic Information</CardTitle>
+                                    <CardTitle>{t('ttl_basic_information')}</CardTitle>
                                     <CardDescription>
                                         Update the basic details for the leave type
                                     </CardDescription>
@@ -159,7 +162,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                                                 type="text"
                                                 value={data.name}
                                                 onChange={(e) => setData('name', e.target.value)}
-                                                placeholder="e.g., Annual Leave"
+                                                placeholder={t('ph_eg_annual_leave')}
                                                 className={errors.name ? 'border-red-500' : ''}
                                             />
                                             {errors.name && (
@@ -181,7 +184,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                                                     type="text"
                                                     value={data.color}
                                                     onChange={(e) => setData('color', e.target.value)}
-                                                    placeholder="#3B82F6"
+                                                    placeholder={t('ph_3b82f6')}
                                                     className="flex-1"
                                                 />
                                             </div>
@@ -197,7 +200,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                                             id="description"
                                             value={data.description}
                                             onChange={(e) => setData('description', e.target.value)}
-                                            placeholder="Brief description of the leave type"
+                                            placeholder={t('ph_brief_description_of_the_leave_type')}
                                             rows={3}
                                             className={errors.description ? 'border-red-500' : ''}
                                         />
@@ -211,7 +214,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                             {/* Leave Configuration */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Leave Configuration</CardTitle>
+                                    <CardTitle>{t('ttl_leave_configuration')}</CardTitle>
                                     <CardDescription>
                                         Update the leave type settings and rules
                                     </CardDescription>
@@ -268,18 +271,18 @@ export default function EditLeaveType({ leaveType }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="gender_specific">Gender Specific</Label>
+                                        <Label htmlFor="gender_specific">{t('gender_specific')}</Label>
                                         <Select
                                             value={data.gender_specific}
                                             onValueChange={(value) => setData('gender_specific', value)}
                                         >
                                             <SelectTrigger className={errors.gender_specific ? 'border-red-500' : ''}>
-                                                <SelectValue placeholder="Select gender applicability" />
+                                                <SelectValue placeholder={t('ph_select_gender_applicability')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="both">Both</SelectItem>
-                                                <SelectItem value="male">Male Only</SelectItem>
-                                                <SelectItem value="female">Female Only</SelectItem>
+                                                <SelectItem value="male">{t('opt_male_only')}</SelectItem>
+                                                <SelectItem value="female">{t('opt_female_only')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         {errors.gender_specific && (
@@ -291,7 +294,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                                     <div className="space-y-4 p-4 border rounded-lg">
                                         <div className="flex items-center justify-between">
                                             <div className="space-y-0.5">
-                                                <Label htmlFor="allow_carry_forward">Allow Carry Forward</Label>
+                                                <Label htmlFor="allow_carry_forward">{t('lbl_allow_carry_forward')}</Label>
                                                 <p className="text-sm text-muted-foreground">
                                                     Allow unused leave days to be carried forward to next year
                                                 </p>
@@ -305,7 +308,7 @@ export default function EditLeaveType({ leaveType }: Props) {
 
                                         {data.allow_carry_forward && (
                                             <div className="space-y-2">
-                                                <Label htmlFor="carry_forward_max_days">Maximum Carry Forward Days</Label>
+                                                <Label htmlFor="carry_forward_max_days">{t('lbl_maximum_carry_forward_days')}</Label>
                                                 <Input
                                                     id="carry_forward_max_days"
                                                     type="number"
@@ -337,7 +340,7 @@ export default function EditLeaveType({ leaveType }: Props) {
                                 <CardContent className="space-y-6">
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
-                                            <Label htmlFor="requires_approval">Requires Approval</Label>
+                                            <Label htmlFor="requires_approval">{t('lbl_requires_approval')}</Label>
                                             <p className="text-sm text-muted-foreground">
                                                 Leave requests need manager approval
                                             </p>
@@ -351,7 +354,7 @@ export default function EditLeaveType({ leaveType }: Props) {
 
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
-                                            <Label htmlFor="is_paid">Paid Leave</Label>
+                                            <Label htmlFor="is_paid">{t('lbl_paid_leave')}</Label>
                                             <p className="text-sm text-muted-foreground">
                                                 Employee receives salary during leave
                                             </p>

@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,7 +51,7 @@ class ErrorBoundary extends Component<Props, State> {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-5 w-5" />
-              Something went wrong
+              {t('rental:something_went_wrong')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

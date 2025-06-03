@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
 import { Employee, Rental, RentalItem, RentalTimesheet } from '@/Modules/RentalManagement/Resources/js/types/models';
@@ -103,6 +104,8 @@ interface Props extends PageProps {
 }
 
 export default function Index({ auth, timesheets, filters = {} }: Props) {
+  const { t } = useTranslation('rental');
+
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
@@ -238,7 +241,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
       return (
         <div className="flex items-center gap-1 text-red-600">
           <UserX className="h-4 w-4" />
-          <span>Operator Absent</span>
+          <span>{t('operator_absent')}</span>
         </div>
       );
     }
@@ -261,7 +264,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
       );
     }
 
-    return <span className="text-muted-foreground text-sm">Not assigned</span>;
+    return <span className="text-muted-foreground text-sm">{t('not_assigned')}</span>;
   };
 
   const columns: ColumnDef<RentalTimesheet>[] = [
@@ -314,7 +317,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">{t('open_menu')}</span>
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
@@ -345,7 +348,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
 
   return (
     <AdminLayout>
-      <Head title="Rental Timesheets" />
+      <Head title={t('rental_timesheets')} />
 
       <div className="container mx-auto py-6 space-y-6">
         {/* Breadcrumbs and Actions */}
@@ -356,7 +359,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
               Dashboard
             </Link>
             <ChevronRight className="h-4 w-4 mx-1" />
-            <span className="font-medium text-foreground">Rental Timesheets</span>
+            <span className="font-medium text-foreground">{t('rental_timesheets')}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -391,23 +394,23 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
         {isFiltering && (
           <Card>
             <CardHeader>
-              <CardTitle>Filter Timesheets</CardTitle>
+              <CardTitle>{t('ttl_filter_timesheets')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Rental ID</label>
+                  <label className="text-sm font-medium">{t('lbl_rental_id')}</label>
                   <Input
-                    placeholder="Rental ID"
+                    placeholder={t('lbl_rental_id')}
                     value={filterValues.rental_id}
                     onChange={(e) => handleFilterChange('rental_id', e.target.value)}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Operator ID</label>
+                  <label className="text-sm font-medium">{t('lbl_operator_id')}</label>
                   <Input
-                    placeholder="Operator ID"
+                    placeholder={t('lbl_operator_id')}
                     value={filterValues.operator_id}
                     onChange={(e) => handleFilterChange('operator_id', e.target.value)}
                   />
@@ -422,10 +425,10 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
                     }}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Filter by status" />
+                      <SelectValue placeholder={t('ph_filter_by_status')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
                     </SelectContent>
@@ -433,7 +436,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Start Date</label>
+                  <label className="text-sm font-medium">{t('lbl_start_date')}</label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -447,7 +450,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
                         {filterValues.start_date ? (
                           format(filterValues.start_date, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{t('pick_a_date')}</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -463,7 +466,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">End Date</label>
+                  <label className="text-sm font-medium">{t('end_date')}</label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -477,7 +480,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
                         {filterValues.end_date ? (
                           format(filterValues.end_date, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{t('pick_a_date')}</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -504,7 +507,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
         {/* Timesheets List */}
         <Card>
           <CardHeader>
-            <CardTitle>Rental Timesheets</CardTitle>
+            <CardTitle>{t('rental_timesheets')}</CardTitle>
             <CardDescription>
               Showing {timesheets.data.length} of {timesheets.total} timesheets
             </CardDescription>
@@ -668,7 +671,7 @@ export default function Index({ auth, timesheets, filters = {} }: Props) {
       <Dialog open={isCompleteDialogOpen} onOpenChange={setIsCompleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Complete Selected Timesheets</DialogTitle>
+            <DialogTitle>{t('ttl_complete_selected_timesheets')}</DialogTitle>
             <DialogDescription>
               Are you sure you want to mark {selectedIds.length} timesheet(s) as completed?
               This action cannot be undone.

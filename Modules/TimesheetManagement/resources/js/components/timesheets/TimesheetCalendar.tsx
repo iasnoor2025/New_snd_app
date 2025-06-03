@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   format,
   startOfMonth,
@@ -82,6 +83,8 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
   };
 
   const handleAddTimesheet = (date: Date) => {
+  const { t } = useTranslation('timesheet');
+
     setSelectedDate(date);
     setSelectedTimesheet(null);
     setShowTimesheetForm(true);
@@ -159,7 +162,7 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
                       <Plus className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>Add timesheet</TooltipContent>
+                  <TooltipContent>{t('tooltip_add_timesheet')}</TooltipContent>
                 </Tooltip>
               </div>
 
@@ -190,7 +193,7 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-[calc(100%-24px)]">
-                  <span className="text-xs text-gray-400">No timesheets</span>
+                  <span className="text-xs text-gray-400">{t('no_timesheets')}</span>
                 </div>
               )}
             </div>

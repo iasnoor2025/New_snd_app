@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 
@@ -25,6 +26,8 @@ export const DailyTimesheetRecords: React.FC<DailyTimesheetRecordsProps> = ({
   className = ''
 }) => {
   const calculateMonthlySummary = (records: TimesheetRecord[]) => {
+  const { t } = useTranslation('timesheet');
+
     const summary = {
       totalRegularHours: 0,
       totalOvertimeHours: 0,
@@ -79,19 +82,19 @@ export const DailyTimesheetRecords: React.FC<DailyTimesheetRecordsProps> = ({
       {showSummary && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <div className="bg-muted/30 rounded-lg p-3">
-            <h3 className="text-xs font-medium text-muted-foreground mb-1">Regular Hours</h3>
+            <h3 className="text-xs font-medium text-muted-foreground mb-1">{t('lbl_regular_hours')}</h3>
             <p className="text-xl font-bold">{calculateMonthlySummary(timesheets).totalRegularHours.toFixed(1)}</p>
           </div>
           <div className="bg-muted/30 rounded-lg p-3">
-            <h3 className="text-xs font-medium text-muted-foreground mb-1">Overtime Hours</h3>
+            <h3 className="text-xs font-medium text-muted-foreground mb-1">{t('lbl_overtime_hours')}</h3>
             <p className="text-xl font-bold">{calculateMonthlySummary(timesheets).totalOvertimeHours.toFixed(1)}</p>
           </div>
           <div className="bg-muted/30 rounded-lg p-3">
-            <h3 className="text-xs font-medium text-muted-foreground mb-1">Days Worked</h3>
+            <h3 className="text-xs font-medium text-muted-foreground mb-1">{t('days_worked')}</h3>
             <p className="text-xl font-bold">{calculateMonthlySummary(timesheets).daysWorked}</p>
           </div>
           <div className="bg-muted/30 rounded-lg p-3">
-            <h3 className="text-xs font-medium text-muted-foreground mb-1">Days Absent</h3>
+            <h3 className="text-xs font-medium text-muted-foreground mb-1">{t('days_absent')}</h3>
             <p className="text-xl font-bold">{calculateMonthlySummary(timesheets).daysAbsent}</p>
           </div>
         </div>
@@ -99,7 +102,7 @@ export const DailyTimesheetRecords: React.FC<DailyTimesheetRecordsProps> = ({
 
       <div className="border rounded-lg overflow-hidden">
         <div className="bg-muted/50 px-3 py-2">
-          <h3 className="text-xs font-medium">Daily Timesheet Records</h3>
+          <h3 className="text-xs font-medium">{t('daily_timesheet_records')}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">

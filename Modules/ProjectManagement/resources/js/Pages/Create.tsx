@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm, Link } from '@inertiajs/react';
 import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../../../resources/js/components/ui/card';
@@ -32,6 +33,8 @@ interface Props {
 }
 
 export default function Create({ customers, locations }: Props) {
+  const { t } = useTranslation('project');
+
     console.log('Received locations:', locations);
 
     const { data, setData, post, processing, errors } = useForm({
@@ -88,27 +91,27 @@ export default function Create({ customers, locations }: Props) {
                         Back to Projects
                     </Link>
 
-                    <h1 className="text-3xl font-bold tracking-tight">Create New Project</h1>
-                    <p className="text-muted-foreground">Enter the details for your new project</p>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('create_new_project')}</h1>
+                    <p className="text-muted-foreground">{t('enter_the_details_for_your_new_project')}</p>
                 </div>
 
                 <Separator />
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-xl">Project Details</CardTitle>
-                        <CardDescription>Fill in the information below to create a new project</CardDescription>
+                        <CardTitle className="text-xl">{t('ttl_project_details')}</CardTitle>
+                        <CardDescription>{t('fill_in_the_information_below_to_create_a_new_proj')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name">Project Name</Label>
+                                    <Label htmlFor="name">{t('lbl_project_name')}</Label>
                                     <Input
                                         id="name"
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
-                                        placeholder="Enter project name"
+                                        placeholder={t('ph_enter_project_name')}
                                         className="w-full"
                                         required
                                     />
@@ -124,7 +127,7 @@ export default function Create({ customers, locations }: Props) {
                                         onValueChange={(value) => setData('customer_id', value)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select customer" />
+                                            <SelectValue placeholder={t('ph_select_customer')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {customers.map((customer) => (
@@ -146,7 +149,7 @@ export default function Create({ customers, locations }: Props) {
                                         onValueChange={(value) => setData('location_id', value)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select location" />
+                                            <SelectValue placeholder={t('ph_select_location')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {uniqueLocations.map((location) => (
@@ -165,7 +168,7 @@ export default function Create({ customers, locations }: Props) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="start_date">Start Date</Label>
+                                    <Label htmlFor="start_date">{t('lbl_start_date')}</Label>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button
@@ -180,7 +183,7 @@ export default function Create({ customers, locations }: Props) {
                                                 {data.start_date ? (
                                                     format(data.start_date, 'PPP')
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t('pick_a_date')}</span>
                                                 )}
                                             </Button>
                                         </PopoverTrigger>
@@ -214,7 +217,7 @@ export default function Create({ customers, locations }: Props) {
                                                 {data.end_date ? (
                                                     format(data.end_date, 'PPP')
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t('pick_a_date')}</span>
                                                 )}
                                             </Button>
                                         </PopoverTrigger>
@@ -239,7 +242,7 @@ export default function Create({ customers, locations }: Props) {
                                         onValueChange={(value) => setData('status', value)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select status" />
+                                            <SelectValue placeholder={t('ph_select_status')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map((status) => (
@@ -261,7 +264,7 @@ export default function Create({ customers, locations }: Props) {
                                         type="number"
                                         value={data.budget}
                                         onChange={(e) => setData('budget', e.target.value)}
-                                        placeholder="Enter project budget"
+                                        placeholder={t('ph_enter_project_budget')}
                                         className="w-full"
                                         required
                                     />
@@ -280,7 +283,7 @@ export default function Create({ customers, locations }: Props) {
                                         id="description"
                                         value={data.description}
                                         onChange={(e) => setData('description', e.target.value)}
-                                        placeholder="Enter project description"
+                                        placeholder={t('ph_enter_project_description')}
                                         rows={4}
                                         className="resize-none"
                                     />
@@ -295,7 +298,7 @@ export default function Create({ customers, locations }: Props) {
                                         id="notes"
                                         value={data.notes}
                                         onChange={(e) => setData('notes', e.target.value)}
-                                        placeholder="Enter any additional notes"
+                                        placeholder={t('ph_enter_any_additional_notes')}
                                         rows={3}
                                         className="resize-none"
                                     />

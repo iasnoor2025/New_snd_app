@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm, Head, Link } from '@inertiajs/react';
 import type { PageProps } from '../../types/index.d';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -34,6 +35,8 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
   const [error, setError] = useState<string | null>(null);
 
   function handleSubmit(e: React.FormEvent) {
+  const { t } = useTranslation('customer');
+
     e.preventDefault();
     post(route('customers.store'), {
       onError: (err) => setError('Failed to create customer.'),
@@ -42,12 +45,12 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
   }
 
   return (
-    <AdminLayout title="Create Customer" breadcrumbs={breadcrumbs}>
-      <Head title="Create Customer" />
+    <AdminLayout title={t('ttl_create_customer')} breadcrumbs={breadcrumbs}>
+      <Head title={t('ttl_create_customer')} />
       <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader>
-            <CardTitle>Create Customer</CardTitle>
+            <CardTitle>{t('ttl_create_customer')}</CardTitle>
           </CardHeader>
           <CardContent>
             {error && <div className="text-red-500 mb-2">{error}</div>}
@@ -59,7 +62,7 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                   {errors.name && <div className="text-red-500 text-xs">{errors.name}</div>}
                 </div>
                 <div>
-                  <label className="block mb-1">Contact Person</label>
+                  <label className="block mb-1">{t('lbl_contact_person')}</label>
                   <Input value={data.contact_person} onChange={e => setData('contact_person', e.target.value)} />
                   {errors.contact_person && <div className="text-red-500 text-xs">{errors.contact_person}</div>}
                 </div>
@@ -99,12 +102,12 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                   {errors.country && <div className="text-red-500 text-xs">{errors.country}</div>}
                 </div>
                 <div>
-                  <label className="block mb-1">Tax ID</label>
+                  <label className="block mb-1">{t('lbl_tax_id')}</label>
                   <Input value={data.tax_id} onChange={e => setData('tax_id', e.target.value)} />
                   {errors.tax_id && <div className="text-red-500 text-xs">{errors.tax_id}</div>}
                 </div>
                 <div>
-                  <label className="block mb-1">Payment Terms</label>
+                  <label className="block mb-1">{t('lbl_payment_terms')}</label>
                   <Input value={data.payment_terms} onChange={e => setData('payment_terms', e.target.value)} />
                   {errors.payment_terms && <div className="text-red-500 text-xs">{errors.payment_terms}</div>}
                 </div>
@@ -122,7 +125,7 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                   {errors.notes && <div className="text-red-500 text-xs">{errors.notes}</div>}
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block mb-1">User ID</label>
+                  <label className="block mb-1">{t('lbl_user_id')}</label>
                   <Input value={data.user_id} onChange={e => setData('user_id', e.target.value)} />
                   {errors.user_id && <div className="text-red-500 text-xs">{errors.user_id}</div>}
                 </div>

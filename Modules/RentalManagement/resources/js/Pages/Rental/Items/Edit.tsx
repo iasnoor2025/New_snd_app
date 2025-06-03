@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
@@ -26,6 +27,8 @@ export const Edit: FC<Props> = ({ item }) => {
     });
 
     const handleSubmit = (e: React.FormEvent) => {
+  const { t } = useTranslation('rental');
+
         e.preventDefault();
         put(route('rentals.items.update', item.id));
     };
@@ -46,7 +49,7 @@ export const Edit: FC<Props> = ({ item }) => {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Edit Rental Item</CardTitle>
+                        <CardTitle>{t('ttl_edit_rental_item')}</CardTitle>
                     </CardHeader>
 
                     <CardContent>
@@ -75,7 +78,7 @@ export const Edit: FC<Props> = ({ item }) => {
                                         onChange={e => setData('category', e.target.value)}
                                         required
                                     >
-                                        <option value="">Select Category</option>
+                                        <option value="">{t('select_category')}</option>
                                         <option value="equipment">Equipment</option>
                                         <option value="tools">Tools</option>
                                         <option value="vehicles">Vehicles</option>
@@ -114,7 +117,7 @@ export const Edit: FC<Props> = ({ item }) => {
                                         required
                                     >
                                         <option value="new">New</option>
-                                        <option value="like_new">Like New</option>
+                                        <option value="like_new">{t('like_new')}</option>
                                         <option value="good">Good</option>
                                         <option value="fair">Fair</option>
                                         <option value="poor">Poor</option>
@@ -127,7 +130,7 @@ export const Edit: FC<Props> = ({ item }) => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="serial_number">Serial Number</Label>
+                                    <Label htmlFor="serial_number">{t('lbl_serial_number')}</Label>
                                     <Input
                                         id="serial_number"
                                         value={data.serial_number}

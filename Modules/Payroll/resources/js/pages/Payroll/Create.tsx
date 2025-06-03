@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/layouts/AuthenticatedLayout';
@@ -20,6 +21,8 @@ interface Props extends PageProps {
 }
 
 export default function Create({ auth, employees }: Props) {
+  const { t } = useTranslation('payroll');
+
     const { data, setData, post, processing, errors } = useForm({
         employee_id: '',
         payroll_month: format(new Date(), 'yyyy-MM'),
@@ -49,15 +52,15 @@ export default function Create({ auth, employees }: Props) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Create Payroll</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('ttl_create_payroll')}</h2>}
         >
-            <Head title="Create Payroll" />
+            <Head title={t('ttl_create_payroll')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Create New Payroll</CardTitle>
+                            <CardTitle>{t('ttl_create_new_payroll')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -69,7 +72,7 @@ export default function Create({ auth, employees }: Props) {
                                             onValueChange={handleEmployeeChange}
                                         >
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select Employee" />
+                                                <SelectValue placeholder={t('ph_select_employee')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {employees.map((employee) => (
@@ -85,7 +88,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="payroll_month">Payroll Month</Label>
+                                        <Label htmlFor="payroll_month">{t('lbl_payroll_month')}</Label>
                                         <Input
                                             id="payroll_month"
                                             type="month"
@@ -98,7 +101,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="base_salary">Base Salary</Label>
+                                        <Label htmlFor="base_salary">{t('base_salary')}</Label>
                                         <Input
                                             id="base_salary"
                                             type="number"
@@ -111,7 +114,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="overtime_hours">Overtime Hours</Label>
+                                        <Label htmlFor="overtime_hours">{t('lbl_overtime_hours')}</Label>
                                         <Input
                                             id="overtime_hours"
                                             type="number"
@@ -124,7 +127,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="overtime_rate">Overtime Rate per Hour</Label>
+                                        <Label htmlFor="overtime_rate">{t('lbl_overtime_rate_per_hour')}</Label>
                                         <Input
                                             id="overtime_rate"
                                             type="number"
@@ -137,7 +140,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="bonus_amount">Bonus Amount</Label>
+                                        <Label htmlFor="bonus_amount">{t('lbl_bonus_amount')}</Label>
                                         <Input
                                             id="bonus_amount"
                                             type="number"
@@ -150,7 +153,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="deduction_amount">Deduction Amount</Label>
+                                        <Label htmlFor="deduction_amount">{t('lbl_deduction_amount')}</Label>
                                         <Input
                                             id="deduction_amount"
                                             type="number"
@@ -185,7 +188,7 @@ export default function Create({ auth, employees }: Props) {
                                         Cancel
                                     </Button>
                                     <Button type="submit" disabled={processing}>
-                                        Create Payroll
+                                        {t('ttl_create_payroll')}
                                     </Button>
                                 </div>
                             </form>

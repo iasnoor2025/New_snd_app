@@ -1,4 +1,5 @@
 import { FC, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Upload, X } from 'lucide-react';
@@ -15,6 +16,8 @@ export const FileUpload: FC<FileUploadProps> = ({ field, name, onFileSelect }) =
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { t } = useTranslation('employee');
+
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);

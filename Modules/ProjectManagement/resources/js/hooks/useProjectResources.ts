@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 interface UseProjectResourcesProps {
@@ -41,6 +42,8 @@ export function useProjectResources({
     }, [projectId]);
 
     const refetch = () => {
+  const { t } = useTranslation('project');
+
         fetchResources();
     };
 

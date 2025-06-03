@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Table,
     TableBody,
@@ -31,6 +32,8 @@ interface Props {
 }
 
 export default function SalaryHistory({ records = [] }: Props) {
+  const { t } = useTranslation('employee');
+
     const calculateTotal = (record: SalaryRecord) => {
         return (
             record.basic_salary +
@@ -54,13 +57,13 @@ export default function SalaryHistory({ records = [] }: Props) {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Month</TableHead>
-                            <TableHead>Basic Salary</TableHead>
+                            <TableHead>{t('basic_salary')}</TableHead>
                             <TableHead>Allowances</TableHead>
                             <TableHead>Overtime</TableHead>
                             <TableHead>Deductions</TableHead>
-                            <TableHead>Net Salary</TableHead>
+                            <TableHead>{t('th_net_salary')}</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead>Paid Date</TableHead>
+                            <TableHead>{t('th_paid_date')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

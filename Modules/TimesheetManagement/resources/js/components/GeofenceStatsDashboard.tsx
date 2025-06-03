@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Card,
     CardContent,
@@ -209,6 +210,8 @@ const GeofenceStatsDashboard: React.FC = () => {
     };
 
     const getSeverityColor = (severity: string) => {
+  const { t } = useTranslation('timesheet');
+
         const colors = {
             low: 'bg-yellow-100 text-yellow-800',
             medium: 'bg-orange-100 text-orange-800',
@@ -239,7 +242,7 @@ const GeofenceStatsDashboard: React.FC = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Geofence Analytics</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('geofence_analytics')}</h1>
                     <p className="text-muted-foreground">
                         Monitor compliance, violations, and coverage statistics
                     </p>
@@ -250,18 +253,18 @@ const GeofenceStatsDashboard: React.FC = () => {
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="1d">Last Day</SelectItem>
-                            <SelectItem value="7d">Last Week</SelectItem>
-                            <SelectItem value="30d">Last Month</SelectItem>
-                            <SelectItem value="90d">Last Quarter</SelectItem>
+                            <SelectItem value="1d">{t('opt_last_day')}</SelectItem>
+                            <SelectItem value="7d">{t('opt_last_week')}</SelectItem>
+                            <SelectItem value="30d">{t('opt_last_month')}</SelectItem>
+                            <SelectItem value="90d">{t('opt_last_quarter')}</SelectItem>
                         </SelectContent>
                     </Select>
                     <Select value={selectedProject} onValueChange={setSelectedProject}>
                         <SelectTrigger className="w-[150px]">
-                            <SelectValue placeholder="All Projects" />
+                            <SelectValue placeholder={t('opt_all_projects')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Projects</SelectItem>
+                            <SelectItem value="all">{t('opt_all_projects')}</SelectItem>
                             {/* Add project options here */}
                         </SelectContent>
                     </Select>
@@ -273,7 +276,7 @@ const GeofenceStatsDashboard: React.FC = () => {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Zones</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_total_zones')}</CardTitle>
                             <Shield className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -286,7 +289,7 @@ const GeofenceStatsDashboard: React.FC = () => {
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Compliance Rate</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_compliance_rate')}</CardTitle>
                             <CheckCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -303,7 +306,7 @@ const GeofenceStatsDashboard: React.FC = () => {
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Violations</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('ttl_total_violations')}</CardTitle>
                             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -347,8 +350,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         {/* Zone Types Distribution */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Zones by Type</CardTitle>
-                                <CardDescription>Distribution of geofence zone types</CardDescription>
+                                <CardTitle>{t('ttl_zones_by_type')}</CardTitle>
+                                <CardDescription>{t('distribution_of_geofence_zone_types')}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 {stats?.zones_by_type && (
@@ -381,8 +384,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         {/* Violations by Severity */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Violations by Severity</CardTitle>
-                                <CardDescription>Breakdown of violation severity levels</CardDescription>
+                                <CardTitle>{t('ttl_violations_by_severity')}</CardTitle>
+                                <CardDescription>{t('breakdown_of_violation_severity_levels')}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 {stats?.violations_by_severity && (
@@ -408,8 +411,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         <CardHeader>
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <CardTitle>Compliance Trend</CardTitle>
-                                    <CardDescription>Daily compliance rate over time</CardDescription>
+                                    <CardTitle>{t('ttl_compliance_trend')}</CardTitle>
+                                    <CardDescription>{t('daily_compliance_rate_over_time')}</CardDescription>
                                 </div>
                                 <Button variant="outline" size="sm" onClick={() => exportData('stats')}>
                                     <Download className="mr-2 h-4 w-4" />
@@ -450,8 +453,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         <CardHeader>
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <CardTitle>Recent Violations</CardTitle>
-                                    <CardDescription>Latest geofence violations and their details</CardDescription>
+                                    <CardTitle>{t('ttl_recent_violations')}</CardTitle>
+                                    <CardDescription>{t('latest_geofence_violations_and_their_details')}</CardDescription>
                                 </div>
                                 <Button variant="outline" size="sm" onClick={() => exportData('violations')}>
                                     <Download className="mr-2 h-4 w-4" />
@@ -515,8 +518,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         {/* Top Violating Employees */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Top Violating Employees</CardTitle>
-                                <CardDescription>Employees with most violations</CardDescription>
+                                <CardTitle>{t('ttl_top_violating_employees')}</CardTitle>
+                                <CardDescription>{t('employees_with_most_violations')}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
@@ -551,8 +554,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         {/* Zone Performance */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Zone Performance</CardTitle>
-                                <CardDescription>Compliance rates by zone</CardDescription>
+                                <CardTitle>{t('ttl_zone_performance')}</CardTitle>
+                                <CardDescription>{t('compliance_rates_by_zone')}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
@@ -592,8 +595,8 @@ const GeofenceStatsDashboard: React.FC = () => {
                         <CardHeader>
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <CardTitle>Work Area Coverage</CardTitle>
-                                    <CardDescription>Geofence coverage analysis by project</CardDescription>
+                                    <CardTitle>{t('ttl_work_area_coverage')}</CardTitle>
+                                    <CardDescription>{t('geofence_coverage_analysis_by_project')}</CardDescription>
                                 </div>
                                 <Button variant="outline" size="sm" onClick={() => exportData('coverage')}>
                                     <Download className="mr-2 h-4 w-4" />

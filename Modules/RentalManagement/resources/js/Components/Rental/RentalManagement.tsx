@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { RentalStatus } from '../RentalStatus';
 import { RentalWorkflowActions } from './RentalWorkflowActions';
@@ -18,14 +19,14 @@ export const RentalManagement: FC<Props> = ({ initialRentals = [], customers = [
     const [activeTab, setActiveTab] = useState<'rentals' | 'customers' | 'equipment'>('rentals');
 
     return (
-            <Head title="Rental Management" />
+            <Head title={t('rental_management')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-2xl font-semibold text-gray-900">Rental Management</h2>
+                                <h2 className="text-2xl font-semibold text-gray-900">{t('rental_management')}</h2>
                                 <RentalWorkflowActions
                                     selectedRental={selectedRental}
                                     onRentalSelect={setSelectedRental}

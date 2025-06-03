@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Plus } from "lucide-react";
@@ -34,14 +35,14 @@ const RentalItemsCard: React.FC<RentalItemsCardProps> = ({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>
-          <CardTitle>Rental Items</CardTitle>
-          <CardDescription>Equipment and operator details for this rental</CardDescription>
+          <CardTitle>{t('rental_items')}</CardTitle>
+          <CardDescription>{t('equipment_and_operator_details_for_this_rental')}</CardDescription>
         </div>
         {canAddItems && (
           <Button variant="outline" size="sm" asChild>
             <Link href={`/rentals/${rentalId}/items/create`}>
               <Plus className="h-4 w-4 mr-2" />
-              Add Item
+              {t('btn_add_item')}
             </Link>
           </Button>
         )}
@@ -52,7 +53,7 @@ const RentalItemsCard: React.FC<RentalItemsCardProps> = ({
         ) : (
           <div className="text-center py-6">
             <FileText className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
-            <p className="mt-2 text-lg font-medium">No items added yet</p>
+            <p className="mt-2 text-lg font-medium">{t('no_items_added_yet')}</p>
             <p className="text-sm text-muted-foreground">
               Add equipment and operators to this rental.
             </p>

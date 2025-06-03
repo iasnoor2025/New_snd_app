@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 // @ts-ignore
 import { Button } from '../../../../../../resources/js/components/ui/button';
@@ -83,6 +84,8 @@ interface LeaveRequest {
 
 // Temporary inline implementation of usePermission hook
 function usePermission() {
+  const { t } = useTranslation('leave');
+
   const { props } = usePage();
   const auth = (props?.auth || {}) as Record<string, any>;
   // DEBUG: Log the full auth object
@@ -215,13 +218,13 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
 
   return (
     <>
-      <Head title="Leave Requests" />
+      <Head title={t('ttl_leave_requests')} />
 
-      <AdminLayout title="Leave Requests" requiredPermission="leave-requests.view" breadcrumbs={breadcrumbs}>
+      <AdminLayout title={t('ttl_leave_requests')} requiredPermission="leave-requests.view" breadcrumbs={breadcrumbs}>
         <div className="flex h-full flex-1 flex-col gap-4 p-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-2xl font-bold">Leave Requests</CardTitle>
+              <CardTitle className="text-2xl font-bold">{t('ttl_leave_requests')}</CardTitle>
               <div className="flex items-center space-x-2">
                 {canCreateLeaveRequest && (
                   <Button asChild>
@@ -237,7 +240,7 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
               <div className="flex flex-wrap gap-4 mb-4">
                 <div className="flex w-full max-w-sm items-center space-x-2">
                   <Input
-                    placeholder="Search by employee name"
+                    placeholder={t('ph_search_by_employee_name')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -247,10 +250,10 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
                     onValueChange={setSelectedStatus}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Filter by Status" />
+                      <SelectValue placeholder={t('ph_filter_by_status')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="approved">Approved</SelectItem>
                       <SelectItem value="rejected">Rejected</SelectItem>
@@ -270,9 +273,9 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
                   <TableHeader>
                     <TableRow>
                       <TableHead>Employee</TableHead>
-                      <TableHead>Leave Type</TableHead>
-                      <TableHead>Start Date</TableHead>
-                      <TableHead>End Date</TableHead>
+                      <TableHead>{t('lbl_leave_type')}</TableHead>
+                      <TableHead>{t('lbl_start_date')}</TableHead>
+                      <TableHead>{t('end_date')}</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>

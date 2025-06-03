@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -16,6 +17,8 @@ interface MaterialTabProps {
 }
 
 export function MaterialTab({ project, projectMaterials }: MaterialTabProps) {
+  const { t } = useTranslation('project');
+
     const {
         isCreateModalOpen,
         isEditModalOpen,
@@ -63,7 +66,7 @@ export function MaterialTab({ project, projectMaterials }: MaterialTabProps) {
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
-                <Button onClick={openCreateModal}>Add Material</Button>
+                <Button onClick={openCreateModal}>{t('ttl_add_material')}</Button>
             </div>
 
             <Table>
@@ -72,9 +75,9 @@ export function MaterialTab({ project, projectMaterials }: MaterialTabProps) {
                         <TableHead>Name</TableHead>
                         <TableHead>Unit</TableHead>
                         <TableHead>Quantity</TableHead>
-                        <TableHead>Unit Price</TableHead>
-                        <TableHead>Total Cost</TableHead>
-                        <TableHead>Date Used</TableHead>
+                        <TableHead>{t('lbl_unit_price')}</TableHead>
+                        <TableHead>{t('th_total_cost')}</TableHead>
+                        <TableHead>{t('lbl_date_used')}</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -113,7 +116,7 @@ export function MaterialTab({ project, projectMaterials }: MaterialTabProps) {
             <ResourceFormModal
                 isOpen={isCreateModalOpen}
                 onClose={closeCreateModal}
-                title="Add Material"
+                title={t('ttl_add_material')}
                 type="material"
                 projectId={Number(project.id)}
                 onSuccess={handleCreateSuccess}
@@ -122,7 +125,7 @@ export function MaterialTab({ project, projectMaterials }: MaterialTabProps) {
             <ResourceFormModal
                 isOpen={isEditModalOpen}
                 onClose={closeEditModal}
-                title="Edit Material"
+                title={t('ttl_edit_material')}
                 type="material"
                 projectId={Number(project.id)}
                 initialData={selectedResource}

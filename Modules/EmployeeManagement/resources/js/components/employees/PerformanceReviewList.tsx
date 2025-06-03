@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { useSearchParams } from 'react-router-dom';
@@ -113,6 +114,8 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
   };
 
   const applyFilters = () => {
+  const { t } = useTranslation('employee');
+
     let filtered = [...reviews];
 
     // Apply search query
@@ -235,7 +238,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
     <Card className="w-full shadow-sm">
       <CardHeader className="pb-0">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-2xl font-bold">Performance Reviews</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t('ttl_performance_reviews')}</CardTitle>
           {onCreateNew && (
             <Button className="flex items-center gap-1" onClick={onCreateNew}>
               <Plus className="h-4 w-4" />
@@ -249,7 +252,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
               type="text"
-              placeholder="Search reviews..."
+              placeholder={t('ph_search_reviews')}
               className="w-full pl-9"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -261,10 +264,10 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
               value={statusFilter}
               onValueChange={setStatusFilter}
               <SelectTrigger className="w-[130px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t('ph_status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t('opt_all_status')}</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
@@ -274,13 +277,13 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
             <DatePicker
               value={startDate}
               onChange={setStartDate}
-              placeholder="Start Date"
+              placeholder={t('lbl_start_date')}
             />
 
             <DatePicker
               value={endDate}
               onChange={setEndDate}
-              placeholder="End Date"
+              placeholder={t('lbl_end_date')}
             />
           </div>
         </div>
@@ -390,7 +393,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Performance Review</DialogTitle>
+            <DialogTitle>{t('ttl_delete_performance_review')}</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this performance review? This action cannot be undone.
             </DialogDescription>
@@ -411,7 +414,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
       <Dialog open={showCommentDialog} onOpenChange={setShowCommentDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Employee Comments</DialogTitle>
+            <DialogTitle>{t('ttl_employee_comments')}</DialogTitle>
             <DialogDescription>
               Add or update employee comments for this performance review.
             </DialogDescription>
@@ -425,7 +428,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
                 value={employeeComment}
                 onChange={(e) => setEmployeeComment(e.target.value)}
                 rows={5}
-                placeholder="Enter employee comments"
+                placeholder={t('ph_enter_employee_comments')}
               />
             </div>
           </div>

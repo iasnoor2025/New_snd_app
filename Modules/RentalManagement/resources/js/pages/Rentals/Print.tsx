@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, usePage } from '@inertiajs/react';
 import { Descriptions, Table, Typography, Divider } from 'antd';
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
@@ -25,6 +26,8 @@ interface Props extends PageProps {
 }
 
 export default function Print({ rental }: Props) {
+  const { t } = useTranslation('rental');
+
   const { props } = usePage();
   const locale = props.locale || 'en';
 
@@ -97,7 +100,7 @@ export default function Print({ rental }: Props) {
         {/* Header */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-2xl font-bold">Rental Agreement</h1>
+            <h1 className="text-2xl font-bold">{t('rental_agreement')}</h1>
             <p className="text-gray-600">Rental Number: {rental.rental_number}</p>
           </div>
           <div className="text-right">
@@ -109,7 +112,7 @@ export default function Print({ rental }: Props) {
 
         {/* Rental Details */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Rental Details</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('rental_details')}</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p><span className="font-semibold">Start Date:</span> {formatDate(rental.start_date)}</p>
@@ -130,14 +133,14 @@ export default function Print({ rental }: Props) {
 
         {/* Rental Items */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Rental Items</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('rental_items')}</h2>
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
                 <th className="border p-2 text-left">Equipment</th>
-                <th className="border p-2 text-left">Serial Number</th>
+                <th className="border p-2 text-left">{t('lbl_serial_number')}</th>
                 <th className="border p-2 text-right">Quantity</th>
-                <th className="border p-2 text-right">Rate Type</th>
+                <th className="border p-2 text-right">{t('lbl_rate_type')}</th>
                 <th className="border p-2 text-right">Rate</th>
                 <th className="border p-2 text-right">Total</th>
               </tr>
@@ -174,7 +177,7 @@ export default function Print({ rental }: Props) {
               <p className="text-sm text-gray-600 mt-2">Date: _________________</p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">Company Representative</h3>
+              <h3 className="font-semibold mb-2">{t('company_representative')}</h3>
               <div className="h-20 border-b border-gray-400"></div>
               <p className="text-sm text-gray-600 mt-2">Date: _________________</p>
             </div>

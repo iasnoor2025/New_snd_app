@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect, memo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import TaskForm from './TaskForm';
 import { ProjectTask } from './TaskList';
@@ -15,6 +16,8 @@ interface TaskDialogProps {
 
 // Creates a portal outside of React's normal rendering flow with safety checks
 function Portal({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation('project');
+
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 

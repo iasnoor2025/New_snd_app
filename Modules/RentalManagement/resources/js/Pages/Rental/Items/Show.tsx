@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
@@ -20,6 +21,8 @@ interface Props {
 
 export const Show: FC<Props> = ({ item, rentalHistory }) => {
     const getStatusColor = (status: string) => {
+  const { t } = useTranslation('rental');
+
         switch (status) {
             case 'available':
                 return 'bg-green-100 text-green-800';
@@ -67,7 +70,7 @@ export const Show: FC<Props> = ({ item, rentalHistory }) => {
                     <Card>
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <CardTitle>Item Details</CardTitle>
+                                <CardTitle>{t('ttl_item_details')}</CardTitle>
                                 <Button
                                     variant="outline"
                                     onClick={() => window.location.href = route('rentals.items.edit', item.id)}
@@ -104,12 +107,12 @@ export const Show: FC<Props> = ({ item, rentalHistory }) => {
                             </div>
 
                             <div>
-                                <h3 className="text-sm font-medium text-gray-500">Daily Rate</h3>
+                                <h3 className="text-sm font-medium text-gray-500">{t('daily_rate')}</h3>
                                 <p className="mt-1">${item.daily_rate.toFixed(2)}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-sm font-medium text-gray-500">Serial Number</h3>
+                                <h3 className="text-sm font-medium text-gray-500">{t('lbl_serial_number')}</h3>
                                 <p className="mt-1">{item.serial_number || 'N/A'}</p>
                             </div>
 
@@ -130,7 +133,7 @@ export const Show: FC<Props> = ({ item, rentalHistory }) => {
                     <Card>
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <CardTitle>Rental History</CardTitle>
+                                <CardTitle>{t('ttl_rental_history')}</CardTitle>
                                 <History className="w-5 h-5 text-gray-400" />
                             </div>
                         </CardHeader>

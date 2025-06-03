@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { Employee } from '../../types/employee';
@@ -43,6 +44,8 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
   };
 
   const getStatusBadgeColor = (status: string) => {
+  const { t } = useTranslation('employee');
+
     switch (status) {
       case 'active':
         return 'bg-green-100 text-green-800 border-green-300';
@@ -74,10 +77,10 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
     return (
       <Card className="w-full shadow-sm">
         <CardContent className="pt-6 text-center p-10">
-          <h3 className="text-lg font-semibold mb-2">Employee Not Found</h3>
+          <h3 className="text-lg font-semibold mb-2">{t('employee_not_found')}</h3>
           <p className="text-gray-500 mb-4">The requested employee could not be found.</p>
           <Link href="/employees">
-            <Button>Back to Employees</Button>
+            <Button>{t('btn_back_to_employees')}</Button>
           </Link>
         </CardContent>
       </Card>
@@ -112,7 +115,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
         <CardHeader className="pb-0">
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
-              <CardTitle>Employee Information</CardTitle>
+              <CardTitle>{t('employee_information')}</CardTitle>
               <div className="mt-2">
                 <Badge variant="outline" className={getStatusBadgeColor(employee.status)}>
                   {employee.status.replace('_', ' ')}
@@ -122,7 +125,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
 
             {employee.current_assignment && (
               <div className="bg-gray-100 p-3 rounded-lg">
-                <p className="text-sm font-medium">Current Assignment</p>
+                <p className="text-sm font-medium">{t('current_assignment')}</p>
                 <p className="text-sm">{employee.current_assignment.name}</p>
                 <p className="text-xs text-gray-500">{employee.current_assignment.type}</p>
               </div>
@@ -139,7 +142,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
             <TabsList className="mb-4">
               <TabsTrigger value="personal" className="flex gap-1 items-center">
                 <FileText className="h-4 w-4" />
-                Personal Info
+                {t('personal_info')}
               </TabsTrigger>
               <TabsTrigger value="employment" className="flex gap-1 items-center">
                 <ClipboardList className="h-4 w-4" />
@@ -171,7 +174,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Full Name</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('full_name')}</h3>
                     <p>{employee.first_name} {employee.last_name}</p>
                   </div>
                   <div>
@@ -183,7 +186,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                     <p>{employee.phone || '-'}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Date of Birth</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('date_of_birth')}</h3>
                     <p>{employee.date_of_birth || '-'}</p>
                   </div>
                 </div>
@@ -193,7 +196,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                     <p>{employee.nationality || '-'}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Emergency Contact</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('emergency_contact')}</h3>
                     <p>{employee.emergency_contact_name || '-'}</p>
                     <p className="text-sm text-gray-500">{employee.emergency_contact_phone || '-'}</p>
                   </div>
@@ -213,7 +216,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                     <p>{employee.department || '-'}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Join Date</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('join_date')}</h3>
                     <p>{employee.join_date || '-'}</p>
                   </div>
                 </div>
@@ -225,7 +228,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                     </Badge>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">User Account</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('user_account')}</h3>
                     <p>{employee.user ? employee.user.email : 'No user account'}</p>
                     {employee.user && employee.user.roles && (
                       <div className="mt-1 flex gap-1">
@@ -243,12 +246,12 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
 
             <TabsContent value="documents" className="space-y-4">
               <Link href={`/employees/${employee.id}/documents`}>
-                <Button>Manage Documents</Button>
+                <Button>{t('btn_manage_documents')}</Button>
               </Link>
 
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Identification Documents</h3>
+                  <h3 className="text-sm font-medium text-gray-500 mb-2">{t('identification_documents')}</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between border-b pb-2">
                       <div>
@@ -273,7 +276,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                   <div className="space-y-3">
                     <div className="flex justify-between border-b pb-2">
                       <div>
-                        <p className="font-medium">Driving License</p>
+                        <p className="font-medium">{t('driving_license')}</p>
                         <p className="text-sm text-gray-500">{employee.driving_license || 'Not provided'}</p>
                       </div>
                       {employee.driving_license_cost && (
@@ -282,7 +285,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                     </div>
                     <div className="flex justify-between border-b pb-2">
                       <div>
-                        <p className="font-medium">Operator License</p>
+                        <p className="font-medium">{t('lbl_operator_license')}</p>
                         <p className="text-sm text-gray-500">{employee.operator_license || 'Not provided'}</p>
                       </div>
                       {employee.operator_license_cost && (
@@ -312,7 +315,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
 
                 {employee.custom_certifications && employee.custom_certifications.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-2">Custom Certifications</h3>
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">{t('custom_certifications')}</h3>
                     <div className="space-y-3">
                       {employee.custom_certifications.map((cert, index) => (
                         <div key={index} className="flex justify-between border-b pb-2">
@@ -334,7 +337,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
 
             <TabsContent value="timesheets" className="space-y-4">
               <Link href={`/employees/${employee.id}/timesheets`}>
-                <Button>View Timesheets</Button>
+                <Button>{t('btn_view_timesheets')}</Button>
               </Link>
               <p className="text-sm text-gray-500">View and manage employee timesheets.</p>
             </TabsContent>
@@ -343,13 +346,13 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Basic Salary</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('basic_salary')}</h3>
                     <p className="text-lg font-medium">
                       {employee.basic_salary ? `SAR ${employee.basic_salary.toFixed(2)}` : '-'}
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Hourly Rate</h3>
+                    <h3 className="text-sm font-medium text-gray-500">{t('hourly_rate')}</h3>
                     <p>
                       {employee.hourly_rate ? `SAR ${employee.hourly_rate.toFixed(2)}` : '-'}
                     </p>
@@ -381,7 +384,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
                   </div>
                   <div className="pt-2 border-t">
                     <div className="flex justify-between font-medium">
-                      <span>Total Compensation</span>
+                      <span>{t('total_compensation')}</span>
                       <span>
                         {calculateTotalCompensation(employee)}
                       </span>
@@ -391,14 +394,14 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
               </div>
 
               <div className="mt-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Banking Information</h3>
+                <h3 className="text-sm font-medium text-gray-500 mb-2">{t('banking_information')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium">Bank Name</p>
+                    <p className="text-sm font-medium">{t('bank_name')}</p>
                     <p className="text-sm">{employee.bank_name || '-'}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Account Number</p>
+                    <p className="text-sm font-medium">{t('account_number')}</p>
                     <p className="text-sm">{employee.bank_account_number || '-'}</p>
                   </div>
                   <div>
@@ -412,7 +415,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
             <TabsContent value="performance" className="space-y-4">
               <div className="mb-4">
                 <Link href={`/employees/${employee.id}/performance`}>
-                  <Button>Manage Performance Reviews</Button>
+                  <Button>{t('btn_manage_performance_reviews')}</Button>
                 </Link>
               </div>
               <PerformanceReviewList

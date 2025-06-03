@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
@@ -50,6 +51,8 @@ interface Props extends PageProps {
 }
 
 export default function History({ auth, employee, monthlyHistory, totalRepaid, pagination }: Props) {
+  const { t } = useTranslation('employee');
+
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -72,14 +75,14 @@ export default function History({ auth, employee, monthlyHistory, totalRepaid, p
   ];
 
   return (
-    <AdminLayout title="Payment History" breadcrumbs={breadcrumbs} requiredPermission="employees.view">
-      <Head title="Payment History" />
+    <AdminLayout title={t('payment_history')} breadcrumbs={breadcrumbs} requiredPermission="employees.view">
+      <Head title={t('payment_history')} />
 
       <div className="flex h-full flex-1 flex-col gap-6 p-4 md:gap-8 md:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
-              Payment History
+              {t('payment_history')}
             </h1>
             <p className="text-muted-foreground">
               {employee.first_name} {employee.last_name} • ID: {employee.employee_id}
@@ -98,8 +101,8 @@ export default function History({ auth, employee, monthlyHistory, totalRepaid, p
 
         <Card>
           {/* <CardHeader>
-            <CardTitle>Payment History</CardTitle>
-            <CardDescription>Track and manage employee advance payments and deductions</CardDescription>
+            <CardTitle>{t('payment_history')}</CardTitle>
+            <CardDescription>{t('track_and_manage_employee_advance_payments_and_ded')}</CardDescription>
           </CardHeader> */}
           <CardContent>
             <PaymentHistory

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm, router } from '@inertiajs/react';
 import { PageProps } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -52,6 +53,8 @@ const breadcrumbs = [
 ];
 
 export default function Create({ auth, employees }: Props) {
+  const { t } = useTranslation('payroll');
+
     const { data, setData, post, processing, errors } = useForm({
         employee_id: '',
         amount: '',
@@ -74,11 +77,11 @@ export default function Create({ auth, employees }: Props) {
 
     return (
         <AdminLayout
-            title="Request Salary Advance"
+            title={t('request_salary_advance')}
             breadcrumbs={breadcrumbs}
             requiredPermission="salary-advances.create"
         >
-            <Head title="Request Salary Advance" />
+            <Head title={t('request_salary_advance')} />
 
             <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <div className="flex items-center gap-4">
@@ -89,7 +92,7 @@ export default function Create({ auth, employees }: Props) {
                         </Link>
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Request Salary Advance</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">{t('request_salary_advance')}</h1>
                         <p className="text-muted-foreground">
                             Submit a new salary advance request
                         </p>
@@ -118,7 +121,7 @@ export default function Create({ auth, employees }: Props) {
                                         required
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select employee" />
+                                            <SelectValue placeholder={t('ph_select_employee_1')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {employees.map((employee) => (
@@ -213,7 +216,7 @@ export default function Create({ auth, employees }: Props) {
                                         <FileText className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                         <Textarea
                                             id="reason"
-                                            placeholder="Please provide a reason for the salary advance request..."
+                                            placeholder={t('ph_please_provide_a_reason_for_the_salary_advance')}
                                             value={data.reason}
                                             onChange={(e) => setData('reason', e.target.value)}
                                             className="min-h-[100px] pl-10 pt-3"
@@ -233,8 +236,8 @@ export default function Create({ auth, employees }: Props) {
                                 <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
                                     <h4 className="font-medium text-amber-800">Important Notes:</h4>
                                     <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-700">
-                                        <li>All salary advance requests require approval from HR or management</li>
-                                        <li>The advance amount will be deducted from your salary starting from the specified date</li>
+                                        <li>{t('all_salary_advance_requests_require_approval_from')}</li>
+                                        <li>{t('the_advance_amount_will_be_deducted_from_your_sala')}</li>
                                         <li>Maximum advance amount is typically 50% of your basic salary</li>
                                         <li>Processing may take 2-3 business days after approval</li>
                                     </ul>

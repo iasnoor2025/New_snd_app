@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -18,14 +19,16 @@ interface Props extends PageProps {
 }
 
 export default function PaySlipTest({ auth, employeeId, month }: Props) {
+  const { t } = useTranslation('timesheet');
+
   return (
-    <AdminLayout title="Pay Slip Test" breadcrumbs={[]} requiredPermission="timesheets.view">
-      <Head title="Pay Slip Test" />
+    <AdminLayout title={t('ttl_pay_slip_test')} breadcrumbs={[]} requiredPermission="timesheets.view">
+      <Head title={t('ttl_pay_slip_test')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <Card>
           <CardHeader>
-            <CardTitle>Pay Slip Test Page</CardTitle>
+            <CardTitle>{t('ttl_pay_slip_test_page')}</CardTitle>
             <CardDescription>
               This is a test page to verify that the pay slip route is working.
             </CardDescription>

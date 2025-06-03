@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,6 +56,8 @@ interface SortState {
 }
 
 export default function Resources({ project }: { project: any }) {
+  const { t } = useTranslation('project');
+
     const [resources, setResources] = useState<Resource[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<ResourceType>("manpower");
@@ -408,7 +411,7 @@ export default function Resources({ project }: { project: any }) {
                     <Card className="p-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div className="space-y-2">
-                                <Label>Date Range</Label>
+                                <Label>{t('date_range')}</Label>
                                 <div className="grid grid-cols-2 gap-2">
                                     <Input
                                         type="date"
@@ -417,7 +420,7 @@ export default function Resources({ project }: { project: any }) {
                                             ...filters.dateRange,
                                             start: e.target.value
                                         })}
-                                        placeholder="Start Date"
+                                        placeholder={t('lbl_start_date')}
                                     />
                                     <Input
                                         type="date"
@@ -426,7 +429,7 @@ export default function Resources({ project }: { project: any }) {
                                             ...filters.dateRange,
                                             end: e.target.value
                                         })}
-                                        placeholder="End Date"
+                                        placeholder={t('end_date')}
                                     />
                                 </div>
                             </div>
@@ -441,7 +444,7 @@ export default function Resources({ project }: { project: any }) {
                                             ...filters.costRange,
                                             min: e.target.value
                                         })}
-                                        placeholder="Min"
+                                        placeholder={t('ph_min')}
                                     />
                                     <Input
                                         type="number"
@@ -450,7 +453,7 @@ export default function Resources({ project }: { project: any }) {
                                             ...filters.costRange,
                                             max: e.target.value
                                         })}
-                                        placeholder="Max"
+                                        placeholder={t('ph_max')}
                                     />
                                 </div>
                             </div>

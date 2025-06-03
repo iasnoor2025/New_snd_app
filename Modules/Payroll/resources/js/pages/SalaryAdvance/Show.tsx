@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm, router } from '@inertiajs/react';
 import { PageProps } from '../../../../../../resources/js/types';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -104,6 +105,8 @@ const getStatusBadge = (status: string) => {
 };
 
 export default function Show({ auth, salaryAdvance }: Props) {
+  const { t } = useTranslation('payroll');
+
     const { hasPermission } = usePermission();
     const [showApproveDialog, setShowApproveDialog] = useState(false);
     const [showRejectDialog, setShowRejectDialog] = useState(false);
@@ -135,7 +138,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
 
     return (
         <AdminLayout
-            title="Salary Advance Details"
+            title={t('ttl_salary_advance_details')}
             breadcrumbs={breadcrumbs}
             requiredPermission="salary-advances.view"
         >
@@ -190,7 +193,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <User className="h-5 w-5" />
-                                Employee Information
+                                {t('employee_information')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -201,7 +204,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-muted-foreground">Employee ID</p>
+                                <p className="text-sm font-medium text-muted-foreground">{t('employee_id')}</p>
                                 <p className="font-medium">{salaryAdvance.employee.employee_id}</p>
                             </div>
                         </CardContent>
@@ -212,7 +215,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <DollarSign className="h-5 w-5" />
-                                Request Details
+                                {t('leave:request_details')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -224,13 +227,13 @@ export default function Show({ auth, salaryAdvance }: Props) {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p className="text-sm font-medium text-muted-foreground">Advance Date</p>
+                                    <p className="text-sm font-medium text-muted-foreground">{t('advance_date')}</p>
                                     <p className="font-medium">
                                         {format(new Date(salaryAdvance.advance_date), 'MMM dd, yyyy')}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium text-muted-foreground">Deduction Start</p>
+                                    <p className="text-sm font-medium text-muted-foreground">{t('deduction_start')}</p>
                                     <p className="font-medium">
                                         {format(new Date(salaryAdvance.deduction_start_date), 'MMM dd, yyyy')}
                                     </p>
@@ -265,7 +268,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
                         <CardContent>
                             <div className="grid gap-4 md:grid-cols-3">
                                 <div>
-                                    <p className="text-sm font-medium text-muted-foreground">Current Status</p>
+                                    <p className="text-sm font-medium text-muted-foreground">{t('current_status')}</p>
                                     <div className="mt-1">
                                         {getStatusBadge(salaryAdvance.status)}
                                     </div>
@@ -301,7 +304,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
             <Dialog open={showApproveDialog} onOpenChange={setShowApproveDialog}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Approve Salary Advance</DialogTitle>
+                        <DialogTitle>{t('ttl_approve_salary_advance')}</DialogTitle>
                         <DialogDescription>
                             Are you sure you want to approve this salary advance request for{' '}
                             <strong>
@@ -329,7 +332,7 @@ export default function Show({ auth, salaryAdvance }: Props) {
             <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Reject Salary Advance</DialogTitle>
+                        <DialogTitle>{t('ttl_reject_salary_advance')}</DialogTitle>
                         <DialogDescription>
                             Are you sure you want to reject this salary advance request for{' '}
                             <strong>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import AdminLayout from '@/layouts/AdminLayout';
@@ -86,6 +87,8 @@ interface Props extends PageProps {
 }
 
 export default function EmployeeCreate({ auth, positions }: Props) {
+  const { t } = useTranslation('employee');
+
   const { toast } = useToast();
   const { hasPermission } = usePermission();
   const [activeTab, setActiveTab] = useState('personal');
@@ -160,18 +163,18 @@ export default function EmployeeCreate({ auth, positions }: Props) {
   };
 
   return (
-    <AdminLayout title="Create Employee" requiredPermission="employees.create">
-      <Head title="Create Employee" />
+    <AdminLayout title={t('ttl_create_employee')} requiredPermission="employees.create">
+      <Head title={t('ttl_create_employee')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-2xl font-bold">Create Employee</CardTitle>
+            <CardTitle className="text-2xl font-bold">{t('ttl_create_employee')}</CardTitle>
             <div className="flex items-center space-x-2">
               <Button variant="outline" asChild>
                 <Link href={route('employees.index')}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Employees
+                  {t('btn_back_to_employees')}
                 </Link>
               </Button>
             </div>
@@ -179,7 +182,7 @@ export default function EmployeeCreate({ auth, positions }: Props) {
           <CardContent>
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
               <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="personal">Personal Info</TabsTrigger>
+                <TabsTrigger value="personal">{t('personal_info')}</TabsTrigger>
                 <TabsTrigger value="employment">Employment</TabsTrigger>
                 <TabsTrigger value="salary">Salary</TabsTrigger>
                 <TabsTrigger value="documents">Documents</TabsTrigger>

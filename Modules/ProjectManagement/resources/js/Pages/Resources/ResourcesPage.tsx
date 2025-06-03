@@ -7,6 +7,7 @@
  */
 
 import React, { Suspense, lazy, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useResourceStore } from '../../stores/resourceStore';
@@ -55,6 +56,8 @@ export function ResourcesPage({
     expenses,
     availableEquipment,
 }: ResourcesPageProps) {
+  const { t } = useTranslation('project');
+
     const { setManpowers, setEquipments, setMaterials, setFuel, setExpenses, setAvailableEquipment } = useResourceStore();
 
     // Memoize the store initialization function
@@ -145,7 +148,7 @@ export function ResourcesPage({
         >
             <div className="container mx-auto py-6">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">Project Resources</h1>
+                    <h1 className="text-2xl font-bold">{t('project_resources')}</h1>
                     <div className="flex items-center space-x-4">
                         <span className="text-sm text-muted-foreground">
                             Project: {project.name}
@@ -155,7 +158,7 @@ export function ResourcesPage({
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Resource Management</CardTitle>
+                        <CardTitle>{t('ttl_resource_management')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Tabs defaultValue="manpower" className="w-full">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/button';
 import {
@@ -36,6 +37,8 @@ interface Props {
 }
 
 export default function LeaveRequestShow({ leaveRequest }: Props) {
+  const { t } = useTranslation('leave');
+
   const { hasPermission } = usePermission();
   const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   const [returnDate, setReturnDate] = useState('');
@@ -142,14 +145,14 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
   return (
     <AdminLayout>
-      <Head title="View Leave Request" />
+      <Head title={t('ttl_view_leave_request')} />
       <div className="container mx-auto py-6">
         <Breadcrumb className="mb-6">
           <BreadcrumbItem>
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>{t('ttl_leave_requests')}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <BreadcrumbLink>View</BreadcrumbLink>
@@ -159,7 +162,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
             <CalendarDays className="h-8 w-8 mr-2 text-primary" />
-            <h1 className="text-2xl font-bold">Leave Request Details</h1>
+            <h1 className="text-2xl font-bold">{t('leave_request_details')}</h1>
           </div>
           <div className="flex space-x-2">
             <Link href={route('leaves.requests.index')}>
@@ -190,7 +193,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-2 shadow-md">
             <CardHeader className="bg-muted/50">
-              <CardTitle>Leave Request Information</CardTitle>
+              <CardTitle>{t('ttl_leave_request_information')}</CardTitle>
               <CardDescription>
                 Details of the leave request
               </CardDescription>
@@ -206,7 +209,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-muted-foreground">Leave Type</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground">{t('lbl_leave_type')}</h3>
                     <p className="text-base font-medium mt-1">
                       {getLeaveTypeName(leaveRequest.leave_type)}
                     </p>
@@ -222,14 +225,14 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-muted-foreground">Start Date</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground">{t('lbl_start_date')}</h3>
                     <p className="text-base font-medium mt-1">
                       {formatDate(leaveRequest.start_date)}
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-muted-foreground">End Date</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground">{t('end_date')}</h3>
                     <p className="text-base font-medium mt-1">
                       {formatDate(leaveRequest.end_date)}
                     </p>
@@ -253,7 +256,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
               {leaveRequest.notes && (
                 <div className="mt-6">
-                  <h3 className="text-sm font-medium text-muted-foreground">Additional Notes</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('additional_notes')}</h3>
                   <p className="text-base mt-1 p-3 bg-muted/20 rounded-md">
                     {leaveRequest.notes}
                   </p>
@@ -262,7 +265,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
               {leaveRequest.status === 'approved' && !leaveRequest.return_date && (
                 <div className="mt-6">
-                  <h3 className="text-sm font-medium text-muted-foreground">Return Status</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('return_status')}</h3>
                   <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                     <p className="text-sm text-yellow-800">
                       Employee has not returned from leave yet.
@@ -276,7 +279,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
               {leaveRequest.return_date && (
                 <div className="mt-6">
-                  <h3 className="text-sm font-medium text-muted-foreground">Return Information</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('return_information')}</h3>
                   <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-md">
                     <p className="text-sm text-green-800">
                       Employee returned on {formatDate(leaveRequest.return_date)}
@@ -320,14 +323,14 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Mark Employee as Returned</DialogTitle>
+                      <DialogTitle>{t('ttl_mark_employee_as_returned')}</DialogTitle>
                       <DialogDescription>
                         Record the employee's return from leave
                       </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                       <div className="grid gap-2">
-                        <Label htmlFor="return_date">Return Date</Label>
+                        <Label htmlFor="return_date">{t('lbl_return_date')}</Label>
                         <Input
                           id="return_date"
                           type="date"
@@ -342,7 +345,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
                           id="return_notes"
                           value={returnNotes}
                           onChange={(e) => setReturnNotes(e.target.value)}
-                          placeholder="Add any notes about the return..."
+                          placeholder={t('ph_add_any_notes_about_the_return')}
                         />
                       </div>
                     </div>
@@ -368,7 +371,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
 
           <Card className="shadow-md">
             <CardHeader className="bg-muted/50">
-              <CardTitle>Leave Balance</CardTitle>
+              <CardTitle>{t('ttl_leave_balance')}</CardTitle>
               <CardDescription>
                 Current leave balance for {leaveRequest.employee?.first_name}
               </CardDescription>
@@ -376,21 +379,21 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
             <CardContent className="pt-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Annual Leave</span>
+                  <span className="text-sm font-medium">{t('annual_leave')}</span>
                   <span className="font-medium">{leaveRequest.employee?.annual_leave_balance || 0} days</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Sick Leave</span>
+                  <span className="text-sm font-medium">{t('sick_leave')}</span>
                   <span className="font-medium">{leaveRequest.employee?.sick_leave_balance || 0} days</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Personal Leave</span>
+                  <span className="text-sm font-medium">{t('personal_leave')}</span>
                   <span className="font-medium">{leaveRequest.employee?.personal_leave_balance || 0} days</span>
                 </div>
               </div>
 
               <div className="mt-6 pt-6 border-t">
-                <h3 className="text-sm font-medium mb-3">Leave History</h3>
+                <h3 className="text-sm font-medium mb-3">{t('leave_history')}</h3>
                 {leaveRequest.employee?.recent_leaves?.length > 0 ? (
                   <div className="space-y-3">
                     {leaveRequest.employee.recent_leaves.map((leave, index) => (
@@ -406,7 +409,7 @@ export default function LeaveRequestShow({ leaveRequest }: Props) {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-muted-foreground">No recent leave history</p>
+                  <p className="text-sm text-muted-foreground">{t('no_recent_leave_history')}</p>
                 )}
               </div>
             </CardContent>

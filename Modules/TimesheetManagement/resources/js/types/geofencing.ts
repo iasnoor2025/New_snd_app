@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 // Geofencing Types and Interfaces
 
 export interface GeofenceZone {

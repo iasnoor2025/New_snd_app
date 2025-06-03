@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Card,
     CardContent,
@@ -221,6 +222,8 @@ const GeofenceMapView: React.FC = () => {
     };
 
     const updateMapLayers = () => {
+  const { t } = useTranslation('timesheet');
+
         if (!map) return;
 
         // Clear existing layers
@@ -360,7 +363,7 @@ const GeofenceMapView: React.FC = () => {
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Geofence Map</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('geofence_map')}</h1>
                     <p className="text-muted-foreground">
                         Real-time visualization of geofence zones and employee locations
                     </p>
@@ -383,7 +386,7 @@ const GeofenceMapView: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center space-x-2">
                             <Layers className="h-5 w-5" />
-                            <span>Map Controls</span>
+                            <span>{t('map_controls')}</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -440,14 +443,14 @@ const GeofenceMapView: React.FC = () => {
 
                         {/* Time Range */}
                         <div className="space-y-2">
-                            <Label>Time Range</Label>
+                            <Label>{t('lbl_time_range')}</Label>
                             <Select value={filters.timeRange} onValueChange={(value) => handleFilterChange('timeRange', value)}>
                                 <SelectTrigger>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="15m">Last 15 minutes</SelectItem>
-                                    <SelectItem value="1h">Last hour</SelectItem>
+                                    <SelectItem value="1h">{t('opt_last_hour')}</SelectItem>
                                     <SelectItem value="4h">Last 4 hours</SelectItem>
                                     <SelectItem value="24h">Last 24 hours</SelectItem>
                                 </SelectContent>
@@ -525,8 +528,8 @@ const GeofenceMapView: React.FC = () => {
                                 ) : (
                                     <div className="flex flex-col items-center space-y-2 text-muted-foreground">
                                         <MapPin className="h-12 w-12" />
-                                        <span>Interactive Map View</span>
-                                        <span className="text-sm">Map integration would be implemented here</span>
+                                        <span>{t('interactive_map_view')}</span>
+                                        <span className="text-sm">{t('map_integration_would_be_implemented_here')}</span>
                                     </div>
                                 )}
                             </div>
@@ -537,7 +540,7 @@ const GeofenceMapView: React.FC = () => {
                                 <div className="space-y-1 text-xs">
                                     <div className="flex items-center space-x-2">
                                         <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                                        <span>Project Site</span>
+                                        <span>{t('opt_project_site')}</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <div className="w-3 h-3 rounded-full bg-green-500"></div>

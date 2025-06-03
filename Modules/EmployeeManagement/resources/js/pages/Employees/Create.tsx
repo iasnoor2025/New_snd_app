@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -133,6 +134,8 @@ type FormValues = z.infer<typeof formSchema>;
 type FileRecord = Record<string, File | null>;
 
 export default function Create({ users, positions, employee, isEditing = false }: Props) {
+  const { t } = useTranslation('employee');
+
   const [activeTab, setActiveTab] = useState('personal');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalCertificationCost, setTotalCertificationCost] = useState(0);
@@ -454,7 +457,7 @@ export default function Create({ users, positions, employee, isEditing = false }
               <Button variant="outline" asChild>
                 <Link href="/employees">
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Employees
+                  {t('btn_back_to_employees')}
                 </Link>
               </Button>
             </div>
@@ -463,7 +466,7 @@ export default function Create({ users, positions, employee, isEditing = false }
             <Form onSubmit={handleSubmit} className="space-y-8">
               <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
                 <TabsList className="grid w-full grid-cols-5">
-                  <TabsTrigger value="personal">Personal Info</TabsTrigger>
+                  <TabsTrigger value="personal">{t('personal_info')}</TabsTrigger>
                   <TabsTrigger value="employment">Employment</TabsTrigger>
                   <TabsTrigger value="salary">Salary</TabsTrigger>
                   <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -472,14 +475,14 @@ export default function Create({ users, positions, employee, isEditing = false }
 
                 {/* Cost Summary */}
                 <div className="p-4 border rounded-lg bg-muted">
-                  <h3 className="text-lg font-medium mb-4">Cost Summary</h3>
+                  <h3 className="text-lg font-medium mb-4">{t('cost_summary')}</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-muted-foreground">Total Certification Costs</p>
+                      <p className="text-sm text-muted-foreground">{t('total_certification_costs')}</p>
                       <p className="text-2xl font-bold">SAR {totalCertificationCost.toFixed(2)}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Calculated Hourly Rate</p>
+                      <p className="text-sm text-muted-foreground">{t('calculated_hourly_rate')}</p>
                       <p className="text-2xl font-bold">SAR {hourlyRate.toFixed(2)}</p>
                     </div>
                   </div>

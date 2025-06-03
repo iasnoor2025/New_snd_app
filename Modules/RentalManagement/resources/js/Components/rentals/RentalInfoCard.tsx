@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -39,6 +40,8 @@ interface RentalInfoCardProps {
 const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
   // Calculate rental duration progress
   const calculateProgress = () => {
+  const { t } = useTranslation('rental');
+
     if (!rental.start_date || !rental.expected_end_date) return 0;
 
     const startDate = new Date(rental.start_date);
@@ -82,7 +85,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental is currently active and equipment is in use</p>
+                <p>{t('rental_is_currently_active_and_equipment_is_in_use')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -98,7 +101,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental is pending approval or activation</p>
+                <p>{t('rental_is_pending_approval_or_activation')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -114,7 +117,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental has been successfully completed</p>
+                <p>{t('rental_has_been_successfully_completed')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -130,7 +133,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental has been cancelled</p>
+                <p>{t('rental_has_been_cancelled')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -146,7 +149,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental period has exceeded the expected end date</p>
+                <p>{t('rental_period_has_exceeded_the_expected_end_date')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -162,7 +165,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Quotation has been generated and awaiting customer approval</p>
+                <p>{t('quotation_has_been_generated_and_awaiting_customer')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -178,7 +181,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Equipment is being mobilized to the customer location</p>
+                <p>{t('equipment_is_being_mobilized_to_the_customer_locat')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -199,7 +202,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
       return (
         <Alert variant="destructive" className="mt-4 animate-pulse">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Rental Overdue</AlertTitle>
+          <AlertTitle>{t('ttl_rental_overdue')}</AlertTitle>
           <AlertDescription>
             This rental has exceeded its expected end date. Please take action immediately.
           </AlertDescription>
@@ -209,7 +212,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
       return (
         <Alert className="mt-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Rental Ending Soon</AlertTitle>
+          <AlertTitle>{t('ttl_rental_ending_soon')}</AlertTitle>
           <AlertDescription>
             This rental is scheduled to end within the next 3 days. Consider extending if needed.
           </AlertDescription>
@@ -239,14 +242,14 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm font-medium">Start Date</p>
+              <p className="text-sm font-medium">{t('lbl_start_date')}</p>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {rental.start_date ? format(new Date(rental.start_date), 'PPP') : 'Not set'}
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium">Expected End Date</p>
+              <p className="text-sm font-medium">{t('expected_end_date')}</p>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {rental.expected_end_date ? format(new Date(rental.expected_end_date), 'PPP') : 'Not set'}
@@ -257,7 +260,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
           {rental.status !== 'quotation' && (
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span>Rental Progress</span>
+                <span>{t('rental_progress')}</span>
                 <span>{calculateProgress()}%</span>
               </div>
               <Progress value={calculateProgress()} className="h-2" />
@@ -266,7 +269,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
 
           {rental.actual_end_date && (
             <div>
-              <p className="text-sm font-medium">Actual End Date</p>
+              <p className="text-sm font-medium">{t('actual_end_date')}</p>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {format(new Date(rental.actual_end_date), 'PPP')}
@@ -275,7 +278,7 @@ const RentalInfoCard: React.FC<RentalInfoCardProps> = ({ rental }) => {
           )}
 
           <div>
-            <p className="text-sm font-medium">Total Amount</p>
+            <p className="text-sm font-medium">{t('th_total_amount')}</p>
             <p className="text-lg font-semibold">
               {formatCurrency(rental.total_amount)}
             </p>

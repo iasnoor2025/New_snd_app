@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/LeaveManagement/Resources/js/types';
 import AdminLayout from '@/Modules/LeaveManagement/Resources/js/layouts/AdminLayout';
@@ -46,6 +47,8 @@ interface Props extends PageProps {
 }
 
 export default function OverdueLeaveReturns({ overdueRequests }: Props) {
+  const { t } = useTranslation('leave');
+
   const { hasPermission } = usePermission();
 
   const getLeaveTypeName = (type: string) => {
@@ -64,23 +67,23 @@ export default function OverdueLeaveReturns({ overdueRequests }: Props) {
 
   return (
     <AdminLayout>
-      <Head title="Overdue Leave Returns" />
+      <Head title={t('overdue_leave_returns')} />
       <div className="container mx-auto py-6">
         <Breadcrumb className="mb-6">
           <BreadcrumbItem>
             <BreadcrumbLink href={route('dashboard')}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={route('leaves.requests.index')}>Leave Requests</BreadcrumbLink>
+            <BreadcrumbLink href={route('leaves.requests.index')}>{t('ttl_leave_requests')}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink>Overdue Returns</BreadcrumbLink>
+            <BreadcrumbLink>{t('overdue_returns')}</BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
 
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold">Overdue Leave Returns</h1>
+            <h1 className="text-2xl font-bold">{t('overdue_leave_returns')}</h1>
           </div>
           <Link href={route('leaves.requests.index')}>
             <Button variant="outline">
@@ -92,7 +95,7 @@ export default function OverdueLeaveReturns({ overdueRequests }: Props) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Overdue Leave Returns</CardTitle>
+            <CardTitle>{t('overdue_leave_returns')}</CardTitle>
             <CardDescription>
               Employees who are overdue to return from leave
             </CardDescription>
@@ -103,10 +106,10 @@ export default function OverdueLeaveReturns({ overdueRequests }: Props) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Employee</TableHead>
-                    <TableHead>Leave Type</TableHead>
-                    <TableHead>Start Date</TableHead>
-                    <TableHead>End Date</TableHead>
-                    <TableHead>Days Overdue</TableHead>
+                    <TableHead>{t('lbl_leave_type')}</TableHead>
+                    <TableHead>{t('lbl_start_date')}</TableHead>
+                    <TableHead>{t('end_date')}</TableHead>
+                    <TableHead>{t('th_days_overdue')}</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { format, startOfMonth, endOfMonth, subMonths, addMonths } from 'date-fns';
@@ -63,6 +64,8 @@ const TimesheetManagement: React.FC = () => {
   };
 
   const handlePreviousMonth = () => {
+  const { t } = useTranslation('timesheet');
+
     setCurrentMonth(subMonths(currentMonth, 1));
   };
 
@@ -91,7 +94,7 @@ const TimesheetManagement: React.FC = () => {
               { title: 'Timesheet Management', href: '#' }
             ]}
           />
-          <h1 className="text-3xl font-bold tracking-tight">Timesheet Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('timesheet_management')}</h1>
           <p className="text-muted-foreground">
             View, create, and manage employee timesheets
           </p>
@@ -105,7 +108,7 @@ const TimesheetManagement: React.FC = () => {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <CardTitle>Employee Timesheets</CardTitle>
+            <CardTitle>{t('ttl_employee_timesheets')}</CardTitle>
 
             <div className="flex items-center gap-2">
               <Select
@@ -113,10 +116,10 @@ const TimesheetManagement: React.FC = () => {
                 onValueChange={setSelectedEmployeeId}
               >
                 <SelectTrigger className="w-[220px]">
-                  <SelectValue placeholder="Select employee" />
+                  <SelectValue placeholder={t('ph_select_employee')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Employees</SelectItem>
+                  <SelectItem value="all">{t('all_employees')}</SelectItem>
                   {employees.map((employee) => (
                     <SelectItem key={employee.id} value={employee.id.toString()}>
                       {employee.first_name} {employee.last_name}

@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { BreadcrumbItem } from '../types';
 import AppLayout from '@/layouts/app-layout';
@@ -16,6 +17,8 @@ export default function AdminLayout({
   breadcrumbs = [],
   requiredPermission
 }: AdminLayoutProps) {
+  const { t } = useTranslation('employee');
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={title} />

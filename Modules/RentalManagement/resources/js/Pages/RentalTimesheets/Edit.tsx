@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link } from "@inertiajs/react";
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
 import { Employee, Rental, RentalItem, RentalTimesheet } from '@/Modules/RentalManagement/Resources/js/types/models';
@@ -27,6 +28,8 @@ interface Props extends PageProps {
 }
 
 export default function Edit({ auth, rental, timesheet, rentalItems, operators }: Props) {
+  const { t } = useTranslation('rental');
+
   // Format auth object for TimesheetForm
   const formattedAuth = {
     user: {
@@ -90,7 +93,7 @@ export default function Edit({ auth, rental, timesheet, rentalItems, operators }
               <div>
                 <h1 className="text-xl font-medium tracking-tight flex items-center gap-2">
                   <Pencil className="h-5 w-5 text-muted-foreground" />
-                  Edit Timesheet
+                  {t('timesheet:edit_timesheet')}
                 </h1>
                 <p className="text-muted-foreground text-sm mt-1">
                   For Rental #{rental.rental_number} • customer: {rental.customer?.company_name}

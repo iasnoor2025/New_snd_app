@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -33,6 +34,8 @@ export default function PendingSection({
   rentalItems,
   permissions
 }: PendingSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("items");
   const [isGeneratingQuotation, setIsGeneratingQuotation] = React.useState(false);
 
@@ -58,7 +61,7 @@ export default function PendingSection({
       {/* Pending rental alert */}
       <Alert>
         <Clock className="h-4 w-4" />
-        <AlertTitle>Pending Rental</AlertTitle>
+        <AlertTitle>{t('ttl_pending_rental')}</AlertTitle>
         <AlertDescription>
           This rental is pending approval. Generate a quotation to proceed with the workflow.
         </AlertDescription>
@@ -67,13 +70,13 @@ export default function PendingSection({
       {/* Action buttons for pending state */}
       <Card>
         <CardHeader>
-          <CardTitle>Pending Actions</CardTitle>
-          <CardDescription>Available actions for this pending rental</CardDescription>
+          <CardTitle>{t('ttl_pending_actions')}</CardTitle>
+          <CardDescription>{t('available_actions_for_this_pending_rental')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="bg-secondary/20 p-4 rounded-md">
-              <h3 className="text-sm font-medium mb-2">Rental Summary</h3>
+              <h3 className="text-sm font-medium mb-2">{t('rental_summary')}</h3>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>Customer:</div>
                 <div className="font-medium">{rental.customer.company_name}</div>
@@ -127,7 +130,7 @@ export default function PendingSection({
       {/* Tabs for pending state - focused on items */}
       <Tabs defaultValue="items" onValueChange={setSelectedTab} value={selectedTab}>
         <TabsList className="mb-4">
-          <TabsTrigger value="items">Rental Items</TabsTrigger>
+          <TabsTrigger value="items">{t('rental_items')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="items">

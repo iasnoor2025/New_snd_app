@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,8 @@ export default function CompletedSection({
   metrics,
   permissions
 }: CompletedSectionProps) {
+  const { t } = useTranslation('rental');
+
   const [selectedTab, setSelectedTab] = React.useState("summary");
   const [isGeneratingReport, setIsGeneratingReport] = React.useState(false);
 
@@ -112,7 +115,7 @@ export default function CompletedSection({
       {/* Completed rental alert */}
       <Alert className="bg-green-50 border-green-200 text-green-800">
         <CheckCircle className="h-4 w-4 text-green-600" />
-        <AlertTitle>Rental Completed</AlertTitle>
+        <AlertTitle>{t('ttl_rental_completed')}</AlertTitle>
         <AlertDescription>
           This rental has been successfully completed on {getCompletionDate()}.
         </AlertDescription>
@@ -123,7 +126,7 @@ export default function CompletedSection({
         <TabsList className="mb-4">
           <TabsTrigger value="summary">Summary</TabsTrigger>
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
-          <TabsTrigger value="items">Rental Items</TabsTrigger>
+          <TabsTrigger value="items">{t('rental_items')}</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
@@ -133,7 +136,7 @@ export default function CompletedSection({
             <CardHeader className="bg-green-50 border-b border-green-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Rental Summary</CardTitle>
+                  <CardTitle>{t('rental_summary')}</CardTitle>
                   <CardDescription>
                     Overview of the completed rental
                   </CardDescription>
@@ -150,7 +153,7 @@ export default function CompletedSection({
                   <Card className="bg-green-50">
                     <CardContent className="pt-6">
                       <div className="flex flex-col items-center space-y-1">
-                        <h3 className="text-sm font-medium text-green-800">Total Revenue</h3>
+                        <h3 className="text-sm font-medium text-green-800">{t('total_revenue')}</h3>
                         <p className="text-2xl font-bold text-green-700">
                           {formatCurrency(rental.total_amount || 0)}
                         </p>
@@ -161,7 +164,7 @@ export default function CompletedSection({
                   <Card className="bg-blue-50">
                     <CardContent className="pt-6">
                       <div className="flex flex-col items-center space-y-1">
-                        <h3 className="text-sm font-medium text-blue-800">Rental Duration</h3>
+                        <h3 className="text-sm font-medium text-blue-800">{t('rental_duration')}</h3>
                         <p className="text-2xl font-bold text-blue-700">
                           {getRentalDuration()}
                         </p>
@@ -172,7 +175,7 @@ export default function CompletedSection({
                   <Card className="bg-purple-50">
                     <CardContent className="pt-6">
                       <div className="flex flex-col items-center space-y-1">
-                        <h3 className="text-sm font-medium text-purple-800">Profit Margin</h3>
+                        <h3 className="text-sm font-medium text-purple-800">{t('profit_margin')}</h3>
                         <p className="text-2xl font-bold text-purple-700">
                           {metrics?.profitMargin || Math.round((getProfit() / (rental.total_amount || 1)) * 100)}%
                         </p>
@@ -184,7 +187,7 @@ export default function CompletedSection({
                 {/* Key information */}
                 <div className="grid grid-cols-2 gap-6 text-sm">
                   <div className="space-y-3">
-                    <h3 className="font-medium">Rental Details</h3>
+                    <h3 className="font-medium">{t('rental_details')}</h3>
                     <div className="grid grid-cols-2 gap-2">
                       <p className="text-muted-foreground">Rental #:</p>
                       <p className="font-medium">{rental.rental_number}</p>
@@ -205,7 +208,7 @@ export default function CompletedSection({
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-medium">Financial Summary</h3>
+                    <h3 className="font-medium">{t('financial_summary')}</h3>
                     <div className="grid grid-cols-2 gap-2">
                       <p className="text-muted-foreground">Subtotal:</p>
                       <p className="font-medium">{formatCurrency(rental.subtotal || 0)}</p>

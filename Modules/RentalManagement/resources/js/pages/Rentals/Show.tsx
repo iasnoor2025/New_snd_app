@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/types';
 import { Rental, RentalItem, PermissionString } from '@/types/models';
@@ -324,6 +325,8 @@ export default function Show({
     request_extension: false,
   }
 }: Props) {
+  const { t } = useTranslation('rental');
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isGeneratingQuotation, setIsGeneratingQuotation] = useState(false);
   const [isExtensionFormOpen, setIsExtensionFormOpen] = useState(false);
@@ -640,7 +643,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental is currently active and equipment is in use</p>
+                <p>{t('rental_is_currently_active_and_equipment_is_in_use')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -656,7 +659,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental is pending approval or activation</p>
+                <p>{t('rental_is_pending_approval_or_activation')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -672,7 +675,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental has been successfully completed</p>
+                <p>{t('rental_has_been_successfully_completed')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -688,7 +691,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental has been cancelled</p>
+                <p>{t('rental_has_been_cancelled')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -704,7 +707,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Rental period has exceeded the expected end date</p>
+                <p>{t('rental_period_has_exceeded_the_expected_end_date')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -720,7 +723,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Quotation has been generated and awaiting customer approval</p>
+                <p>{t('quotation_has_been_generated_and_awaiting_customer')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -736,7 +739,7 @@ export default function Show({
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Equipment is being mobilized to the customer location</p>
+                <p>{t('equipment_is_being_mobilized_to_the_customer_locat')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -802,7 +805,7 @@ export default function Show({
     if (!customer) {
       return (
         <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">No customer information available</p>
+          <p className="text-sm text-muted-foreground">{t('no_customer_information_available')}</p>
         </div>
       );
     }
@@ -907,7 +910,7 @@ export default function Show({
       return (
         <Alert variant="destructive" className="mt-4 animate-pulse">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Rental Overdue</AlertTitle>
+          <AlertTitle>{t('ttl_rental_overdue')}</AlertTitle>
           <AlertDescription>
             This rental has exceeded its expected end date. Please take action immediately.
           </AlertDescription>
@@ -917,7 +920,7 @@ export default function Show({
       return (
         <Alert className="mt-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Rental Ending Soon</AlertTitle>
+          <AlertTitle>{t('ttl_rental_ending_soon')}</AlertTitle>
           <AlertDescription>
             This rental is scheduled to end within the next 3 days. Consider extending if needed.
           </AlertDescription>
@@ -1136,7 +1139,7 @@ export default function Show({
       {!isLoading && !dataLoaded && (
         <div className="flex h-[50vh] w-full flex-col items-center justify-center gap-4">
           <AlertCircle className="h-12 w-12 text-destructive" />
-          <h2 className="text-xl font-semibold">Unable to load rental details</h2>
+          <h2 className="text-xl font-semibold">{t('unable_to_load_rental_details')}</h2>
           <p className="text-muted-foreground">The rental data could not be loaded properly.</p>
           <Button onClick={() => router.visit('/rentals')}>
             Return to Rentals List

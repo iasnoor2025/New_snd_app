@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -44,6 +45,8 @@ interface ManpowerTabProps {
  * @returns JSX element containing the manpower management interface
  */
 export function ManpowerTab({ project, manpowers }: ManpowerTabProps) {
+  const { t } = useTranslation('project');
+
     const {
         isCreateModalOpen,
         isEditModalOpen,
@@ -108,7 +111,7 @@ export function ManpowerTab({ project, manpowers }: ManpowerTabProps) {
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
-                <Button onClick={openCreateModal}>Add Manpower</Button>
+                <Button onClick={openCreateModal}>{t('ttl_add_manpower')}</Button>
             </div>
 
             <div className="rounded-md border">
@@ -117,11 +120,11 @@ export function ManpowerTab({ project, manpowers }: ManpowerTabProps) {
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Position</TableHead>
-                            <TableHead>Start Date</TableHead>
-                            <TableHead>End Date</TableHead>
-                            <TableHead>Daily Rate</TableHead>
-                            <TableHead>Total Days</TableHead>
-                            <TableHead>Total Cost</TableHead>
+                            <TableHead>{t('lbl_start_date')}</TableHead>
+                            <TableHead>{t('end_date')}</TableHead>
+                            <TableHead>{t('lbl_daily_rate')}</TableHead>
+                            <TableHead>{t('lbl_total_days')}</TableHead>
+                            <TableHead>{t('th_total_cost')}</TableHead>
                             <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -162,7 +165,7 @@ export function ManpowerTab({ project, manpowers }: ManpowerTabProps) {
             <ResourceFormModal
                 isOpen={isCreateModalOpen}
                 onClose={closeCreateModal}
-                title="Add Manpower"
+                title={t('ttl_add_manpower')}
                 type="manpower"
                 projectId={Number(project.id)}
                 onSuccess={handleCreateSuccess}
@@ -171,7 +174,7 @@ export function ManpowerTab({ project, manpowers }: ManpowerTabProps) {
             <ResourceFormModal
                 isOpen={isEditModalOpen}
                 onClose={closeEditModal}
-                title="Edit Manpower"
+                title={t('ttl_edit_manpower')}
                 type="manpower"
                 projectId={Number(project.id)}
                 initialData={selectedResource}

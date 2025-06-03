@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
 import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
@@ -46,6 +47,8 @@ interface Props extends PageProps {
 }
 
 export default function TimesheetShow({ auth, timesheet }: Props) {
+  const { t } = useTranslation('timesheet');
+
   const { toast } = useToast();
   const { hasPermission } = usePermission();
 
@@ -126,14 +129,14 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
                       parseFloat(timesheet.overtime_hours?.toString() || '0')).toFixed(1);
 
   return (
-    <AdminLayout title="View Timesheet" breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
-      <Head title="View Timesheet" />
+    <AdminLayout title={t('ttl_view_timesheet')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+      <Head title={t('ttl_view_timesheet')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <ClockIcon className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Timesheet Details</h1>
+            <h1 className="text-2xl font-bold">{t('timesheet_details')}</h1>
             <Badge className="ml-2">{getStatusBadge(timesheet.status)}</Badge>
           </div>
 
@@ -148,7 +151,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Back to Timesheets</p>
+                  <p>{t('back_to_timesheets')}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -164,7 +167,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Edit Timesheet</p>
+                    <p>{t('edit_timesheet')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -179,7 +182,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Delete Timesheet</p>
+                    <p>{t('delete_timesheet')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -203,7 +206,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="flex flex-col space-y-1">
-                  <span className="text-sm text-muted-foreground">Regular Hours</span>
+                  <span className="text-sm text-muted-foreground">{t('lbl_regular_hours')}</span>
                   <span className="text-2xl font-bold">{timesheet.hours_worked}</span>
                 </div>
 
@@ -213,14 +216,14 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
                 </div>
 
                 <div className="flex flex-col space-y-1">
-                  <span className="text-sm text-muted-foreground">Total Hours</span>
+                  <span className="text-sm text-muted-foreground">{t('total_hours')}</span>
                   <span className="text-2xl font-bold">{totalHours}</span>
                 </div>
               </div>
 
               {timesheet.tasks_completed && (
                 <div className="mb-6">
-                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Tasks Completed</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('tasks_completed')}</h3>
                   <div className="bg-muted/20 p-4 rounded-md whitespace-pre-wrap">
                     {timesheet.tasks_completed}
                   </div>
@@ -273,15 +276,15 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Regular Hours</span>
+                  <span className="text-sm font-medium">{t('lbl_regular_hours')}</span>
                   <span className="font-medium">{timesheet.employee?.monthly_regular_hours || 0} hrs</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Overtime Hours</span>
+                  <span className="text-sm font-medium">{t('lbl_overtime_hours')}</span>
                   <span className="font-medium">{timesheet.employee?.monthly_overtime_hours || 0} hrs</span>
                 </div>
                 <div className="flex justify-between items-center border-t pt-2 mt-2">
-                  <span className="text-sm font-medium">Total Hours</span>
+                  <span className="text-sm font-medium">{t('total_hours')}</span>
                   <span className="font-bold">{
                     (parseFloat(timesheet.employee?.monthly_regular_hours?.toString() || '0') +
                      parseFloat(timesheet.employee?.monthly_overtime_hours?.toString() || '0')).toFixed(1)
@@ -291,7 +294,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
 
               {timesheet.employee?.recent_timesheets?.length > 0 && (
                 <div className="mt-6 pt-4 border-t">
-                  <h3 className="text-sm font-medium mb-3">Recent Timesheets</h3>
+                  <h3 className="text-sm font-medium mb-3">{t('recent_timesheets')}</h3>
                   <div className="space-y-3">
                     {timesheet.employee.recent_timesheets.map((entry, index) => (
                       <div key={index} className="flex justify-between items-center text-sm">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { route } from 'ziggy-js';
@@ -155,6 +156,8 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
 
   // Toggle between time clock and direct hours input
   const toggleTimeClockMode = () => {
+  const { t } = useTranslation('timesheet');
+
     setUseTimeClock(!useTimeClock);
     if (!useTimeClock) {
       // Switching to time clock mode
@@ -241,7 +244,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                   onValueChange={field.onChange}
                   disabled={isLoading}
                   <SelectTrigger id="employee_id" className="w-full">
-                    <SelectValue placeholder="Select employee" />
+                    <SelectValue placeholder={t('ph_select_employee')} />
                   </SelectTrigger>
                   <SelectContent>
                     {employees.map((employee) => (
@@ -291,10 +294,10 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                   onValueChange={field.onChange}
                   disabled={isLoading}
                   <SelectTrigger id="project_id" className="w-full">
-                    <SelectValue placeholder="Select project" />
+                    <SelectValue placeholder={t('ph_select_project')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No Project</SelectItem>
+                    <SelectItem value="">{t('opt_no_project')}</SelectItem>
                     {projects.map((project) => (
                       <SelectItem
                         key={project.id}
@@ -337,7 +340,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="clock_in">Clock In</Label>
+                  <Label htmlFor="clock_in">{t('lbl_clock_in')}</Label>
                   <Input
                     id="clock_in"
                     type="time"
@@ -352,7 +355,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                   )}
                 </div>
                 <div>
-                  <Label htmlFor="clock_out">Clock Out</Label>
+                  <Label htmlFor="clock_out">{t('lbl_clock_out')}</Label>
                   <Input
                     id="clock_out"
                     type="time"
@@ -370,7 +373,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="break_start">Break Start</Label>
+                  <Label htmlFor="break_start">{t('lbl_break_start')}</Label>
                   <Input
                     id="break_start"
                     type="time"
@@ -380,7 +383,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="break_end">Break End</Label>
+                  <Label htmlFor="break_end">{t('lbl_break_end')}</Label>
                   <Input
                     id="break_end"
                     type="time"
@@ -393,13 +396,13 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
 
               <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                 <div>
-                  <Label>Calculated Regular Hours</Label>
+                  <Label>{t('lbl_calculated_regular_hours')}</Label>
                   <p className="text-lg font-medium">
                     {watch('regular_hours') || 0}
                   </p>
                 </div>
                 <div>
-                  <Label>Calculated Overtime Hours</Label>
+                  <Label>{t('lbl_calculated_overtime_hours')}</Label>
                   <p className="text-lg font-medium">
                     {watch('overtime_hours') || 0}
                   </p>
@@ -409,7 +412,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
           ) : (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="regular_hours">Regular Hours</Label>
+                <Label htmlFor="regular_hours">{t('lbl_regular_hours')}</Label>
                 <Input
                   id="regular_hours"
                   type="number"
@@ -425,7 +428,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                 )}
               </div>
               <div>
-                <Label htmlFor="overtime_hours">Overtime Hours</Label>
+                <Label htmlFor="overtime_hours">{t('lbl_overtime_hours')}</Label>
                 <Input
                   id="overtime_hours"
                   type="number"

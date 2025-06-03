@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,6 +19,8 @@ export default function ResourceSearch({
     className = '',
     debounceTime = 300
 }: ResourceSearchProps) {
+  const { t } = useTranslation('project');
+
     const [searchValue, setSearchValue] = useState(value);
 
     // Debounce the search input

@@ -1,15 +1,40 @@
 import '../css/app.css';
+import './bootstrap';
+import './i18n';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-import { initializeTheme } from './hooks/use-appearance';
 import { Toaster } from 'sonner';
-// Import Ziggy configuration
-import { Ziggy } from './ziggy';
+import { ThemeProvider } from './components/theme-provider';
+import { TooltipProvider } from './components/ui/tooltip';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import { initializeTheme } from './hooks/use-appearance';
+
+// Initialize document direction based on language
+const DirectionProvider = ({ children }: { children: React.ReactNode }) => {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    // Set document direction based on language
+    const dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = dir;
+    document.documentElement.lang = i18n.language;
+
+    // Add RTL class for Arabic
+    if (dir === 'rtl') {
+      document.documentElement.classList.add('rtl');
+    } else {
+      document.documentElement.classList.remove('rtl');
+    }
+  }, [i18n.language]);
+
+  return <>{children}</>;
+};
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -288,8 +313,14 @@ createInertiaApp({
         root.render(
             <I18nextProvider i18n={i18n}>
                 <QueryClientProvider client={queryClient}>
-                    <App {...props} />
-                    <Toaster richColors position="top-right" />
+                    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+                        <TooltipProvider>
+                            <DirectionProvider>
+                                <App {...props} />
+                                <Toaster richColors position="top-right" />
+                            </DirectionProvider>
+                        </TooltipProvider>
+                    </ThemeProvider>
                 </QueryClientProvider>
             </I18nextProvider>
         );

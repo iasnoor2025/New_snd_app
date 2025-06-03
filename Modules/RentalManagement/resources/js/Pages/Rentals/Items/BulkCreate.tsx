@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
@@ -45,6 +46,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
     });
 
     const handleSubmit = (e: React.FormEvent) => {
+  const { t } = useTranslation('rental');
+
         e.preventDefault();
         post(`/rentals/${rental.id}/items/bulk`);
     };
@@ -76,13 +79,13 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
 
     return (
         <>
-            <Head title="Bulk Add Rental Items" />
+            <Head title={t('ttl_bulk_add_rental_items')} />
 
             <div className="container mx-auto py-6">
                 <div className="max-w-4xl mx-auto">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Bulk Add Rental Items</CardTitle>
+                            <CardTitle>{t('ttl_bulk_add_rental_items')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -109,7 +112,7 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                 onValueChange={(value) => updateItem(index, 'equipment_id', value)}
                                             >
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select equipment" />
+                                                    <SelectValue placeholder={t('ph_select_equipment')} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {equipment.map((equip) => (
@@ -131,7 +134,7 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                 onValueChange={(value) => updateItem(index, 'operator_id', value)}
                                             >
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select operator" />
+                                                    <SelectValue placeholder={t('ph_select_operator')} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {operators.map((operator) => (
@@ -162,13 +165,13 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                             </div>
 
                                             <div className="space-y-2">
-                                                <Label htmlFor={`rate_type_${index}`}>Rate Type</Label>
+                                                <Label htmlFor={`rate_type_${index}`}>{t('lbl_rate_type')}</Label>
                                                 <Select
                                                     value={item.rate_type}
                                                     onValueChange={(value) => updateItem(index, 'rate_type', value)}
                                                 >
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select rate type" />
+                                                        <SelectValue placeholder={t('ph_select_rate_type')} />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectItem value="daily">Daily</SelectItem>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
 import { Button } from '@/Modules/Payroll/Resources/js/Components/ui/button';
@@ -8,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Reso
 import { Label } from '@/Modules/Payroll/Resources/js/Components/ui/label';
 
 export default function Create({ auth, employees, currentMonth }) {
+  const { t } = useTranslation('payroll');
+
     const { data, setData, post, processing, errors } = useForm({
         employee_id: '',
         month: currentMonth,
@@ -21,15 +24,15 @@ export default function Create({ auth, employees, currentMonth }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Generate Payroll</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('generate_payroll')}</h2>}
         >
-            <Head title="Generate Payroll" />
+            <Head title={t('generate_payroll')} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Generate New Payroll</CardTitle>
+                            <CardTitle>{t('ttl_generate_new_payroll')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -42,7 +45,7 @@ export default function Create({ auth, employees, currentMonth }) {
                                             onChange={e => setData('employee_id', e.target.value)}
                                             className="mt-1 block w-full"
                                         >
-                                            <option value="">Select Employee</option>
+                                            <option value="">{t('ph_select_employee')}</option>
                                             {employees.map((employee) => (
                                                 <option key={employee.id} value={employee.id}>
                                                     {employee.name}
@@ -55,7 +58,7 @@ export default function Create({ auth, employees, currentMonth }) {
                                     </div>
 
                                     <div>
-                                        <Label htmlFor="month">Payroll Month</Label>
+                                        <Label htmlFor="month">{t('lbl_payroll_month')}</Label>
                                         <Input
                                             id="month"
                                             type="month"
@@ -81,7 +84,7 @@ export default function Create({ auth, employees, currentMonth }) {
                                         type="submit"
                                         disabled={processing}
                                     >
-                                        Generate Payroll
+                                        {t('generate_payroll')}
                                     </Button>
                                 </div>
                             </form>

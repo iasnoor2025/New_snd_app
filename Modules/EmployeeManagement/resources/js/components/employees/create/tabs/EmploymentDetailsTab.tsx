@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -44,6 +45,8 @@ interface EmploymentDetailsTabProps {
 type PositionType = { id: number; name: string; description?: string };
 
 export default function EmploymentDetailsTab({ form, positions, users }: EmploymentDetailsTabProps) {
+  const { t } = useTranslation('employee');
+
   const [positionsState, setPositionsState] = useState<PositionType[]>(positions || []);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newPosition, setNewPosition] = useState<{ name: string; description: string }>({ name: '', description: '' });
@@ -162,7 +165,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Employment Details</CardTitle>
+        <CardTitle>{t('employment_details')}</CardTitle>
       </CardHeader>
       <CardContent>
         <Alert className="mb-6">
@@ -180,7 +183,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
               name="file_number"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>File Number</FormLabel>
+                  <FormLabel>{t('file_number')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter file number (EMP-XXXX)" {...field} />
                   </FormControl>
@@ -204,7 +207,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select position" />
+                            <SelectValue placeholder={t('ph_select_position')} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -224,7 +227,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                       className="ml-1"
                       disabled={!field.value}
                       onClick={handleEditPositionClick}
-                      title="Edit Position"
+                      title={t('ttl_edit_position')}
                     >
                       <Pencil className="w-4 h-4" />
                     </Button>
@@ -235,7 +238,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                       className="ml-1"
                       disabled={!field.value}
                       onClick={handleDeletePositionClick}
-                      title="Delete Position"
+                      title={t('delete_position')}
                     >
                       <Trash className="w-4 h-4 text-red-500" />
                     </Button>
@@ -245,7 +248,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                       size="sm"
                       className="ml-1 whitespace-nowrap"
                       onClick={handleAddPositionClick}
-                      title="Add Position"
+                      title={t('ttl_add_position')}
                     >
                       +
                     </Button>
@@ -260,7 +263,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
               name="hire_date"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>Hire Date</FormLabel>
+                  <FormLabel>{t('hire_date')}</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -278,13 +281,13 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
+                        <SelectValue placeholder={t('ph_select_status')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="inactive">Inactive</SelectItem>
-                      <SelectItem value="on_leave">On Leave</SelectItem>
+                      <SelectItem value="on_leave">{t('on_leave')}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -301,7 +304,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select role" />
+                        <SelectValue placeholder={t('ph_select_role')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -326,7 +329,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select supervisor" />
+                        <SelectValue placeholder={t('ph_select_supervisor')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -347,7 +350,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
               name="contract_hours_per_day"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>Contract Hours Per Day</FormLabel>
+                  <FormLabel>{t('lbl_contract_hours_per_day')}</FormLabel>
                   <FormControl>
                     <Input type="number" min="1" max="24" {...field} />
                   </FormControl>
@@ -361,7 +364,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
               name="contract_days_per_month"
               render={({ field }: any) => (
                 <FormItem>
-                  <FormLabel>Contract Days Per Month</FormLabel>
+                  <FormLabel>{t('lbl_contract_days_per_month')}</FormLabel>
                   <FormControl>
                     <Input type="number" min="1" max="31" {...field} />
                   </FormControl>
@@ -379,7 +382,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
               <h2 className="text-lg font-semibold mb-4">{editingPosition ? 'Edit Position' : 'Add New Position'}</h2>
               <div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1">Position Name</label>
+                  <label className="block text-sm font-medium mb-1">{t('lbl_position_name')}</label>
                   <input
                     type="text"
                     className="w-full border rounded px-3 py-2"
@@ -412,7 +415,7 @@ export default function EmploymentDetailsTab({ form, positions, users }: Employm
         {showDeleteConfirm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/60">
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
-              <h2 className="text-lg font-semibold mb-4 text-red-600">Delete Position</h2>
+              <h2 className="text-lg font-semibold mb-4 text-red-600">{t('delete_position')}</h2>
               <p className="mb-6">Are you sure you want to delete the position <span className="font-bold">{deletingPosition?.name}</span>?</p>
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="ghost" onClick={handleDeleteCancel}>Cancel</Button>
