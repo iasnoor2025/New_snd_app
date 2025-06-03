@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../resources/js/components/ui/card';
 import { Input } from '../../../../../../resources/js/components/ui/input';

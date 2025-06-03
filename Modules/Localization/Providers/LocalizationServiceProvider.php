@@ -30,6 +30,7 @@ class LocalizationServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/web.php'));
+        $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/public.php'));
 
         // Register observers
         $this->registerObservers();

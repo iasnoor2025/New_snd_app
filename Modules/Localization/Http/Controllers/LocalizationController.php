@@ -266,7 +266,16 @@ class LocalizationController extends Controller
             auth()->user()->update(['locale' => $locale]);
         }
 
-        return redirect()->back()->with('message', 'Language switched successfully.');
+        // Get the URL to redirect back to
+        $redirectUrl = url()->previous();
+
+        // If the previous URL is the login page or contains 'login', keep it as is
+        // Otherwise, redirect back to the previous page
+        if (strpos($redirectUrl, '/login') !== false) {
+            return redirect($redirectUrl);
+        }
+
+        return redirect()->back();
     }
 
     /**

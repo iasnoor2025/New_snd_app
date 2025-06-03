@@ -10,6 +10,7 @@ import { Pencil } from 'lucide-react';
 import { route } from 'ziggy-js';
 import { differenceInDays, parseISO } from 'date-fns';
 import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { useTranslation } from '../../../../../../resources/js/hooks/useTranslation';
 
 interface Role { id: number; name: string; }
 interface User {
@@ -148,7 +149,19 @@ const UsersIndex: React.FC<Props> = ({ users, roles }) => {
     {
       key: 'roles',
       header: 'Roles',
-      accessor: (user) => user.roles.map(r => r.name).join(', '),
+      accessor: (user) => (
+        <div className="flex flex-wrap gap-1">
+          {user.roles && user.roles.length > 0 ? (
+            user.roles.map(role => (
+              <Badge key={role.id} variant="secondary" className="text-xs">
+                {role.name}
+              </Badge>
+            ))
+          ) : (
+            <span className="text-gray-500 text-xs">No roles assigned</span>
+          )}
+        </div>
+      ),
       sortable: true,
     },
     {
@@ -171,24 +184,43 @@ const UsersIndex: React.FC<Props> = ({ users, roles }) => {
       sortable: true,
     },
     {
-      key: 'edit',
-      header: 'Edit',
+      key: 'actions',
+      header: 'Actions',
       accessor: (user) => (
-        <Button size="sm" variant="outline" onClick={() => router.get(route('users.edit', user.id))}>
-          <Pencil className="w-4 h-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => router.get(route('users.show', user.id, undefined, { locale }))}
+            title="View User"
+          >
+            View
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => router.get(route('users.edit', user.id, undefined, { locale }))}
+            title="Edit User"
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => deleteUser(user.id)}
+            disabled={loading}
+            title="Delete User"
+          >
+            Delete
+          </Button>
+        </div>
       ),
       sortable: false,
-    },
-    {
-      key: 'delete',
-      header: 'Delete',
-      accessor: (user) => (
-        <Button size="sm" variant="destructive" onClick={() => deleteUser(user.id)} disabled={loading}>Delete</Button>
-      ),
-      sortable: false,
+      width: 200,
     },
   ];
+
+  const { locale } = useTranslation();
 
   return (
     <AdminLayout title="User Management">
@@ -196,7 +228,7 @@ const UsersIndex: React.FC<Props> = ({ users, roles }) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>User Management</CardTitle>
-          <Button onClick={() => router.get(route('users.create'))}>
+          <Button onClick={() => router.get(route('users.create', undefined, undefined, { locale }))}>
             Add User
           </Button>
         </CardHeader>

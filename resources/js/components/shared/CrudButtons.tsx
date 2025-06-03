@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import { Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -75,7 +74,7 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
   const handleDelete = () => {
     setIsDeleting(true);
 
-    Inertia.delete(`/${resourceType}/${resourceId}`, {
+    router.delete(`/${resourceType}/${resourceId}`, {
       onSuccess: () => {
         toast.success(`${resourceName} has been deleted successfully.`);
         if (onDelete) onDelete();

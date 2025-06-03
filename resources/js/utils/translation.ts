@@ -171,21 +171,9 @@ export function getAllTranslations(
  * @param preserveState - Whether to preserve current state
  */
 export function switchLocale(locale: string, preserveState: boolean = false): void {
-  router.post(
-    route('localization.switch', locale),
-    {},
-    {
-      preserveState: false,
-      preserveScroll: false,
-      onSuccess: () => {
-        // Force a full page reload to ensure all locale data is updated
-        window.location.reload();
-      },
-      onError: (errors) => {
-        console.error('Failed to switch locale:', errors);
-      }
-    }
-  );
+  // Use a GET request instead of POST to avoid CSRF issues on login page
+  // This is important because the login page might not have the CSRF token properly set
+  window.location.href = route('localization.switch.public', locale);
 }
 
 /**

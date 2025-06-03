@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
-import { Head } from '@inertiajs/react';
+import { useState } from 'react';
+import { Head, router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
@@ -37,7 +36,7 @@ const RolesIndex: React.FC<Props> = ({ roles }) => {
 
   const handleDelete = () => {
     if (deleteRole) {
-      Inertia.delete(route('roles.destroy', deleteRole.id));
+      router.delete(route('roles.destroy', deleteRole.id));
       setDialogOpen(false);
       setDeleteRole(null);
     }
@@ -54,7 +53,7 @@ const RolesIndex: React.FC<Props> = ({ roles }) => {
       <Card className="mt-8">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Roles</CardTitle>
-          <Button onClick={() => Inertia.get(route('roles.create'))}>
+          <Button onClick={() => router.get(route('roles.create'))}>
             Create Role
           </Button>
         </CardHeader>
@@ -78,7 +77,7 @@ const RolesIndex: React.FC<Props> = ({ roles }) => {
                   <TableCell>{role.name}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">
-                      <Button size="sm" onClick={() => Inertia.get(route('roles.edit', role.id))}>Edit</Button>
+                      <Button size="sm" onClick={() => router.get(route('roles.edit', role.id))}>Edit</Button>
                       <Button size="sm" variant="destructive" onClick={() => openDeleteDialog(role)}>
                         Delete
                       </Button>

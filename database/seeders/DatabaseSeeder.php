@@ -48,13 +48,16 @@ class DatabaseSeeder extends Seeder
 
         // Create a test user if needed
         if (app()->environment('local', 'development')) {
-            User::factory()->create([
+            $testUser = User::factory()->create([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);
+
+            // Assign a role to the test user
+            $testUser->assignRole('user');
         }
     }
 }
