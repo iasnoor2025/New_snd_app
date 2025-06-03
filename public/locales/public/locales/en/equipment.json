@@ -34,7 +34,12 @@
   "accumulated_depreciation": "accumulated_depreciation",
   "ack": "ack",
   "acquisition": "acquisition",
-  "actions": "actions",
+  "actions": {
+    "book": "Book",
+    "book_now": "Book Now",
+    "view": "View",
+    "view_details": "View Details"
+  },
   "active": "active",
   "active_alerts": "active_alerts",
   "active_predictions": "active_predictions",
@@ -117,6 +122,31 @@
   "battery_level": "battery_level",
   "best_in_class_tco": "best_in_class_tco",
   "book_to_market_ratio": "book_to_market_ratio",
+  "browser": {
+    "adjust_search": "Try adjusting your search or filters",
+    "all_categories": "All categories",
+    "apply_filters": "Apply Filters",
+    "availability": "Availability",
+    "category": "Category",
+    "clear_all": "Clear All",
+    "clear_filters": "Clear Filters",
+    "filter_equipment": "Filter Equipment",
+    "filters": "Filters",
+    "items_found": "{{count}} equipment items found",
+    "items_found_plural": "{{count}} equipment items found",
+    "no_equipment": "No equipment found",
+    "offline_mode": "Offline Mode",
+    "price_down": "Price ↓",
+    "price_up": "Price ↑",
+    "search_placeholder": "Search equipment...",
+    "sort_by": "Sort By",
+    "sort_options": {
+      "name": "Name",
+      "price_high": "Price: High to Low",
+      "price_low": "Price: Low to High",
+      "rating": "Rating"
+    }
+  },
   "budget_analysis": "budget_analysis",
   "budget_variance": "budget_variance",
   "budget_variance_analysis": "budget_variance_analysis",
@@ -482,7 +512,10 @@
   "preview": "preview",
   "preview_not_available_for_this_file_type": "preview_not_available_for_this_file_type",
   "previous": "previous",
-  "pricing": "pricing",
+  "pricing": {
+    "per_day": "/day",
+    "per_week": "/week"
+  },
   "progress": "progress",
   "project_assignments": "project_assignments",
   "projected_depreciation_over_the_useful_life_of_the_equipment": "projected_depreciation_over_the_useful_life_of_the_equipment",
@@ -594,7 +627,13 @@
   "start_date": "start_date",
   "start_simulation": "start_simulation",
   "starting_value": "starting_value",
-  "status": "status",
+  "status": {
+    "available": "Available",
+    "maintenance": "Maintenance",
+    "rented": "Rented",
+    "reserved": "Reserved",
+    "unknown": "Unknown"
+  },
   "status_information": "status_information",
   "stop": "stop",
   "system_info": "system_info",

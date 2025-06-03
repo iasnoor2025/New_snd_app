@@ -1031,6 +1031,17 @@
   "pwa": {
     "enable": "تفعيل",
     "install": "تثبيت",
+    "install_prompt": {
+      "description": "احصل على وصول سريع لتأجير المعدات مع تطبيقنا المحمول. قم بالتثبيت الآن للحصول على تجربة أفضل!",
+      "dismiss_button": "ليس الآن",
+      "features": {
+        "offline_access": "العمل دون اتصال",
+        "push_notifications": "الحصول على إشعارات",
+        "quick_booking": "حجز سريع"
+      },
+      "install_button": "تثبيت التطبيق",
+      "title": "تثبيت تطبيق SND للتأجير"
+    },
     "management": "إدارة تطبيق الويب التقدمي",
     "offline": "غير متصل",
     "running_as_app": "يعمل كتطبيق مثبت",

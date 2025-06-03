@@ -1031,6 +1031,17 @@
   "pwa": {
     "enable": "Enable",
     "install": "Install",
+    "install_prompt": {
+      "description": "Get quick access to equipment rentals with our mobile app. Install now for a better experience!",
+      "dismiss_button": "Not Now",
+      "features": {
+        "offline_access": "Work offline",
+        "push_notifications": "Get notifications",
+        "quick_booking": "Quick booking"
+      },
+      "install_button": "Install App",
+      "title": "Install SND Rental App"
+    },
     "management": "PWA Management",
     "offline": "Offline",
     "running_as_app": "Running as installed app",

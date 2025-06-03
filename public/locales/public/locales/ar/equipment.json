@@ -34,7 +34,12 @@
   "accumulated_depreciation": "accumulated_depreciation",
   "ack": "ack",
   "acquisition": "acquisition",
-  "actions": "actions",
+  "actions": {
+    "book": "حجز",
+    "book_now": "احجز الآن",
+    "view": "عرض",
+    "view_details": "عرض التفاصيل"
+  },
   "active": "active",
   "active_alerts": "active_alerts",
   "active_predictions": "active_predictions",
@@ -117,6 +122,31 @@
   "battery_level": "battery_level",
   "best_in_class_tco": "best_in_class_tco",
   "book_to_market_ratio": "book_to_market_ratio",
+  "browser": {
+    "adjust_search": "حاول تعديل البحث أو الفلاتر",
+    "all_categories": "جميع الفئات",
+    "apply_filters": "تطبيق الفلاتر",
+    "availability": "التوفر",
+    "category": "الفئة",
+    "clear_all": "مسح الكل",
+    "clear_filters": "مسح الفلاتر",
+    "filter_equipment": "تصفية المعدات",
+    "filters": "الفلاتر",
+    "items_found": "تم العثور على {{count}} معدة",
+    "items_found_plural": "تم العثور على {{count}} معدات",
+    "no_equipment": "لم يتم العثور على معدات",
+    "offline_mode": "وضع عدم الاتصال",
+    "price_down": "السعر ↓",
+    "price_up": "السعر ↑",
+    "search_placeholder": "البحث عن معدات...",
+    "sort_by": "ترتيب حسب",
+    "sort_options": {
+      "name": "الاسم",
+      "price_high": "السعر: من الأعلى إلى الأقل",
+      "price_low": "السعر: من الأقل إلى الأعلى",
+      "rating": "التقييم"
+    }
+  },
   "budget_analysis": "budget_analysis",
   "budget_variance": "budget_variance",
   "budget_variance_analysis": "budget_variance_analysis",
@@ -482,7 +512,10 @@
   "preview": "preview",
   "preview_not_available_for_this_file_type": "preview_not_available_for_this_file_type",
   "previous": "previous",
-  "pricing": "pricing",
+  "pricing": {
+    "per_day": "/يوم",
+    "per_week": "/أسبوع"
+  },
   "progress": "progress",
   "project_assignments": "project_assignments",
   "projected_depreciation_over_the_useful_life_of_the_equipment": "projected_depreciation_over_the_useful_life_of_the_equipment",
@@ -594,7 +627,13 @@
   "start_date": "start_date",
   "start_simulation": "start_simulation",
   "starting_value": "starting_value",
-  "status": "status",
+  "status": {
+    "available": "متاح",
+    "maintenance": "صيانة",
+    "rented": "مؤجر",
+    "reserved": "محجوز",
+    "unknown": "غير معروف"
+  },
   "status_information": "status_information",
   "stop": "stop",
   "system_info": "system_info",
