@@ -15,6 +15,7 @@ import {
   Share
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -36,6 +37,7 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
   onInstall,
   onDismiss
 }) => {
+  const { t } = useTranslation('common');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -174,17 +176,17 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
     if (/iPhone|iPad|iPod/.test(userAgent)) {
       return {
         icon: <Share className="h-4 w-4" />,
-        text: 'Tap the Share button and select "Add to Home Screen"'
+        text: t('pwa.install.instructions.ios', 'Tap the Share button and select "Add to Home Screen"')
       };
     } else if (/Android/.test(userAgent)) {
       return {
         icon: <Home className="h-4 w-4" />,
-        text: 'Tap "Add to Home Screen" from the browser menu'
+        text: t('pwa.install.instructions.android', 'Tap "Add to Home Screen" from the browser menu')
       };
     } else {
       return {
         icon: <Download className="h-4 w-4" />,
-        text: 'Click the install button in your browser\'s address bar'
+        text: t('pwa.install.instructions.desktop', 'Click the install button in your browser\'s address bar')
       };
     }
   };
@@ -194,12 +196,12 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
       <div className={cn('flex items-center gap-2', className)}>
         <Badge variant="secondary" className="bg-green-100 text-green-800">
           <Smartphone className="h-3 w-3 mr-1" />
-          App Installed
+          {t('pwa.status.installed', 'App Installed')}
         </Badge>
         {!isOnline && (
           <Badge variant="destructive">
             <WifiOff className="h-3 w-3 mr-1" />
-            Offline
+            {t('pwa.status.offline', 'Offline')}
           </Badge>
         )}
       </div>
@@ -213,7 +215,7 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
           <Alert className="border-orange-200 bg-orange-50">
             <WifiOff className="h-4 w-4" />
             <AlertDescription>
-              You're offline. Some features may be limited.
+              {t('pwa.messages.offline_warning', 'You\'re offline. Some features may be limited.')}
             </AlertDescription>
           </Alert>
         )}
@@ -229,7 +231,7 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Smartphone className="h-5 w-5 text-blue-600" />
-            <CardTitle className="text-lg">Install SND Rental App</CardTitle>
+            <CardTitle className="text-lg">{t('pwa.install.title', 'Install SND Rental App')}</CardTitle>
           </div>
           <Button
             variant="ghost"
@@ -241,7 +243,7 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
           </Button>
         </div>
         <CardDescription>
-          Get faster access and work offline by installing our app on your device.
+          {t('pwa.install.description', 'Get faster access and work offline by installing our app on your device.')}
         </CardDescription>
       </CardHeader>
 
@@ -249,15 +251,15 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
           <div className="flex items-center gap-2 text-green-700">
             <Wifi className="h-4 w-4" />
-            <span>Works offline</span>
+            <span>{t('pwa.features.offline', 'Works offline')}</span>
           </div>
           <div className="flex items-center gap-2 text-blue-700">
             <Download className="h-4 w-4" />
-            <span>Faster loading</span>
+            <span>{t('pwa.features.faster_loading', 'Faster loading')}</span>
           </div>
           <div className="flex items-center gap-2 text-purple-700">
             <Bell className="h-4 w-4" />
-            <span>Push notifications</span>
+            <span>{t('pwa.features.notifications', 'Push notifications')}</span>
           </div>
         </div>
 
@@ -270,12 +272,12 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
             {isInstalling ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                Installing...
+                {t('pwa.install.installing', 'Installing...')}
               </>
             ) : (
               <>
                 <Download className="h-4 w-4 mr-2" />
-                Install App
+                {t('pwa.install.button', 'Install App')}
               </>
             )}
           </Button>
@@ -287,7 +289,7 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
               className="flex-1"
             >
               <Bell className="h-4 w-4 mr-2" />
-              Enable Notifications
+              {t('pwa.notifications.enable', 'Enable Notifications')}
             </Button>
           )}
         </div>
@@ -295,7 +297,7 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
         <div className="flex items-start gap-2 p-3 bg-white rounded-lg border">
           {instructions.icon}
           <p className="text-sm text-gray-600">
-            <strong>Manual installation:</strong> {instructions.text}
+            <strong>{t('pwa.install.manual', 'Manual installation:')}</strong> {instructions.text}
           </p>
         </div>
 
@@ -304,12 +306,12 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
             {isOnline ? (
               <>
                 <Wifi className="h-3 w-3 text-green-500" />
-                <span>Online</span>
+                <span>{t('pwa.status.online', 'Online')}</span>
               </>
             ) : (
               <>
                 <WifiOff className="h-3 w-3 text-red-500" />
-                <span>Offline</span>
+                <span>{t('pwa.status.offline', 'Offline')}</span>
               </>
             )}
           </div>
@@ -318,12 +320,12 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
             {notificationPermission === 'granted' ? (
               <>
                 <Bell className="h-3 w-3 text-green-500" />
-                <span>Notifications enabled</span>
+                <span>{t('pwa.notifications.enabled', 'Notifications enabled')}</span>
               </>
             ) : (
               <>
                 <BellOff className="h-3 w-3 text-gray-400" />
-                <span>Notifications disabled</span>
+                <span>{t('pwa.notifications.disabled', 'Notifications disabled')}</span>
               </>
             )}
           </div>

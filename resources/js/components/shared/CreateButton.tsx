@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import Permission from '@/components/Permission';
+import { useTranslation } from 'react-i18next';
 
 interface CreateButtonProps {
   resourceType: string;
@@ -23,7 +24,8 @@ const CreateButton: React.FC<CreateButtonProps> = ({
   className = '',
   href,
 }) => {
-  const defaultText = `Add ${resourceType.charAt(0).toUpperCase() + resourceType.slice(1).replace(/s$/, '')}`;
+  const { t } = useTranslation(['common']);
+  const defaultText = text || t('common:actions.add', { resource: resourceType.charAt(0).toUpperCase() + resourceType.slice(1).replace(/s$/, '') });
   const defaultHref = `/${resourceType}/create`;
 
   const button = (
@@ -35,7 +37,7 @@ const CreateButton: React.FC<CreateButtonProps> = ({
     >
       <Link href={href || defaultHref}>
         <Plus className="mr-2 h-4 w-4" />
-        {text || defaultText}
+        {defaultText}
       </Link>
     </Button>
   );

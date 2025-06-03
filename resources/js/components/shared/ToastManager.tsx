@@ -1,4 +1,6 @@
 import { toast } from '@/components/ui/use-toast';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 /**
  * Toast Manager Service
@@ -7,13 +9,22 @@ import { toast } from '@/components/ui/use-toast';
  */
 export class ToastManager {
   /**
+   * Get translation function
+   * @returns The translation function
+   */
+  private static getT() {
+    return i18next.t;
+  }
+
+  /**
    * Show a success toast notification
    * @param message The message to display
    * @param options Additional toast options
    */
   static success(message: string, options: any = {}) {
+    const t = this.getT();
     toast({
-      title: options.title || 'Success',
+      title: options.title || t('common:toasts.success', 'Success'),
       description: message,
       variant: 'success',
       duration: options.duration || 3000,
@@ -27,8 +38,9 @@ export class ToastManager {
    * @param options Additional toast options
    */
   static error(message: string, options: any = {}) {
+    const t = this.getT();
     toast({
-      title: options.title || 'Error',
+      title: options.title || t('common:toasts.error', 'Error'),
       description: message,
       variant: 'destructive',
       duration: options.duration || 5000,
@@ -42,8 +54,9 @@ export class ToastManager {
    * @param options Additional toast options
    */
   static info(message: string, options: any = {}) {
+    const t = this.getT();
     toast({
-      title: options.title || 'Information',
+      title: options.title || t('common:toasts.information', 'Information'),
       description: message,
       variant: 'info',
       duration: options.duration || 3000,
@@ -57,8 +70,9 @@ export class ToastManager {
    * @param options Additional toast options
    */
   static warning(message: string, options: any = {}) {
+    const t = this.getT();
     toast({
-      title: options.title || 'Warning',
+      title: options.title || t('common:toasts.warning', 'Warning'),
       description: message,
       variant: 'warning',
       duration: options.duration || 4000,
@@ -73,8 +87,9 @@ export class ToastManager {
    * @returns The toast ID that can be used to dismiss the toast
    */
   static loading(message: string, options: any = {}) {
+    const t = this.getT();
     return toast({
-      title: options.title || 'Loading',
+      title: options.title || t('common:toasts.loading', 'Loading'),
       description: message,
       variant: 'default',
       duration: options.duration || 0, // Infinite duration by default

@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { Progress } from '@/Components/ui/progress';
 import { Separator } from '@/Components/ui/separator';
+import { useTranslation } from 'react-i18next';
 import {
   TrendingUp,
   TrendingDown,
@@ -95,6 +96,7 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const { isOnline } = usePWA();
+  const { t } = useTranslation(['common', 'analytics']);
   const [selectedPeriod, setSelectedPeriod] = useState('7d');
   const [activeTab, setActiveTab] = useState('overview');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -289,7 +291,7 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Revenue</p>
+                <p className="text-xs text-muted-foreground">{t('analytics:revenue', 'Revenue')}</p>
                 <p className="text-lg font-bold">{formatCurrency(analyticsData.overview.totalRevenue)}</p>
                 <div className="flex items-center space-x-1 mt-1">
                   {analyticsData.overview.revenueChange > 0 ? (
@@ -313,7 +315,7 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Bookings</p>
+                <p className="text-xs text-muted-foreground">{t('analytics:bookings', 'Bookings')}</p>
                 <p className="text-lg font-bold">{analyticsData.overview.totalBookings}</p>
                 <div className="flex items-center space-x-1 mt-1">
                   {analyticsData.overview.bookingsChange > 0 ? (
@@ -337,9 +339,9 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Active Rentals</p>
+                <p className="text-xs text-muted-foreground">{t('analytics:active_rentals', 'Active Rentals')}</p>
                 <p className="text-lg font-bold">{analyticsData.overview.activeRentals}</p>
-                <p className="text-xs text-muted-foreground mt-1">Currently rented</p>
+                <p className="text-xs text-muted-foreground mt-1">{t('analytics:currently_rented', 'Currently rented')}</p>
               </div>
               <Package className="h-8 w-8 text-orange-600" />
             </div>
@@ -350,9 +352,9 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Customers</p>
+                <p className="text-xs text-muted-foreground">{t('analytics:customers', 'Customers')}</p>
                 <p className="text-lg font-bold">{analyticsData.overview.customerCount}</p>
-                <p className="text-xs text-muted-foreground mt-1">Total customers</p>
+                <p className="text-xs text-muted-foreground mt-1">{t('analytics:total_customers', 'Total customers')}</p>
               </div>
               <Users className="h-8 w-8 text-purple-600" />
             </div>
@@ -364,12 +366,12 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium">Equipment Utilization</p>
+            <p className="text-sm font-medium">{t('analytics:equipment_utilization', 'Equipment Utilization')}</p>
             <span className="text-sm font-bold">{analyticsData.overview.utilizationRate}%</span>
           </div>
           <Progress value={analyticsData.overview.utilizationRate} className="h-2" />
           <p className="text-xs text-muted-foreground mt-1">
-            Target: 75% • Current: {analyticsData.overview.utilizationRate}%
+            {t('analytics:utilization_target', 'Target: 75% • Current: {{rate}}%', { rate: analyticsData.overview.utilizationRate })}
           </p>
         </CardContent>
       </Card>
@@ -377,7 +379,7 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
       {/* Quick Insights */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Key Insights</CardTitle>
+          <CardTitle className="text-base">{t('analytics:key_insights', 'Key Insights')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-0 space-y-3">
           {analyticsData.insights.map((insight) => (
@@ -418,7 +420,7 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
       {/* Revenue Chart */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Revenue Trend</CardTitle>
+          <CardTitle className="text-base">{t('analytics:revenue_trend', 'Revenue Trend')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="h-32 flex items-end justify-between space-x-1">
@@ -440,8 +442,8 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
             })}
           </div>
           <div className="flex justify-between text-xs text-muted-foreground mt-2">
-            <span>7 days ago</span>
-            <span>Today</span>
+            <span>{t('analytics:days_ago', '7 days ago')}</span>
+            <span>{t('analytics:today', 'Today')}</span>
           </div>
         </CardContent>
       </Card>
@@ -585,9 +587,9 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h2 className="text-lg font-semibold">Analytics</h2>
+              <h2 className="text-lg font-semibold">{t('analytics:title', 'Analytics')}</h2>
               <p className="text-xs text-muted-foreground">
-                Last updated: {lastUpdated.toLocaleTimeString()}
+                {t('analytics:last_updated', 'Last updated: {{time}}', { time: lastUpdated.toLocaleTimeString() })}
               </p>
             </div>
             <div className="flex items-center space-x-2">
@@ -611,10 +613,10 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1d">Today</SelectItem>
-                <SelectItem value="7d">7 Days</SelectItem>
-                <SelectItem value="30d">30 Days</SelectItem>
-                <SelectItem value="90d">90 Days</SelectItem>
+                <SelectItem value="1d">{t('analytics:today', 'Today')}</SelectItem>
+                <SelectItem value="7d">{t('analytics:7_days', '7 Days')}</SelectItem>
+                <SelectItem value="30d">{t('analytics:30_days', '30 Days')}</SelectItem>
+                <SelectItem value="90d">{t('analytics:90_days', '90 Days')}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -633,19 +635,19 @@ const MobileAnalytics: React.FC<MobileAnalyticsProps> = ({
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview" className="text-xs">
               <BarChart3 className="h-4 w-4 mr-1" />
-              Overview
+              {t('analytics:overview', 'Overview')}
             </TabsTrigger>
             <TabsTrigger value="charts" className="text-xs">
               <PieChart className="h-4 w-4 mr-1" />
-              Charts
+              {t('analytics:charts', 'Charts')}
             </TabsTrigger>
             <TabsTrigger value="equipment" className="text-xs">
               <Package className="h-4 w-4 mr-1" />
-              Equipment
+              {t('analytics:equipment', 'Equipment')}
             </TabsTrigger>
             <TabsTrigger value="activity" className="text-xs">
               <Activity className="h-4 w-4 mr-1" />
-              Activity
+              {t('analytics:activity', 'Activity')}
             </TabsTrigger>
           </TabsList>
 

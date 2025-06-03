@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
 import { Alert, AlertDescription } from '@/Components/ui/alert';
 import { Separator } from '@/Components/ui/separator';
 import { Progress } from '@/Components/ui/progress';
+import { useTranslation } from 'react-i18next';
 import {
   Smartphone,
   Package,
@@ -71,6 +72,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const { isOnline, isStandalone } = usePWA();
+  const { t } = useTranslation(['common', 'mobile']);
   const [activeTab, setActiveTab] = useState('overview');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -126,29 +128,29 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
 
   const quickActions = [
     {
-      title: 'New Rental',
-      description: 'Start a new equipment rental',
+      title: t('mobile:new_rental', 'New Rental'),
+      description: t('mobile:new_rental_desc', 'Start a new equipment rental'),
       icon: <Plus className="h-6 w-6" />,
       href: '/rentals/create',
       color: 'bg-blue-500'
     },
     {
-      title: 'Search Equipment',
-      description: 'Find available equipment',
+      title: t('mobile:search_equipment', 'Search Equipment'),
+      description: t('mobile:search_equipment_desc', 'Find available equipment'),
       icon: <Search className="h-6 w-6" />,
       href: '/equipment/search',
       color: 'bg-green-500'
     },
     {
-      title: 'My Bookings',
-      description: 'View your bookings',
+      title: t('mobile:my_bookings', 'My Bookings'),
+      description: t('mobile:my_bookings_desc', 'View your bookings'),
       icon: <Calendar className="h-6 w-6" />,
       href: '/bookings',
       color: 'bg-purple-500'
     },
     {
-      title: 'Maintenance',
-      description: 'Equipment maintenance',
+      title: t('mobile:maintenance', 'Maintenance'),
+      description: t('mobile:maintenance_desc', 'Equipment maintenance'),
       icon: <Truck className="h-6 w-6" />,
       href: '/maintenance',
       color: 'bg-orange-500'
@@ -163,11 +165,11 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
               <Smartphone className="h-6 w-6 text-blue-500" />
-              <h1 className="text-xl font-bold">SND Rental</h1>
+              <h1 className="text-xl font-bold">{t('common:app_name', 'SND Rental')}</h1>
             </div>
             {!isOnline && (
               <Badge variant="destructive" className="text-xs">
-                Offline
+                {t('common:offline', 'Offline')}
               </Badge>
             )}
           </div>
@@ -205,10 +207,10 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">
-              Welcome back, {user?.name || 'User'}!
+              {t('mobile:welcome_back', 'Welcome back, {{name}}!', { name: user?.name || t('common:user', 'User') })}
             </CardTitle>
             <CardDescription>
-              {isStandalone ? 'Mobile App' : 'Web App'} • {new Date().toLocaleDateString()}
+              {isStandalone ? t('mobile:mobile_app', 'Mobile App') : t('mobile:web_app', 'Web App')} • {new Date().toLocaleDateString()}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -222,7 +224,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
                   <Package className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Active Rentals</p>
+                  <p className="text-sm text-muted-foreground">{t('mobile:active_rentals', 'Active Rentals')}</p>
                   <p className="text-2xl font-bold">{stats.activeRentals}</p>
                 </div>
               </div>
@@ -236,7 +238,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
                   <Calendar className="h-5 w-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Bookings</p>
+                  <p className="text-sm text-muted-foreground">{t('mobile:bookings', 'Bookings')}</p>
                   <p className="text-2xl font-bold">{stats.pendingBookings}</p>
                 </div>
               </div>
@@ -250,7 +252,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
                   <DollarSign className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Revenue</p>
+                  <p className="text-sm text-muted-foreground">{t('mobile:revenue', 'Revenue')}</p>
                   <p className="text-2xl font-bold">${stats.totalRevenue.toLocaleString()}</p>
                 </div>
               </div>
@@ -264,7 +266,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
                   <Truck className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Equipment</p>
+                  <p className="text-sm text-muted-foreground">{t('mobile:equipment', 'Equipment')}</p>
                   <p className="text-2xl font-bold">{stats.equipmentCount}</p>
                 </div>
               </div>
@@ -279,7 +281,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  {stats.maintenanceAlerts} equipment items need maintenance
+                  {t('mobile:maintenance_alert', '{{count}} equipment items need maintenance', { count: stats.maintenanceAlerts })}
                 </AlertDescription>
               </Alert>
             )}
@@ -287,7 +289,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
               <Alert variant="destructive">
                 <Clock className="h-4 w-4" />
                 <AlertDescription>
-                  {stats.overdueReturns} rentals are overdue for return
+                  {t('mobile:overdue_alert', '{{count}} rentals are overdue for return', { count: stats.overdueReturns })}
                 </AlertDescription>
               </Alert>
             )}
@@ -297,7 +299,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Quick Actions</CardTitle>
+            <CardTitle className="text-lg">{t('mobile:quick_actions', 'Quick Actions')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
@@ -325,7 +327,7 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Recent Activity</CardTitle>
+            <CardTitle className="text-lg">{t('mobile:recent_activity', 'Recent Activity')}</CardTitle>
           </CardHeader>
           <CardContent>
             {recentActivity.length > 0 ? (
@@ -354,14 +356,14 @@ const MobileDashboard: React.FC<MobileDashboardProps> = ({
                 ))}
                 <Link href="/activity">
                   <Button variant="outline" className="w-full mt-3">
-                    View All Activity
+                    {t('mobile:view_all_activity', 'View All Activity')}
                   </Button>
                 </Link>
               </div>
             ) : (
               <div className="text-center py-6">
                 <Clock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">No recent activity</p>
+                <p className="text-sm text-muted-foreground">{t('mobile:no_recent_activity', 'No recent activity')}</p>
               </div>
             )}
           </CardContent>

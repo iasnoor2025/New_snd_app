@@ -13,6 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/Co
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { Checkbox } from '@/Components/ui/checkbox';
 import { Separator } from '@/Components/ui/separator';
+import { useTranslation } from 'react-i18next';
 import {
   Search,
   Filter,
@@ -81,6 +82,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const { isOnline } = usePWA();
+  const { t } = useTranslation(['common', 'equipment']);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>('');
@@ -162,11 +164,11 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
 
   const getAvailabilityText = (availability: string) => {
     switch (availability) {
-      case 'available': return 'Available';
-      case 'rented': return 'Rented';
-      case 'maintenance': return 'Maintenance';
-      case 'reserved': return 'Reserved';
-      default: return 'Unknown';
+      case 'available': return t('equipment:available', 'Available');
+      case 'rented': return t('equipment:rented', 'Rented');
+      case 'maintenance': return t('equipment:maintenance', 'Maintenance');
+      case 'reserved': return t('equipment:reserved', 'Reserved');
+      default: return t('equipment:unknown', 'Unknown');
     }
   };
 
@@ -249,7 +251,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
             <div className="flex items-center justify-between text-xs">
               <Badge variant="outline">{item.category}</Badge>
               <span className={`font-medium ${getConditionColor(item.condition)}`}>
-                {item.condition}
+                {t(`equipment:condition_${item.condition}`, item.condition)}
               </span>
             </div>
 
@@ -263,10 +265,10 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
             <div className="flex items-center justify-between">
               <div className="text-sm">
                 <span className="font-bold">${item.dailyRate}</span>
-                <span className="text-muted-foreground">/day</span>
+                <span className="text-muted-foreground">/{t('equipment:day', 'day')}</span>
               </div>
               <div className="text-xs text-muted-foreground">
-                ${item.weeklyRate}/week
+                ${item.weeklyRate}/{t('equipment:week', 'week')}
               </div>
             </div>
 
@@ -278,7 +280,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
                 onClick={() => onEquipmentSelect?.(item)}
                 disabled={item.availability !== 'available'}
               >
-                {item.availability === 'available' ? 'Book Now' : 'View Details'}
+                {item.availability === 'available' ? t('equipment:book_now', 'Book Now') : t('equipment:view_details', 'View Details')}
               </Button>
               <Button variant="outline" size="sm">
                 <Info className="h-4 w-4" />
@@ -332,7 +334,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
                 <div className="flex items-center justify-between mt-2">
                   <div className="text-sm">
                     <span className="font-bold">${item.dailyRate}</span>
-                    <span className="text-muted-foreground">/day</span>
+                    <span className="text-muted-foreground">/{t('equipment:day', 'day')}</span>
                   </div>
                   <div className="flex space-x-1">
                     <Button
@@ -349,7 +351,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
                       onClick={() => onEquipmentSelect?.(item)}
                       disabled={item.availability !== 'available'}
                     >
-                      {item.availability === 'available' ? 'Book' : 'View'}
+                      {item.availability === 'available' ? t('equipment:book', 'Book') : t('equipment:view', 'View')}
                     </Button>
                   </div>
                 </div>
@@ -370,7 +372,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search equipment..."
+              placeholder={t('equipment:search_placeholder', 'Search equipment...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-4"
@@ -384,23 +386,23 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
                 <SheetTrigger asChild>
                   <Button variant="outline" size="sm">
                     <Filter className="h-4 w-4 mr-2" />
-                    Filters
+                    {t('equipment:filters', 'Filters')}
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="bottom" className="h-[80vh]">
                   <SheetHeader>
-                    <SheetTitle>Filter Equipment</SheetTitle>
+                    <SheetTitle>{t('equipment:filter_equipment', 'Filter Equipment')}</SheetTitle>
                   </SheetHeader>
                   <div className="py-4 space-y-6">
                     {/* Category Filter */}
                     <div>
-                      <label className="text-sm font-medium">Category</label>
+                      <label className="text-sm font-medium">{t('equipment:category', 'Category')}</label>
                       <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                         <SelectTrigger className="mt-2">
-                          <SelectValue placeholder="All categories" />
+                          <SelectValue placeholder={t('equipment:all_categories', 'All categories')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All categories</SelectItem>
+                          <SelectItem value="">{t('equipment:all_categories', 'All categories')}</SelectItem>
                           {categories.map((category) => (
                             <SelectItem key={category.id} value={category.id}>
                               {category.name} ({category.count})
@@ -412,7 +414,7 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
 
                     {/* Availability Filter */}
                     <div>
-                      <label className="text-sm font-medium">Availability</label>
+                      <label className="text-sm font-medium">{t('equipment:availability', 'Availability')}</label>
                       <div className="mt-2 space-y-2">
                         {['available', 'rented', 'maintenance', 'reserved'].map((status) => (
                           <div key={status} className="flex items-center space-x-2">
@@ -437,27 +439,27 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
 
                     {/* Sort By */}
                     <div>
-                      <label className="text-sm font-medium">Sort By</label>
+                      <label className="text-sm font-medium">{t('equipment:sort_by', 'Sort By')}</label>
                       <Select value={sortBy} onValueChange={setSortBy}>
                         <SelectTrigger className="mt-2">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="name">Name</SelectItem>
-                          <SelectItem value="price-low">Price: Low to High</SelectItem>
-                          <SelectItem value="price-high">Price: High to Low</SelectItem>
-                          <SelectItem value="rating">Rating</SelectItem>
-                          <SelectItem value="availability">Availability</SelectItem>
+                          <SelectItem value="name">{t('equipment:sort_name', 'Name')}</SelectItem>
+                          <SelectItem value="price-low">{t('equipment:sort_price_low', 'Price: Low to High')}</SelectItem>
+                          <SelectItem value="price-high">{t('equipment:sort_price_high', 'Price: High to Low')}</SelectItem>
+                          <SelectItem value="rating">{t('equipment:sort_rating', 'Rating')}</SelectItem>
+                          <SelectItem value="availability">{t('equipment:sort_availability', 'Availability')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="flex space-x-2">
                       <Button variant="outline" onClick={clearFilters} className="flex-1">
-                        Clear All
+                        {t('equipment:clear_all', 'Clear All')}
                       </Button>
                       <Button onClick={() => setShowFilters(false)} className="flex-1">
-                        Apply Filters
+                        {t('equipment:apply_filters', 'Apply Filters')}
                       </Button>
                     </div>
                   </div>
@@ -469,10 +471,10 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="price-low">Price ↑</SelectItem>
-                  <SelectItem value="price-high">Price ↓</SelectItem>
-                  <SelectItem value="rating">Rating</SelectItem>
+                  <SelectItem value="name">{t('equipment:sort_name', 'Name')}</SelectItem>
+                  <SelectItem value="price-low">{t('equipment:sort_price_asc', 'Price ↑')}</SelectItem>
+                  <SelectItem value="price-high">{t('equipment:sort_price_desc', 'Price ↓')}</SelectItem>
+                  <SelectItem value="rating">{t('equipment:sort_rating', 'Rating')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -502,10 +504,10 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
         {/* Results Count */}
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-muted-foreground">
-            {filteredEquipment.length} equipment items found
+            {t('equipment:items_found', '{{count}} equipment items found', { count: filteredEquipment.length })}
           </p>
           {!isOnline && (
-            <Badge variant="outline">Offline Mode</Badge>
+            <Badge variant="outline">{t('equipment:offline_mode', 'Offline Mode')}</Badge>
           )}
         </div>
 
@@ -523,12 +525,12 @@ const MobileEquipmentBrowser: React.FC<MobileEquipmentBrowserProps> = ({
         ) : (
           <div className="text-center py-12">
             <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No equipment found</h3>
+            <h3 className="text-lg font-medium mb-2">{t('equipment:no_equipment_found', 'No equipment found')}</h3>
             <p className="text-muted-foreground mb-4">
-              Try adjusting your search or filters
+              {t('equipment:try_adjusting_filters', 'Try adjusting your search or filters')}
             </p>
             <Button variant="outline" onClick={clearFilters}>
-              Clear Filters
+              {t('equipment:clear_filters', 'Clear Filters')}
             </Button>
           </div>
         )}

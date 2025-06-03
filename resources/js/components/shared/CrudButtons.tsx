@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePermission } from '@/hooks/usePermission';
+import { useTranslation } from 'react-i18next';
 
 interface CrudButtonsProps {
   resourceType: string;
@@ -66,6 +67,7 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { hasPermission } = usePermission();
+  const { t } = useTranslation(['common']);
 
   const hasViewPermission = hasPermission(`${resourceType}.view`);
   const hasEditPermission = hasPermission(`${resourceType}.edit`);
@@ -76,11 +78,11 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
 
     router.delete(`/${resourceType}/${resourceId}`, {
       onSuccess: () => {
-        toast.success(`${resourceName} has been deleted successfully.`);
+        toast.success(t('common:messages.delete_success', { resource: resourceName }));
         if (onDelete) onDelete();
       },
       onError: (errors) => {
-        toast.error(errors.message || 'Failed to delete. Please try again.');
+        toast.error(errors.message || t('common:messages.delete_error'));
       },
       onFinish: () => {
         setIsDeleting(false);
@@ -92,7 +94,7 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
       {showView && hasViewPermission && (
-        <Button variant="outline" size="icon" asChild title="View">
+        <Button variant="outline" size="icon" asChild title={t('common:actions.view')}>
           <Link href={`/${resourceType}/${resourceId}`}>
             <Eye className="h-4 w-4" />
           </Link>
@@ -100,7 +102,7 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
       )}
 
       {showEdit && hasEditPermission && (
-        <Button variant="outline" size="icon" asChild title="Edit">
+        <Button variant="outline" size="icon" asChild title={t('common:actions.edit')}>
           <Link href={`/${resourceType}/${resourceId}/edit`}>
             <Pencil className="h-4 w-4" />
           </Link>
@@ -149,7 +151,7 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
                 onClick={() => setIsDeleteDialogOpen(true)}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                Delete
+                {t('common:actions.delete')}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -159,14 +161,14 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogTitle>{t('common:dialogs.confirm_delete.title')}</DialogTitle>
             <DialogDescription>
-              This will permanently delete {resourceName}. This action cannot be undone.
+              {t('common:dialogs.confirm_delete.description', { resource: resourceName })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" disabled={isDeleting}>Cancel</Button>
+              <Button variant="outline" disabled={isDeleting}>{t('common:actions.cancel')}</Button>
             </DialogClose>
             <Button
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -179,10 +181,10 @@ const CrudButtons: React.FC<CrudButtonsProps> = ({
               {isDeleting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {t('common:actions.deleting')}
                 </>
               ) : (
-                'Delete'
+                t('common:actions.delete')
               )}
             </Button>
           </DialogFooter>

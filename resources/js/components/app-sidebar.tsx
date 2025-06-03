@@ -39,6 +39,7 @@ import { usePermission } from '../hooks/usePermission';
 import type { PageProps } from '../types';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 // Map module names to their respective icon, route, and required permission
 const moduleMap: Record<string, { icon: any; route: string; permission: string; subItems?: Array<{ title: string; route: string; permission: string }> }> = {
@@ -94,6 +95,7 @@ export function AppSidebar() {
     const auth = pageProps?.auth || { user: null };
     const [moduleItems, setModuleItems] = useState<NavItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { t } = useTranslation(['common']);
 
     // Check if user is admin directly from auth data
     const isAdmin = auth?.user && 'roles' in auth.user && auth.user.roles
@@ -113,19 +115,19 @@ export function AppSidebar() {
         const items: NavItem[] = [];
         // Add Dashboard as first item
         items.push({
-            title: 'Dashboard',
+            title: t('common:dashboard'),
             href: '/dashboard',
             icon: LayoutGrid,
         });
         // Add Users and Roles for admins
         if (isAdmin) {
             items.push({
-                title: 'Users',
+                title: t('common:users'),
                 href: '/users',
                 icon: Users,
             });
             items.push({
-                title: 'Roles',
+                title: t('common:roles'),
                 href: '/roles',
                 icon: Shield,
             });
@@ -136,7 +138,7 @@ export function AppSidebar() {
         if (isAdmin) {
             Object.entries(moduleMap).forEach(([module, mapInfo]) => {
                 const navItem: NavItem = {
-                    title: moduleDisplayNames[module] || module,
+                    title: t(`common:modules.${module}`),
                     href: mapInfo.route,
                     icon: mapInfo.icon,
                 };
@@ -144,7 +146,7 @@ export function AppSidebar() {
                 // Add sub-items if they exist
                 if (mapInfo.subItems) {
                     navItem.items = mapInfo.subItems.map(subItem => ({
-                        title: subItem.title,
+                        title: t(`common:${module.toLowerCase()}.${subItem.title.toLowerCase().replace(' ', '_')}`),
                         href: subItem.route,
                     }));
                 }

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-06-03T09:43:09.761Z",
+  "summary": {
+    "totalFiles": 0,
+    "filesWithHardcodedText": 0,
+    "completionRate": 100
+  },
+  "moduleResults": {
+    "EmployeeManagement": {
+      "total": 0,
+      "withHardcodedText": 0,
+      "completionRate": 100
+    },
+    "ProjectManagement": {
+      "total": 0,
+      "withHardcodedText": 0,
+      "completionRate": 100
+    },
+    "RentalManagement": {
+      "total": 0,
+      "withHardcodedText": 0,
+      "completionRate": 100
+    },
+    "Payroll": {
+      "total": 0,
+      "withHardcodedText": 0,
+      "completionRate": 100
+    },
+    "TimesheetManagement": {
+      "total": 0,
+      "withHardcodedText": 0,
+      "completionRate": 100
+    },
+    "EquipmentManagement": {
+      "total": 0,
+      "withHardcodedText": 0,
+      "completionRate": 100
+    }
+  }
+}

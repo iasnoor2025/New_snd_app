@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { usePWA } from '@/hooks/usePWA';
 import { pushNotificationService } from '@/services/pushNotificationService';
+import { useTranslation } from 'react-i18next';
 
 interface NotificationCategory {
     id: string;
@@ -36,6 +37,7 @@ interface NotificationStats {
 }
 
 const NotificationSettings: React.FC = () => {
+    const { t } = useTranslation('common');
     const {
         notificationPermission,
         requestNotificationPermission,
@@ -49,36 +51,36 @@ const NotificationSettings: React.FC = () => {
     const [categories, setCategories] = useState<NotificationCategory[]>([
         {
             id: 'system',
-            name: 'System Notifications',
-            description: 'Important system updates and maintenance alerts',
+            name: t('notifications.categories.system.name', 'System Notifications'),
+            description: t('notifications.categories.system.description', 'Important system updates and maintenance alerts'),
             enabled: true,
             priority: 'high'
         },
         {
             id: 'transactional',
-            name: 'Transaction Alerts',
-            description: 'Payment confirmations, booking updates, and receipts',
+            name: t('notifications.categories.transactional.name', 'Transaction Alerts'),
+            description: t('notifications.categories.transactional.description', 'Payment confirmations, booking updates, and receipts'),
             enabled: true,
             priority: 'high'
         },
         {
             id: 'reminder',
-            name: 'Reminders',
-            description: 'Upcoming bookings, due dates, and scheduled events',
+            name: t('notifications.categories.reminder.name', 'Reminders'),
+            description: t('notifications.categories.reminder.description', 'Upcoming bookings, due dates, and scheduled events'),
             enabled: true,
             priority: 'normal'
         },
         {
             id: 'marketing',
-            name: 'Promotional Offers',
-            description: 'Special deals, discounts, and new features',
+            name: t('notifications.categories.marketing.name', 'Promotional Offers'),
+            description: t('notifications.categories.marketing.description', 'Special deals, discounts, and new features'),
             enabled: false,
             priority: 'low'
         },
         {
             id: 'alert',
-            name: 'Emergency Alerts',
-            description: 'Urgent security and safety notifications',
+            name: t('notifications.categories.alert.name', 'Emergency Alerts'),
+            description: t('notifications.categories.alert.description', 'Urgent security and safety notifications'),
             enabled: true,
             priority: 'urgent'
         }
@@ -215,19 +217,19 @@ const NotificationSettings: React.FC = () => {
             case 'granted':
                 return {
                     icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-                    text: 'Notifications Enabled',
+                    text: t('notifications.status.enabled', 'Notifications Enabled'),
                     color: 'text-green-700'
                 };
             case 'denied':
                 return {
                     icon: <BellOff className="h-5 w-5 text-red-500" />,
-                    text: 'Notifications Blocked',
+                    text: t('notifications.status.blocked', 'Notifications Blocked'),
                     color: 'text-red-700'
                 };
             default:
                 return {
                     icon: <AlertCircle className="h-5 w-5 text-yellow-500" />,
-                    text: 'Permission Required',
+                    text: t('notifications.status.permission_required', 'Permission Required'),
                     color: 'text-yellow-700'
                 };
         }
@@ -246,10 +248,10 @@ const NotificationSettings: React.FC = () => {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Bell className="h-5 w-5" />
-                        Notification Status
+                        {t('notifications.status.title', 'Notification Status')}
                     </CardTitle>
                     <CardDescription>
-                        Manage your push notification preferences and permissions
+                        {t('notifications.status.description', 'Manage your push notification preferences and permissions')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -262,7 +264,7 @@ const NotificationSettings: React.FC = () => {
                             {isSubscribed && (
                                 <Badge variant="secondary" className="ml-2">
                                     <Smartphone className="h-3 w-3 mr-1" />
-                                    Subscribed
+                                    {t('notifications.status.subscribed', 'Subscribed')}
                                 </Badge>
                             )}
                         </div>
@@ -274,7 +276,7 @@ const NotificationSettings: React.FC = () => {
                                     disabled={loading}
                                     className="bg-green-600 hover:bg-green-700"
                                 >
-                                    Enable Notifications
+                                    {t('notifications.actions.enable', 'Enable Notifications')}
                                 </Button>
                             ) : (
                                 <>
@@ -283,14 +285,14 @@ const NotificationSettings: React.FC = () => {
                                         onClick={sendTestNotification}
                                         disabled={loading || !isSubscribed}
                                     >
-                                        Send Test
+                                        {t('notifications.actions.send_test', 'Send Test')}
                                     </Button>
                                     <Button
                                         variant="destructive"
                                         onClick={handleDisableNotifications}
                                         disabled={loading}
                                     >
-                                        Disable
+                                        {t('notifications.actions.disable', 'Disable')}
                                     </Button>
                                 </>
                             )}
@@ -301,7 +303,7 @@ const NotificationSettings: React.FC = () => {
                         <Alert>
                             <CheckCircle className="h-4 w-4" />
                             <AlertDescription>
-                                Test notification sent! Check your device for the notification.
+                                {t('notifications.messages.test_sent', 'Test notification sent! Check your device for the notification.')}
                             </AlertDescription>
                         </Alert>
                     )}
@@ -320,10 +322,10 @@ const NotificationSettings: React.FC = () => {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Settings className="h-5 w-5" />
-                        Notification Categories
+                        {t('notifications.categories.title', 'Notification Categories')}
                     </CardTitle>
                     <CardDescription>
-                        Choose which types of notifications you want to receive
+                        {t('notifications.categories.description', 'Choose which types of notifications you want to receive')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -337,7 +339,7 @@ const NotificationSettings: React.FC = () => {
                                             variant="secondary"
                                             className={getPriorityColor(category.priority)}
                                         >
-                                            {category.priority}
+                                            {t(`notifications.priority.${category.priority}`, category.priority)}
                                         </Badge>
                                     </div>
                                     <p className="text-sm text-gray-600">
@@ -359,9 +361,9 @@ const NotificationSettings: React.FC = () => {
             {/* Sound & Vibration Settings */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Sound & Vibration</CardTitle>
+                    <CardTitle>{t('notifications.sound_vibration.title', 'Sound & Vibration')}</CardTitle>
                     <CardDescription>
-                        Configure how notifications alert you
+                        {t('notifications.sound_vibration.description', 'Configure how notifications alert you')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -373,9 +375,9 @@ const NotificationSettings: React.FC = () => {
                                 <VolumeX className="h-5 w-5 text-gray-400" />
                             )}
                             <div>
-                                <h4 className="font-medium">Sound</h4>
+                                <h4 className="font-medium">{t('notifications.sound_vibration.sound', 'Sound')}</h4>
                                 <p className="text-sm text-gray-600">
-                                    Play sound when notifications arrive
+                                    {t('notifications.sound_vibration.sound_description', 'Play sound when notifications arrive')}
                                 </p>
                             </div>
                         </div>
@@ -391,9 +393,9 @@ const NotificationSettings: React.FC = () => {
                         <div className="flex items-center gap-2">
                             <Smartphone className="h-5 w-5 text-blue-500" />
                             <div>
-                                <h4 className="font-medium">Vibration</h4>
+                                <h4 className="font-medium">{t('notifications.sound_vibration.vibration', 'Vibration')}</h4>
                                 <p className="text-sm text-gray-600">
-                                    Vibrate device for notifications
+                                    {t('notifications.sound_vibration.vibration_description', 'Vibrate device for notifications')}
                                 </p>
                             </div>
                         </div>
@@ -410,18 +412,18 @@ const NotificationSettings: React.FC = () => {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Clock className="h-5 w-5" />
-                        Quiet Hours
+                        {t('notifications.quiet_hours.title', 'Quiet Hours')}
                     </CardTitle>
                     <CardDescription>
-                        Set times when you don't want to receive notifications
+                        {t('notifications.quiet_hours.description', 'Set times when you don\'t want to receive notifications')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h4 className="font-medium">Enable Quiet Hours</h4>
+                            <h4 className="font-medium">{t('notifications.quiet_hours.enable', 'Enable Quiet Hours')}</h4>
                             <p className="text-sm text-gray-600">
-                                Silence non-urgent notifications during specified hours
+                                {t('notifications.quiet_hours.enable_description', 'Silence non-urgent notifications during specified hours')}
                             </p>
                         </div>
                         <Switch
@@ -436,7 +438,7 @@ const NotificationSettings: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4 pt-2">
                             <div>
                                 <label className="block text-sm font-medium mb-1">
-                                    Start Time
+                                    {t('notifications.quiet_hours.start_time', 'Start Time')}
                                 </label>
                                 <input
                                     type="time"
@@ -449,7 +451,7 @@ const NotificationSettings: React.FC = () => {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">
-                                    End Time
+                                    {t('notifications.quiet_hours.end_time', 'End Time')}
                                 </label>
                                 <input
                                     type="time"
@@ -469,9 +471,9 @@ const NotificationSettings: React.FC = () => {
             {stats && (
                 <Card>
                     <CardHeader>
-                        <CardTitle>Notification Statistics</CardTitle>
+                        <CardTitle>{t('notifications.statistics.title', 'Notification Statistics')}</CardTitle>
                         <CardDescription>
-                            Your notification activity over the last 30 days
+                            {t('notifications.statistics.description', 'Your notification activity over the last 30 days')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -480,25 +482,25 @@ const NotificationSettings: React.FC = () => {
                                 <div className="text-2xl font-bold text-blue-600">
                                     {stats.total}
                                 </div>
-                                <div className="text-sm text-gray-600">Total Sent</div>
+                                <div className="text-sm text-gray-600">{t('notifications.statistics.total_sent', 'Total Sent')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-2xl font-bold text-green-600">
                                     {stats.delivered}
                                 </div>
-                                <div className="text-sm text-gray-600">Delivered</div>
+                                <div className="text-sm text-gray-600">{t('notifications.statistics.delivered', 'Delivered')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-2xl font-bold text-purple-600">
                                     {stats.clicked}
                                 </div>
-                                <div className="text-sm text-gray-600">Clicked</div>
+                                <div className="text-sm text-gray-600">{t('notifications.statistics.clicked', 'Clicked')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-2xl font-bold text-orange-600">
                                     {stats.click_rate}%
                                 </div>
-                                <div className="text-sm text-gray-600">Click Rate</div>
+                                <div className="text-sm text-gray-600">{t('notifications.statistics.click_rate', 'Click Rate')}</div>
                             </div>
                         </div>
                     </CardContent>

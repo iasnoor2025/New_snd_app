@@ -3,13 +3,15 @@ import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
+    const { t } = useTranslation(['common']);
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('common:platform')}</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => {
                     const hasSubItems = item.items && item.items.length > 0;
@@ -55,7 +57,6 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                             <SidebarMenuButton
                                 asChild
                                 isActive={isActive}
-                                tooltip={{ children: item.title }}
                             >
                                 <Link href={item.href} prefetch>
                                     {item.icon && <item.icon />}

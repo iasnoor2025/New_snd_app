@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from '@/Components/ui/alert';
 import { Checkbox } from '@/Components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { useTranslation } from 'react-i18next';
 import {
   Calendar,
   Clock,
@@ -90,6 +91,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const { isOnline } = usePWA();
+  const { t } = useTranslation(['common', 'booking']);
   const [currentStep, setCurrentStep] = useState(1);
   const [isCalculating, setIsCalculating] = useState(false);
   const [pricing, setPricing] = useState({
@@ -121,10 +123,10 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
   });
 
   const steps = [
-    { id: 1, title: 'Dates & Delivery', icon: Calendar },
-    { id: 2, title: 'Customer Info', icon: User },
-    { id: 3, title: 'Options & Payment', icon: CreditCard },
-    { id: 4, title: 'Review & Confirm', icon: CheckCircle }
+    { id: 1, title: t('booking:step_dates_delivery', 'Dates & Delivery'), icon: Calendar },
+    { id: 2, title: t('booking:step_customer_info', 'Customer Info'), icon: User },
+    { id: 3, title: t('booking:step_options_payment', 'Options & Payment'), icon: CreditCard },
+    { id: 4, title: t('booking:step_review_confirm', 'Review & Confirm'), icon: CheckCircle }
   ];
 
   // Calculate pricing when dates change
@@ -298,7 +300,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
 
         {/* Delivery Method */}
         <div className="mb-4">
-          <Label>Delivery Method</Label>
+          <Label>{t('booking:delivery_method', 'Delivery Method')}</Label>
           <RadioGroup
             value={data.delivery_method}
             onValueChange={(value) => setData('delivery_method', value as 'pickup' | 'delivery')}
@@ -308,14 +310,14 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
               <RadioGroupItem value="pickup" id="pickup" />
               <Label htmlFor="pickup" className="flex items-center space-x-2">
                 <Package className="h-4 w-4" />
-                <span>Pickup from location</span>
+                <span>{t('booking:pickup_from_location', 'Pickup from location')}</span>
               </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="delivery" id="delivery" />
               <Label htmlFor="delivery" className="flex items-center space-x-2">
                 <Truck className="h-4 w-4" />
-                <span>Delivery (+$50)</span>
+                <span>{t('booking:delivery_fee', 'Delivery (+$50)')}</span>
               </Label>
             </div>
           </RadioGroup>
@@ -325,23 +327,23 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
         {data.delivery_method === 'delivery' && (
           <div className="space-y-3">
             <div>
-              <Label htmlFor="delivery_address">Delivery Address</Label>
+              <Label htmlFor="delivery_address">{t('booking:delivery_address', 'Delivery Address')}</Label>
               <Textarea
                 id="delivery_address"
                 value={data.delivery_address}
                 onChange={(e) => setData('delivery_address', e.target.value)}
-                placeholder="Enter full delivery address..."
+                placeholder={t('booking:delivery_address_placeholder', 'Enter full delivery address...')}
                 className="mt-1"
                 rows={3}
               />
             </div>
             <div>
-              <Label htmlFor="delivery_notes">Delivery Notes (Optional)</Label>
+              <Label htmlFor="delivery_notes">{t('booking:delivery_notes', 'Delivery Notes (Optional)')}</Label>
               <Textarea
                 id="delivery_notes"
                 value={data.delivery_notes}
                 onChange={(e) => setData('delivery_notes', e.target.value)}
-                placeholder="Special delivery instructions..."
+                placeholder={t('booking:delivery_notes_placeholder', 'Special delivery instructions...')}
                 className="mt-1"
                 rows={2}
               />
@@ -354,11 +356,11 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
           <Card className="mt-4">
             <CardContent className="p-4">
               <div className="flex items-center justify-between text-sm">
-                <span>Rental Duration:</span>
-                <span className="font-medium">{pricing.rentalDays} days</span>
+                <span>{t('booking:rental_duration', 'Rental Duration:')}</span>
+                <span className="font-medium">{t('booking:days_count', '{{count}} days', { count: pricing.rentalDays })}</span>
               </div>
               <div className="flex items-center justify-between text-sm mt-1">
-                <span>Estimated Total:</span>
+                <span>{t('booking:estimated_total', 'Estimated Total:')}</span>
                 <span className="font-bold text-lg">${pricing.total.toFixed(2)}</span>
               </div>
             </CardContent>
@@ -371,16 +373,16 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
   const renderStep2 = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Customer Information</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('booking:customer_information', 'Customer Information')}</h3>
 
         <div className="space-y-4">
           <div>
-            <Label htmlFor="customer_name">Full Name *</Label>
+            <Label htmlFor="customer_name">{t('booking:full_name', 'Full Name *')}</Label>
             <Input
               id="customer_name"
               value={data.customer_name}
               onChange={(e) => setData('customer_name', e.target.value)}
-              placeholder="Enter your full name"
+              placeholder={t('booking:full_name_placeholder', 'Enter your full name')}
               className="mt-1"
             />
             {errors.customer_name && (
@@ -389,13 +391,13 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
           </div>
 
           <div>
-            <Label htmlFor="customer_email">Email Address *</Label>
+            <Label htmlFor="customer_email">{t('booking:email_address', 'Email Address *')}</Label>
             <Input
               id="customer_email"
               type="email"
               value={data.customer_email}
               onChange={(e) => setData('customer_email', e.target.value)}
-              placeholder="Enter your email address"
+              placeholder={t('booking:email_placeholder', 'Enter your email address')}
               className="mt-1"
             />
             {errors.customer_email && (
@@ -606,38 +608,38 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
         {/* Pricing Breakdown */}
         <Card className="mb-4">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">Pricing Breakdown</CardTitle>
+            <CardTitle className="text-base">{t('booking:pricing_breakdown', 'Pricing Breakdown')}</CardTitle>
           </CardHeader>
           <CardContent className="pt-0 space-y-2">
             <div className="flex justify-between text-sm">
-              <span>Rental ({pricing.rentalDays} days):</span>
+              <span>{t('booking:rental_days', 'Rental ({{count}} days):', { count: pricing.rentalDays })}</span>
               <span>${pricing.subtotal.toFixed(2)}</span>
             </div>
             {pricing.deposit > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Security Deposit:</span>
+                <span>{t('booking:security_deposit', 'Security Deposit:')}</span>
                 <span>${pricing.deposit.toFixed(2)}</span>
               </div>
             )}
             {pricing.insurance > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Insurance:</span>
+                <span>{t('booking:insurance', 'Insurance:')}</span>
                 <span>${pricing.insurance.toFixed(2)}</span>
               </div>
             )}
             {pricing.delivery > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Delivery:</span>
+                <span>{t('booking:delivery', 'Delivery:')}</span>
                 <span>${pricing.delivery.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-sm">
-              <span>Tax:</span>
+              <span>{t('booking:tax', 'Tax:')}</span>
               <span>${pricing.tax.toFixed(2)}</span>
             </div>
             <Separator />
             <div className="flex justify-between font-bold">
-              <span>Total:</span>
+              <span>{t('booking:total', 'Total:')}</span>
               <span>${pricing.total.toFixed(2)}</span>
             </div>
           </CardContent>
@@ -652,7 +654,9 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
               onCheckedChange={(checked) => setData('terms_accepted', !!checked)}
             />
             <Label htmlFor="terms" className="text-sm leading-relaxed">
-              I agree to the <a href="#" className="text-blue-600 underline">Terms and Conditions</a> and <a href="#" className="text-blue-600 underline">Rental Agreement</a>
+              {t('booking:terms_agreement', 'I agree to the <a>Terms and Conditions</a> and <a>Rental Agreement</a>', {
+                a: (chunks) => <a href="#" className="text-blue-600 underline">{chunks}</a>
+              })}
             </Label>
           </div>
 
@@ -663,7 +667,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
               onCheckedChange={(checked) => setData('marketing_consent', !!checked)}
             />
             <Label htmlFor="marketing" className="text-sm leading-relaxed">
-              I would like to receive marketing communications and special offers (optional)
+              {t('booking:marketing_consent', 'I would like to receive marketing communications and special offers (optional)')}
             </Label>
           </div>
         </div>
@@ -672,7 +676,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              You're currently offline. Your booking will be submitted when you're back online.
+              {t('booking:offline_message', 'You\'re currently offline. Your booking will be submitted when you\'re back online.')}
             </AlertDescription>
           </Alert>
         )}
@@ -685,7 +689,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl">Book Equipment</CardTitle>
+            <CardTitle className="text-xl">{t('booking:book_equipment', 'Book Equipment')}</CardTitle>
             {onCancel && (
               <Button variant="ghost" size="sm" onClick={onCancel}>
                 ×
@@ -693,7 +697,11 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
             )}
           </div>
           <CardDescription>
-            Step {currentStep} of {steps.length}: {steps[currentStep - 1].title}
+            {t('booking:step_indicator', 'Step {{current}} of {{total}}: {{title}}', {
+              current: currentStep,
+              total: steps.length,
+              title: steps[currentStep - 1].title
+            })}
           </CardDescription>
         </CardHeader>
 
@@ -716,7 +724,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
                 className="flex items-center space-x-2"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span>Previous</span>
+                <span>{t('common:previous', 'Previous')}</span>
               </Button>
 
               {currentStep < 4 ? (
@@ -726,7 +734,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
                   disabled={!validateStep(currentStep) || isCalculating}
                   className="flex items-center space-x-2"
                 >
-                  <span>Next</span>
+                  <span>{t('common:next', 'Next')}</span>
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               ) : (
@@ -740,7 +748,7 @@ const MobileBookingForm: React.FC<MobileBookingFormProps> = ({
                   ) : (
                     <CheckCircle className="h-4 w-4" />
                   )}
-                  <span>{processing ? 'Submitting...' : 'Confirm Booking'}</span>
+                  <span>{processing ? t('booking:submitting', 'Submitting...') : t('booking:confirm_booking', 'Confirm Booking')}</span>
                 </Button>
               )}
             </div>

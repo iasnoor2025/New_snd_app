@@ -2,6 +2,7 @@ import { Icon } from '@/components/icon';
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { type ComponentPropsWithoutRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function NavFooter({
     items,
@@ -10,6 +11,8 @@ export function NavFooter({
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
     items: NavItem[];
 }) {
+    const { t } = useTranslation(['common']);
+
     return (
         <SidebarGroup {...props} className={`group-data-[collapsible=icon]:p-0 ${className || ''}`}>
             <SidebarGroupContent>
@@ -22,7 +25,7 @@ export function NavFooter({
                             >
                                 <a href={item.href} target="_blank" rel="noopener noreferrer">
                                     {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                    <span>{item.title}</span>
+                                    <span>{t(`common:footer.${item.title.toLowerCase().replace(' ', '_')}`, {defaultValue: item.title})}</span>
                                 </a>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

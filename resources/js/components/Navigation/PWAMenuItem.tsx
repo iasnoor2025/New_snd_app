@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/react';
 import { Smartphone, Wifi, Bell, Download } from 'lucide-react';
 import { usePWA } from '@/hooks/usePWA';
 import { Badge } from '@/Components/ui/badge';
+import { useTranslation } from 'react-i18next';
 
 interface PWAMenuItemProps {
     className?: string;
@@ -17,6 +18,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
         notificationPermission,
         serviceWorkerStatus
     } = usePWA();
+    const { t } = useTranslation(['common']);
 
     const getStatusBadges = () => {
         const badges = [];
@@ -25,7 +27,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
         if (!isOnline) {
             badges.push(
                 <Badge key="offline" variant="destructive" className="text-xs">
-                    Offline
+                    {t('common:pwa.offline')}
                 </Badge>
             );
         }
@@ -35,7 +37,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
             badges.push(
                 <Badge key="installable" variant="secondary" className="text-xs">
                     <Download className="h-3 w-3 mr-1" />
-                    Install
+                    {t('common:pwa.install')}
                 </Badge>
             );
         }
@@ -45,7 +47,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
             badges.push(
                 <Badge key="notifications" variant="outline" className="text-xs">
                     <Bell className="h-3 w-3 mr-1" />
-                    Enable
+                    {t('common:pwa.enable')}
                 </Badge>
             );
         }
@@ -54,7 +56,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
         if (serviceWorkerStatus === 'waiting') {
             badges.push(
                 <Badge key="update" variant="default" className="text-xs bg-blue-600">
-                    Update
+                    {t('common:pwa.update')}
                 </Badge>
             );
         }
@@ -71,7 +73,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
         >
             <div className="flex items-center gap-2">
                 <Smartphone className="h-4 w-4" />
-                <span>PWA Management</span>
+                <span>{t('common:pwa.management')}</span>
             </div>
 
             {statusBadges.length > 0 && (
@@ -91,7 +93,7 @@ const PWAMenuItem: React.FC<PWAMenuItemProps> = ({ className = '', showBadges = 
                     isOnline ? 'bg-green-500' : 'bg-red-500'
                 }`} />
                 {isStandalone && (
-                    <Smartphone className="h-3 w-3 text-blue-600" title="Running as installed app" />
+                    <Smartphone className="h-3 w-3 text-blue-600" title={t('common:pwa.running_as_app')} />
                 )}
             </div>
         </Link>

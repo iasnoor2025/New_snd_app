@@ -14,6 +14,8 @@ import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
+import { useTranslation } from 'react-i18next';
+
 
 const mainNavItems: NavItem[] = [
     {
@@ -46,6 +48,31 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+    const { t } = useTranslation(['common']);
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: t('common:dashboard'),
+            href: '/dashboard',
+            icon: LayoutGrid,
+        },
+    ];
+
+    const rightNavItems: NavItem[] = [
+        {
+            title: t('common:repository'),
+            href: 'https://github.com/laravel/react-starter-kit',
+            icon: Folder,
+        },
+        {
+            title: t('common:documentation'),
+            href: 'https://laravel.com/docs/starter-kits#react',
+            icon: BookOpen,
+        },
+    ];
+
+    const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
+
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
