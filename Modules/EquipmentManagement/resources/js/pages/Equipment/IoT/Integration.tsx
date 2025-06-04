@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '../../../../../../../resources/js/compo
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../../../resources/js/components/ui/tabs';
 import { Input } from '../../../../../../../resources/js/components/ui/input';
 import { Label } from '../../../../../../../resources/js/components/ui/label';
-import { Switch } from '../../../../../../../resources/js/components/ui/switch';
+import { Switch } from 'Modules/Core/resources/js/Components/ui/switch';
 import {
   LineChart,
   Line,

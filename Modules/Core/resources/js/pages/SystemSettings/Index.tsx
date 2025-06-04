@@ -39,9 +39,9 @@ import {
 } from 'lucide-react';
 
 // Components
-import SettingsForm from '../../components/SystemSettings/SettingsForm';
-import SystemHealthCard from '../../components/SystemSettings/SystemHealthCard';
-import ImportExportDialog from '../../components/SystemSettings/ImportExportDialog';
+import SettingsForm from '../../Components/SystemSettings/SettingsForm';
+import SystemHealth from '../../Components/SystemSettings/SystemHealth';
+import ImportExport from '../../Components/SystemSettings/ImportExport';
 
 interface SystemSettings {
   [category: string]: {
@@ -216,222 +216,278 @@ export default function SystemSettingsIndex({ auth, settings, categories }: Prop
   };
 
   return (
-    <AdminLayout
-      user={auth.user}
-      header={
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-              System Settings
-            </h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Configure system-wide settings and preferences
-            </p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowImportExport(true)}
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              Import/Export
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={loadSystemHealth}
-              disabled={isLoadingHealth}
-            >
-              <Activity className="h-4 w-4 mr-2" />
-              {isLoadingHealth ? 'Checking...' : 'Health Check'}
-            </Button>
-          </div>
+    <>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+            System Settings
+          </h2>
+          <p className="text-sm text-gray-600 mt-1">
+            Configure system-wide settings and preferences
+          </p>
         </div>
-      }
-    >
-      <Head title="System Settings" />
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowImportExport(true)}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Import/Export
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadSystemHealth}
+            disabled={isLoadingHealth}
+          >
+            <Activity className="h-4 w-4 mr-2" />
+            {isLoadingHealth ? 'Checking...' : 'Health Check'}
+          </Button>
+        </div>
+      </div>
+      <AdminLayout title="System Settings">
+        <Head title="System Settings" />
 
-      <div className="py-6">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          {/* System Health Alert */}
-          {systemHealth && systemHealth.overall_status !== 'healthy' && (
-            <Alert className={`mb-6 ${getStatusColor(systemHealth.overall_status)}`}>
-              {getStatusIcon(systemHealth.overall_status)}
-              <AlertDescription className="ml-2">
-                <strong>System Health Warning:</strong> Some system components need attention.
-                Check the Health tab for details.
-              </AlertDescription>
-            </Alert>
-          )}
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            {/* System Health Alert */}
+            {systemHealth && systemHealth.overall_status !== 'healthy' && (
+              <Alert className={`mb-6 ${getStatusColor(systemHealth.overall_status)}`}>
+                {getStatusIcon(systemHealth.overall_status)}
+                <AlertDescription className="ml-2">
+                  <strong>System Health Warning:</strong> Some system components need attention.
+                  Check the Health tab for details.
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {/* Unsaved Changes Alert */}
-          {hasChanges && (
-            <Alert className="mb-6 bg-blue-50 border-blue-200">
-              <Info className="h-4 w-4 text-blue-500" />
-              <AlertDescription className="ml-2 text-blue-800">
-                You have unsaved changes. Don't forget to save your settings.
-              </AlertDescription>
-            </Alert>
-          )}
+            {/* Unsaved Changes Alert */}
+            {hasChanges && (
+              <Alert className="mb-6 bg-blue-50 border-blue-200">
+                <Info className="h-4 w-4 text-blue-500" />
+                <AlertDescription className="ml-2 text-blue-800">
+                  You have unsaved changes. Don't forget to save your settings.
+                </AlertDescription>
+              </Alert>
+            )}
 
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-6">
-                  {Object.entries(categories).map(([key, category]) => {
-                    const IconComponent = iconMap[category.icon as keyof typeof iconMap];
-                    return (
-                      <TabsTrigger key={key} value={key} className="flex items-center space-x-2">
-                        {IconComponent && <IconComponent className="h-4 w-4" />}
-                        <span className="hidden sm:inline">{category.label}</span>
-                      </TabsTrigger>
-                    );
-                  })}
-                  <TabsTrigger value="health" className="flex items-center space-x-2">
-                    <Activity className="h-4 w-4" />
-                    <span className="hidden sm:inline">Health</span>
-                    {systemHealth && (
-                      <Badge
-                        variant="outline"
-                        className={`ml-1 ${getStatusColor(systemHealth.overall_status)}`}
-                      >
-                        {systemHealth.overall_status}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                </TabsList>
+            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+              <div className="p-6">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-6">
+                    {Object.entries(categories).map(([key, category]) => {
+                      const IconComponent = iconMap[category.icon as keyof typeof iconMap];
+                      return (
+                        <TabsTrigger key={key} value={key} className="flex items-center space-x-2">
+                          {IconComponent && <IconComponent className="h-4 w-4" />}
+                          <span className="hidden sm:inline">{category.label}</span>
+                        </TabsTrigger>
+                      );
+                    })}
+                    <TabsTrigger value="health" className="flex items-center space-x-2">
+                      <Activity className="h-4 w-4" />
+                      <span className="hidden sm:inline">Health</span>
+                      {systemHealth && (
+                        <Badge
+                          variant="outline"
+                          className={`ml-1 ${getStatusColor(systemHealth.overall_status)}`}
+                        >
+                          {systemHealth.overall_status}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                  </TabsList>
 
-                {/* Settings Categories */}
-                {Object.entries(categories).map(([categoryKey, category]) => (
-                  <TabsContent key={categoryKey} value={categoryKey} className="mt-6">
-                    <Card>
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <CardTitle className="flex items-center space-x-2">
-                              {iconMap[category.icon as keyof typeof iconMap] &&
-                                React.createElement(iconMap[category.icon as keyof typeof iconMap], { className: "h-5 w-5" })
-                              }
-                              <span>{category.label}</span>
-                            </CardTitle>
-                            <CardDescription>{category.description}</CardDescription>
+                  {/* Settings Categories */}
+                  {Object.entries(categories).map(([categoryKey, category]) => (
+                    <TabsContent key={categoryKey} value={categoryKey} className="mt-6">
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <CardTitle className="flex items-center space-x-2">
+                                {iconMap[category.icon as keyof typeof iconMap] &&
+                                  React.createElement(iconMap[category.icon as keyof typeof iconMap], { className: "h-5 w-5" })
+                                }
+                                <span>{category.label}</span>
+                              </CardTitle>
+                              <CardDescription>{category.description}</CardDescription>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setResetCategory(categoryKey);
+                                setShowResetDialog(true);
+                              }}
+                            >
+                              <RotateCcw className="h-4 w-4 mr-2" />
+                              Reset
+                            </Button>
                           </div>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setResetCategory(categoryKey);
-                              setShowResetDialog(true);
-                            }}
-                          >
-                            <RotateCcw className="h-4 w-4 mr-2" />
-                            Reset
-                          </Button>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <SettingsForm
-                          category={categoryKey}
-                          settings={formData[categoryKey] || {}}
-                          fields={category.fields}
-                          onChange={handleInputChange}
-                        />
-                      </CardContent>
-                    </Card>
+                        </CardHeader>
+                        <CardContent>
+                          <SettingsForm
+                            category={categoryKey}
+                            settings={formData[categoryKey] || {}}
+                            fields={category.fields}
+                            onChange={handleInputChange}
+                          />
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  ))}
+
+                  {/* System Health Tab */}
+                  <TabsContent value="health" className="mt-6">
+                    {systemHealth ? (
+                      <SystemHealth
+                        healthData={{
+                          overall_status: systemHealth.overall_status === 'unhealthy' ? 'critical' : systemHealth.overall_status,
+                          last_updated: systemHealth.last_checked,
+                          metrics: {
+                            database: systemHealth.checks.database ? {
+                              name: 'database',
+                              status: systemHealth.checks.database.status === 'unhealthy' ? 'critical' : systemHealth.checks.database.status,
+                              message: systemHealth.checks.database.message
+                            } : { name: 'database', status: 'healthy', message: '' },
+                            cache: systemHealth.checks.cache ? {
+                              name: 'cache',
+                              status: systemHealth.checks.cache.status === 'unhealthy' ? 'critical' : systemHealth.checks.cache.status,
+                              message: systemHealth.checks.cache.message
+                            } : { name: 'cache', status: 'healthy', message: '' },
+                            storage: systemHealth.checks.storage ? {
+                              name: 'storage',
+                              status: systemHealth.checks.storage.status === 'unhealthy' ? 'critical' : systemHealth.checks.storage.status,
+                              message: systemHealth.checks.storage.message
+                            } : { name: 'storage', status: 'healthy', message: '' },
+                            memory: systemHealth.checks.memory ? {
+                              name: 'memory',
+                              status: systemHealth.checks.memory.status === 'unhealthy' ? 'critical' : systemHealth.checks.memory.status,
+                              message: systemHealth.checks.memory.message
+                            } : { name: 'memory', status: 'healthy', message: '' },
+                            cpu: systemHealth.checks.cpu ? {
+                              name: 'cpu',
+                              status: systemHealth.checks.cpu.status === 'unhealthy' ? 'critical' : systemHealth.checks.cpu.status,
+                              message: systemHealth.checks.cpu.message
+                            } : { name: 'cpu', status: 'healthy', message: '' },
+                            queue: systemHealth.checks.queue ? {
+                              name: 'queue',
+                              status: systemHealth.checks.queue.status === 'unhealthy' ? 'critical' : systemHealth.checks.queue.status,
+                              message: systemHealth.checks.queue.message
+                            } : { name: 'queue', status: 'healthy', message: '' },
+                            mail: systemHealth.checks.mail ? {
+                              name: 'mail',
+                              status: systemHealth.checks.mail.status === 'unhealthy' ? 'critical' : systemHealth.checks.mail.status,
+                              message: systemHealth.checks.mail.message
+                            } : { name: 'mail', status: 'healthy', message: '' },
+                            security: systemHealth.checks.security ? {
+                              name: 'security',
+                              status: systemHealth.checks.security.status === 'unhealthy' ? 'critical' : systemHealth.checks.security.status,
+                              message: systemHealth.checks.security.message
+                            } : { name: 'security', status: 'healthy', message: '' },
+                          },
+                          uptime: { days: 0, hours: 0, minutes: 0 }, // Placeholder
+                          version: { app: '', php: '', laravel: '' } // Placeholder
+                        }}
+                        isRefreshing={isLoadingHealth}
+                        onRefresh={loadSystemHealth}
+                      />
+                    ) : (
+                      <div className="text-center text-gray-500 py-8">No health data available.</div>
+                    )}
                   </TabsContent>
-                ))}
+                </Tabs>
 
-                {/* System Health Tab */}
-                <TabsContent value="health" className="mt-6">
-                  <SystemHealthCard
-                    health={systemHealth}
-                    isLoading={isLoadingHealth}
-                    onRefresh={loadSystemHealth}
-                  />
-                </TabsContent>
-              </Tabs>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between mt-8 pt-6 border-t">
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="destructive"
-                    onClick={() => {
-                      setResetCategory(null);
-                      setShowResetDialog(true);
-                    }}
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Reset All Settings
-                  </Button>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setFormData(settings);
-                      setHasChanges(false);
-                    }}
-                    disabled={!hasChanges}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={!hasChanges || isSubmitting}
-                  >
-                    <Save className="h-4 w-4 mr-2" />
-                    {isSubmitting ? 'Saving...' : 'Save Settings'}
-                  </Button>
+                {/* Action Buttons */}
+                <div className="flex items-center justify-between mt-8 pt-6 border-t">
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        setResetCategory(null);
+                        setShowResetDialog(true);
+                      }}
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Reset All Settings
+                    </Button>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setFormData(settings);
+                        setHasChanges(false);
+                      }}
+                      disabled={!hasChanges}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!hasChanges || isSubmitting}
+                    >
+                      <Save className="h-4 w-4 mr-2" />
+                      {isSubmitting ? 'Saving...' : 'Save Settings'}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Reset Confirmation Dialog */}
-      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Reset Settings</DialogTitle>
-            <DialogDescription>
-              {resetCategory
-                ? `Are you sure you want to reset all ${categories[resetCategory]?.label} settings to their default values?`
-                : 'Are you sure you want to reset ALL system settings to their default values?'
-              }
-              <br />
-              <strong>This action cannot be undone.</strong>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowResetDialog(false);
-                setResetCategory(null);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => handleReset(resetCategory || undefined)}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Resetting...' : 'Reset Settings'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        {/* Reset Confirmation Dialog */}
+        <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Reset Settings</DialogTitle>
+              <DialogDescription>
+                {resetCategory
+                  ? `Are you sure you want to reset all ${categories[resetCategory]?.label} settings to their default values?`
+                  : 'Are you sure you want to reset ALL system settings to their default values?'
+                }
+                <br />
+                <strong>This action cannot be undone.</strong>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowResetDialog(false);
+                  setResetCategory(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => handleReset(resetCategory || undefined)}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Resetting...' : 'Reset Settings'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-      {/* Import/Export Dialog */}
-      <ImportExportDialog
-        open={showImportExport}
-        onOpenChange={setShowImportExport}
-        settings={settings}
-      />
-    </AdminLayout>
+        {/* Import/Export Dialog */}
+        <ImportExport
+          onExport={(categories, format) => {
+            // Implement export logic here (e.g., call API or download file)
+            console.log('Export requested:', categories, format);
+          }}
+          onImport={(data, options) => {
+            // Implement import logic here (e.g., call API to import settings)
+            console.log('Import requested:', data, options);
+          }}
+          isExporting={false}
+          isImporting={false}
+        />
+      </AdminLayout>
+    </>
   );
 }

@@ -11,7 +11,7 @@ import { Label } from '@/Components/ui/label';
 import { Textarea } from '@/Components/ui/textarea';
 import { Badge } from '@/Components/ui/badge';
 import { Separator } from '@/Components/ui/separator';
-import { Alert, AlertDescription } from '@/Components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/Components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';

@@ -4,7 +4,7 @@ import { Switch } from '@/Components/ui/switch';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Separator } from '@/Components/ui/separator';
-import { Alert, AlertDescription } from '@/Components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
     Bell,
     BellOff,
