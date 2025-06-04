@@ -10,7 +10,7 @@ import { Badge } from '@/Components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/Components/ui/separator';
-import { Progress } from '@/Components/ui/progress';
+import { Progress } from '@/components/ui/progress';
 import { useTranslation } from 'react-i18next';
 import {
   Smartphone,

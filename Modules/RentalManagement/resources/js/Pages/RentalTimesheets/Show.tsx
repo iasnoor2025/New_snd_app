@@ -33,28 +33,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/Modules/RentalManagement/Resources/js/components/ui/tooltip';
-import { Progress } from '@/Modules/RentalManagement/Resources/js/components/ui/progress';
+import { Progress } from '@/components/ui/progress';
 import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
 
 // Icons
-import { 
-  ArrowLeft, 
+import {
+  ArrowLeft,
   ArrowUpRight,
   BarChart2,
   Building2,
   Calendar,
-  Check, 
-  ChevronRight, 
-  Clock, 
+  Check,
+  ChevronRight,
+  Clock,
   DollarSign,
-  FileText, 
-  Home, 
+  FileText,
+  Home,
   Info,
   Pencil,
   Printer,
   Receipt,
   Tag,
-  Trash, 
+  Trash,
   User,
   UserX
 } from "lucide-react";
@@ -75,7 +75,7 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    
+
   }
 
   render() {
@@ -84,8 +84,8 @@ class ErrorBoundary extends React.Component<
         <div className="p-6 border rounded-md bg-red-50 text-red-800 my-4">
           <h3 className="font-bold mb-2">{t('something_went_wrong')}</h3>
           <p className="mb-4 text-sm">{this.state.error?.message || "An error occurred while rendering this component."}</p>
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             onClick={() => window.location.reload()}
             variant="destructive"
           >
@@ -110,25 +110,25 @@ export default function Show({ auth, rental, timesheet }: Props) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  
+
   // Calculate cost based on rental item rate and hours used
   const calculateCost = () => {
     if (!timesheet?.rate) return 0;
-    
+
     try {
       const rate = typeof timesheet.rate === 'number' ;
         ? timesheet.rate ;
         : parseFloat(String(timesheet.rate));
-      
+
       const hours = typeof timesheet.hours_used === 'number' ;
         ? timesheet.hours_used ;
         : parseFloat(String(timesheet.hours_used || 0));
-      
+
       if (isNaN(rate) || isNaN(hours)) return 0;
-      
+
       return rate * hours;
     } catch (error) {
-      
+
       return 0;
     }
   };
@@ -144,8 +144,8 @@ export default function Show({ auth, rental, timesheet }: Props) {
 
   // Format time
   const formatTime = (time: string | null) => {
-    if (!time) return "â€”";
-    
+    if (!time) return "â€"";
+
     try {
       // Check if the time is just a time string (HH:MM or HH:MM:SS)
       if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(time)) {
@@ -156,18 +156,18 @@ export default function Show({ auth, rental, timesheet }: Props) {
         dummyDate.setMinutes(parseInt(minutes, 10));
         return format(dummyDate, "h:mm a");
       }
-      
+
       // Otherwise try to parse it as a normal date
       const parsedDate = new Date(time);
       if (isNaN(parsedDate.getTime())) {
-        
-        return "â€”";
+
+        return "â€"";
       }
-      
+
       return format(parsedDate, "h:mm a");
     } catch (error) {
-      
-      return "â€”";
+
+      return "â€"";
     }
   };
 
@@ -281,7 +281,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
               <Label>Status</Label>
               {getStatusBadge(timesheet.status)}
             </div>
-            
+
             {timesheet.status === 'completed' && (
               <div className="mt-4 text-sm text-muted-foreground">
                 <p>Completed on {format(new Date(timesheet.approved_at!), "MMM d, yyyy")}</p>
@@ -318,8 +318,8 @@ export default function Show({ auth, rental, timesheet }: Props) {
                 {rental.rental_number}
               </Link>
               <ChevronRight className="h-4 w-4 mx-1" />
-              <Link 
-                href={route("rentals.timesheets", rental.id)} 
+              <Link
+                href={route("rentals.timesheets", rental.id)}
                 className="hover:text-primary transition-colors"
               >
                 Timesheets
@@ -335,12 +335,12 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   {t('timesheet:back_to_timesheets')}
                 </Link>
               </Button>
-              
+
               <Button variant="outline" size="sm" onClick={printTimesheet}>
                 <Printer className="mr-2 h-4 w-4" />
                 Print
               </Button>
-              
+
               {/* Edit button - only for non-completed timesheets */}
               {timesheet.status !== 'completed' && (
                 <>
@@ -350,9 +350,9 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       Edit
                     </Link>
                   </Button>
-                  
-                  <Button 
-                    variant="outline" 
+
+                  <Button
+                    variant="outline"
                     size="sm"
                     onClick={() => setIsCompleteDialogOpen(true)}
                     className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100"
@@ -362,10 +362,10 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   </Button>
                 </>
               )}
-              
+
               {/* Delete button - for all timesheets */}
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 size="sm"
                 onClick={() => setIsDeleteDialogOpen(true)}
               >
@@ -407,7 +407,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                 </div>
                 <div className="flex items-center gap-2">
                   {getStatusBadge(timesheet.status)}
-                  
+
                   {timesheet.status === 'completed' && (
                     <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                       {timesheet.hours_used} hours recorded
@@ -446,7 +446,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         </p>
                       )}
                     </div>
-                    
+
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground">Date</h3>
                       <p className="font-semibold mt-1">
@@ -456,7 +456,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   </div>
                 </CardContent>
               </Card>
-              
+
               {/* Time and Hours Info */}
               <Card className="print:shadow-none print:border-none">
                 <CardHeader className="print:pt-0">
@@ -493,7 +493,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       </tbody>
                     </table>
                   </div>
-                  
+
                   {/* Visual Timeline */}
                   {timesheet.start_time && timesheet.end_time && (
                     <div className="mt-6">
@@ -511,7 +511,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         </TooltipProvider>
                       </div>
                       <div className="relative h-12 bg-muted/20 rounded-md">
-                        <div 
+                        <div
                           className="absolute h-full bg-primary/30 rounded-md"
                           style={{
                             left: `${Math.min((new Date(`2000-01-01T${timesheet.start_time}`).getHours() * 60 + new Date(`2000-01-01T${timesheet.start_time}`).getMinutes()) / (24 * 60) * 100, 100)}%`,
@@ -532,7 +532,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Utilization */}
                   <div>
                     <div className="flex justify-between items-center mb-2">
@@ -543,7 +543,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   </div>
                 </CardContent>
               </Card>
-              
+
               {/* Cost Calculation */}
               {timesheet.rentalItem?.rate && (
                 <Card className="print:shadow-none print:border-none">
@@ -567,7 +567,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         <tbody>
                           <tr>
                             <td className="px-4 py-3 border-t font-medium">
-                              ${typeof timesheet.rentalItem?.rate === 'number' 
+                              ${typeof timesheet.rentalItem?.rate === 'number'
                                 ? timesheet.rentalItem.rate.toFixed(2)
                                 : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)}
                             </td>
@@ -588,55 +588,55 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         </tbody>
                       </table>
                     </div>
-                    
+
                     <div className="bg-muted/10 p-3 rounded border border-dashed text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Info className="h-3.5 w-3.5" />
                         <span className="font-medium">Cost Calculation:</span>
                       </div>
                       <p className="mt-1">
-                        {timesheet.rentalItem?.rate_type === 'hourly' && 
-                          `${typeof timesheet.rentalItem?.rate === 'number' 
-                              ? timesheet.rentalItem.rate.toFixed(2) 
+                        {timesheet.rentalItem?.rate_type === 'hourly' &&
+                          `${typeof timesheet.rentalItem?.rate === 'number'
+                              ? timesheet.rentalItem.rate.toFixed(2)
                               : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per hour Ã— ${
-                                typeof timesheet.hours_used === 'number' 
-                                  ? timesheet.hours_used 
+                                typeof timesheet.hours_used === 'number'
+                                  ? timesheet.hours_used
                                   : parseFloat(String(timesheet.hours_used || 0))
                               } hours = $${calculateCost().toFixed(2)}`}
-                        {timesheet.rentalItem?.rate_type === 'daily' && 
-                          `${typeof timesheet.rentalItem?.rate === 'number' 
-                              ? timesheet.rentalItem.rate.toFixed(2) 
+                        {timesheet.rentalItem?.rate_type === 'daily' &&
+                          `${typeof timesheet.rentalItem?.rate === 'number'
+                              ? timesheet.rentalItem.rate.toFixed(2)
                               : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per day Ã— ${
-                                Math.ceil(typeof timesheet.hours_used === 'number' 
+                                Math.ceil(typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used / 8
                                   : parseFloat(String(timesheet.hours_used || 0)) / 8)
                               } days (${
-                                typeof timesheet.hours_used === 'number' 
-                                  ? timesheet.hours_used 
+                                typeof timesheet.hours_used === 'number'
+                                  ? timesheet.hours_used
                                   : parseFloat(String(timesheet.hours_used || 0))
                               } hours) = $${calculateCost().toFixed(2)}`}
-                        {timesheet.rentalItem?.rate_type === 'weekly' && 
-                          `${typeof timesheet.rentalItem?.rate === 'number' 
-                              ? timesheet.rentalItem.rate.toFixed(2) 
+                        {timesheet.rentalItem?.rate_type === 'weekly' &&
+                          `${typeof timesheet.rentalItem?.rate === 'number'
+                              ? timesheet.rentalItem.rate.toFixed(2)
                               : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per week Ã— ${
-                                Math.ceil(typeof timesheet.hours_used === 'number' 
+                                Math.ceil(typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used / 40
                                   : parseFloat(String(timesheet.hours_used || 0)) / 40)
                               } weeks (${
-                                typeof timesheet.hours_used === 'number' 
-                                  ? timesheet.hours_used 
+                                typeof timesheet.hours_used === 'number'
+                                  ? timesheet.hours_used
                                   : parseFloat(String(timesheet.hours_used || 0))
                               } hours) = $${calculateCost().toFixed(2)}`}
-                        {timesheet.rentalItem?.rate_type === 'monthly' && 
-                          `${typeof timesheet.rentalItem?.rate === 'number' 
-                              ? timesheet.rentalItem.rate.toFixed(2) 
+                        {timesheet.rentalItem?.rate_type === 'monthly' &&
+                          `${typeof timesheet.rentalItem?.rate === 'number'
+                              ? timesheet.rentalItem.rate.toFixed(2)
                               : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per month Ã— ${
-                                Math.ceil(typeof timesheet.hours_used === 'number' 
+                                Math.ceil(typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used / 160
                                   : parseFloat(String(timesheet.hours_used || 0)) / 160)
                               } months (${
-                                typeof timesheet.hours_used === 'number' 
-                                  ? timesheet.hours_used 
+                                typeof timesheet.hours_used === 'number'
+                                  ? timesheet.hours_used
                                   : parseFloat(String(timesheet.hours_used || 0))
                               } hours) = $${calculateCost().toFixed(2)}`}
                       </p>
@@ -644,7 +644,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   </CardContent>
                 </Card>
               )}
-              
+
               {/* Notes */}
               {timesheet.notes && (
                 <Card className="print:shadow-none print:border-none">
@@ -662,11 +662,11 @@ export default function Show({ auth, rental, timesheet }: Props) {
                 </Card>
               )}
             </div>
-            
+
             {/* Side Details */}
             <div className="space-y-6 print:space-y-4">
               <OperatorInformationCard />
-              
+
               {/* customer Info */}
               <Card className="print:shadow-none print:border-none">
                 <CardHeader className="print:pt-0">
@@ -684,7 +684,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                           {rental.customer.company_name}
                         </p>
                       </div>
-                      
+
                       {rental.customer.contact_person && (
                         <div>
                           <h3 className="text-sm font-medium text-muted-foreground">{t('contact_person')}</h3>
@@ -693,7 +693,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                           </p>
                         </div>
                       )}
-                      
+
                       {rental.customer.email && (
                         <div>
                           <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
@@ -702,7 +702,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                           </p>
                         </div>
                       )}
-                      
+
                       {rental.customer.phone && (
                         <div>
                           <h3 className="text-sm font-medium text-muted-foreground">Phone</h3>
@@ -719,7 +719,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   )}
                 </CardContent>
               </Card>
-              
+
               {/* Timesheet Info */}
               <Card className="print:shadow-none print:border-none">
                 <CardHeader className="print:pt-0">
@@ -735,7 +735,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       {getStatusBadge(timesheet.status)}
                     </div>
                   </div>
-                  
+
                   {timesheet.created_at && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground">Created</h3>
@@ -749,7 +749,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       </p>
                     </div>
                   )}
-                  
+
                   {timesheet.updated_at && timesheet.updated_at !== timesheet.created_at && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground">{t('last_updated')}</h3>
@@ -758,7 +758,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                       </p>
                     </div>
                   )}
-                  
+
                   {timesheet.approved_at && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground">Completed</h3>
@@ -774,7 +774,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                   )}
                 </CardContent>
               </Card>
-              
+
               {/* View More */}
               <div className="flex justify-between items-center print:hidden">
                 <Button asChild variant="outline" size="sm">
@@ -792,7 +792,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
               </div>
             </div>
           </div>
-          
+
           {/* Print Footer */}
           <div className="hidden print:block mt-8">
             <Separator className="mb-4" />
@@ -821,8 +821,8 @@ export default function Show({ auth, rental, timesheet }: Props) {
               <Button variant="outline" onClick={() => setIsCompleteDialogOpen(false)} disabled={isSubmitting}>
                 Cancel
               </Button>
-              <Button 
-                onClick={completeTimesheet} 
+              <Button
+                onClick={completeTimesheet}
                 disabled={isSubmitting}
                 className="bg-green-600 hover:bg-green-700"
               >
@@ -855,5 +855,5 @@ export default function Show({ auth, rental, timesheet }: Props) {
       </AdminLayout>
     </ErrorBoundary>
   );
-} 
+}
 

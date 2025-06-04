@@ -31,7 +31,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/Components/ui/input';
 import { DatePicker } from '@/Components/ui/date-picker';
 import { Alert, AlertDescription } from '@/Components/ui/alert';
-import { Progress } from '@/Components/ui/progress';
+import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/Components/ui/separator';
 import {
   Dialog,

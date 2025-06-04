@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from '@/components/ui/progress';
 import PaymentForm from "@/components/payments/PaymentForm";
 import {
   Table,
@@ -82,16 +82,16 @@ export default function PaymentTracker({
     const totalPaid = payments;
       .filter(p => p.status === 'completed');
       .reduce((sum, p) => sum + p.amount, 0);
-    
+
     const pendingPayments = payments.filter(p => p.status === 'pending');
     const failedPayments = payments.filter(p => p.status === 'failed');
-    
+
     const remainingAmount = rental.total_amount - totalPaid;
     const paymentProgress = (totalPaid / rental.total_amount) * 100;
-    
+
     const isOverdue = rental.payment_due_date && isAfter(new Date(), new Date(rental.payment_due_date));
     const daysOverdue = isOverdue ? differenceInDays(new Date(), new Date(rental.payment_due_date)) : 0;
-    
+
     return {
       totalPaid,
       remainingAmount,
@@ -138,7 +138,7 @@ export default function PaymentTracker({
       toast.error("Please enter a valid amount");
       return;
     }
-    
+
     onAddPayment?.(data);
   };
 
@@ -295,5 +295,5 @@ export default function PaymentTracker({
       />
     </div>
   );
-} 
+}
 

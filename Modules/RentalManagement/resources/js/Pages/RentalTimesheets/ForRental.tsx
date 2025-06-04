@@ -55,24 +55,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/Modules/RentalManagement/Resources/js/components/ui/tooltip';
-import { Progress } from '@/Modules/RentalManagement/Resources/js/components/ui/progress';
+import { Progress } from '@/components/ui/progress';
 
 // Icons
-import { 
-  ArrowLeft, 
+import {
+  ArrowLeft,
   Calendar,
-  Check, 
-  ChevronRight, 
-  ClipboardCheck, 
-  Clock, 
+  Check,
+  ChevronRight,
+  ClipboardCheck,
+  Clock,
   Download,
-  Edit, 
-  Eye, 
+  Edit,
+  Eye,
   Filter,
-  Home, 
+  Home,
   Info,
-  Pencil, 
-  Plus, 
+  Pencil,
+  Plus,
   Search,
   Sheet,
   Trash,
@@ -113,7 +113,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   const [isProblemDialogOpen, setIsProblemDialogOpen] = useState(false);
   const [timesheetToMarkAbsent, setTimesheetToMarkAbsent] = useState<number | null>(null);
   const [isAbsentDialogOpen, setIsAbsentDialogOpen] = useState(false);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -127,7 +127,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
     sum, ;
     timesheet;
   ) => sum + (timesheet.hours_used ? parseFloat(String(timesheet.hours_used)) : 0), 0);
-  
+
   // Filter timesheets by status, using type-safe comparisons
   const completedTimesheets = timesheets.filter(t => t.status === 'completed' as any);
   const pendingTimesheets = timesheets.filter(t => t.status === 'pending' as any);
@@ -139,13 +139,13 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
     if (statusFilter === "all" && search.trim() === '') {
       return timesheets;
     }
-    
+
     // Apply status filter
     let filtered = timesheets;
     if (statusFilter && statusFilter !== "all") {
       filtered = timesheets.filter(timesheet => timesheet.status === statusFilter as any);
     }
-    
+
     // Apply search filter if search term exists
     if (search.trim() !== '') {
       filtered = filtered.filter(timesheet => {
@@ -155,18 +155,18 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
           ? `${(timesheet.operator as any).first_name || ""} ${(timesheet.operator as any).last_name || ""}`.toLowerCase()
           : "";
         const date = format(new Date(timesheet.date), "MMM dd, yyyy").toLowerCase();
-        
+
         return equipmentName.includes(searchLower) ||
           operatorName.includes(searchLower) ||
           date.includes(searchLower);
       });
     }
-    
+
     return filtered;
   };
 
   const filteredTimesheets = getFilteredTimesheets();
-  
+
   // Pagination logic
   const totalPages = Math.ceil(filteredTimesheets.length / pageSize);
   const paginatedTimesheets = filteredTimesheets.slice(;
@@ -190,8 +190,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
 
   // Format time
   const formatTime = (time: string | null) => {
-    if (!time) return "â€”";
-    
+    if (!time) return "â€"";
+
     try {
       // Check if the time is just a time string (HH:MM or HH:MM:SS)
       if (typeof time === 'string') {
@@ -200,7 +200,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
         if (!isNaN(isoDate.getTime())) {
           return format(isoDate, "h:mm a");
         }
-        
+
         // If not ISO, try as time string
         if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(time)) {
           const [hours, minutes] = time.split(':');
@@ -210,12 +210,12 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
           return format(dummyDate, "h:mm a");
         }
       }
-      
-      
-      return "â€”";
+
+
+      return "â€"";
     } catch (error) {
-      
-      return "â€”";
+
+      return "â€"";
     }
   };
 
@@ -233,7 +233,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
     const activeTimesheetIds = filteredTimesheets;
       .filter(timesheet => timesheet.status !== 'completed' as any);
       .map(timesheet => timesheet.id);
-    
+
     if (activeTimesheetIds.length > 0 && selectedIds.length === activeTimesheetIds.length) {
       // If all active timesheets are already selected, deselect all
       setSelectedIds([]);
@@ -367,12 +367,12 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">;
         <h3 className="text-sm font-medium text-muted-foreground">{t('total_hours_used')}</h3>;
         <p className="text-2xl font-bold">;
-          {typeof totalHours === 'number' 
-            ? totalHours.toFixed(1) 
+          {typeof totalHours === 'number'
+            ? totalHours.toFixed(1)
             : parseFloat(String(totalHours || 0)).toFixed(1)}
         </p>
       </div>
-      
+
       <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">
         <h3 className="text-sm font-medium text-muted-foreground">{t('total_timesheets')}</h3>
         <p className="text-2xl font-bold">{timesheets.length}</p>
@@ -382,7 +382,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
           </Badge>
         )}
       </div>
-      
+
       <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">
         <h3 className="text-sm font-medium text-muted-foreground">Status</h3>
         <div className="flex flex-wrap gap-2 justify-center">
@@ -427,7 +427,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <ChevronRight className="h-4 w-4 mx-1" />
               <span className="font-medium text-foreground">Timesheets</span>
             </div>
-            
+
             <div className="flex flex-wrap gap-2">
               <Button asChild variant="outline" size="sm">
                 <Link href={route("rentals.show", rental.id)}>
@@ -441,7 +441,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                   {t('employee:btn_add_timesheet')}
                 </Link>
               </Button>
-              <Button 
+              <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setIsMissingDatesDialogOpen(true)}
@@ -451,8 +451,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               </Button>
               {selectedIds.length > 0 && (
                 <>
-                  <Button 
-                    variant="default" 
+                  <Button
+                    variant="default"
                     size="sm"
                     onClick={() => setIsCompleteDialogOpen(true)}
                     className="bg-green-600 hover:bg-green-700"
@@ -460,8 +460,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                     <Check className="mr-2 h-4 w-4" />
                     Complete Selected
                   </Button>
-                  <Button 
-                    variant="destructive" 
+                  <Button
+                    variant="destructive"
                     size="sm"
                     onClick={() => setIsBulkDeleteDialogOpen(true)}
                   >
@@ -511,15 +511,15 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{t('total_hours')}</p>
                     <p className="text-2xl font-bold">
-                      {typeof totalHours === 'number' 
-                        ? totalHours.toFixed(1) 
+                      {typeof totalHours === 'number'
+                        ? totalHours.toFixed(1)
                         : parseFloat(String(totalHours || 0)).toFixed(1)}
                     </p>
                   </div>
@@ -527,7 +527,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
@@ -539,7 +539,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
@@ -565,7 +565,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <CardDescription>
                 Track equipment usage hours for this rental
               </CardDescription>
-              
+
               {/* Filters */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-4">
                 <div className="relative w-full sm:w-72">
@@ -577,7 +577,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                     className="pl-8"
                   />
                 </div>
-                
+
                 <div className="flex gap-2 w-full sm:w-auto">
                   <Select
                     value={statusFilter}
@@ -593,10 +593,10 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                       <SelectItem value="completed">Completed</SelectItem>
                     </SelectContent>
                   </Select>
-                  
+
                   {(statusFilter !== "all" || search !== "") && (
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       onClick={() => {
                         setStatusFilter("all");
                         setSearch("");
@@ -606,10 +606,10 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                       Clear Filters
                     </Button>
                   )}
-                  
+
                   {timesheets.length > 0 && (
                     <Button variant="outline" size="sm" onClick={selectAll}>
-                      {selectedIds.length === filteredTimesheets.filter(t => t.status !== 'completed' as any).length && 
+                      {selectedIds.length === filteredTimesheets.filter(t => t.status !== 'completed' as any).length &&
                       selectedIds.length > 0 ? "Deselect All" : "Select All Active"}
                     </Button>
                   )}
@@ -658,8 +658,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                         <TableRow key={timesheet.id}>
                           <TableCell>
                             {timesheet.status !== 'completed' as any && (
-                              <Checkbox 
-                                checked={selectedIds.includes(timesheet.id)} 
+                              <Checkbox
+                                checked={selectedIds.includes(timesheet.id)}
                                 onCheckedChange={() => toggleSelection(timesheet.id)}
                               />
                             )}
@@ -694,8 +694,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                                     <TooltipTrigger className="flex items-center gap-1 cursor-help">
                                       <Info className="h-3 w-3" />
                                       <span>
-                                        {timesheet.rentalItem 
-                                          ? "Equipment Data Missing" 
+                                        {timesheet.rentalItem
+                                          ? "Equipment Data Missing"
                                           : "Unknown Rental Item"}
                                       </span>
                                     </TooltipTrigger>
@@ -744,9 +744,9 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                                       {timesheet.hours_used} hours
                                     </p>
                                     <div className="w-full mt-1">
-                                      <Progress 
-                                        value={Math.min((timesheet.hours_used ? parseFloat(String(timesheet.hours_used)) : 0) / 8 * 100, 100)} 
-                                        className="h-1" 
+                                      <Progress
+                                        value={Math.min((timesheet.hours_used ? parseFloat(String(timesheet.hours_used)) : 0) / 8 * 100, 100)}
+                                        className="h-1"
                                       />
                                     </div>
                                   </>
@@ -835,11 +835,11 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                                   </Link>
                                 </Button>
                               )}
-                              
+
                               {/* Delete button - visible for all timesheets regardless of status */}
                               {canEdit && (
-                                <Button 
-                                  variant="ghost" 
+                                <Button
+                                  variant="ghost"
                                   size="icon"
                                   onClick={() => deleteTimesheet(timesheet.id)}
                                   className="text-destructive hover:text-destructive"
@@ -849,9 +849,9 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                               )}
 
                               {/* Mark Absent button - only visible for timesheets with operators that aren't already marked absent */}
-                              {canEdit && 
-                               timesheet.status !== 'completed' as any && 
-                               (timesheet.operator || timesheet.rentalItem?.operator) && 
+                              {canEdit &&
+                               timesheet.status !== 'completed' as any &&
+                               (timesheet.operator || timesheet.rentalItem?.operator) &&
                                !timesheet.operator_absent && (
                                 <Button
                                   variant="ghost"
@@ -887,7 +887,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                     <span className="font-medium">{Math.min(currentPage * pageSize, filteredTimesheets.length)}</span> of{" "}
                     <span className="font-medium">{filteredTimesheets.length}</span> timesheets
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground whitespace-nowrap">Items per page:</span>
@@ -910,7 +910,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -948,8 +948,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <Button variant="outline" onClick={() => setIsCompleteDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 onClick={completeSelectedTimesheets}
                 className="bg-green-600 hover:bg-green-700"
               >
@@ -976,8 +976,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <Button variant="outline" onClick={() => setIsMissingDatesDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 onClick={checkMissingTimesheets}
               >
                 <Clock className="mr-2 h-4 w-4" />
@@ -993,7 +993,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
             <DialogHeader>
               <DialogTitle>{t('ttl_delete_timesheet')}</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete this timesheet? 
+                Are you sure you want to delete this timesheet?
                 This action cannot be undone.
               </DialogDescription>
             </DialogHeader>
@@ -1001,8 +1001,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 onClick={confirmDeleteTimesheet}
               >
                 <Trash className="mr-2 h-4 w-4" />
@@ -1018,7 +1018,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
             <DialogHeader>
               <DialogTitle>{t('ttl_bulk_delete_timesheets')}</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete {selectedIds.length} timesheets? 
+                Are you sure you want to delete {selectedIds.length} timesheets?
                 This action cannot be undone.
               </DialogDescription>
             </DialogHeader>
@@ -1026,8 +1026,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <Button variant="outline" onClick={() => setIsBulkDeleteDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 onClick={bulkDeleteTimesheets}
               >
                 <Trash className="mr-2 h-4 w-4" />
@@ -1051,8 +1051,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
               <Button variant="outline" onClick={() => setIsAbsentDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 onClick={confirmMarkOperatorAbsent}
                 className="bg-red-600 hover:bg-red-700"
               >
@@ -1107,6 +1107,6 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       </AdminLayout>
     </ErrorBoundary>
   );
-} 
+}
 
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from '@/components/ui/progress';
 import PaymentStatusBadge from "@/components/shared/PaymentStatusBadge";
 import { CreditCard, DollarSign, Calendar, TrendingUp, AlertCircle } from "lucide-react";
 import { formatCurrency } from '@/lib/utils';
@@ -30,7 +30,7 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
   const daysOverdue = isOverdue ? differenceInDays(new Date(), new Date(rental.payment_due_date as string)) : 0;
   const daysLeft = rental.payment_due_date ?
     differenceInDays(new Date(rental.payment_due_date), new Date()) : 0;
-  
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -60,7 +60,7 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
             </div>
           </div>
         </div>
-        
+
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm mb-1">
             <span>{t('payment_progress')}</span>
@@ -68,7 +68,7 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
           </div>
           <Progress value={paymentProgress} className="h-2" />
         </div>
-        
+
         {rental.payment_due_date && (
           <div className="mt-4 p-3 rounded-md bg-gray-50 flex items-center justify-between">
             <div className="flex items-center">
@@ -89,7 +89,7 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
             </div>
           </div>
         )}
-        
+
         {showDetails && (
           <div className="mt-4">
             <Button asChild className="w-full" variant="outline">
@@ -103,4 +103,4 @@ export default function PaymentsSummary({ rental, showDetails = true }: Payments
       </CardContent>
     </Card>
   );
-} 
+}

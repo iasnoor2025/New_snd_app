@@ -9,6 +9,7 @@ import { Clock, Download, CheckCircle2, FileText, Send, X } from "lucide-react";
 import RentalItemsCard from "@/components/rentals/RentalItemsCard";
 import { format } from "date-fns";
 import { formatCurrency } from "@/lib/utils";
+import { Progress } from '@/components/ui/progress';
 
 // Interface for QuotationSection props
 interface QuotationSectionProps {

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, FileText, Loader2 } from "lucide-react";
 import RentalItemsCard from "@/components/rentals/RentalItemsCard";
 import { format } from "date-fns";
+import { Progress } from '@/components/ui/progress';
 
 // Interface for PendingSection props
 interface PendingSectionProps {

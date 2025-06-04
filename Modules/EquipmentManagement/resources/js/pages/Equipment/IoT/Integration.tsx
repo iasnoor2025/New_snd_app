@@ -18,7 +18,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip
   ResponsiveContainer,
   ReferenceLine,
   ComposedChart,

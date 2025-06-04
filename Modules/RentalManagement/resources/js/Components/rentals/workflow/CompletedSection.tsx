@@ -12,6 +12,7 @@ import InvoicesCard from "@/components/rentals/InvoicesCard";
 import DocumentsCard from "@/components/rentals/DocumentsCard";
 import RentalAnalytics from "@/components/rentals/RentalAnalytics";
 import { formatCurrency } from "@/lib/utils";
+import { Progress } from '@/components/ui/progress';
 
 // Define interface for document
 interface AttachedDocument {

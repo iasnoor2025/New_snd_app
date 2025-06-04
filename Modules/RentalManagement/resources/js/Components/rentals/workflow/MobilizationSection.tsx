@@ -9,6 +9,7 @@ import { Truck, MapPin, Calendar, Loader2, Clock, Phone, CheckSquare, CalendarCl
 import RentalItemsCard from "@/components/rentals/RentalItemsCard";
 import { format } from "date-fns";
 import MapView from "@/components/maps/MapView";
+import { Progress } from '@/components/ui/progress';
 
 // Interface for MobilizationSection props
 interface MobilizationSectionProps {

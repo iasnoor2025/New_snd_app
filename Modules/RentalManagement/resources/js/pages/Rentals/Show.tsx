@@ -901,7 +901,7 @@ export default function Show({
     if (progress < 25) return "ðŸŸ¢";
     if (progress < 50) return "ðŸŸ¡";
     if (progress < 75) return "ðŸŸ ";
-    return "ðŸ”´";
+    return "ðŸ"´";
   };
 
   // Get warning message if rental is nearing completion or overdue

@@ -35,7 +35,7 @@ import { Label } from '@/Components/ui/label';
 import { Textarea } from '@/Components/ui/textarea';
 import { Switch } from '@/Components/ui/switch';
 import { Alert, AlertDescription } from '@/Components/ui/alert';
-import { Progress } from '@/Components/ui/progress';
+import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/Components/ui/separator';
 import {
   Dialog,

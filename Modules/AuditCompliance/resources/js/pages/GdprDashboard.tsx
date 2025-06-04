@@ -30,7 +30,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/Components/ui/input';
 import { DatePicker } from '@/Components/ui/date-picker';
 import { Alert, AlertDescription } from '@/Components/ui/alert';
-import { Progress } from '@/Components/ui/progress';
+import { Progress } from '@/components/ui/progress';
 import Pagination from '@/Components/Pagination';
 import { formatDateTime } from '@/utils/date';
 import { cn } from '@/lib/utils';

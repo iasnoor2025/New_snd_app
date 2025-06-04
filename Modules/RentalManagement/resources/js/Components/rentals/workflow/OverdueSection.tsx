@@ -10,7 +10,7 @@ import { AlertCircle, AlertTriangle, CalendarClock, CreditCard, Printer, Send } 
 import RentalItemsCard from "@/components/rentals/RentalItemsCard";
 import InvoicesCard from "@/components/rentals/InvoicesCard";
 import { formatCurrency } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from '@/components/ui/progress';
 
 // Interface for OverdueSection props
 interface OverdueSectionProps {
