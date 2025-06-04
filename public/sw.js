@@ -1,411 +1,375 @@
-// Service Worker for SND Rental Management System
-// Version: 1.0.0
+// Service Worker Version
+const SW_VERSION = '1.0.3';
 
-const CACHE_NAME = 'snd-rental-v1.0.0';
-const OFFLINE_URL = '/offline';
-const API_CACHE_NAME = 'snd-api-cache-v1';
-const STATIC_CACHE_NAME = 'snd-static-cache-v1';
-const DYNAMIC_CACHE_NAME = 'snd-dynamic-cache-v1';
+// Cache Names
+const STATIC_CACHE = 'static-cache-v1';
+const API_CACHE = 'api-cache-v1';
+const DYNAMIC_CACHE = 'dynamic-cache-v1';
 
-// Assets to cache immediately
+// Assets to precache
 const PRECACHE_ASSETS = [
   '/',
   '/offline',
+  '/favicon.ico',
+  '/logo.svg',
   '/manifest.json'
 ];
 
 // API endpoints to cache
-const API_CACHE_PATTERNS = [
-  /\/api\/dashboard\/stats/,
-  /\/api\/equipment\/\d+/,
-  /\/api\/rentals\/\d+/,
-  /\/api\/customers\/\d+/,
-  /\/api\/user\/profile/
+const API_ENDPOINTS = [
+  { url: '/api/dashboard/stats', strategy: 'network-first' },
+  { url: '/api/equipment', strategy: 'network-first' },
+  { url: '/api/rentals', strategy: 'network-first' },
+  { url: '/api/user/profile', strategy: 'network-first' },
+  { url: '/api/notifications/unread', strategy: 'network-first' }
 ];
 
-// Cache strategies
-const CACHE_STRATEGIES = {
-  CACHE_FIRST: 'cache-first',
-  NETWORK_FIRST: 'network-first',
-  STALE_WHILE_REVALIDATE: 'stale-while-revalidate',
-  NETWORK_ONLY: 'network-only',
-  CACHE_ONLY: 'cache-only'
-};
-
-// Install event - cache essential assets
-self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
+// Install event - precache static assets
+self.addEventListener('install', event => {
+  console.log('[SW] Installing Service Worker version:', SW_VERSION);
 
   event.waitUntil(
     (async () => {
       try {
-        const cache = await caches.open(STATIC_CACHE_NAME);
-        console.log('[SW] Caching essential assets');
+        const cache = await caches.open(STATIC_CACHE);
+        console.log('[SW] Caching static assets');
         await cache.addAll(PRECACHE_ASSETS);
-        console.log('[SW] Essential assets cached successfully');
-
-        // Skip waiting to activate immediately
-        self.skipWaiting();
+        await self.skipWaiting();
+        console.log('[SW] Static assets cached successfully');
       } catch (error) {
-        console.error('[SW] Failed to cache essential assets:', error);
+        console.error('[SW] Failed to cache assets:', error);
+        // Continue with service worker installation even if caching fails
+        await self.skipWaiting();
       }
     })()
   );
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
+self.addEventListener('activate', event => {
+  console.log('[SW] Activating Service Worker version:', SW_VERSION);
 
   event.waitUntil(
     (async () => {
-      try {
-        // Clean up old caches
-        const cacheNames = await caches.keys();
-        const validCaches = [STATIC_CACHE_NAME, API_CACHE_NAME, DYNAMIC_CACHE_NAME];
-
-        await Promise.all(
-          cacheNames.map(async (cacheName) => {
-            if (!validCaches.includes(cacheName)) {
-              console.log('[SW] Deleting old cache:', cacheName);
-              await caches.delete(cacheName);
-            }
-          })
+      const cacheNames = await caches.keys();
+      const cachesToDelete = cacheNames.filter(cacheName => {
+        return (
+          cacheName.startsWith('static-cache-') && cacheName !== STATIC_CACHE ||
+          cacheName.startsWith('api-cache-') && cacheName !== API_CACHE ||
+          cacheName.startsWith('dynamic-cache-') && cacheName !== DYNAMIC_CACHE
         );
+      });
 
-        // Take control of all clients
-        await self.clients.claim();
-        console.log('[SW] Service worker activated successfully');
+      await Promise.all(cachesToDelete.map(cacheName => caches.delete(cacheName)));
+      await self.clients.claim();
+      console.log('[SW] Service Worker activated and claimed clients');
+    })()
+  );
+});
+
+// Helper function to determine if a request is a navigation request
+function isNavigationRequest(request) {
+  return request.mode === 'navigate' && request.destination === 'document';
+}
+
+// Helper function to determine if a request is for a static asset
+function isStaticAsset(request) {
+  const url = new URL(request.url);
+  return (
+    request.destination === 'style' ||
+    request.destination === 'script' ||
+    request.destination === 'image' ||
+    request.destination === 'font' ||
+    url.pathname.match(/\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/i)
+  );
+}
+
+// Helper function to determine if a request is for an API endpoint
+function isApiRequest(request) {
+  const url = new URL(request.url);
+  return url.pathname.startsWith('/api/');
+}
+
+// Helper function to determine if a request is for the Vite dev server
+function isViteRequest(request) {
+  const url = new URL(request.url);
+  return url.pathname.includes('/@vite/') || url.pathname.includes('node_modules/.vite');
+}
+
+// Fetch event - handle network requests
+self.addEventListener('fetch', event => {
+  const request = event.request;
+
+  // Skip cross-origin requests
+  if (!request.url.startsWith(self.location.origin) && !request.url.startsWith('http://127.0.0.1')) {
+    return;
+  }
+
+  // Skip Vite dev server requests during development
+  if (isViteRequest(request)) {
+    return;
+  }
+
+  // Handle navigation requests (HTML pages)
+  if (isNavigationRequest(request)) {
+    event.respondWith(
+      (async () => {
+        try {
+          // Try network first for navigation requests
+          console.log('[SW] Navigation request for:', request.url);
+          const networkResponse = await fetch(request);
+          return networkResponse;
+        } catch (error) {
+          console.log('[SW] Network failed for navigation, trying cache:', request.url);
+
+          // If network fails, try cache
+          const cachedResponse = await caches.match(request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+
+          // If cache fails, return offline page
+          console.log('[SW] Cache failed for navigation, returning offline page');
+          return caches.match('/offline');
+        }
+      })()
+    );
+    return;
+  }
+
+  // Handle static assets (cache-first strategy)
+  if (isStaticAsset(request)) {
+    event.respondWith(
+      (async () => {
+        try {
+          // Try cache first for static assets
+          const cachedResponse = await caches.match(request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+
+          // If not in cache, try network
+          try {
+            const networkResponse = await fetch(request);
+            // Only cache successful responses
+            if (networkResponse.ok) {
+              const cache = await caches.open(STATIC_CACHE);
+              cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+          } catch (error) {
+            console.log('[SW] Failed to fetch static asset:', request.url);
+            // For favicon and other critical assets, try to return a default
+            if (request.url.includes('favicon.ico')) {
+              return caches.match('/favicon.ico');
+            }
+            // No fallback for other static assets
+            return new Response('Not found', { status: 404 });
+          }
+        } catch (error) {
+          console.error('[SW] Error handling static asset:', error);
+          return new Response('Error', { status: 500 });
+        }
+      })()
+    );
+    return;
+  }
+
+  // Handle API requests (network-first strategy)
+  if (isApiRequest(request)) {
+    event.respondWith(
+      (async () => {
+        try {
+          // Try network first for API requests
+          const networkResponse = await fetch(request);
+
+          // Cache successful GET responses
+          if (request.method === 'GET' && networkResponse.ok) {
+            const cache = await caches.open(API_CACHE);
+            cache.put(request, networkResponse.clone());
+          }
+
+          return networkResponse;
+        } catch (error) {
+          console.log('[SW] Network failed for API request, trying cache:', request.url);
+
+          // If network fails, try cache for GET requests
+          if (request.method === 'GET') {
+            const cachedResponse = await caches.match(request);
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+          }
+
+          // If cache fails or not a GET request, return error response
+          return new Response(JSON.stringify({ error: 'Network error', offline: true }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  // Helper function to determine if a request is for locale files
+  function isLocaleRequest(request) {
+    const url = new URL(request.url);
+    return url.pathname.includes('/locales/') && url.pathname.endsWith('.json');
+  }
+
+  // Handle locale files (network-first with fallback)
+  if (isLocaleRequest(request)) {
+    event.respondWith(
+      (async () => {
+        try {
+          // Try network first for locale files
+          const networkResponse = await fetch(request);
+
+          // Cache successful responses
+          if (networkResponse.ok) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            cache.put(request, networkResponse.clone());
+          }
+
+          return networkResponse;
+        } catch (error) {
+          console.log('[SW] Network failed for locale request, trying cache:', request.url);
+
+          // If network fails, try cache
+          const cachedResponse = await caches.match(request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+
+          // If cache fails, return empty JSON object as fallback
+          return new Response(JSON.stringify({}), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+      })()
+    );
+    return;
+  }
+
+  // Default strategy for other requests (network-first with dynamic caching)
+  event.respondWith(
+    (async () => {
+      try {
+        const networkResponse = await fetch(request);
+
+        // Cache successful GET responses
+        if (request.method === 'GET' && networkResponse.ok) {
+          const cache = await caches.open(DYNAMIC_CACHE);
+          cache.put(request, networkResponse.clone());
+        }
+
+        return networkResponse;
       } catch (error) {
-        console.error('[SW] Failed to activate service worker:', error);
+        console.log('[SW] Network failed for request, trying cache:', request.url);
+
+        // If network fails, try cache
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // If cache fails, return error response
+        return new Response('Network error', { status: 503 });
       }
     })()
   );
 });
 
-// Fetch event - handle network requests
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
+// Background sync event
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-pending-actions') {
+    event.waitUntil(
+      (async () => {
+        try {
+          // Notify clients that sync is happening
+          const clients = await self.clients.matchAll();
+          clients.forEach(client => {
+            client.postMessage({
+              type: 'SYNC_STARTED'
+            });
+          });
 
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // Skip Vite dev server requests (localhost:5173) and HMR WebSocket requests
-  if (url.hostname === 'localhost' && (url.port === '5173' || url.port === '')) {
-    return;
-  }
-
-  // Skip Vite HMR and dev server related requests
-  if (url.pathname.includes('/@vite/') ||
-      url.pathname.includes('/@fs/') ||
-      url.pathname.includes('/@id/') ||
-      url.pathname.includes('/node_modules/') ||
-      url.searchParams.has('t') || // Vite timestamp parameter
-      url.protocol === 'ws:' || url.protocol === 'wss:') {
-    return;
-  }
-
-  // Skip requests to the current origin when running on Vite dev server
-  if (url.origin === 'http://localhost:5173') {
-    return;
-  }
-
-  // Handle different types of requests
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(handleApiRequest(request));
-  } else if (isStaticAsset(url.pathname)) {
-    event.respondWith(handleStaticAsset(request));
-  } else if (isNavigationRequest(request)) {
-    event.respondWith(handleNavigationRequest(request));
-  } else {
-    event.respondWith(handleDynamicRequest(request));
-  }
-});
-
-// Handle API requests with network-first strategy
-async function handleApiRequest(request) {
-  const url = new URL(request.url);
-
-  try {
-    // Try network first
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Cache successful API responses
-      if (shouldCacheApiResponse(url.pathname)) {
-        const cache = await caches.open(API_CACHE_NAME);
-        cache.put(request, networkResponse.clone());
-      }
-      return networkResponse;
-    }
-
-    throw new Error('Network response not ok');
-  } catch (error) {
-    console.log('[SW] Network failed for API request, trying cache:', url.pathname);
-
-    // Fallback to cache
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Return offline response for critical API endpoints
-    if (isCriticalApiEndpoint(url.pathname)) {
-      return new Response(
-        JSON.stringify({
-          error: 'Offline',
-          message: 'This data is not available offline',
-          offline: true
-        }),
-        {
-          status: 503,
-          statusText: 'Service Unavailable',
-          headers: { 'Content-Type': 'application/json' }
+          // The actual sync will be handled by the client
+          console.log('[SW] Triggered background sync for pending actions');
+        } catch (error) {
+          console.error('[SW] Background sync failed:', error);
         }
-      );
-    }
-
-    throw error;
-  }
-}
-
-// Handle static assets with cache-first strategy
-async function handleStaticAsset(request) {
-  try {
-    // Try cache first
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Fallback to network
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      const cache = await caches.open(STATIC_CACHE_NAME);
-      cache.put(request, networkResponse.clone());
-    }
-
-    return networkResponse;
-  } catch (error) {
-    console.error('[SW] Failed to fetch static asset:', request.url);
-    throw error;
-  }
-}
-
-// Handle navigation requests
-async function handleNavigationRequest(request) {
-  try {
-    // Try network first for navigation
-    const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      // Cache successful navigation responses
-      const cache = await caches.open(DYNAMIC_CACHE_NAME);
-      cache.put(request, networkResponse.clone());
-      return networkResponse;
-    }
-
-    throw new Error('Network response not ok');
-  } catch (error) {
-    console.log('[SW] Network failed for navigation, trying cache:', request.url);
-
-    // Try cache
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Fallback to offline page
-    const offlineResponse = await caches.match(OFFLINE_URL);
-    if (offlineResponse) {
-      return offlineResponse;
-    }
-
-    // Last resort - basic offline response
-    return new Response(
-      `<!DOCTYPE html>
-      <html>
-      <head>
-        <title>Offline - SND Rental</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-          .offline-container { max-width: 400px; margin: 0 auto; }
-          .offline-icon { font-size: 64px; margin-bottom: 20px; }
-        </style>
-      </head>
-      <body>
-        <div class="offline-container">
-          <div class="offline-icon">📱</div>
-          <h1>You're Offline</h1>
-          <p>Please check your internet connection and try again.</p>
-          <button onclick="window.location.reload()">Retry</button>
-        </div>
-      </body>
-      </html>`,
-      {
-        status: 200,
-        statusText: 'OK',
-        headers: { 'Content-Type': 'text/html' }
-      }
+      })()
     );
   }
-}
+});
 
-// Handle dynamic requests with stale-while-revalidate
-async function handleDynamicRequest(request) {
+// Push notification event
+self.addEventListener('push', event => {
   try {
-    const cache = await caches.open(DYNAMIC_CACHE_NAME);
-    const cachedResponse = await cache.match(request);
-
-    // Fetch from network in background
-    const networkPromise = fetch(request).then(response => {
-      if (response.ok) {
-        cache.put(request, response.clone());
-      }
-      return response;
-    }).catch(() => null);
-
-    // Return cached response immediately if available
-    if (cachedResponse) {
-      return cachedResponse;
+    let data = {};
+    if (event.data) {
+      data = event.data.json();
     }
 
-    // Wait for network response if no cache
-    return await networkPromise || new Response('Not found', { status: 404 });
+    const options = {
+      body: data.body || 'New notification',
+      icon: data.icon || '/images/logo.png',
+      badge: '/images/badge.png',
+      data: {
+        url: data.url || '/'
+      }
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(data.title || 'Notification', options)
+    );
   } catch (error) {
-    console.error('[SW] Failed to handle dynamic request:', error);
-    return new Response('Service Unavailable', { status: 503 });
-  }
-}
-
-// Utility functions
-function isStaticAsset(pathname) {
-  return /\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$/.test(pathname);
-}
-
-function isNavigationRequest(request) {
-  return request.mode === 'navigate' ||
-         (request.method === 'GET' && request.headers.get('accept').includes('text/html'));
-}
-
-function shouldCacheApiResponse(pathname) {
-  return API_CACHE_PATTERNS.some(pattern => pattern.test(pathname));
-}
-
-function isCriticalApiEndpoint(pathname) {
-  const criticalEndpoints = [
-    '/api/dashboard/stats',
-    '/api/user/profile',
-    '/api/notifications/unread'
-  ];
-  return criticalEndpoints.some(endpoint => pathname.includes(endpoint));
-}
-
-// Background sync for offline actions
-self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync triggered:', event.tag);
-
-  if (event.tag === 'background-sync') {
-    event.waitUntil(doBackgroundSync());
+    console.error('[SW] Push notification error:', error);
   }
 });
 
-async function doBackgroundSync() {
-  try {
-    // Process queued offline actions
-    const queuedActions = await getQueuedActions();
-
-    for (const action of queuedActions) {
-      try {
-        await processQueuedAction(action);
-        await removeQueuedAction(action.id);
-      } catch (error) {
-        console.error('[SW] Failed to process queued action:', error);
-      }
-    }
-  } catch (error) {
-    console.error('[SW] Background sync failed:', error);
-  }
-}
-
-// Push notification handling
-self.addEventListener('push', (event) => {
-  console.log('[SW] Push notification received');
-
-  const options = {
-    body: 'You have new updates in SND Rental System',
-    icon: '/images/icons/icon-192x192.png',
-    badge: '/images/icons/badge-72x72.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'View Details',
-        icon: '/images/icons/checkmark.png'
-      },
-      {
-        action: 'close',
-        title: 'Close',
-        icon: '/images/icons/xmark.png'
-      }
-    ]
-  };
-
-  if (event.data) {
-    const payload = event.data.json();
-    options.body = payload.body || options.body;
-    options.title = payload.title || 'SND Rental System';
-    options.data = { ...options.data, ...payload.data };
-  }
+// Notification click event
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
 
   event.waitUntil(
-    self.registration.showNotification('SND Rental System', options)
+    (async () => {
+      const url = event.notification.data.url;
+      const windowClients = await self.clients.matchAll({ type: 'window' });
+
+      // Check if there's already a window open with the target URL
+      for (const client of windowClients) {
+        if (client.url === url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+
+      // If no window is open with the URL, open a new one
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(url);
+      }
+    })()
   );
 });
 
-// Notification click handling
-self.addEventListener('notificationclick', (event) => {
-  console.log('[SW] Notification clicked:', event.action);
-
-  event.notification.close();
-
-  if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow('/dashboard')
-    );
+// Message event for client communication
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
-// Helper functions for offline queue management
-async function getQueuedActions() {
-  // Implementation would depend on your offline storage strategy
-  // This is a placeholder for IndexedDB or localStorage operations
-  return [];
-}
-
-async function processQueuedAction(action) {
-  // Process the queued action (API call, form submission, etc.)
-  console.log('[SW] Processing queued action:', action);
-}
-
-async function removeQueuedAction(actionId) {
-  // Remove the processed action from the queue
-  console.log('[SW] Removing queued action:', actionId);
-}
-
-// Error handling
-self.addEventListener('error', (event) => {
+// Log service worker errors
+self.addEventListener('error', event => {
   console.error('[SW] Service worker error:', event.error);
 });
 
-self.addEventListener('unhandledrejection', (event) => {
+// Handle unhandled promise rejections
+self.addEventListener('unhandledrejection', event => {
   console.error('[SW] Unhandled promise rejection:', event.reason);
 });
+
+console.log('[SW] Service Worker initialized (version:', SW_VERSION, ')');

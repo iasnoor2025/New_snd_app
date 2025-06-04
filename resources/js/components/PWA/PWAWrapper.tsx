@@ -23,7 +23,13 @@ const PWAWrapper: React.FC<PWAWrapperProps> = ({ children }) => {
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
-        initializePWA();
+        // Wait for document to be fully loaded before initializing PWA
+        if (document.readyState === 'complete') {
+            initializePWA();
+        } else {
+            window.addEventListener('load', initializePWA);
+            return () => window.removeEventListener('load', initializePWA);
+        }
     }, []);
 
     useEffect(() => {
@@ -54,20 +60,39 @@ const PWAWrapper: React.FC<PWAWrapperProps> = ({ children }) => {
 
             // Register service worker if not already registered
             let registration: ServiceWorkerRegistration | undefined;
-            if ('serviceWorker' in navigator && serviceWorkerStatus !== 'activated') {
-                registration = await navigator.serviceWorker.register('/sw.js');
-            } else if ('serviceWorker' in navigator) {
-                registration = await navigator.serviceWorker.ready;
-            }
 
-            // Initialize push notification service with service worker registration
-            if (registration) {
-                await pushNotificationService.initialize(registration);
+            if ('serviceWorker' in navigator) {
+                try {
+                    // Check if service worker is already registered
+                    registration = await navigator.serviceWorker.getRegistration();
+
+                    if (!registration || serviceWorkerStatus !== 'activated') {
+                        // Register service worker with proper error handling
+                        registration = await navigator.serviceWorker.register('/sw.js', {
+                            scope: '/'
+                        });
+                        console.log('Service Worker registered successfully:', registration);
+                    } else {
+                        // Use existing registration
+                        registration = await navigator.serviceWorker.ready;
+                        console.log('Using existing Service Worker registration');
+                    }
+
+                    // Initialize push notification service with service worker registration
+                    if (registration) {
+                        await pushNotificationService.initialize(registration);
+                    }
+                } catch (swError) {
+                    console.error('Service Worker registration failed:', swError);
+                    // Continue initialization even if SW fails
+                }
             }
 
             setInitialized(true);
         } catch (error) {
             console.error('Failed to initialize PWA:', error);
+            // Set initialized to true anyway to show the UI
+            setInitialized(true);
         }
     };
 

@@ -40,6 +40,11 @@ Route::get('/whoami', function () {
 
 Route::redirect('/roles', '/settings/roles');
 
+// Redirect auth/login to login route with 301 status code
+Route::get('auth/login', function () {
+    return redirect('/login', 301);
+});
+
 require __DIR__.'/health.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

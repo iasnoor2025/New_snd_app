@@ -11,7 +11,22 @@ createServer((page) =>
         page,
         render: ReactDOMServer.renderToString,
         title: (title) => `${title} - ${appName}`,
-        resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
+        resolve: async (name) => {
+            console.log('SSR resolving page:', name);
+
+            // Special case for auth pages
+            if (name.startsWith('auth/')) {
+                try {
+                    const page = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+                    console.log('SSR found auth page:', name);
+                    return page;
+                } catch (error) {
+                    console.error(`SSR could not find auth page: ${name}`, error);
+                }
+            }
+
+            return resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+        },
         setup: ({ App, props }) => {
             /* eslint-disable */
             // @ts-expect-error

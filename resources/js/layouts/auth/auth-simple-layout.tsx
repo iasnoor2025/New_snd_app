@@ -1,5 +1,5 @@
 import AppLogoIcon from '@/components/app-logo-icon';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 

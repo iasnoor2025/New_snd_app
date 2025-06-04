@@ -23,9 +23,18 @@ class HandleInertiaRequests extends Middleware
      *
      * @see https://inertiajs.com/asset-versioning
      */
+    /**
+     * Get the version that will determine if the frontend needs to be refreshed.
+     */
     public function version(Request $request): ?string
     {
-        return parent::version($request);
+        try {
+            return md5_file(public_path('build/manifest.json'));
+        } catch (\Exception $e) {
+            // Log the error but don't crash the application
+            \Log::error('Error determining asset version: ' . $e->getMessage());
+            return null;
+        }
     }
 
     /**

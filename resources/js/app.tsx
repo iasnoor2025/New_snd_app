@@ -161,28 +161,51 @@ const moduleMap: Record<string, string[]> = {
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
-        // First try to resolve from main app's pages
-        try {
-            const component = await resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx'));
-            return component;
-        } catch (error) {
+        console.log('Resolving page:', name); // Add debug logging
+
+        // Special case for auth pages - add more debug logging
+        if (name.startsWith('auth/')) {
+            console.log('Attempting to resolve auth page:', name);
             try {
-                const component = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
-                return component;
+                // Try lowercase pages directory first
+                const page = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+                console.log('Successfully resolved auth page from lowercase pages directory:', name);
+                return page;
+            } catch (error) {
+                console.error(`Failed to resolve auth page from lowercase pages directory: ${name}`, error);
+
+                try {
+                    // Try uppercase Pages directory
+                    const page = await resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx'));
+                    console.log('Successfully resolved auth page from uppercase Pages directory:', name);
+                    return page;
+                } catch (upperError) {
+                    console.error(`Failed to resolve auth page from uppercase Pages directory: ${name}`, upperError);
+                }
+            }
+        }
+
+        // First try to resolve from main app's lowercase pages directory
+        try {
+            return await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+        } catch (error) {
+            // If not found in lowercase pages, try uppercase Pages
+            try {
+                return await resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx'));
             } catch (e) {
                 // Handle Laravel's Inertia::render('Module::Page') pattern (like Employee module)
                 if (name.includes('::')) {
                     const [module, page] = name.split('::');
-                    // Try both Pages and pages directories, and both .tsx and .jsx
+                    // Try both pages and Pages directories, and both .tsx and .jsx
                     const possiblePaths = [
-                        `./Modules/${module}/resources/js/Pages/${page}.tsx`,
-                        `./Modules/${module}/resources/js/Pages/${page}.jsx`,
                         `./Modules/${module}/resources/js/pages/${page}.tsx`,
                         `./Modules/${module}/resources/js/pages/${page}.jsx`,
-                        `./Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
-                        `./Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}.jsx`,
                         `./Modules/${module}/resources/js/pages/${page}/Index.tsx`,
                         `./Modules/${module}/resources/js/pages/${page}/Index.jsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
                     ];
                     for (const path of possiblePaths) {
                         if (path in modulePages) {

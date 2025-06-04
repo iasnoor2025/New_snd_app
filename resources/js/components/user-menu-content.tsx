@@ -3,7 +3,8 @@ import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { type User } from '@/types';
 import { Link, router } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
+import { LogOut, Settings, Globe } from 'lucide-react';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 interface UserMenuContentProps {
     user: User;
@@ -31,6 +32,15 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                         <Settings className="mr-2" />
                         Settings
                     </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <div className="flex w-full items-center">
+                        <Globe className="mr-2 h-4 w-4" />
+                        <span className="mr-2">Language</span>
+                        <div className="ml-auto">
+                            <LanguageSwitcher variant="compact" showLabel={false} />
+                        </div>
+                    </div>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
