@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/Components/ui/button';
-import { Input } from '@/Modules/Payroll/Resources/js/Components/ui/input';
-import { Select } from '@/Modules/Payroll/Resources/js/Components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Components/ui/card';
-import { Label } from '@/Modules/Payroll/Resources/js/Components/ui/label';
+import { Button } from '@/Modules/Payroll/Resources/js/components/ui/button';
+import { Input } from '@/Modules/Payroll/Resources/js/components/ui/input';
+import { Select } from '@/Modules/Payroll/Resources/js/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/components/ui/card';
+import { Label } from '@/Modules/Payroll/Resources/js/components/ui/label';
 
 export default function Create({ auth, employees, currentMonth }) {
   const { t } = useTranslation('payroll');

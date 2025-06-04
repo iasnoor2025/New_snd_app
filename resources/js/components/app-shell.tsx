@@ -1,7 +1,7 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
-import PWAWrapper from '@/Components/PWA/PWAWrapper';
+import PWAWrapper from '@/components/PWA/PWAWrapper';
 
 interface AppShellProps {
     children: React.ReactNode;

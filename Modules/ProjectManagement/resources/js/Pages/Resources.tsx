@@ -4,8 +4,8 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ResourceForm from '../Components/project/ResourceForm';
-import ResourceList from '../Components/project/ResourceList';
+import ResourceForm from '../components/project/ResourceForm';
+import ResourceList from '../components/project/ResourceList';
 import {
     Dialog,
     DialogContent,
@@ -58,15 +58,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import TaskList, { ProjectTask } from '../Components/project/TaskList';
-import TaskDialog from '../Components/project/TaskDialog';
-import { DialogErrorBoundary } from '../Components/DialogErrorBoundary';
-import ErrorBoundary from '../Components/ErrorBoundary';
-import { SafeDialog } from '../Components/ui/SafeDialog';
-import TaskForm from '../Components/project/TaskForm';
-import ResourceFilters from '../Components/project/ResourceFilters';
-import ResourcePagination from '../Components/project/ResourcePagination';
-import ResourceSearch from '../Components/project/ResourceSearch';
+import TaskList, { ProjectTask } from '../components/project/TaskList';
+import TaskDialog from '../components/project/TaskDialog';
+import { DialogErrorBoundary } from '../components/DialogErrorBoundary';
+import ErrorBoundary from '../components/ErrorBoundary';
+import { SafeDialog } from '../components/ui/SafeDialog';
+import TaskForm from '../components/project/TaskForm';
+import ResourceFilters from '../components/project/ResourceFilters';
+import ResourcePagination from '../components/project/ResourcePagination';
+import ResourceSearch from '../components/project/ResourceSearch';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 

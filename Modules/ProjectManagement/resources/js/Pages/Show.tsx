@@ -22,17 +22,17 @@ import {
     PieChart,
     XIcon
 } from 'lucide-react';
-import ResourceList from '../Components/project/ResourceList';
-import ResourceForm from '../Components/project/ResourceForm';
+import ResourceList from '../components/project/ResourceList';
+import ResourceForm from '../components/project/ResourceForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../../../../resources/js/components/ui/dialog';
 import { Badge } from '../../../../../resources/js/components/ui/badge';
 import { Separator } from '../../../../../resources/js/components/ui/separator';
 import { Progress } from '../../../../../resources/js/components/ui/progress';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import TaskList, { ProjectTask } from '../Components/project/TaskList';
-import TaskDialog from '../Components/project/TaskDialog';
-import { ProjectProgress } from '../Components/project/ProjectProgress';
+import TaskList, { ProjectTask } from '../components/project/TaskList';
+import TaskDialog from '../components/project/TaskDialog';
+import { ProjectProgress } from '../components/project/ProjectProgress';
 
 // Declare window.route for TypeScript
 // @ts-ignore

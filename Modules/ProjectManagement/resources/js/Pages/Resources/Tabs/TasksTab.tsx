@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useProjectResources } from '../../../hooks/useProjectResources';
 import { TaskStatus } from '../../../types/projectResources';
-import TaskList, { ProjectTask } from '../../../Components/project/TaskList';
+import TaskList, { ProjectTask } from '../../../components/project/TaskList';
 
 interface TasksTabProps {
     project: {

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
@@ -19,7 +19,7 @@ import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 import { usePermission } from '@/Modules/Payroll/Resources/js/hooks/usePermission';
 
-const breadcrumbs = [;
+const breadcrumbs = [
     {
         title: 'Dashboard',
         href: '/dashboard',

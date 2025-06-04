@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -6,8 +6,8 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@/Modules/EquipmentManagement/Resources/js/Components/ui/table';
-import { Progress } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/progress';
+} from '@/Modules/EquipmentManagement/Resources/js/components/ui/table';
+import { Progress } from '@/Modules/EquipmentManagement/Resources/js/components/ui/progress';
 
 interface Category {
   category_id: number;

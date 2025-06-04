@@ -1,4 +1,4 @@
-﻿import { z } from 'zod';
+import { z } from 'zod';
 import { commonSchemas, requiredString } from './common.schema';
 import { useTranslation } from 'react-i18next';
 

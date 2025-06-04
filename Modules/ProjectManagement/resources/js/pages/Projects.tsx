@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';
-import { ProjectList } from '../Components/ProjectList';
-import { ProjectForm } from '../Components/ProjectForm';
+import { ProjectList } from '../components/ProjectList';
+import { ProjectForm } from '../components/ProjectForm';
 import {
     Dialog,
     DialogContent,

@@ -1,4 +1,4 @@
-﻿import React, { HTMLAttributes, forwardRef } from "react";
+import React, { HTMLAttributes, forwardRef } from "react";
 import {
   Toast as ShadcnToast,
   ToastTitle,
@@ -6,7 +6,7 @@ import {
   ToastClose,
   ToastProvider,
   ToastViewport,
-} from "../../../../../../resources/js/Components/ui/toast";
+} from "../../../../../../resources/js/components/ui/toast";
 import { cn } from "../../../../../../resources/js/lib/utils";
 import { AlertCircle, CheckCircle, Info, XCircle, X, Loader2 } from "lucide-react";
 

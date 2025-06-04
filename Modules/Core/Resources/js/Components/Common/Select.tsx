@@ -1,20 +1,20 @@
-﻿import React, { SelectHTMLAttributes, forwardRef } from "react";
+import React, { SelectHTMLAttributes, forwardRef } from "react";
 import {
   Select as ShadcnSelect,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../../../../resources/js/Components/ui/select";
+} from "../../../../../../resources/js/components/ui/select";
 import { cn } from "../../../../../../resources/js/lib/utils";
-import { Label } from "../../../../../../resources/js/Components/ui/label";
+import { Label } from "../../../../../../resources/js/components/ui/label";
 import { HelpCircle } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../../../../resources/js/Components/ui/tooltip";
+} from "../../../../../../resources/js/components/ui/tooltip";
 
 /**
  * Option interface for Select component

@@ -1,4 +1,4 @@
-﻿import React, { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import {
   Table as ShadcnTable,
   TableBody,
@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../../../../resources/js/Components/ui/table";
+} from "../../../../../../resources/js/components/ui/table";
 import { cn } from "../../../../../../resources/js/lib/utils";
 import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "./Button";

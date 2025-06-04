@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { ResourceFormModal } from '../../../Components/project/resources/ResourceModal';
+import { ResourceFormModal } from '../../../components/project/resources/ResourceModal';
 import { useResourceFormModal } from '../../../hooks/useResourceFormModal';
 import { useResourceSubmit } from '../../../hooks/useResourceSubmit';
 import type { ManpowerResource } from '../../../types/projectResources';

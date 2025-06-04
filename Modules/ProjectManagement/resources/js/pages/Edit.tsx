@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm, Link } from '@inertiajs/react';
 import AdminLayout from '../../../../../resources/js/layouts/AdminLayout';

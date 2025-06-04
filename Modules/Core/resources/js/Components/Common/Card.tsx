@@ -1,4 +1,4 @@
-﻿import React, { HTMLAttributes, forwardRef } from "react";
+import React, { HTMLAttributes, forwardRef } from "react";
 import {
   Card as ShadcnCard,
   CardContent,
@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../../../../resources/js/Components/ui/card";
+} from "../../../../../../resources/js/components/ui/card";
 import { cn } from "../../../../../../resources/js/lib/utils";
 import { Loader2 } from "lucide-react";
 

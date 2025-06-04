@@ -39,9 +39,9 @@ import {
 } from 'lucide-react';
 
 // Components
-import SettingsForm from '../../Components/SystemSettings/SettingsForm';
-import SystemHealth from '../../Components/SystemSettings/SystemHealth';
-import ImportExport from '../../Components/SystemSettings/ImportExport';
+import SettingsForm from '../../components/SystemSettings/SettingsForm';
+import SystemHealth from '../../components/SystemSettings/SystemHealth';
+import ImportExport from '../../components/SystemSettings/ImportExport';
 
 interface SystemSettings {
   [category: string]: {

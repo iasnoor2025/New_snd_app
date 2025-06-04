@@ -1,12 +1,12 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { router } from '@inertiajs/react';
-import { PerformanceReview } from '../../types/performance';
+import { PerformanceReview } from '../../types/employee';
 import PerformanceReviewList from '../../components/employees/PerformanceReviewList';
 import PerformanceReviewForm from '../../components/employees/PerformanceReviewForm';
-import { Breadcrumbs } from '../../components/ui/breadcrumbs';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Button } from '../../components/ui/button';
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { Plus, ArrowLeft } from 'lucide-react';
 
 export default function PerformanceManagement({ employeeId }: { employeeId?: string }) {
@@ -46,7 +46,7 @@ export default function PerformanceManagement({ employeeId }: { employeeId?: str
 
     crumbs.push({ title: 'Performance Management', href: '#' });
 
-    return <Breadcrumbs items={crumbs} />;
+    return <Breadcrumbs breadcrumbs={crumbs} />;
   };
 
   return (

@@ -1,45 +1,42 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, usePage } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Employee, Rental, RentalItem } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
-
-// Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import { PageProps } from '@/types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/alert';
-import TimesheetForm from '@/Modules/RentalManagement/Resources/js/components/rentals/timesheets/TimesheetForm';
+} from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import TimesheetForm from '@/Modules/RentalManagement/resources/js/components/rentals/timesheets/TimesheetForm';
 
 // Icons
 import { AlertCircle } from "lucide-react";
 
 interface Props extends PageProps {
-  rentals: Rental[];
-  rentalItems: RentalItem[];
-  operators: Employee[];
+  rentals: any[];
+  rentalItems: any[];
+  operators: any[];
   selectedRentalId?: number;
   csrf_token?: string;
   errors?: { [key: string]: string };
 }
 
-export default function Create({ rentals = [], rentalItems = [], operators = [], auth, errors = {} }: Props) {
+export default function Create({ rentals = [], rentalItems = [], operators = [], errors = {} }: Props) {
   const { t } = useTranslation('rental');
 
   const [loading, setLoading] = useState(false);
-  
+
   // Ensure arrays are defined
   const safeRentals = Array.isArray(rentals) ? rentals : [];
   const safeRentalItems = Array.isArray(rentalItems) ? rentalItems : [];
   const safeOperators = Array.isArray(operators) ? operators : [];
 
   // Debug logging
-  
+
 
   // Check if we have active rentals
   if (safeRentals.length === 0) {
@@ -60,10 +57,8 @@ export default function Create({ rentals = [], rentalItems = [], operators = [],
   }
 
   // Check if we have rental items with equipment
-  const hasValidRentalItems = safeRentalItems.some(item => 
-    item.equipment && ;
-    item.equipment.id && ;
-    item.equipment.status === 'active';
+  const hasValidRentalItems = safeRentalItems.some(item =>
+    item.equipment && item.equipment.id && item.equipment.status === 'active'
   );
 
   if (!hasValidRentalItems) {
@@ -99,11 +94,10 @@ export default function Create({ rentals = [], rentalItems = [], operators = [],
           rentals={safeRentals}
           rentalItems={safeRentalItems}
           operators={safeOperators}
-          auth={auth}
         />
       </div>
     </AdminLayout>
   );
-} 
+}
 
 

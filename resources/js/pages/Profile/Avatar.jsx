@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
-import { Badge } from '@/Components/ui/badge';
-import { Separator } from '@/Components/ui/separator';
-import AvatarUploader from '@/Components/Avatar/AvatarUploader';
-import { SmartAvatar, UserAvatar, TeamAvatar } from '@/Components/ui/smart-avatar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
-import { Button } from '@/Components/ui/button';
-import { useToast } from '@/Components/ui/use-toast';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import AvatarUploader from '@/components/Avatar/AvatarUploader';
+import { SmartAvatar, UserAvatar, TeamAvatar } from '@/components/ui/smart-avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import {
     User,
     Settings,

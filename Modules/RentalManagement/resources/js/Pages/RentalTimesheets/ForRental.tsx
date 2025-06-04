@@ -1,18 +1,17 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Rental, RentalTimesheet, Equipment } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
+import { PageProps } from '@/types';
+import AdminLayout from '@/layouts/AdminLayout';
 import { format } from "date-fns";
-import ErrorAlert from '@/Modules/RentalManagement/Resources/js/components/ui/error-alert';
-import { showSuccessToast, showErrorToast } from '@/Modules/RentalManagement/Resources/js/lib/toast-config';
-import ErrorBoundary from '@/Modules/RentalManagement/Resources/js/components/ErrorBoundary';
-import { usePermission } from '@/Modules/RentalManagement/Resources/js/hooks/usePermission';
+import ErrorAlert from '@/components/ui/error-alert';
+import { toast } from 'sonner';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { usePermission } from '@/hooks/usePermission';
 
 // Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/RentalManagement/Resources/js/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -20,16 +19,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/table';
+  TableCell,
+} from '@/components/ui/table';
 import {
   Dialog,
   DialogContent,
@@ -38,23 +36,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/dialog';
-import { Checkbox } from '@/Modules/RentalManagement/Resources/js/components/ui/checkbox';
-import { Separator } from '@/Modules/RentalManagement/Resources/js/components/ui/separator';
+} from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/select';
-import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/tooltip';
+} from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
 
 // Icons
@@ -82,8 +80,8 @@ import {
 } from "lucide-react";
 
 interface Props extends PageProps {
-  rental: Rental;
-  timesheets: RentalTimesheet[];
+  rental: any;
+  timesheets: any[];
   debug?: {
     problemTimesheets: Array<{
       id: number;
@@ -123,10 +121,10 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   const canEdit = hasPermission('rental-timesheets.edit');
 
   // Calculate total hours for all timesheets
-  const totalHours = timesheets.reduce((;
-    sum, ;
-    timesheet;
-  ) => sum + (timesheet.hours_used ? parseFloat(String(timesheet.hours_used)) : 0), 0);
+  const totalHours = timesheets.reduce(
+    (sum, timesheet) => sum + (timesheet.hours_used ? parseFloat(String(timesheet.hours_used)) : 0),
+    0
+  );
 
   // Filter timesheets by status, using type-safe comparisons
   const completedTimesheets = timesheets.filter(t => t.status === 'completed' as any);
@@ -151,7 +149,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       filtered = filtered.filter(timesheet => {
         const searchLower = search.toLowerCase();
         const equipmentName = timesheet.rentalItem?.equipment?.name?.toLowerCase() || "";
-        const operatorName = timesheet.operator ;
+        const operatorName = timesheet.operator
           ? `${(timesheet.operator as any).first_name || ""} ${(timesheet.operator as any).last_name || ""}`.toLowerCase()
           : "";
         const date = format(new Date(timesheet.date), "MMM dd, yyyy").toLowerCase();
@@ -169,9 +167,9 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
 
   // Pagination logic
   const totalPages = Math.ceil(filteredTimesheets.length / pageSize);
-  const paginatedTimesheets = filteredTimesheets.slice(;
-    (currentPage - 1) * pageSize,;
-    currentPage * pageSize;
+  const paginatedTimesheets = filteredTimesheets.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
   );
 
   // Get status badge with appropriate color and icon
@@ -190,7 +188,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
 
   // Format time
   const formatTime = (time: string | null) => {
-    if (!time) return "â€"";
+    if (!time) return "-";
 
     try {
       // Check if the time is just a time string (HH:MM or HH:MM:SS)
@@ -212,10 +210,10 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       }
 
 
-      return "â€"";
+      return "-";
     } catch (error) {
 
-      return "â€"";
+      return "-";
     }
   };
 
@@ -230,8 +228,8 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
 
   // Select/deselect all active timesheets
   const selectAll = () => {
-    const activeTimesheetIds = filteredTimesheets;
-      .filter(timesheet => timesheet.status !== 'completed' as any);
+    const activeTimesheetIds = filteredTimesheets
+      .filter(timesheet => timesheet.status !== 'completed' as any)
       .map(timesheet => timesheet.id);
 
     if (activeTimesheetIds.length > 0 && selectedIds.length === activeTimesheetIds.length) {
@@ -246,7 +244,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   // Complete selected timesheets
   const completeSelectedTimesheets = () => {
     if (selectedIds.length === 0) {
-      showErrorToast("No timesheets selected");
+      toast.error("No timesheets selected");
       return;
     }
 
@@ -254,11 +252,11 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       timesheet_ids: selectedIds
     }, {
       onSuccess: () => {
-        showSuccessToast("Timesheets completed successfully");
+        toast.success("Timesheets completed successfully");
         setSelectedIds([]);
         setIsCompleteDialogOpen(false);
       },
-      onError: () => showErrorToast("Failed to complete timesheets")
+      onError: () => toast.error("Failed to complete timesheets")
     });
   };
 
@@ -274,12 +272,12 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
     if (timesheetToDelete) {
       router.delete(route("rental-timesheets.destroy", timesheetToDelete), {
         onSuccess: () => {
-          showSuccessToast("Timesheet deleted successfully");
+          toast.success("Timesheet deleted successfully");
           setIsDeleteDialogOpen(false);
           router.reload();
         },
         onError: (errors) => {
-          showErrorToast(errors.message || "Failed to delete timesheet");
+          toast.error(errors.message || "Failed to delete timesheet");
           setIsDeleteDialogOpen(false);
         }
       });
@@ -289,7 +287,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   // Bulk delete timesheets
   const bulkDeleteTimesheets = () => {
     if (selectedIds.length === 0) {
-      showErrorToast("No timesheets selected");
+      toast.error("No timesheets selected");
       return;
     }
 
@@ -297,12 +295,12 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
       timesheet_ids: selectedIds
     }, {
       onSuccess: () => {
-        showSuccessToast(`${selectedIds.length} timesheets deleted successfully`);
+        toast.success(`${selectedIds.length} timesheets deleted successfully`);
         setSelectedIds([]);
         setIsBulkDeleteDialogOpen(false);
         router.reload();
       },
-      onError: () => showErrorToast("Failed to delete timesheets")
+      onError: () => toast.error("Failed to delete timesheets")
     });
   };
 
@@ -310,18 +308,18 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   const completeTimesheet = (id: number) => {
     router.put(route("rental-timesheets.complete", id), {}, {
       onSuccess: () => {
-        showSuccessToast("Timesheet completed successfully");
+        toast.success("Timesheet completed successfully");
         router.reload();
       },
-      onError: () => showErrorToast("Failed to complete timesheet")
+      onError: () => toast.error("Failed to complete timesheet")
     });
   };
 
   // Check Missing Timesheets
   const checkMissingTimesheets = () => {
     router.get(route("rental-timesheets.check-missing", rental.id), {}, {
-      onSuccess: () => showSuccessToast("Timesheet check completed"),
-      onError: () => showErrorToast("Failed to check timesheets")
+      onSuccess: () => toast.success("Timesheet check completed"),
+      onError: () => toast.error("Failed to check timesheets")
     });
     setIsMissingDatesDialogOpen(false);
   };
@@ -337,12 +335,12 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
     if (timesheetToMarkAbsent) {
       router.put(route("rental-timesheets.mark-absent", timesheetToMarkAbsent), {}, {
         onSuccess: () => {
-          showSuccessToast("Operator marked as absent for this timesheet");
+          toast.success("Operator marked as absent for this timesheet");
           setIsAbsentDialogOpen(false);
           router.reload();
         },
         onError: (errors) => {
-          showErrorToast(errors.message || "Failed to mark operator as absent");
+          toast.error(errors.message || "Failed to mark operator as absent");
           setIsAbsentDialogOpen(false);
         }
       });
@@ -350,7 +348,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   };
 
   // Get operator status badge
-  const getOperatorStatusBadge = (timesheet: RentalTimesheet) => {
+  const getOperatorStatusBadge = (timesheet: any) => {
     if (timesheet.operator_absent) {
       return (
         <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 mt-1">
@@ -364,9 +362,9 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
   // Update stats cards
   const statCards = (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-      <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">;
-        <h3 className="text-sm font-medium text-muted-foreground">{t('total_hours_used')}</h3>;
-        <p className="text-2xl font-bold">;
+      <div className="flex flex-col gap-2 items-center justify-center bg-muted/20 p-4 rounded-md">
+        <h3 className="text-sm font-medium text-muted-foreground">{t('total_hours_used')}</h3>
+        <p className="text-2xl font-bold">
           {typeof totalHours === 'number'
             ? totalHours.toFixed(1)
             : parseFloat(String(totalHours || 0)).toFixed(1)}
@@ -485,7 +483,7 @@ export default function ForRental({ auth, rental, timesheets, debug }: Props) {
                     Timesheets for Rental #{rental.rental_number}
                   </h1>
                   <p className="text-muted-foreground text-sm mt-1">
-                    customer: {rental.customer?.company_name} â€¢ Status: {rental.status}
+                    customer: {rental.customer?.company_name} � Status: {rental.status}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">

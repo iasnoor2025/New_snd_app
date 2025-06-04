@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { format, isBefore, isAfter, isSameDay, differenceInDays } from 'date-fns';
 import { Rental } from '@/types/models';

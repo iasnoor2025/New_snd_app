@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
@@ -116,13 +116,9 @@ export default function Show({ auth, rental, timesheet }: Props) {
     if (!timesheet?.rate) return 0;
 
     try {
-      const rate = typeof timesheet.rate === 'number' ;
-        ? timesheet.rate ;
-        : parseFloat(String(timesheet.rate));
+      const rate = typeof timesheet.rate === 'number' ? timesheet.rate : parseFloat(String(timesheet.rate));
 
-      const hours = typeof timesheet.hours_used === 'number' ;
-        ? timesheet.hours_used ;
-        : parseFloat(String(timesheet.hours_used || 0));
+      const hours = typeof timesheet.hours_used === 'number' ? timesheet.hours_used : parseFloat(String(timesheet.hours_used || 0));
 
       if (isNaN(rate) || isNaN(hours)) return 0;
 
@@ -135,16 +131,14 @@ export default function Show({ auth, rental, timesheet }: Props) {
 
   // Calculate utilization percentage (hours used / available hours in a day)
   const calculateUtilization = () => {
-    const hours = typeof timesheet.hours_used === 'number' ;
-      ? timesheet.hours_used ;
-      : parseFloat(String(timesheet.hours_used || 0));
+    const hours = typeof timesheet.hours_used === 'number' ? timesheet.hours_used : parseFloat(String(timesheet.hours_used || 0));
     // Assuming 8 hour workday
     return Math.min((hours / 8) * 100, 100);
   };
 
   // Format time
   const formatTime = (time: string | null) => {
-    if (!time) return "â€"";
+    if (!time) return "�";
 
     try {
       // Check if the time is just a time string (HH:MM or HH:MM:SS)
@@ -161,13 +155,13 @@ export default function Show({ auth, rental, timesheet }: Props) {
       const parsedDate = new Date(time);
       if (isNaN(parsedDate.getTime())) {
 
-        return "â€"";
+        return "�";
       }
 
       return format(parsedDate, "h:mm a");
     } catch (error) {
 
-      return "â€"";
+      return "�";
     }
   };
 
@@ -402,7 +396,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                     {t('ttl_timesheet_details')}
                   </h1>
                   <p className="text-muted-foreground text-sm mt-1">
-                    For Rental #{rental.rental_number} â€¢ customer: {rental.customer?.company_name}
+                    For Rental #{rental.rental_number} • customer: {rental.customer?.company_name}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -598,7 +592,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         {timesheet.rentalItem?.rate_type === 'hourly' &&
                           `${typeof timesheet.rentalItem?.rate === 'number'
                               ? timesheet.rentalItem.rate.toFixed(2)
-                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per hour Ã— ${
+                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per hour × ${
                                 typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used
                                   : parseFloat(String(timesheet.hours_used || 0))
@@ -606,7 +600,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         {timesheet.rentalItem?.rate_type === 'daily' &&
                           `${typeof timesheet.rentalItem?.rate === 'number'
                               ? timesheet.rentalItem.rate.toFixed(2)
-                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per day Ã— ${
+                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per day × ${
                                 Math.ceil(typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used / 8
                                   : parseFloat(String(timesheet.hours_used || 0)) / 8)
@@ -618,7 +612,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         {timesheet.rentalItem?.rate_type === 'weekly' &&
                           `${typeof timesheet.rentalItem?.rate === 'number'
                               ? timesheet.rentalItem.rate.toFixed(2)
-                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per week Ã— ${
+                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per week × ${
                                 Math.ceil(typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used / 40
                                   : parseFloat(String(timesheet.hours_used || 0)) / 40)
@@ -630,7 +624,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
                         {timesheet.rentalItem?.rate_type === 'monthly' &&
                           `${typeof timesheet.rentalItem?.rate === 'number'
                               ? timesheet.rentalItem.rate.toFixed(2)
-                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per month Ã— ${
+                              : parseFloat(String(timesheet.rentalItem?.rate || 0)).toFixed(2)} per month × ${
                                 Math.ceil(typeof timesheet.hours_used === 'number'
                                   ? timesheet.hours_used / 160
                                   : parseFloat(String(timesheet.hours_used || 0)) / 160)

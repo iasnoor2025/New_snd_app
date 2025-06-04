@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ResourceFormModal } from '../../../Components/project/resources/ResourceModal';
-import { ResourceTable } from '../../../Components/project/resources/ResourceTable';
+import { ResourceFormModal } from '../../../components/project/resources/ResourceModal';
+import { ResourceTable } from '../../../components/project/resources/ResourceTable';
 import { useResourceFormModal } from '../../../hooks/useResourceFormModal';
 import { useResourceSubmit } from '../../../hooks/useResourceSubmit';
 import type { EquipmentResource } from '../../../types/projectResources';

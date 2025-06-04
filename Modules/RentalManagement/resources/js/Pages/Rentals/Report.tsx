@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
@@ -277,8 +277,8 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
       if (!rentals?.data) return 0;
       return rentals.data.reduce((sum, rental) => {
         // Ensure the total_amount exists and is a valid number
-        const amount = rental.total_amount !== undefined && rental.total_amount !== null;
-          ? Number(rental.total_amount);
+        const amount = (rental.total_amount !== undefined && rental.total_amount !== null)
+          ? Number(rental.total_amount)
           : 0;
 
         // Check if conversion resulted in a valid number
@@ -303,10 +303,10 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
   const averageAmount = calculateAverageAmount();
 
   // Rest of the existing calculations
-  const averageDuration = rentals?.data?.length > 0;
+  const averageDuration = rentals?.data?.length > 0
     ? rentals.data.reduce((sum, rental) => {
-        const days = rental.duration_days !== undefined && rental.duration_days !== null;
-          ? Number(rental.duration_days);
+        const days = (rental.duration_days !== undefined && rental.duration_days !== null)
+          ? Number(rental.duration_days)
           : 0;
         return sum + (isNaN(days) ? 0 : days);
       }, 0) / rentals.data.length
@@ -353,7 +353,7 @@ export default function Report({ auth, rentals, customers, filters }: Props) {
       }
     }
 
-    return parts.length > 0 ? parts.join(' â€¢ ') : 'All rentals';
+    return parts.length > 0 ? parts.join(' • ') : 'All rentals';
   };
 
   return (

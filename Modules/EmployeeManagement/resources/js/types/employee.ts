@@ -160,3 +160,15 @@ export interface User {
   created_at?: string;
   updated_at?: string;
 }
+
+export interface PerformanceReview {
+    id: number;
+    review_date: string;
+    reviewer: string;
+    rating: number;
+    status: 'pending' | 'completed';
+    strengths: string[];
+    areas_for_improvement: string[];
+    goals: string[];
+    notes?: string;
+}

@@ -1,41 +1,37 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Customer, Equipment, Rental, RentalItem } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
+import { PageProps } from '@/types';
+import AdminLayout from '@/layouts/AdminLayout';
 import { format } from "date-fns";
 import { toast } from "sonner";
 
 // Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Icons
 import { ArrowLeft } from "lucide-react";
 
 // Our components
-import RentalForm, { RentalFormValues } from '@/Modules/RentalManagement/Resources/js/components/rentals/RentalForm';
+import RentalForm, { RentalFormValues } from '../../components/rentals/RentalForm';
 
 interface Props extends PageProps {
-  customers: Customer[];
-  equipment: Equipment[];
-  rental: Rental & {
-    rentalItems?: RentalItem[];
-    rental_items?: RentalItem[];
-  };
-  employees?: { id: number; name: string }[];
+  customers: any[];
+  equipment: any[];
+  rental: any;
+  employees?: any[];
 }
 
-export default function Edit({ auth, customers, equipment, rental, employees = [] }: Props) {
+export default function Edit({ customers, equipment, rental, employees = [] }: Props) {
   const { t } = useTranslation('rental');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle form submission
-  const handleSubmit = (;
-    values: RentalFormValues,;
-    rentalItems: any[],;
+  const handleSubmit = (
+    values: RentalFormValues,
+    rentalItems: any[],
     financials: {
       subtotal: number;
       taxAmount: number;

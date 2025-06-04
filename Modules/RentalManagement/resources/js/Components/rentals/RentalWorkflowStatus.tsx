@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { useTranslation } from 'react-i18next';
 import { router, useForm } from "@inertiajs/react";
 import { Rental } from "@/types/models";

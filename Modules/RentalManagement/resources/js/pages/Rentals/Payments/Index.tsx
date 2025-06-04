@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import PaymentTracker from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/rentals/PaymentTracker';
@@ -62,7 +62,7 @@ export default function Index({ rental, payments }: Props) {
   const canCreateRentalpayments = hasPermission('rental-payments.create');
 const [activeTab, setActiveTab] = useState<string>('tracker');
 
-  const breadcrumbs = [;
+  const breadcrumbs = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Rentals', href: route('rentals.index') },
     { title: `Rental #${rental.rental_number || rental.id}`, href: route('rentals.show', rental.id) },

@@ -1,10 +1,10 @@
-﻿import React, { HTMLAttributes, forwardRef } from "react";
+import React, { HTMLAttributes, forwardRef } from "react";
 import {
   Tabs as ShadcnTabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../../../../../resources/js/Components/ui/tabs";
+} from "../../../../../../resources/js/components/ui/tabs";
 import { cn } from "../../../../../../resources/js/lib/utils";
 import { Loader2 } from "lucide-react";
 

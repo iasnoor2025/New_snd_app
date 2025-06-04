@@ -1,9 +1,9 @@
-﻿import React, { HTMLAttributes, forwardRef } from "react";
+import React, { HTMLAttributes, forwardRef } from "react";
 import {
   Alert as ShadcnAlert,
   AlertTitle,
   AlertDescription,
-} from "../../../../../../resources/js/Components/ui/alert";
+} from "../../../../../../resources/js/components/ui/alert";
 import { cn } from "../../../../../../resources/js/lib/utils";
 import { AlertCircle, CheckCircle, Info, XCircle, X } from "lucide-react";
 

@@ -6,8 +6,8 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@/Modules/EquipmentManagement/Resources/js/Components/ui/table';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/badge';
+} from '@/Modules/EquipmentManagement/Resources/js/components/ui/table';
+import { Badge } from '@/Modules/EquipmentManagement/Resources/js/components/ui/badge';
 
 interface ReplacementNeedsProps {
   replacementNeeds: {

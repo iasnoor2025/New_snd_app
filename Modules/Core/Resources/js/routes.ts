@@ -1,4 +1,4 @@
-﻿import { RouteConfig } from '@inertiajs/react';
+import { RouteConfig } from '@inertiajs/react';
 
 export const routes: RouteConfig = {
     'core.modules.index': '/modules',

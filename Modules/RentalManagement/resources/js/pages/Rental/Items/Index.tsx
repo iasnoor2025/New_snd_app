@@ -1,11 +1,11 @@
-﻿import { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
-import { DataTable } from '@/Modules/RentalManagement/Resources/js/Components/ui/data-table';
-import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
-import { Input } from '@/Modules/RentalManagement/Resources/js/Components/ui/input';
-import { Select } from '@/Modules/RentalManagement/Resources/js/Components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
+import { DataTable } from '@/Modules/RentalManagement/Resources/js/components/ui/data-table';
+import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
+import { Select } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
 import { Plus, Search, Filter } from 'lucide-react';
 import { useForm } from '@inertiajs/react';
 import { RentalItem } from '@/Modules/RentalManagement/Resources/js/Types/rental';
@@ -36,7 +36,7 @@ export const Index: FC<Props> = ({ items, filters = { search: '', status: '', ca
         }));
     };
 
-    const columns = [;
+    const columns = [
         {
             header: 'Name',
             accessorKey: 'name',

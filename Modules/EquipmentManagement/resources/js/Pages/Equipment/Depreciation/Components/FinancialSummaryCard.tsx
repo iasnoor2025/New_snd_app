@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/card';
-import { Progress } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/components/ui/card';
+import { Progress } from '@/Modules/EquipmentManagement/Resources/js/components/ui/progress';
 import { DollarSign } from 'lucide-react';
 
 interface FinancialSummaryProps {

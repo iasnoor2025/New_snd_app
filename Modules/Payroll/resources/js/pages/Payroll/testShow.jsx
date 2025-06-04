@@ -2,10 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/Components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/Payroll/Resources/js/Components/ui/table';
-import { Badge } from '@/Modules/Payroll/Resources/js/Components/ui/badge';
+import { Button } from '@/Modules/Payroll/Resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/Payroll/Resources/js/components/ui/table';
+import { Badge } from '@/Modules/Payroll/Resources/js/components/ui/badge';
 import { format } from 'date-fns';
 
 export default function Show({ auth, payroll }) {

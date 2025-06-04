@@ -1,8 +1,8 @@
-﻿import { Button as ShadcnButton } from '@/Modules/Core/Resources/js/Components/ui/button';
+import { Button as ShadcnButton } from '@/Modules/Core/Resources/js/components/ui/button';
 import { cn } from '@/Modules/Core/Resources/js/lib/utils';
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import { VariantProps } from "class-variance-authority";
-import { buttonVariants } from '@/Modules/Core/Resources/js/Components/ui/button';
+import { buttonVariants } from '@/Modules/Core/Resources/js/components/ui/button';
 import { Loader2 } from "lucide-react";
 
 /**

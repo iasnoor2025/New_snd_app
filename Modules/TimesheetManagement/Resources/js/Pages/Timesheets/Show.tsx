@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
@@ -199,7 +199,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
               </CardTitle>
               <CardDescription>
                 {timesheet.date && format(new Date(timesheet.date), 'PPP')}
-                {timesheet.project?.name && ` â€¢ ${timesheet.project.name}`}
+                {timesheet.project?.name && ` • ${timesheet.project.name}`}
               </CardDescription>
             </CardHeader>
 

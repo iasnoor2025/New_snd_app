@@ -1,14 +1,14 @@
-﻿import React, { InputHTMLAttributes, forwardRef } from "react";
-import { Input as ShadcnInput } from "../../../../../../resources/js/Components/ui/input";
+import React, { InputHTMLAttributes, forwardRef } from "react";
+import { Input as ShadcnInput } from "../../../../../../resources/js/components/ui/input";
 import { cn } from "../../../../../../resources/js/lib/utils";
-import { Label } from "../../../../../../resources/js/Components/ui/label";
+import { Label } from "../../../../../../resources/js/components/ui/label";
 import { HelpCircle } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../../../../../resources/js/Components/ui/tooltip";
+} from "../../../../../../resources/js/components/ui/tooltip";
 
 /**
  * Input component that extends shadcn/ui's input with additional features.

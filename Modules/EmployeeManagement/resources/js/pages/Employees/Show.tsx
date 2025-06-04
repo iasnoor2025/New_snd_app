@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '../../types';
@@ -296,7 +296,7 @@ const DocumentTab = ({ employeeId }: { employeeId: number }) => {
               {doc.name || 'Unnamed Document'}
             </CardTitle>
             <CardDescription className="text-xs">
-              {doc.file_type ? doc.file_type.toUpperCase() : 'Unknown'} â€¢ {formatFileSize(doc.size || 0)}
+              {doc.file_type ? doc.file_type.toUpperCase() : 'Unknown'} • {formatFileSize(doc.size || 0)}
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 pt-2">
@@ -858,10 +858,10 @@ export default function Show({
               </h1>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <span>{typeof employee?.position === 'object' && employee?.position !== null ? getTranslation(employee.position.name) : employee?.position}</span>
-                <span className="text-xs">â€¢</span>
+                <span className="text-xs">•</span>
                 <span>ID: {employee?.employee_id || 'N/A'}</span>
                 {employee?.status && getStatusBadge(employee.status)}
-                <span className="text-xs">â€¢</span>
+                <span className="text-xs">•</span>
                 <Badge
                   variant="outline"
                   className={
@@ -1124,13 +1124,13 @@ export default function Show({
                           )}
                           {employee.tuv_certification_number && (
                             <div className="flex justify-between border-b pb-2">
-                              <dt className="text-sm font-medium">TÃœV Certification</dt>
+                              <dt className="text-sm font-medium">TÜV Certification</dt>
                               <dd className="text-sm">{employee.tuv_certification_number}</dd>
                             </div>
                           )}
                           {employee.tuv_certification_expiry && (
                             <div className="flex justify-between border-b pb-2">
-                              <dt className="text-sm font-medium">TÃœV Certification Expiry</dt>
+                              <dt className="text-sm font-medium">TÜV Certification Expiry</dt>
                               <dd className="text-sm">{format(new Date(employee.tuv_certification_expiry), 'PPP')}</dd>
                             </div>
                           )}
@@ -1391,7 +1391,7 @@ export default function Show({
                           { name: 'Passport', expiry: employee.passport_expiry, number: employee.passport_number },
                           { name: 'Driving License', expiry: employee.driving_license_expiry, number: employee.driving_license_number },
                           { name: 'Operator License', expiry: employee.operator_license_expiry, number: employee.operator_license_number },
-                          { name: 'TÃœV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
+                          { name: 'TÜV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
                           { name: 'SPSP License', expiry: employee.spsp_license_expiry, number: employee.spsp_license_number },
                         ].filter(doc => doc.number); // Only count documents that have a number
 
@@ -1453,7 +1453,7 @@ export default function Show({
                           { name: 'Passport', expiry: employee.passport_expiry, number: employee.passport_number },
                           { name: 'Driving License', expiry: employee.driving_license_expiry, number: employee.driving_license_number },
                           { name: 'Operator License', expiry: employee.operator_license_expiry, number: employee.operator_license_number },
-                          { name: 'TÃœV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
+                          { name: 'TÜV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
                           { name: 'SPSP License', expiry: employee.spsp_license_expiry, number: employee.spsp_license_number },
                         ].filter(doc => doc.number && doc.expiry); // Only consider documents with both number and expiry
 
@@ -1661,7 +1661,7 @@ export default function Show({
                 { name: 'Passport', expiry: employee.passport_expiry, number: employee.passport_number },
                 { name: 'Driving License', expiry: employee.driving_license_expiry, number: employee.driving_license_number },
                 { name: 'Operator License', expiry: employee.operator_license_expiry, number: employee.operator_license_number },
-                { name: 'TÃœV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
+                { name: 'TÜV Certification', expiry: employee.tuv_certification_expiry, number: employee.tuv_certification_number },
                 { name: 'SPSP License', expiry: employee.spsp_license_expiry, number: employee.spsp_license_number },
               ]}
             /> */}

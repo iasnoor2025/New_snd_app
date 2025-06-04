@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
-import { Input } from '@/Modules/RentalManagement/Resources/js/Components/ui/input';
-import { Label } from '@/Modules/RentalManagement/Resources/js/Components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/Components/ui/select';
-import { Textarea } from '@/Modules/RentalManagement/Resources/js/Components/ui/textarea';
+import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
+import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
+import { Textarea } from '@/Modules/RentalManagement/Resources/js/components/ui/textarea';
 import { Equipment, Employee, RentalItem } from '@/Modules/RentalManagement/Resources/js/types';
 
 interface Props {

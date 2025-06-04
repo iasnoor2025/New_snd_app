@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, usePage } from '@inertiajs/react';
 import { Descriptions, Table, Typography, Divider } from 'antd';
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Rental, RentalItem, Equipment } from '@/Modules/RentalManagement/Resources/js/types/models';
+import { PageProps } from '@/types';
+import { Rental, RentalItem, Equipment } from '@/types/models';
 import { getTranslation } from '@/utils/translation';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'; 
 
 const { Title, Text } = Typography;
 
@@ -54,7 +54,7 @@ export default function Print({ rental }: Props) {
     return status.toUpperCase();
   };
 
-  const rentalItemColumns = [;
+  const rentalItemColumns = [
     {
       title: 'Equipment',
       dataIndex: ['equipment', 'name'],

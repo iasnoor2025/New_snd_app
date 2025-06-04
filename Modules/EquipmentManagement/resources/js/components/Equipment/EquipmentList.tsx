@@ -1,4 +1,4 @@
-﻿import { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { formatDateTime } from '@/utils/date-time';
 
@@ -104,37 +104,37 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('name')}
-                                Name {sortField === 'name' && (sortDirection === 'asc' ? 'â†‘' : 'â†“')}
+                                Name {sortField === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('category')}
-                                Category {sortField === 'category' && (sortDirection === 'asc' ? 'â†‘' : 'â†“')}
+                                Category {sortField === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('daily_rate')}
-                                Daily Rate {sortField === 'daily_rate' && (sortDirection === 'asc' ? 'â†‘' : 'â†“')}
+                                Daily Rate {sortField === 'daily_rate' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('status')}
-                                Status {sortField === 'status' && (sortDirection === 'asc' ? 'â†‘' : 'â†“')}
+                                Status {sortField === 'status' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('serial_number')}
-                                Serial Number {sortField === 'serial_number' && (sortDirection === 'asc' ? 'â†‘' : 'â†“')}
+                                Serial Number {sortField === 'serial_number' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('last_maintenance_date')}
-                                Last Maintenance {sortField === 'last_maintenance_date' && (sortDirection === 'asc' ? 'â†‘' : 'â†“')}
+                                Last Maintenance {sortField === 'last_maintenance_date' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th scope="col" className="relative px-6 py-3">
                                 <span className="sr-only">Actions</span>

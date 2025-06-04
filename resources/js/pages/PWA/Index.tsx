@@ -1,11 +1,11 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/app-layout';
-import PWADashboard from '@/Components/PWA/PWADashboard';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
-import NotificationSettings from '@/Components/PWA/NotificationSettings';
-import OfflineSync from '@/Components/PWA/OfflineSync';
+import PWADashboard from '@/components/PWA/PWADashboard';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import NotificationSettings from '@/components/PWA/NotificationSettings';
+import OfflineSync from '@/components/PWA/OfflineSync';
 import {
     Smartphone,
     Bell,

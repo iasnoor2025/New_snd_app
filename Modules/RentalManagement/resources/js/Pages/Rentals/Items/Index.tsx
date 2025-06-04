@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/RentalManagement/Resources/js/Components/ui/table';
+import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/RentalManagement/Resources/js/components/ui/table';
 import { formatCurrency } from '@/Modules/RentalManagement/Resources/js/lib/utils';
 import { RentalItem } from '@/Modules/RentalManagement/Resources/js/types/rental';
 import { getTranslation } from '@/utils/translation';

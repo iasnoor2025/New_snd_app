@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { differenceInDays, format } from "date-fns";
 import { CheckCircle, FileText, Printer, Download, BarChart3, MessageSquare, Star } from "lucide-react";
-import RentalItemsCard from "@/components/rentals/RentalItemsCard";
-import InvoicesCard from "@/components/rentals/InvoicesCard";
-import DocumentsCard from "@/components/rentals/DocumentsCard";
-import RentalAnalytics from "@/components/rentals/RentalAnalytics";
-import { formatCurrency } from "@/lib/utils";
+import RentalItemsCard from "../RentalItemsCard";
+import InvoicesCard from "../InvoicesCard";
+import DocumentsCard from "../DocumentsCard";
+import RentalAnalytics from "../RentalAnalytics";
+import { formatCurrency } from "@/utils/format";
 import { Progress } from '@/components/ui/progress';
 
 // Define interface for document
@@ -233,6 +233,7 @@ export default function CompletedSection({
                     className="flex-1"
                     onClick={handleGenerateReport}
                     disabled={isGeneratingReport}
+                  >
                     <BarChart3 className="mr-2 h-4 w-4" />
                     {isGeneratingReport ? "Generating..." : "Generate Report"}
                   </Button>
@@ -312,11 +313,11 @@ export default function CompletedSection({
         </TabsContent>
 
         <TabsContent value="analytics">
-          <RentalAnalytics
+          <RentalAnalytics 
             rental={rental}
-            metrics={metrics}
+            maintenanceRecords={maintenanceRecords?.data}
             weatherData={weatherData}
-            maintenanceRecords={maintenanceRecords?.data || []}
+            metrics={metrics}
           />
         </TabsContent>
       </Tabs>

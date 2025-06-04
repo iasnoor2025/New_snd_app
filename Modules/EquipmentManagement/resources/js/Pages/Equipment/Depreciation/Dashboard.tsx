@@ -24,12 +24,12 @@ import {
   EquipmentNeedingReplacement
 } from '@/Modules/EquipmentManagement/Resources/js/types/DepreciationTypes';
 import DepreciationTrackingService from '@/Modules/EquipmentManagement/Resources/js/services/DepreciationTrackingService';
-import FinancialSummaryCard from './Components/FinancialSummaryCard';
-import EquipmentCountsCard from './Components/EquipmentCountsCard';
-import ReplacementNeedsTable from './Components/ReplacementNeedsTable';
-import DepreciationByCategoryChart from './Components/DepreciationByCategoryChart';
-import AssetValueTrendChart from './Components/AssetValueTrendChart';
-import CategorySummaryTable from './Components/CategorySummaryTable';
+import FinancialSummaryCard from './components/FinancialSummaryCard';
+import EquipmentCountsCard from './components/EquipmentCountsCard';
+import ReplacementNeedsTable from './components/ReplacementNeedsTable';
+import DepreciationByCategoryChart from './components/DepreciationByCategoryChart';
+import AssetValueTrendChart from './components/AssetValueTrendChart';
+import CategorySummaryTable from './components/CategorySummaryTable';
 import { LoadingSpinner } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/LoadingSpinner';
 import { AlertTriangle, TrendingDown, Calculator, Clock, BarChart, PieChart } from 'lucide-react';
 

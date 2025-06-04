@@ -1,11 +1,10 @@
-﻿import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router, useForm } from "@inertiajs/react";
-import { Employee, Equipment, Rental, RentalItem, RentalTimesheet } from "@/types/models";
 import { format } from "date-fns";
 import { z } from "zod";
 
-// Shadcn UI Components
+// Standardize all UI imports to '@/components/ui/'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,12 +49,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
-  rentals?: Rental[];
-  rentalItems?: RentalItem[];
-  operators?: Employee[];
-  equipment?: Equipment[];
-  timesheet?: RentalTimesheet;
-  rental?: Rental;
+  rentals?: any[];
+  rentalItems?: any[];
+  operators?: any[];
+  equipment?: any[];
+  timesheet?: any;
+  rental?: any;
   isEditing?: boolean;
   auth?: {
     user: {
@@ -189,13 +188,13 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
   const { t } = useTranslation('rental');
 
   const [hours, setHours] = useState<number | null>(0);
-  const [selectedRental, setSelectedRental] = useState<Rental | null>(null);
+  const [selectedRental, setSelectedRental] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [useDirectSubmit, setUseDirectSubmit] = useState(false);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
-  const [selectedRentalItem, setSelectedRentalItem] = useState<RentalItem | null>(null);
+  const [selectedRentalItem, setSelectedRentalItem] = useState<any | null>(null);
   const [operatorAbsent, setOperatorAbsent] = useState<boolean>(false);
 
   // Get the selected rental from props or from form data
@@ -215,7 +214,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
   };
 
   // Get the rate for a rental item based on its rate type
-  const getRentalItemRate = (rentalItem: RentalItem) => {
+  const getRentalItemRate = (rentalItem: any) => {
     if (!rentalItem?.equipment) return rentalItem?.rate || 0;
 
     const rateType = rentalItem.rate_type;
@@ -309,7 +308,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
 
       // Find the rental item
       const currentRentalItem = validRentalItems.find(item =>
-        item.id.toString() === timesheet.rental_item_id?.toString();
+        item.id.toString() === timesheet.rental_item_id?.toString()
       );
 
       if (currentRentalItem) {
@@ -492,8 +491,8 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
   };
 
   // Check if user has admin/manager/accountant role
-  const hasAdminAccess = auth?.user?.role === 'admin' || 
-                        auth?.user?.role === 'manager' || 
+  const hasAdminAccess = auth?.user?.role === 'admin' ||
+                        auth?.user?.role === 'manager' ||
                         auth?.user?.role === 'accountant';
 
   // Check if timesheet is completed
@@ -569,28 +568,31 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
     }
 
     return (
-      <Select
-        value={form.data.rental_item_id?.toString() || ""}
-        onValueChange={handleRentalItemChange}
-        <SelectTrigger>
-          <SelectValue placeholder={t('ph_select_equipment')} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{t('lbl_available_equipment')}</SelectLabel>
-            {validRentalItems.map((item) => (
-              <SelectItem key={item.id} value={item.id.toString()}>
-                {item.equipment?.name || "Unnamed Equipment"}
-                {item.equipment?.serial_number && (
-                  <span className="text-muted-foreground ml-2">
-                    (SN: {item.equipment.serial_number})
-                  </span>
-                )}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <>
+        <Select
+          value={form.data.rental_item_id?.toString() || ""}
+          onValueChange={handleRentalItemChange}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder={t('ph_select_equipment')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>{t('lbl_available_equipment')}</SelectLabel>
+              {validRentalItems.map((item) => (
+                <SelectItem key={item.id} value={item.id.toString()}>
+                  {item.equipment?.name || "Unnamed Equipment"}
+                  {item.equipment?.serial_number && (
+                    <span className="text-muted-foreground ml-2">
+                      (SN: {item.equipment.serial_number})
+                    </span>
+                  )}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </>
     );
   };
 
@@ -687,28 +689,22 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {isCompleted ? (
-                      <DropdownMenuItem
-                        onClick={() => handleTimesheetAction('approve')}
+                    <>
+                      <DropdownMenuItem onClick={() => handleTimesheetAction('approve')}>
                         Approve Timesheet
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleTimesheetAction('reject')}
+                      <DropdownMenuItem onClick={() => handleTimesheetAction('reject')}>
                         Reject Timesheet
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleTimesheetAction('void')}
-                        className="text-destructive"
+                      <DropdownMenuItem onClick={() => handleTimesheetAction('void')} className="text-destructive">
                         Void Timesheet
                       </DropdownMenuItem>
                     </>
                   ) : null}
-                  <DropdownMenuItem
-                    onClick={() => handleTimesheetAction('edit')}
+                  <DropdownMenuItem onClick={() => handleTimesheetAction('edit')}>
                     Edit Timesheet
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleTimesheetAction('delete')}
-                    className="text-destructive"
+                  <DropdownMenuItem onClick={() => handleTimesheetAction('delete')} className="text-destructive">
                     Delete Timesheet
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -739,6 +735,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                       handleOperatorAbsentChange(false);
                     }
                   }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder={t('ph_select_operator')} />
                   </SelectTrigger>
@@ -769,7 +766,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                   <Label
                     htmlFor="operator_absent"
                     className="text-base flex items-center gap-1 cursor-pointer"
-                    <UserX className="h-4 w-4 text-red-600" />
+                  >
                     {t('mark_operator_as_absent')}
                   </Label>
                   <p className="text-sm text-muted-foreground">
@@ -799,6 +796,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                           form.errors.date && "border-destructive",
                         )}
                         disabled={submitting}
+                      >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {form.data.date ? (
                           format(new Date(form.data.date), "MMMM d, yyyy")
@@ -950,6 +948,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
               variant="outline"
               onClick={() => window.history.back()}
               disabled={submitting}
+            >
               Cancel
             </Button>
             <div className="flex gap-2">
@@ -957,6 +956,7 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                 type="submit"
                 disabled={submitting}
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              >
                 {isEditing ? "Update" : "Create"} Timesheet
               </Button>
             </div>
@@ -1012,20 +1012,19 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                   <span>{operatorAbsent ? "0" : form.data.hours_used}</span>
                 </div>
                 {selectedRentalItem && (
-                    <div className="grid grid-cols-2">
-                      <span>Rate:</span>
-                      <span>${getRentalItemRate(selectedRentalItem)}/hr</span>
-                    </div>
-                    <div className="grid grid-cols-2 font-bold">
-                      <span>Total:</span>
-                      <span>
-                        ${operatorAbsent ?
-                          "0.00" :
-                          (getRentalItemRate(selectedRentalItem) * (parseFloat(form.data.hours_used) || 0)).toFixed(2)
-                        }
-                      </span>
-                    </div>
-                  </>
+                  <div className="grid grid-cols-2">
+                    <span>Rate:</span>
+                    <span>${getRentalItemRate(selectedRentalItem)}/hr</span>
+                  </div>
+                  <div className="grid grid-cols-2 font-bold">
+                    <span>Total:</span>
+                    <span>
+                      ${operatorAbsent ?
+                        "0.00" :
+                        (getRentalItemRate(selectedRentalItem) * (parseFloat(form.data.hours_used) || 0)).toFixed(2)
+                      }
+                    </span>
+                  </div>
                 )}
               </div>
             </CardContent>
@@ -1035,16 +1034,4 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
     </form>
   );
 }
-
-
-
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
 

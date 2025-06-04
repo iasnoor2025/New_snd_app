@@ -3,9 +3,9 @@ import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Settings/Resources/js/types';
 import { Setting } from '../types';
 import AppLayout from '@/Modules/Settings/Resources/js/Layouts/AppLayout';
-import Button from '@/Modules/Settings/Resources/js/Components/ui/Button';
-import Card from '@/Modules/Settings/Resources/js/Components/ui/Card';
-import Tabs from '@/Modules/Settings/Resources/js/Components/ui/Tabs';
+import Button from '@/Modules/Settings/Resources/js/components/ui/Button';
+import Card from '@/Modules/Settings/Resources/js/components/ui/Card';
+import Tabs from '@/Modules/Settings/Resources/js/components/ui/Tabs';
 import { Building2, Bell, FileText, Settings, ChevronRight } from 'lucide-react';
 
 interface SettingsGroup {

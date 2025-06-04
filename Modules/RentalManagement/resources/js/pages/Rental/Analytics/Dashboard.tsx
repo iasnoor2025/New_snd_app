@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/Components/ui/select';
-import { LineChart, BarChart, PieChart, MapChart } from '@/Modules/RentalManagement/Resources/js/Components/ui/charts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
+import { LineChart, BarChart, PieChart, MapChart } from '@/Modules/RentalManagement/Resources/js/components/ui/charts';
 import { formatCurrency, formatPercentage } from '@/Modules/RentalManagement/Resources/js/lib/utils';
 
 interface Props {

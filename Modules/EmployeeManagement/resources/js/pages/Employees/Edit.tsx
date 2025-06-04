@@ -4,10 +4,10 @@ import { Head, Link, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
 import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
 import { Employee, User } from '@/Modules/EmployeeManagement/Resources/js/types/models';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/card';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/button';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EmployeeManagement/Resources/js/components/ui/card';
+import { Button } from '@/Modules/EmployeeManagement/Resources/js/components/ui/button';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/Modules/EmployeeManagement/Resources/js/components/ui/form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EmployeeManagement/Resources/js/components/ui/tabs';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,8 +18,8 @@ import { SectionHeader } from '@/Modules/EmployeeManagement/Resources/js/Modules
 import { COUNTRIES, EMPLOYEE_ROLES, EMPLOYEE_STATUS } from '@/Modules/EmployeeManagement/Resources/js/constants/employee';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { Input } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EmployeeManagement/Resources/js/Components/ui/select';
+import { Input } from '@/Modules/EmployeeManagement/Resources/js/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EmployeeManagement/Resources/js/components/ui/select';
 import { getTranslation } from '@/utils/translation';
 import SalaryInfoTab from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/employees/create/tabs/SalaryInfoTab';
 

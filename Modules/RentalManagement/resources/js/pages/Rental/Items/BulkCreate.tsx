@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Components/ui/card';
-import { Button } from '@/Modules/RentalManagement/Resources/js/Components/ui/button';
-import { Input } from '@/Modules/RentalManagement/Resources/js/Components/ui/input';
-import { Select } from '@/Modules/RentalManagement/Resources/js/Components/ui/select';
-import { Textarea } from '@/Modules/RentalManagement/Resources/js/Components/ui/textarea';
-import { Label } from '@/Modules/RentalManagement/Resources/js/Components/ui/label';
-import { Alert, AlertDescription } from '@/Modules/RentalManagement/Resources/js/Components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
+import { Select } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
+import { Textarea } from '@/Modules/RentalManagement/Resources/js/components/ui/textarea';
+import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
+import { Alert, AlertDescription } from '@/Modules/RentalManagement/Resources/js/components/ui/alert';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 
 interface ItemTemplate {

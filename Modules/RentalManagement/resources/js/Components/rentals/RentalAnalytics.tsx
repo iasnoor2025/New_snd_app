@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from '@/components/ui/progress';
@@ -193,7 +193,7 @@ export default function RentalAnalytics({
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold">{weatherData.temperature}Â°C</div>
+              <div className="text-2xl font-bold">{weatherData.temperature}°C</div>
               <Badge variant={weatherData.temperature > 35 ? "destructive" : weatherData.temperature > 25 ? "secondary" : "default"}>
                 {weatherData.conditions}
               </Badge>

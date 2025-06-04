@@ -1,4 +1,4 @@
-﻿import React, { HTMLAttributes, forwardRef } from "react";
+import React, { HTMLAttributes, forwardRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../../../../../../resources/js/Components/ui/dialog";
+} from "../../../../../../resources/js/components/ui/dialog";
 import { cn } from "../../../../../../resources/js/lib/utils";
 import { Button } from "./Button";
 import { X, Loader2 } from "lucide-react";

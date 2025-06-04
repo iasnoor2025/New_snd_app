@@ -77,7 +77,7 @@ const formSchema = z.object({
 });
 
 // Define leave types constant array to ensure it's always available
-const LEAVE_TYPES = [;
+const LEAVE_TYPES = [
   { value: 'annual', label: 'Annual Leave' },
   { value: 'vacation', label: 'Vacation Leave' },
   { value: 'sick', label: 'Sick Leave' },

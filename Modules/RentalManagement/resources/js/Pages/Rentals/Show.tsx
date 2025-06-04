@@ -1,11 +1,11 @@
-﻿import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
+import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from '@/types';
 import { Rental, RentalItem, PermissionString } from '@/types/models';
 import AdminLayout from '@/layouts/AdminLayout';
-import RentalItemsTable from '../../Components/rentals/RentalItemsTable';
-import RentalWorkflowStatus from '../../Components/rentals/RentalWorkflowStatus';
+import RentalItemsTable from '../../components/rentals/RentalItemsTable';
+import RentalWorkflowStatus from '../../components/rentals/RentalWorkflowStatus';
 import { format, differenceInDays, addDays, isAfter, isBefore } from "date-fns";
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
@@ -144,21 +144,21 @@ import {
   DollarSign
 } from "lucide-react";
 import { toast } from 'sonner';
-import RentalAnalytics from '../../Components/rentals/RentalAnalytics';
-// import MaintenanceRecordList from '../../Components/maintenance/MaintenanceRecordList';
-// import PaymentStatusBadge from '../../Components/shared/PaymentStatusBadge';
-// import MapView from '../../Components/maps/MapView';
+import RentalAnalytics from '../../components/rentals/RentalAnalytics';
+// import MaintenanceRecordList from '../../components/maintenance/MaintenanceRecordList';
+// import PaymentStatusBadge from '../../components/shared/PaymentStatusBadge';
+// import MapView from '../../components/maps/MapView';
 import { formatCurrency } from '@/lib/utils';
 
 // Other components
-import RentalTimeline from '../../Components/rentals/RentalTimeline';
-import RentalExtensionForm from '../../Components/rentals/RentalExtensionForm';
-// import DocumentsViewer from '../../Components/documents/DocumentsViewer';
+import RentalTimeline from '../../components/rentals/RentalTimeline';
+import RentalExtensionForm from '../../components/rentals/RentalExtensionForm';
+// import DocumentsViewer from '../../components/documents/DocumentsViewer';
 
 // Add import for QRCode component
 import QRCode from '@/components/ui/qr-code';
-import { RentalWorkflowStepper } from '../../Components/rentals/RentalWorkflowStepper';
-import { RentalWorkflowActions } from '../../Components/rentals/RentalWorkflowActions';
+import { RentalWorkflowStepper } from '../../components/rentals/RentalWorkflowStepper';
+import { RentalWorkflowActions } from '../../components/rentals/RentalWorkflowActions';
 
 // Add Echo declaration for TypeScript
 declare global {
@@ -167,29 +167,29 @@ declare global {
   }
 }
 
-import RentalNotificationsPanel from '../../Components/rentals/RentalNotificationsPanel';
-import RentalExtensionDialog from '../../Components/rentals/RentalExtensionDialog';
-import QuotationGenerator from '../../Components/rentals/QuotationGenerator';
+import RentalNotificationsPanel from '../../components/rentals/RentalNotificationsPanel';
+import RentalExtensionDialog from '../../components/rentals/RentalExtensionDialog';
+import QuotationGenerator from '../../components/rentals/QuotationGenerator';
 
 // New components
-import StatusTimeline from '../../Components/rentals/StatusTimeline';
-import InvoicesCard from '../../Components/rentals/InvoicesCard';
-import DocumentsCard from '../../Components/rentals/DocumentsCard';
+import StatusTimeline from '../../components/rentals/StatusTimeline';
+import InvoicesCard from '../../components/rentals/InvoicesCard';
+import DocumentsCard from '../../components/rentals/DocumentsCard';
 
 // Our custom components
-import RentalInfoCard from '../../Components/rentals/RentalInfoCard';
-import CustomerCard from '../../Components/rentals/CustomerCard';
-import RentalItemsCard from '../../Components/rentals/RentalItemsCard';
-import RentalActionsCard from '../../Components/rentals/RentalActionsCard';
+import RentalInfoCard from '../../components/rentals/RentalInfoCard';
+import CustomerCard from '../../components/rentals/CustomerCard';
+import RentalItemsCard from '../../components/rentals/RentalItemsCard';
+import RentalActionsCard from '../../components/rentals/RentalActionsCard';
 
 // Lazy load workflow-specific components
-const PendingSection = lazy(() => import("../../Components/rentals/workflow/PendingSection"));
-const QuotationSection = lazy(() => import("../../Components/rentals/workflow/QuotationSection"));
-const MobilizationSection = lazy(() => import("../../Components/rentals/workflow/MobilizationSection"));
-const ActiveSection = lazy(() => import("../../Components/rentals/workflow/ActiveSection"));
-const CompletedSection = lazy(() => import("../../Components/rentals/workflow/CompletedSection"));
-const CancelledSection = lazy(() => import("../../Components/rentals/workflow/CancelledSection"));
-const OverdueSection = lazy(() => import("../../Components/rentals/workflow/OverdueSection"));
+const PendingSection = lazy(() => import("../../components/rentals/workflow/PendingSection"));
+const QuotationSection = lazy(() => import("../../components/rentals/workflow/QuotationSection"));
+const MobilizationSection = lazy(() => import("../../components/rentals/workflow/MobilizationSection"));
+const ActiveSection = lazy(() => import("../../components/rentals/workflow/ActiveSection"));
+const CompletedSection = lazy(() => import("../../components/rentals/workflow/CompletedSection"));
+const CancelledSection = lazy(() => import("../../components/rentals/workflow/CancelledSection"));
+const OverdueSection = lazy(() => import("../../components/rentals/workflow/OverdueSection"));
 
 interface ExtendedRental extends Rental {
   subtotal: number;
@@ -898,10 +898,10 @@ export default function Show({
   // Progress of rental displayed as emoji
   const getRentalProgressEmoji = () => {
     const progress = calculateProgress();
-    if (progress < 25) return "ðŸŸ¢";
-    if (progress < 50) return "ðŸŸ¡";
-    if (progress < 75) return "ðŸŸ ";
-    return "ðŸ"´";
+    if (progress < 25) return "🟢";
+    if (progress < 50) return "🟡";
+    if (progress < 75) return "🟠";
+    return "�";
   };
 
   // Get warning message if rental is nearing completion or overdue

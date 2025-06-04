@@ -88,7 +88,7 @@ const formSchema = z.object({
 export default function LeaveRequestEdit({ leaveRequest, employees = [] }: Props) {
   const [processing, setProcessing] = useState(false);
 
-  const leaveTypes = [;
+  const leaveTypes = [
     { id: 'annual', name: 'Annual Leave' },
     { id: 'sick', name: 'Sick Leave' },
     { id: 'personal', name: 'Personal Leave' },

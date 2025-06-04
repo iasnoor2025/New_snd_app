@@ -1,10 +1,10 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Modules/EquipmentManagement/Resources/js/Layouts/AppLayout';
-import Pagination from '@/Modules/EquipmentManagement/Resources/js/Components/Pagination';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/table';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Components/ui/badge';
+import Pagination from '@/Modules/EquipmentManagement/Resources/js/components/Pagination';
+import { Button } from '@/Modules/EquipmentManagement/Resources/js/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/EquipmentManagement/Resources/js/components/ui/table';
+import { Badge } from '@/Modules/EquipmentManagement/Resources/js/components/ui/badge';
 import { formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/date';
 import { getTranslation } from '@/utils/translation';
 
