@@ -261,16 +261,15 @@ class TimesheetReportController extends Controller
         $filename = 'timesheets_' . $monthYear;
         if ($employeeId) {
             // Ensure ID is numeric
-        if (!is_numeric($employeeId)) {
-            abort(404, 'Invalid ID provided');
-        }
-        // Ensure ID is numeric
-        if (!is_numeric($employeeId)) {
-            abort(404, 'Invalid ID provided');
-        }
-        $employee = Employee::find($employeeId);
+            if (!is_numeric($employeeId)) {
+                abort(404, 'Invalid ID provided');
+            }
+
+            $employee = Employee::find($employeeId);
             if ($employee) {
-                $filename .= '_' . strtolower(str_replace(' ', '_', $employee->first_name . '_' . $employee->last_name));
+                $filename .= '_' . strtolower(
+                    str_replace(' ', '_', $employee->first_name . '_' . $employee->last_name)
+                );
             }
         }
 
