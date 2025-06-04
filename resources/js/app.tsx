@@ -163,148 +163,153 @@ createInertiaApp({
     resolve: async (name) => {
         // First try to resolve from main app's pages
         try {
-            const component = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+            const component = await resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx'));
             return component;
         } catch (error) {
-            // Handle Laravel's Inertia::render('Module::Page') pattern (like Employee module)
-            if (name.includes('::')) {
-                const [module, page] = name.split('::');
-                // Try both Pages and pages directories, and both .tsx and .jsx
+            try {
+                const component = await resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+                return component;
+            } catch (e) {
+                // Handle Laravel's Inertia::render('Module::Page') pattern (like Employee module)
+                if (name.includes('::')) {
+                    const [module, page] = name.split('::');
+                    // Try both Pages and pages directories, and both .tsx and .jsx
+                    const possiblePaths = [
+                        `./Modules/${module}/resources/js/Pages/${page}.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}.jsx`,
+                        `./Modules/${module}/resources/js/pages/${page}.tsx`,
+                        `./Modules/${module}/resources/js/pages/${page}.jsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
+                        `./Modules/${module}/resources/js/pages/${page}/Index.tsx`,
+                        `./Modules/${module}/resources/js/pages/${page}/Index.jsx`,
+                    ];
+                    for (const path of possiblePaths) {
+                        if (path in modulePages) {
+                            return await modulePages[path]();
+                        }
+                    }
+                }
+
+                // First check in our combined page mappings
+                const mappedPath = allPageMappings[name];
+                if (mappedPath) {
+                    // Try both with and without leading slash
+                    const possibleKeys = [mappedPath, mappedPath.replace(/^\./, ''), '/' + mappedPath.replace(/^\./, '')];
+                    for (const key of possibleKeys) {
+                        if (key in modulePages) {
+                            return await modulePages[key]();
+                        }
+                    }
+                }
+
+                // Direct lookup for Employee pages that we know about (legacy approach)
+                if (name in employeePages && employeePages[name] in modulePages) {
+                    try {
+                        const pagePath = employeePages[name];
+                        return await modulePages[pagePath]();
+                    } catch (e) {
+                        console.error(`Failed to import ${name} page directly:`, e);
+                    }
+                }
+
+                // Try loading the page from any module
+                const moduleName = name.split('/')[0]; // Extract module name, like 'Employees' from 'Employees/Index'
+                const pagePath = name.split('/').slice(1).join('/'); // Extract page path, like 'Index' from 'Employees/Index'
+
+                // Get potential modules for this page
+                const potentialModules = moduleMap[moduleName] || Object.values(moduleMap).flat();
+
+                // Try each potential module
+                for (const module of potentialModules) {
                 const possiblePaths = [
-                    `./Modules/${module}/resources/js/Pages/${page}.tsx`,
-                    `./Modules/${module}/resources/js/Pages/${page}.jsx`,
-                    `./Modules/${module}/resources/js/pages/${page}.tsx`,
-                    `./Modules/${module}/resources/js/pages/${page}.jsx`,
-                    `./Modules/${module}/resources/js/Pages/${page}/Index.tsx`,
-                    `./Modules/${module}/resources/js/Pages/${page}/Index.jsx`,
-                    `./Modules/${module}/resources/js/pages/${page}/Index.tsx`,
-                    `./Modules/${module}/resources/js/pages/${page}/Index.jsx`,
-                ];
-                for (const path of possiblePaths) {
-                    if (path in modulePages) {
-                        return await modulePages[path]();
-                    }
-                }
-            }
+                        `./Modules/${module}/resources/js/pages/${name}.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${name}.tsx`,
+                        // For exact module page match (like Employees/Index in EmployeeManagement)
+                        `./Modules/${module}/resources/js/pages/${pagePath}.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${pagePath}.tsx`,
+                        // Common pattern: Module/pages/PagePrefix/PageName
+                        `./Modules/${module}/resources/js/pages/${moduleName}/${pagePath}.tsx`,
+                        `./Modules/${module}/resources/js/Pages/${moduleName}/${pagePath}.tsx`,
 
-            // First check in our combined page mappings
-            const mappedPath = allPageMappings[name];
-            if (mappedPath) {
-                // Try both with and without leading slash
-                const possibleKeys = [mappedPath, mappedPath.replace(/^\./, ''), '/' + mappedPath.replace(/^\./, '')];
-                for (const key of possibleKeys) {
-                    if (key in modulePages) {
-                        return await modulePages[key]();
-                    }
-                }
-            }
+                    ];
 
-            // Direct lookup for Employee pages that we know about (legacy approach)
-            if (name in employeePages && employeePages[name] in modulePages) {
-                try {
-                    const pagePath = employeePages[name];
-                    return await modulePages[pagePath]();
-                } catch (e) {
-                    console.error(`Failed to import ${name} page directly:`, e);
-                }
-            }
-
-            // Try loading the page from any module
-            const moduleName = name.split('/')[0]; // Extract module name, like 'Employees' from 'Employees/Index'
-            const pagePath = name.split('/').slice(1).join('/'); // Extract page path, like 'Index' from 'Employees/Index'
-
-            // Get potential modules for this page
-            const potentialModules = moduleMap[moduleName] || Object.values(moduleMap).flat();
-
-            // Try each potential module
-            for (const module of potentialModules) {
-            const possiblePaths = [
-                    `./Modules/${module}/resources/js/pages/${name}.tsx`,
-                    `./Modules/${module}/resources/js/Pages/${name}.tsx`,
-                    // For exact module page match (like Employees/Index in EmployeeManagement)
-                    `./Modules/${module}/resources/js/pages/${pagePath}.tsx`,
-                    `./Modules/${module}/resources/js/Pages/${pagePath}.tsx`,
-                    // Common pattern: Module/pages/PagePrefix/PageName
-                    `./Modules/${module}/resources/js/pages/${moduleName}/${pagePath}.tsx`,
-                    `./Modules/${module}/resources/js/Pages/${moduleName}/${pagePath}.tsx`,
-
-                ];
-
-                for (const path of possiblePaths) {
-                    if (path in modulePages) {
-                        return await modulePages[path]();
-                    }
-                }
-            }
-
-            // Try more specific patterns for known module pages using our helper
-            const modulePatternMap: Record<string, [string, string]> = {
-                'Employees/Index': ['EmployeeManagement', 'Index.tsx'],
-                'Projects/Index': ['ProjectManagement', 'Index.tsx'],
-                'Rentals/Index': ['RentalManagement/Rentals', 'Index.tsx'],
-                'Timesheets/Index': ['TimesheetManagement/Timesheets', 'Index.tsx'],
-                'Equipment/Index': ['EquipmentManagement', 'Index.tsx'],
-                'Settings/Index': ['Settings', 'Index.tsx'],
-                'Payrolls/Index': ['Payroll', 'Index.tsx'],
-                'LeaveRequests/Index': ['LeaveManagement', 'Index.tsx'],
-                'Customers/Index': ['CustomerManagement', 'Index.tsx'],
-
-            };
-
-            if (name in modulePatternMap) {
-                const [modulePattern, pagePattern] = modulePatternMap[name];
-                const specificPaths = findModulePagesByPattern(modulePattern, pagePattern)
-                  .map(p => p.replace(/^\//, './'))
-                  .filter(p => p.endsWith(`/${modulePattern}/${pagePattern}`));
-
-                if (specificPaths.length > 0) {
-                    return await modulePages[specificPaths[0]]();
-              }
-            }
-
-            // Try generic match for any module as a last resort
-            const normalizedName = name.replace(/\\/g, '/');
-            for (const key in modulePages) {
-              const keyNoExt = key.replace(/\.tsx$/, '').replace(/\\/g, '/');
-                if (keyNoExt.endsWith(`/${normalizedName}`) ||
-                    keyNoExt.toLowerCase().endsWith(`/${normalizedName.toLowerCase()}`)) {
-                return await modulePages[key]();
-              }
-            }
-
-            // Try to infer pattern for common page types (Create, Edit, Show)
-            if (name.includes('/')) {
-                const [modulePartRaw, pagePartRaw] = name.split('/', 2);
-                const modulePart = modulePartRaw.trim();
-                const pagePart = pagePartRaw.trim();
-                if (['Create', 'Edit', 'Show', 'Index'].includes(pagePart) && modulePart in moduleMap) {
-                    const possibleModules = moduleMap[modulePart];
-
-                    for (const moduleType of possibleModules) {
-                        // First try direct path in the module
-                        const directPath = `./Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`;
-                        if (directPath in modulePages) {
-                            return await modulePages[directPath]();
-                        }
-
-                        // Then try module part as directory
-                        const subDirPath = `./Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`;
-                        if (subDirPath in modulePages) {
-                            return await modulePages[subDirPath]();
+                    for (const path of possiblePaths) {
+                        if (path in modulePages) {
+                            return await modulePages[path]();
                         }
                     }
                 }
-            }
 
-            // Return a default component that shows an error
-            return {
-                default: () => (
-                    <div className="p-6">
-                        <h1 className="text-2xl text-red-600">Page Not Found</h1>
-                        <p className="mt-2">The page "{name}" could not be found.</p>
-                    </div>
-                )
-            };
+                // Try more specific patterns for known module pages using our helper
+                const modulePatternMap: Record<string, [string, string]> = {
+                    'Employees/Index': ['EmployeeManagement', 'Index.tsx'],
+                    'Projects/Index': ['ProjectManagement', 'Index.tsx'],
+                    'Rentals/Index': ['RentalManagement/Rentals', 'Index.tsx'],
+                    'Timesheets/Index': ['TimesheetManagement/Timesheets', 'Index.tsx'],
+                    'Equipment/Index': ['EquipmentManagement', 'Index.tsx'],
+                    'Settings/Index': ['Settings', 'Index.tsx'],
+                    'Payrolls/Index': ['Payroll', 'Index.tsx'],
+                    'LeaveRequests/Index': ['LeaveManagement', 'Index.tsx'],
+                    'Customers/Index': ['CustomerManagement', 'Index.tsx'],
+
+                };
+
+                if (name in modulePatternMap) {
+                    const [modulePattern, pagePattern] = modulePatternMap[name];
+                    const specificPaths = findModulePagesByPattern(modulePattern, pagePattern)
+                      .map(p => p.replace(/^\//, './'))
+                      .filter(p => p.endsWith(`/${modulePattern}/${pagePattern}`));
+
+                    if (specificPaths.length > 0) {
+                        return await modulePages[specificPaths[0]]();
+                  }
+                }
+
+                // Try generic match for any module as a last resort
+                const normalizedName = name.replace(/\\/g, '/');
+                for (const key in modulePages) {
+                  const keyNoExt = key.replace(/\.tsx$/, '').replace(/\\/g, '/');
+                    if (keyNoExt.endsWith(`/${normalizedName}`) ||
+                        keyNoExt.toLowerCase().endsWith(`/${normalizedName.toLowerCase()}`)) {
+                    return await modulePages[key]();
+                  }
+                }
+
+                // Try to infer pattern for common page types (Create, Edit, Show)
+                if (name.includes('/')) {
+                    const [modulePartRaw, pagePartRaw] = name.split('/', 2);
+                    const modulePart = modulePartRaw.trim();
+                    const pagePart = pagePartRaw.trim();
+                    if (['Create', 'Edit', 'Show', 'Index'].includes(pagePart) && modulePart in moduleMap) {
+                        const possibleModules = moduleMap[modulePart];
+
+                        for (const moduleType of possibleModules) {
+                            // First try direct path in the module
+                            const directPath = `./Modules/${moduleType}/resources/js/pages/${pagePart}.tsx`;
+                            if (directPath in modulePages) {
+                                return await modulePages[directPath]();
+                            }
+
+                            // Then try module part as directory
+                            const subDirPath = `./Modules/${moduleType}/resources/js/pages/${modulePart}/${pagePart}.tsx`;
+                            if (subDirPath in modulePages) {
+                                return await modulePages[subDirPath]();
+                            }
+                        }
+                    }
+                }
+
+                // Return a default component that shows an error
+                return {
+                    default: () => (
+                        <div className="p-6">
+                            <h1 className="text-2xl text-red-600">Page Not Found</h1>
+                            <p className="mt-2">The page "{name}" could not be found.</p>
+                        </div>
+                    )
+                };
+            }
         }
     },
     setup({ el, App, props }) {

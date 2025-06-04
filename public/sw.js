@@ -93,6 +93,26 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip Vite dev server requests (localhost:5173) and HMR WebSocket requests
+  if (url.hostname === 'localhost' && (url.port === '5173' || url.port === '')) {
+    return;
+  }
+
+  // Skip Vite HMR and dev server related requests
+  if (url.pathname.includes('/@vite/') ||
+      url.pathname.includes('/@fs/') ||
+      url.pathname.includes('/@id/') ||
+      url.pathname.includes('/node_modules/') ||
+      url.searchParams.has('t') || // Vite timestamp parameter
+      url.protocol === 'ws:' || url.protocol === 'wss:') {
+    return;
+  }
+
+  // Skip requests to the current origin when running on Vite dev server
+  if (url.origin === 'http://localhost:5173') {
+    return;
+  }
+
   // Handle different types of requests
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(handleApiRequest(request));

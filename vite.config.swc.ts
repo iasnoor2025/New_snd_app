@@ -1,23 +1,18 @@
-import react from '@vitejs/plugin-react-swc';
+import tailwindcss from '@tailwindcss/vite';
+import reactSwc from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import moduleLoader, { collectModuleAssetsPaths } from './vite-module-loader.js';
 
-export default defineConfig(async () => {
-    // Collect module paths
-    const modulesPaths = [];
-    await collectModuleAssetsPaths(modulesPaths, 'Modules');
-
-    return {
+export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.tsx', ...modulesPaths],
+            input: ['resources/css/app.css', 'resources/js/app.tsx'],
             ssr: 'resources/js/ssr.tsx',
             refresh: true,
         }),
-        react(),
-        moduleLoader(),
+        reactSwc(),
+        tailwindcss(),
         // Add a custom plugin to serve modules_statuses.json
         {
             name: 'serve-modules-status',
@@ -51,9 +46,8 @@ export default defineConfig(async () => {
             }
         }
     ],
-    esbuild: {
-        jsx: 'automatic',
-    },
+    // Disable esbuild and use SWC instead
+    esbuild: false,
     resolve: {
         alias: {
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
@@ -62,13 +56,11 @@ export default defineConfig(async () => {
         },
     },
     server: {
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 5173,
-        strictPort: false,
+        strictPort: true,
         hmr: {
-            host: 'localhost',
-            protocol: 'ws'
+            host: 'localhost'
         },
-    }
-    };
+    },
 });
