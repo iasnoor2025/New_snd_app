@@ -82,7 +82,7 @@ export default function Index({ maintenanceRecord, availableParts }: IndexProps)
     }
   };
 
-  const breadcrumbItems = [;
+  const breadcrumbItems = [
     { title: 'Dashboard', href: route('dashboard') },
     { title: 'Equipment', href: route('equipment.index') },
     { title: 'Maintenance', href: route('equipment.maintenance.index') },

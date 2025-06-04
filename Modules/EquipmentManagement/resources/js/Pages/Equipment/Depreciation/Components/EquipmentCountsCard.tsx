@@ -21,7 +21,7 @@ interface EquipmentCountsProps {
 }
 
 const EquipmentCountsCard: React.FC<EquipmentCountsProps> = ({ counts }) => {
-  const pieData = [;
+  const pieData = [
     {
       name: 'Tracking Depreciation',
       value: counts.with_depreciation - counts.fully_depreciated,
@@ -129,9 +129,4 @@ const EquipmentCountsCard: React.FC<EquipmentCountsProps> = ({ counts }) => {
 };
 
 export default EquipmentCountsCard;
-
-
-</div>
-</div>
-</div>
 

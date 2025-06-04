@@ -64,7 +64,7 @@ export default function Edit({ auth, employee, advance }: Props) {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const breadcrumbs = [;
+  const breadcrumbs = [
     {
       title: 'Dashboard',
       href: '/dashboard',

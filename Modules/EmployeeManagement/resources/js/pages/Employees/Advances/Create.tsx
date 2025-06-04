@@ -38,7 +38,7 @@ export default function Create({ auth, employee }: Props) {
   const [estimatedMonths, setEstimatedMonths] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const breadcrumbs = [;
+  const breadcrumbs = [
     {
       title: 'Dashboard',
       href: '/dashboard',

@@ -82,7 +82,7 @@ export default function Index({ auth, employee, advances, total_balance }: Props
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [showRequestDialog, setShowRequestDialog] = React.useState(false);
 
-  const breadcrumbs = [;
+  const breadcrumbs = [
     {
       title: 'Dashboard',
       href: '/dashboard',
@@ -102,7 +102,7 @@ export default function Index({ auth, employee, advances, total_balance }: Props
   ];
 
   const handleDeleteAdvance = (advanceId: number) => {
-    const routeParams = employee;
+    const routeParams = employee
       ? { employee: employee.id, advance: advanceId }
       : { advance: advanceId };
 

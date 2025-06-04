@@ -66,7 +66,7 @@ export default function Show({ auth, employee, advance }: Props) {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
-  const breadcrumbs = [;
+  const breadcrumbs = [
     {
       title: 'Dashboard',
       href: '/dashboard',
@@ -105,8 +105,8 @@ export default function Show({ auth, employee, advance }: Props) {
   const remainingBalance = Math.max(0, advance.amount - (advance.repaid_amount || 0));
 
   // Calculate estimated months
-  const estimatedMonths = advance.monthly_deduction;
-    ? Math.ceil(remainingBalance / advance.monthly_deduction);
+  const estimatedMonths = advance.monthly_deduction
+    ? Math.ceil(remainingBalance / advance.monthly_deduction)
     : 0;
 
   const getStatusBadge = (status: string) => {

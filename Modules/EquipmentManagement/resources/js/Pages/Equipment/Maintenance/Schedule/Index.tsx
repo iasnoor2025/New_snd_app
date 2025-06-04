@@ -77,7 +77,7 @@ export default function Index({
     // You would typically refresh the page or data here
   };
 
-  const breadcrumbItems = [;
+  const breadcrumbItems = [
     { title: 'Dashboard', href: route('dashboard') },
     { title: 'Equipment', href: route('equipment.index') },
     { title: 'Maintenance', href: route('equipment.maintenance.index') },

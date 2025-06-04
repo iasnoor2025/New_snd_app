@@ -44,8 +44,8 @@ const CategorySummaryTable: React.FC<CategorySummaryTableProps> = ({
       </TableHeader>
       <TableBody>
         {sortedCategories.map((category) => {
-          const depreciationPercent = category.original_value > 0;
-            ? (category.depreciation / category.original_value) * 100;
+          const depreciationPercent = category.original_value > 0
+            ? (category.depreciation / category.original_value) * 100
             : 0;
 
           return (

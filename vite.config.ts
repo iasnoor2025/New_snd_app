@@ -61,6 +61,19 @@ export default defineConfig(async () => {
             'Modules': resolve(__dirname, 'Modules'),
         },
     },
+    optimizeDeps: {
+        include: ['zod', '@hookform/resolvers/zod']
+    },
+    build: {
+        commonjsOptions: {
+            include: [/node_modules/],
+            transformMixedEsModules: true
+        }
+    },
+    ssr: {
+        noExternal: ['zod', '@hookform/resolvers/zod']
+    },
+
     server: {
         host: 'localhost',
         port: 5173,
