@@ -1,15 +1,17 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Rental, RentalTimesheet } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
+// Placeholder types
+type PageProps = any;
+type Rental = any;
+type RentalTimesheet = any;
+import AdminLayout from '@/layouts/AdminLayout';
 import { format, differenceInHours, differenceInMinutes } from "date-fns";
-import ErrorAlert from '@/Modules/RentalManagement/Resources/js/components/ui/error-alert';
+import ErrorAlert from '@/components/ui/error-alert';
 
 // Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/RentalManagement/Resources/js/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -17,7 +19,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+} from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -25,16 +27,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/dialog';
-import { Separator } from '@/Modules/RentalManagement/Resources/js/components/ui/separator';
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/tooltip';
+} from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
-import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
+import { Label } from '@/components/ui/label';
 
 // Icons
 import {
