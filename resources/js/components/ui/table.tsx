@@ -321,3 +321,7 @@ const TableComponent = forwardRef<HTMLDivElement, TableProps<any>>(
 TableComponent.displayName = "Table";
 
 export { TableComponent, TableBody, TableCell, TableHead, TableHeader, TableRow, Table };
+
+export const TableFooter = ({ children, ...props }: any) => (
+  <tfoot {...props}>{children}</tfoot>
+);

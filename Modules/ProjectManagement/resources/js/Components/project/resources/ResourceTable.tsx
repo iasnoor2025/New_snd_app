@@ -97,3 +97,5 @@ const ResourceTable: React.FC<ResourceTableProps> = ({
 };
 
 export default ResourceTable;
+
+export { ResourceTable };

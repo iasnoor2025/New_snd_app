@@ -435,3 +435,9 @@ const ResourceModal: React.FC<ResourceModalProps> = ({
 
 export default ResourceModal;
 
+export const ResourceFormModal = (props: any) => (
+  <div className="resource-form-modal-placeholder">
+    {props.children || 'Resource Form Modal'}
+  </div>
+);
+

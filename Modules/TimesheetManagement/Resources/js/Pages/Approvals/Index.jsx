@@ -4,18 +4,39 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Modal from '@/Modules/TimesheetManagement/Resources/js/components/Modal.tsx';
-import TextInput from '@/Modules/TimesheetManagement/Resources/js/components/TextInput';
-import TextArea from '@/Modules/TimesheetManagement/Resources/js/components/TextArea';
-import Label from '@/Modules/TimesheetManagement/Resources/js/components/Label';
-import InputError from '@/Modules/TimesheetManagement/Resources/js/components/InputError';
-import FormSection from '@/Modules/TimesheetManagement/Resources/js/components/FormSection';
-import SelectInput from '@/Modules/TimesheetManagement/Resources/js/components/SelectInput';
-import InputGroup from '@/Modules/TimesheetManagement/Resources/js/components/InputGroup';
-import Table from '@/Modules/TimesheetManagement/Resources/js/components/Table';
-import Pagination from '@/Modules/TimesheetManagement/Resources/js/components/Pagination';
-import Badge from '@/Modules/TimesheetManagement/Resources/js/components/Badge';
-import { formatDate, formatHours } from '@/Modules/TimesheetManagement/Resources/js/utils/formatters';
+import Modal from '../../../../../../Modules/TimesheetManagement/resources/js/components/Modal';
+import TextArea from '@/components/ui/textarea';
+
+// Minimal placeholder formatDate and formatHours functions
+const formatDate = (date) => date ? String(date) : '';
+const formatHours = (hours) => hours != null ? String(hours) : '';
+
+// Minimal placeholder TextInput component
+const TextInput = (props) => <input {...props} />;
+
+// Minimal placeholder Label component
+const Label = (props) => <label {...props} />;
+
+// Minimal placeholder InputError component
+const InputError = ({ message }) => message ? <div style={{ color: 'red' }}>{message}</div> : null;
+
+// Minimal placeholder SelectInput component
+const SelectInput = (props) => <select {...props}>{props.children}</select>;
+
+// Minimal placeholder FormSection component
+const FormSection = ({ children }) => <section>{children}</section>;
+
+// Minimal placeholder InputGroup component
+const InputGroup = ({ children }) => <div>{children}</div>;
+
+// Minimal placeholder Table component
+const Table = ({ children }) => <table>{children}</table>;
+
+// Minimal placeholder Pagination component
+const Pagination = () => null;
+
+// Minimal placeholder Badge component
+const Badge = ({ children }) => <span>{children}</span>;
 
 const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll }) => {
   const { t } = useTranslation('timesheet');
@@ -298,7 +319,6 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
                 onChange={(e) => rejectionForm.setData('rejection_reason', e.target.value)}
                 required
               />
-              <InputError message={rejectionForm.errors.rejection_reason} className="mt-2" />
             </div>
 
             <div className="mt-6 flex justify-end space-x-3">

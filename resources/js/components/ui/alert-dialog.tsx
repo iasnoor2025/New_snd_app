@@ -27,3 +27,11 @@ export function AlertDialogTitle({ children }: { children: React.ReactNode }) {
 export function AlertDialogDescription({ children }: { children: React.ReactNode }) {
   return <p>{children}</p>;
 }
+
+export const AlertDialogCancel = ({ children, ...props }: any) => (
+  <button {...props}>{children || 'Cancel'}</button>
+);
+
+export const AlertDialogAction = ({ children, ...props }: any) => (
+  <button {...props}>{children || 'Action'}</button>
+);

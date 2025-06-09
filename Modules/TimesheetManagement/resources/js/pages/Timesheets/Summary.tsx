@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
-import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
-import { Button } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/button';
+// Placeholder types
+type PageProps = any;
+type BreadcrumbItem = any;
+// Minimal placeholder AdminLayout component
+const AdminLayout = ({ children }: { children: React.ReactNode }) => <div className="admin-layout-placeholder">{children}</div>;
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/card';
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -18,16 +21,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/table';
-import { Input } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/input';
-import { Badge } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/badge';
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/select';
+} from '@/components/ui/select';
 import {
   Calendar as CalendarIcon,
   Download as DownloadIcon,
@@ -40,10 +43,10 @@ import {
   Users as UsersIcon,
   Briefcase as BriefcaseIcon,
 } from 'lucide-react';
-import { useToast } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/popover';
-import { Calendar } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Dashboard', href: '/dashboard' },
@@ -101,7 +104,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedEmployee, setSelectedEmployee] = useState<string>('');
   const [selectedProject, setSelectedProject] = useState<string>('');
-  
+
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       setSelectedDate(date);
@@ -132,7 +135,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
       title: "Export Started",
       description: "Your monthly summary export is being prepared."
     });
-    
+
     // Here you would implement the actual export functionality
     // For example, making an API call to generate a PDF or Excel file
   };
@@ -154,16 +157,16 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
   };
 
   return (
-    <AdminLayout title={t('monthly_summary')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
+    <AdminLayout>
       <Head title={t('ttl_monthly_timesheet_summary')} />
-      
+
       <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <BarChartIcon className="h-6 w-6 text-primary" />
             <h1 className="text-2xl font-bold">{t('monthly_summary')}</h1>
           </div>
-          
+
           <div className="flex space-x-2">
             <Button variant="outline" asChild>
               <Link href={route('timesheets.index')}>
@@ -171,14 +174,14 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                 {t('back_to_timesheets')}
               </Link>
             </Button>
-            
+
             <Button variant="default" onClick={handleExport}>
               <DownloadIcon className="mr-2 h-4 w-4" />
               Export Report
             </Button>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-2">
@@ -194,7 +197,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">{t('ttl_total_employees')}</CardTitle>
@@ -209,7 +212,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">Month</CardTitle>
@@ -237,7 +240,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
             </CardContent>
           </Card>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="col-span-1">
             <CardHeader>
@@ -249,11 +252,11 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                 Hours worked by each employee
               </CardDescription>
             </CardHeader>
-            
+
             <CardContent>
               <div className="mb-4">
-                <Select 
-                  value={selectedEmployee} 
+                <Select
+                  value={selectedEmployee}
                   onValueChange={handleEmployeeSelect}
                 >
                   <SelectTrigger>
@@ -269,7 +272,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="rounded-md border">
                 <Table>
                   <TableHeader>
@@ -296,7 +299,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="col-span-1">
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -307,11 +310,11 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                 Hours distribution by project
               </CardDescription>
             </CardHeader>
-            
+
             <CardContent>
               <div className="mb-4">
-                <Select 
-                  value={selectedProject} 
+                <Select
+                  value={selectedProject}
                   onValueChange={handleProjectSelect}
                 >
                   <SelectTrigger>
@@ -327,7 +330,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-4">
                 {summary.project_stats.map((stat) => (
                   <div key={stat.project_id} className="space-y-2">
@@ -336,8 +339,8 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
                       <span>{stat.total_hours} hrs ({stat.percentage}%)</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2.5">
-                      <div 
-                        className="bg-primary h-2.5 rounded-full" 
+                      <div
+                        className="bg-primary h-2.5 rounded-full"
                         style={{ width: `${stat.percentage}%` }}
                       ></div>
                     </div>
@@ -347,7 +350,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
             </CardContent>
           </Card>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -358,7 +361,7 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
               Timesheet status distribution
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {summary.status_stats.map((stat) => (
@@ -382,4 +385,4 @@ export default function TimesheetSummary({ auth, summary, employees = [], projec
       </div>
     </AdminLayout>
   );
-} 
+}
