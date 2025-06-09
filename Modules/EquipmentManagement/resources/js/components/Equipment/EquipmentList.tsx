@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Link } from '@inertiajs/react';
-import { formatDateTime } from '@/utils/date-time';
+import { formatDateTime } from '@/utils/date';
 
 interface Equipment {
     id: number;
@@ -32,9 +32,9 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
 
     const categories = Array.from(new Set(equipment.map(e => e.category)));
 
-    const filteredEquipment = equipment;
+    const filteredEquipment = equipment
         .filter(e => {
-            const matchesSearch = e.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            const matchesSearch = e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                 e.serial_number.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesStatus = statusFilter === 'all' || e.status === statusFilter;
             const matchesCategory = categoryFilter === 'all' || e.category === categoryFilter;
@@ -52,7 +52,7 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
                 return (aValue - bValue) * modifier;
             }
             return 0;
-        })
+        });
 
     const handleSort = (field: keyof Equipment) => {
         if (field === sortField) {
@@ -79,6 +79,7 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                >
                     <option value="all">All Statuses</option>
                     <option value="available">Available</option>
                     <option value="rented">Rented</option>
@@ -89,6 +90,7 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
                     className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                >
                     <option value="all">All Categories</option>
                     {categories.map(category => (
                         <option key={category} value={category}>{category}</option>
@@ -104,36 +106,42 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('name')}
+                            >
                                 Name {sortField === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('category')}
+                            >
                                 Category {sortField === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('daily_rate')}
+                            >
                                 Daily Rate {sortField === 'daily_rate' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('status')}
+                            >
                                 Status {sortField === 'status' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('serial_number')}
+                            >
                                 Serial Number {sortField === 'serial_number' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                                 onClick={() => handleSort('last_maintenance_date')}
+                            >
                                 Last Maintenance {sortField === 'last_maintenance_date' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th scope="col" className="relative px-6 py-3">
@@ -173,11 +181,13 @@ export const EquipmentList: FC<Props> = ({ equipment }) => {
                                     <Link
                                         href={`/equipment/${item.id}`}
                                         className="text-indigo-600 hover:text-indigo-900 mr-4"
+                                    >
                                         View
                                     </Link>
                                     <Link
                                         href={`/equipment/${item.id}/edit`}
                                         className="text-indigo-600 hover:text-indigo-900"
+                                    >
                                         Edit
                                     </Link>
                                 </td>

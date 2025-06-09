@@ -172,6 +172,7 @@ export function RentalWorkflowActions({
                         variant={variant}
                         onClick={() => handleAction(action)}
                         disabled={isProcessing}
+                    >
                         {label}
                     </Button>
                 ))}

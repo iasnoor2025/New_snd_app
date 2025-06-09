@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from '@/components/ui/progress';
-import PaymentForm from "@/components/payments/PaymentForm";
+// TODO: Implement PaymentForm or replace with a placeholder
+// import PaymentForm from "@/components/payments/PaymentForm";
 import {
   Table,
   TableBody,
@@ -36,7 +37,7 @@ import {
 } from "lucide-react";
 import { format, differenceInDays, isAfter, isBefore } from "date-fns";
 import { toast } from "sonner";
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/utils/format';
 
 interface Payment {
   id: number;
@@ -79,8 +80,8 @@ export default function PaymentTracker({
 
   // Calculate payment metrics
   const calculatePaymentMetrics = () => {
-    const totalPaid = payments;
-      .filter(p => p.status === 'completed');
+    const totalPaid = payments
+      .filter(p => p.status === 'completed')
       .reduce((sum, p) => sum + p.amount, 0);
 
     const pendingPayments = payments.filter(p => p.status === 'pending');
@@ -89,8 +90,8 @@ export default function PaymentTracker({
     const remainingAmount = rental.total_amount - totalPaid;
     const paymentProgress = (totalPaid / rental.total_amount) * 100;
 
-    const isOverdue = rental.payment_due_date && isAfter(new Date(), new Date(rental.payment_due_date));
-    const daysOverdue = isOverdue ? differenceInDays(new Date(), new Date(rental.payment_due_date)) : 0;
+    const isOverdue = rental.payment_due_date ? isAfter(new Date(), new Date(rental.payment_due_date)) : false;
+    const daysOverdue = isOverdue && rental.payment_due_date ? differenceInDays(new Date(), new Date(rental.payment_due_date)) : 0;
 
     return {
       totalPaid,
@@ -189,7 +190,7 @@ export default function PaymentTracker({
                 </Badge>
               ) : (
                 <Badge variant="outline">
-                  {differenceInDays(new Date(rental.payment_due_date || new Date()), new Date())} days left
+                  {rental.payment_due_date ? differenceInDays(new Date(rental.payment_due_date), new Date()) : 'N/A'} days left
                 </Badge>
               )}
             </div>
@@ -282,7 +283,8 @@ export default function PaymentTracker({
       </Card>
 
       {/* Payment Form */}
-      <PaymentForm
+      {/* TODO: Implement PaymentForm or replace with a placeholder */}
+      {/* <PaymentForm
         isOpen={isAddPaymentDialogOpen}
         onClose={() => setIsAddPaymentDialogOpen(false)}
         onSubmit={handleFormSubmit}
@@ -292,7 +294,7 @@ export default function PaymentTracker({
           total_amount: rental.total_amount,
           remaining_balance: metrics.remainingAmount
         }}
-      />
+      /> */}
     </div>
   );
 }

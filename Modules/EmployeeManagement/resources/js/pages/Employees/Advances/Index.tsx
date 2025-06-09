@@ -2,15 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
-import { Breadcrumb } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/breadcrumb';
+import AdminLayout from '../../../layouts/AdminLayout';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/card';
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -18,10 +18,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/table';
-import { Badge } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/badge';
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Trash2, Check, X, ArrowLeft, History } from 'lucide-react';
 import {
   Dialog,
@@ -30,15 +30,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/components/ui/dialog';
+} from '@/components/ui/dialog';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/Modules/EmployeeManagement/Resources/js/components/ui/tooltip';
-import { usePermission } from '@/Modules/EmployeeManagement/Resources/js/hooks/usePermission';
-import { ToastService } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/shared/ToastManager';
+} from '@/components/ui/tooltip';
+import { usePermission } from '@/hooks/usePermission';
+import { ToastService } from '@/components/shared/ToastManager';
 
 interface Advance {
   id: number;

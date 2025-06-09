@@ -1,13 +1,9 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { Equipment, MaintenanceRecord, User } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { formatCurrency, formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/components/ui/use-toast';
 import {
   Calendar as CalendarIcon,
   Clock as ClockIcon,
@@ -22,19 +18,52 @@ import {
   AlertTriangle as AlertTriangleIcon
 } from 'lucide-react';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/components/ui/alert-dialog';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+import AdminLayout from '@/layouts/AdminLayout';
 
-interface Props extends PageProps {
+// Inline type definitions
+interface Equipment {
+  id: number;
+  name: string;
+  model: string;
+  serial_number?: string;
+  status?: string;
+  category?: string;
+  purchase_date?: string;
+  door_number?: string;
+}
+interface User {
+  id: number;
+  name: string;
+}
+interface MaintenanceRecord {
+  id: number;
+  type: string;
+  status: string;
+  cost: number;
+  scheduled_date?: string;
+  performed_date?: string;
+  performedBy?: User;
+  approvedBy?: User;
+  equipment: Equipment;
+  description?: string;
+  notes?: string;
+}
+
+// Simple placeholder formatters
+const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+const formatDate = (date: string) => new Date(date).toLocaleDateString();
+
+interface Props {
   maintenance: MaintenanceRecord & {
     equipment: Equipment;
     performedBy?: User;
@@ -42,9 +71,15 @@ interface Props extends PageProps {
   };
 }
 
+// Define BreadcrumbItem inline
+type BreadcrumbItem = {
+  title: string;
+  href: string;
+};
+
 export default function MaintenanceShow({ maintenance }: Props) {
   const { toast } = useToast();
-  
+
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('dashboard') },
     { title: 'Equipment', href: route('equipment.index') },
@@ -193,26 +228,26 @@ export default function MaintenanceShow({ maintenance }: Props) {
             </CardContent>
             {maintenance.status === 'scheduled' && (
               <CardFooter className="flex justify-between gap-2">
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
+                <Dialog>
+                  <DialogTrigger asChild>
                     <Button variant="destructive">
                       <XCircleIcon className="mr-2 h-4 w-4" />
                       Cancel Maintenance
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Cancel Maintenance</AlertDialogTitle>
-                      <AlertDialogDescription>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Cancel Maintenance</DialogTitle>
+                      <DialogDescription>
                         Are you sure you want to cancel this maintenance record? This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleCancel}>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose>Cancel</DialogClose>
+                      <Button onClick={handleCancel}>Continue</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
 
                 <Button onClick={handleComplete}>
                   <CheckCircleIcon className="mr-2 h-4 w-4" />
@@ -309,4 +344,4 @@ export default function MaintenanceShow({ maintenance }: Props) {
       </div>
     </AdminLayout>
   );
-} 
+}

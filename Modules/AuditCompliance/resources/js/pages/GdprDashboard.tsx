@@ -20,7 +20,7 @@ import {
   Filter,
   Plus
 } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -31,8 +31,8 @@ import { Input } from '@/components/ui/input';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
-import Pagination from '@/components/Pagination';
-import { formatDateTime } from '@/utils/date';
+import { Pagination } from '@/components/ui/pagination';
+import { formatDate } from '@/utils/format';
 import { cn } from '@/lib/utils';
 import useTranslation from '@/hooks/useTranslation';
 
@@ -214,14 +214,14 @@ function DataRequestsTable({ requests }: { requests: GdprDataRequest[] }) {
                 <div className="flex items-center space-x-2">
                   {getStatusBadge(request.status)}
                   {isOverdue && (
-                    <AlertTriangle className="h-4 w-4 text-red-500" title="Overdue" />
+                    <AlertTriangle className="h-4 w-4 text-red-500" />
                   )}
                 </div>
               </TableCell>
-              <TableCell>{formatDateTime(request.requested_at)}</TableCell>
+              <TableCell>{formatDate(request.requested_at)}</TableCell>
               <TableCell>
                 <span className={isOverdue ? 'text-red-600 font-medium' : ''}>
-                  {formatDateTime(request.expires_at)}
+                  {formatDate(request.expires_at)}
                 </span>
               </TableCell>
               <TableCell>
@@ -317,10 +317,10 @@ function ConsentRecordsTable({ records }: { records: ConsentRecord[] }) {
               )}
             </TableCell>
             <TableCell>
-              {record.given_at ? formatDateTime(record.given_at) : '-'}
+              {record.given_at ? formatDate(record.given_at) : '-'}
             </TableCell>
             <TableCell>
-              {record.withdrawn_at ? formatDateTime(record.withdrawn_at) : '-'}
+              {record.withdrawn_at ? formatDate(record.withdrawn_at) : '-'}
             </TableCell>
             <TableCell className="font-mono text-sm">
               {record.ip_address || '-'}
@@ -350,8 +350,8 @@ export default function GdprDashboard({
   const [formState, setFormState] = useState({
     status: filters.status || '',
     type: filters.type || '',
-    from_date: filters.from_date ? new Date(filters.from_date) : null,
-    to_date: filters.to_date ? new Date(filters.to_date) : null,
+    from_date: filters.from_date ? new Date(filters.from_date) : undefined,
+    to_date: filters.to_date ? new Date(filters.to_date) : undefined,
   });
 
   const handleFilterChange = (name: string, value: any) => {
@@ -370,31 +370,27 @@ export default function GdprDashboard({
     setFormState({
       status: '',
       type: '',
-      from_date: null,
-      to_date: null,
+      from_date: undefined,
+      to_date: undefined,
     });
     router.get(route('gdpr.dashboard'));
   };
 
   return (
-    <AppLayout
-      title="GDPR Compliance Dashboard"
-      renderHeader={() => (
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight flex items-center space-x-2">
-            <Shield className="h-6 w-6" />
-            <span>GDPR Compliance Dashboard</span>
-          </h2>
-          <Link href={route('gdpr.requests.create')}>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Request
-            </Button>
-          </Link>
-        </div>
-      )}
-    >
+    <AppLayout>
       <Head title="GDPR Compliance Dashboard" />
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-semibold text-xl text-gray-800 leading-tight flex items-center space-x-2">
+          <Shield className="h-6 w-6" />
+          <span>GDPR Compliance Dashboard</span>
+        </h2>
+        <Link href={route('gdpr.requests.create')}>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            New Request
+          </Button>
+        </Link>
+      </div>
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -524,7 +520,8 @@ export default function GdprDashboard({
                 <CardContent>
                   <DataRequestsTable requests={dataRequests.data} />
                   <div className="mt-6">
-                    <Pagination links={dataRequests.links} />
+                    {/* TODO: Replace with actual currentPage, totalPages, and onPageChange logic */}
+                    {/* <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} /> */}
                   </div>
                 </CardContent>
               </Card>
@@ -538,7 +535,8 @@ export default function GdprDashboard({
                 <CardContent>
                   <ConsentRecordsTable records={consentRecords.data} />
                   <div className="mt-6">
-                    <Pagination links={consentRecords.links} />
+                    {/* TODO: Replace with actual currentPage, totalPages, and onPageChange logic */}
+                    {/* <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} /> */}
                   </div>
                 </CardContent>
               </Card>

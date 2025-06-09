@@ -6,8 +6,9 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@/Modules/EquipmentManagement/Resources/js/components/ui/table';
-import { Progress } from '@/Modules/EquipmentManagement/Resources/js/components/ui/progress';
+} from '@/components/ui/table';
+import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Category {
   category_id: number;
@@ -57,15 +58,7 @@ const CategorySummaryTable: React.FC<CategorySummaryTableProps> = ({
               <TableCell>{formatCurrency(category.depreciation)}</TableCell>
               <TableCell>
                 <div className="flex items-center space-x-2">
-                  <Progress
-                    value={depreciationPercent}
-                    className="h-2 w-24"
-                    indicatorClassName={
-                      depreciationPercent > 80 ? "bg-red-500" :
-                      depreciationPercent > 50 ? "bg-amber-500" :
-                      "bg-green-500"
-                    }
-                  />
+                  <Progress value={depreciationPercent} className="h-2 w-24" />
                   <span className="text-xs text-muted-foreground">
                     {depreciationPercent.toFixed(1)}%
                   </span>

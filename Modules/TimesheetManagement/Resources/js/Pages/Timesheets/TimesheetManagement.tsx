@@ -8,22 +8,23 @@ import { EmployeeTimesheet } from '../../types/timesheet';
 import TimesheetCalendar from '../../components/timesheets/TimesheetCalendar';
 import TimesheetList from '../../components/timesheets/TimesheetList';
 import BulkTimesheetUpload from '../../components/timesheets/BulkTimesheetUpload';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '../../components/ui/select';
+} from '@/components/ui/select';
 import { ChevronLeft, ChevronRight, Calendar, List, Upload, Plus } from 'lucide-react';
-import { Breadcrumbs } from '../../components/ui/breadcrumbs';
+import { Breadcrumbs } from '@/components/breadcrumbs';
 import useLoadingState from '../../hooks/useLoadingState';
 
 const TimesheetManagement: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation('timesheet');
   const { isLoading, error, withLoading } = useLoadingState('timesheetManagement');
 
   const [activeTab, setActiveTab] = useState('calendar');
@@ -64,8 +65,6 @@ const TimesheetManagement: React.FC = () => {
   };
 
   const handlePreviousMonth = () => {
-  const { t } = useTranslation('timesheet');
-
     setCurrentMonth(subMonths(currentMonth, 1));
   };
 
@@ -89,7 +88,7 @@ const TimesheetManagement: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <Breadcrumbs
-            items={[
+            breadcrumbs={[
               { title: 'Dashboard', href: '/' },
               { title: 'Timesheet Management', href: '#' }
             ]}

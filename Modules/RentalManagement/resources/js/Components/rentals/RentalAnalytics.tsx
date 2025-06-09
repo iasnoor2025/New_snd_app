@@ -49,7 +49,7 @@ export default function RentalAnalytics({
   const calculateEquipmentHealth = () => {
     const totalEquipment = rental.rentalItems?.length || 0;
     const maintenanceRequired = maintenanceRecords.filter(record =>
-      record.status === 'pending' || record.status === 'in_progress';
+      record.status === 'pending' || record.status === 'in_progress'
     ).length;
 
     return {

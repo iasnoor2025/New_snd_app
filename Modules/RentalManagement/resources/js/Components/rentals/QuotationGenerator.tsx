@@ -75,11 +75,14 @@ export default function QuotationGenerator({
       className={className}
       variant={variant}
       size={size}
+    >
       {isGenerating ? (
+        <>
           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
           Generating...
         </>
       ) : (
+        <>
           <FileText className="h-4 w-4 mr-2" />
           Generate Quotation
         </>

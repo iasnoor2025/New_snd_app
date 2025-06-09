@@ -52,7 +52,7 @@ interface RentalWorkflowStatusProps {
   className?: string;
 }
 
-const workflowSteps = [;
+const workflowSteps = [
   {
     id: 'pending',
     name: 'Pending',
@@ -169,15 +169,15 @@ export default function RentalWorkflowStatus({
   const currentStepIndex = workflowSteps.findIndex(step => step.id === safeStatus);
 
   // Determine which steps are next possible states
-  const possibleNextSteps = nextPossibleStates && Array.isArray(nextPossibleStates);
+  const possibleNextSteps = nextPossibleStates && Array.isArray(nextPossibleStates)
     ? workflowSteps.filter(step => nextPossibleStates.includes(step.id))
     : [];
 
   const confirmAction = (
     title: string,
-    description: string,;
-    confirmText: string,;
-    action: () => void;
+    description: string,
+    confirmText: string,
+    action: () => void
   ) => {
     setDialogAction({
       title,
@@ -192,9 +192,9 @@ export default function RentalWorkflowStatus({
   const createActionHandler = (
     statusId: string,
     title: string,
-    description: string,;
-    routeName: string,;
-    confirmText: string = 'Confirm';
+    description: string,
+    routeName: string,
+    confirmText: string = 'Confirm'
   ) => {
     return () => {
       confirmAction(
@@ -372,6 +372,7 @@ export default function RentalWorkflowStatus({
                             "relative flex items-start gap-4",
                             isCurrent && "bg-gray-50 p-2 rounded-md shadow-sm"
                           )}
+                        >
                           {/* Step indicator */}
                           <div
                             className={cn(
@@ -380,6 +381,7 @@ export default function RentalWorkflowStatus({
                               isCurrent && "border-primary",
                               isUpcoming && "border-gray-200"
                             )}
+                          >
                             <StepIcon
                               className={cn(
                                 "h-4 w-4",
@@ -399,6 +401,7 @@ export default function RentalWorkflowStatus({
                                 isCurrent && "text-primary font-bold",
                                 isUpcoming && "text-gray-500"
                               )}
+                            >
                               {step.name}
                               {isCurrent && (
                                 <span className="ml-2 inline-block bg-primary text-white text-xs px-2 py-0.5 rounded-full">
@@ -411,6 +414,7 @@ export default function RentalWorkflowStatus({
                                 "text-sm",
                                 isCurrent ? "text-gray-700" : "text-gray-500"
                               )}
+                            >
                               {step.description}
                             </p>
                           </div>
@@ -465,6 +469,7 @@ export default function RentalWorkflowStatus({
                     onClick={action.handler}
                     variant="outline"
                     className="w-full flex items-center justify-start text-left"
+                  >
                     <ActionIcon className="w-4 h-4 mr-2" />
                     {action.buttonText}
                     <ArrowRight className="w-4 h-4 ml-auto" />
@@ -487,6 +492,7 @@ export default function RentalWorkflowStatus({
             <Button
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button
@@ -494,6 +500,7 @@ export default function RentalWorkflowStatus({
                 dialogAction.action();
                 setIsDialogOpen(false);
               }}
+            >
               {dialogAction.confirmText}
             </Button>
           </DialogFooter>

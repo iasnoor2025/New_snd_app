@@ -1,33 +1,32 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import type { PageProps } from '@/resources/js/types';
-import AdminLayout from '@/resources/js/layouts/AdminLayout';
+import type { PageProps } from '@/types';
+import AdminLayout from '@/layouts/app-layout';
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
-import ErrorBoundary from '@/resources/js/components/ErrorBoundary';
-import { Button } from '@/resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/resources/js/components/ui/card';
-import { Input } from '@/resources/js/components/ui/input';
-import { Textarea } from '@/resources/js/components/ui/textarea';
-import { ScrollArea } from '@/resources/js/components/ui/scroll-area';
-import { Alert, AlertDescription } from '@/resources/js/components/ui/alert';
-import { Skeleton } from '@/resources/js/components/ui/skeleton';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/resources/js/components/ui/select';
+} from '@/components/ui/select';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/resources/js/components/ui/form';
+} from '@/components/ui/form';
 import {
   Dialog,
   DialogContent,
@@ -35,17 +34,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/resources/js/components/ui/dialog';
+} from '@/components/ui/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm as useReactHookForm } from 'react-hook-form';
-import { Calendar } from '@/resources/js/components/ui/calendar';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/resources/js/components/ui/popover';
-import { cn } from '@/resources/js/lib/utils';
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import { CalendarIcon, ArrowLeft, Loader2, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { router } from '@inertiajs/react';
@@ -125,7 +124,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="name"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
@@ -140,7 +139,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="model"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Model</FormLabel>
                 <FormControl>
@@ -155,7 +154,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="serial_number"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Serial Number</FormLabel>
                 <FormControl>
@@ -170,7 +169,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="door_number"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Door Number</FormLabel>
                 <FormControl>
@@ -185,7 +184,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="category_id"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <div className="flex gap-2">
@@ -226,7 +225,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="status"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Status</FormLabel>
                 <Select
@@ -254,7 +253,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="location_id"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Location</FormLabel>
                 <div className="flex gap-2">
@@ -295,7 +294,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="daily_rate"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Daily Rate (SAR)</FormLabel>
                 <FormControl>
@@ -322,7 +321,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="weekly_rate"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Weekly Rate (SAR)</FormLabel>
                 <FormControl>
@@ -350,7 +349,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="monthly_rate"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Monthly Rate (SAR)</FormLabel>
                 <FormControl>
@@ -378,7 +377,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="purchase_cost"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <FormLabel>Purchase Cost (SAR)</FormLabel>
                 <FormControl>
@@ -399,7 +398,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="purchase_date"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Purchase Date</FormLabel>
                 <Popover>
@@ -442,7 +441,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="last_maintenance_date"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Last Maintenance Date</FormLabel>
                 <Popover>
@@ -485,7 +484,7 @@ const CreateEquipmentForm = ({
           <FormField
             control={form.control}
             name="next_maintenance_date"
-            render={({ field }) => (
+            render={({ field }: { field: any }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Next Maintenance Date</FormLabel>
                 <Popover>
@@ -526,7 +525,7 @@ const CreateEquipmentForm = ({
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
@@ -536,6 +535,9 @@ const CreateEquipmentForm = ({
                   className="min-h-[100px]"
                 />
               </FormControl>
+              <div className="text-muted-foreground text-sm">
+                Some description here
+              </div>
               <FormMessage />
             </FormItem>
           )}
@@ -545,7 +547,7 @@ const CreateEquipmentForm = ({
         <FormField
           control={form.control}
           name="notes"
-          render={({ field }) => (
+          render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Notes</FormLabel>
               <FormControl>
@@ -587,11 +589,11 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
   const [newLocation, setNewLocation] = useState("");
   const [availableLocations, setAvailableLocations] = useState(locations);
 
-  // Deduplicate locations based on name, city, and state
+  // Deduplicate locations based on name
   const uniqueLocations = React.useMemo(() => {
     const seen = new Set();
     return availableLocations.filter(location => {
-      const key = `${location.name}-${location.city}-${location.state}`;
+      const key = location.name;
       if (seen.has(key)) {
         return false;
       }
@@ -764,7 +766,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
   };
 
   return (
-    <AdminLayout title="Create Equipment" breadcrumbs={breadcrumbs} requiredPermission="equipment.create">
+    <AdminLayout breadcrumbs={breadcrumbs} requiredPermission="equipment.create">
       <Head title="Create Equipment" />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

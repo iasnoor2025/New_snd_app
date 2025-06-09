@@ -73,16 +73,22 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer }) => {
             <p className="text-sm text-muted-foreground">
               <Home className="h-3 w-3 inline mr-1" />
               {customer.address}
-              {(customer.city || customer.state || customer.zip_code) && (
-                  <br />
-                  <span className="ml-4">
-                    {[customer.city, customer.state, customer.zip_code].filter(Boolean).join(', ')}
-                  </span>
-                </>
-              )}
-              {customer.country && (
-                  <br />
-                  <span className="ml-4">{customer.country}</span>
+              {(customer.city || customer.state || customer.zip_code || customer.country) && (
+                <>
+                  {(customer.city || customer.state || customer.zip_code) && (
+                    <>
+                      <br />
+                      <span className="ml-4">
+                        {[customer.city, customer.state, customer.zip_code].filter(Boolean).join(', ')}
+                      </span>
+                    </>
+                  )}
+                  {customer.country && (
+                    <>
+                      <br />
+                      <span className="ml-4">{customer.country}</span>
+                    </>
+                  )}
                 </>
               )}
             </p>

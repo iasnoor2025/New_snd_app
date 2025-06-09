@@ -15,6 +15,7 @@ export default [
         languageOptions: {
             globals: {
                 ...globals.browser,
+                // FIX: Ensure no whitespace in global keys (e.g., 'AudioWorkletGlobalScope')
             },
         },
         rules: {

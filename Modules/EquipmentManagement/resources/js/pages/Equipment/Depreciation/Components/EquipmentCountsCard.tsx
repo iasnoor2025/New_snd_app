@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   PieChart as RechartsPieChart,
   Pie,
@@ -9,6 +9,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { BarChart, ListChecks, AlertTriangle, ClipboardList } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 interface EquipmentCountsProps {
   counts: {

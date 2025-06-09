@@ -1,31 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { Equipment, MaintenanceRecord } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/label';
-import { Textarea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
+} from '@/components/ui/select';
 import { ArrowLeft as ArrowLeftIcon } from 'lucide-react';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/popover';
-import { Calendar } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/calendar';
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
-import { cn } from '@/Modules/EquipmentManagement/Resources/js/lib/utils';
+import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
+import AdminLayout from '@/layouts/AdminLayout';
+
+// Minimal type definitions for build
+type PageProps = { [key: string]: any };
+type BreadcrumbItem = { title: string; href: string };
+
+// Minimal type definitions for build
+type Equipment = { id: number; name: string; model: string; door_number?: string };
+type MaintenanceRecord = { id: number; equipment_id: number; type: string; description: string; status: string; scheduled_date: string; cost?: number; notes?: string };
 
 interface Props extends PageProps {
   equipment: Equipment;
@@ -39,7 +45,7 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     maintenance.scheduled_date ? new Date(maintenance.scheduled_date) : undefined
   );
-  
+
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('dashboard') },
     { title: 'Equipment', href: route('equipment.index') },
@@ -85,7 +91,6 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
   return (
     <AdminLayout title="Edit Maintenance Record" breadcrumbs={breadcrumbs}>
       <Head title="Edit Maintenance Record" />
-
       <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
@@ -102,7 +107,6 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
             </Link>
           </Button>
         </div>
-
         <Card>
           <CardHeader>
             <CardTitle>Maintenance Details</CardTitle>
@@ -128,7 +132,6 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
                   </Select>
                   {errors.type && <p className="text-sm text-red-500">{errors.type}</p>}
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="cost">Estimated Cost ($)</Label>
                   <Input
@@ -142,7 +145,6 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
                   {errors.cost && <p className="text-sm text-red-500">{errors.cost}</p>}
                 </div>
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
@@ -153,7 +155,6 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
                 />
                 {errors.description && <p className="text-sm text-red-500">{errors.description}</p>}
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="scheduled_date">Scheduled Date</Label>
                 <Popover>
@@ -184,7 +185,6 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
                 </Popover>
                 {errors.scheduled_date && <p className="text-sm text-red-500">{errors.scheduled_date}</p>}
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="notes">Additional Notes</Label>
                 <Textarea
@@ -195,15 +195,14 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
                 />
                 {errors.notes && <p className="text-sm text-red-500">{errors.notes}</p>}
               </div>
-
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" type="button" asChild>
                   <Link href={route('equipment.maintenance.show', [equipment.id, maintenance.id])}>
                     Cancel
                   </Link>
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={processing || maintenance.status === 'completed' || maintenance.status === 'cancelled'}
                 >
                   Update Maintenance
@@ -215,4 +214,4 @@ export default function MaintenanceEdit({ equipment, maintenance }: Props) {
       </div>
     </AdminLayout>
   );
-} 
+}

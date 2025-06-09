@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { format, parseISO, eachDayOfInterval, isSameDay, addDays, subDays, isWithinInterval } from 'date-fns';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Dialog, DialogContent } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { MaintenanceDetailView } from './MaintenanceDetailView';
 
 interface Equipment {
@@ -96,16 +96,16 @@ export function ScheduleCalendar({ schedule, startDate, endDate }: ScheduleCalen
           {format(visibleStartDate, 'MMMM d')} - {format(visibleEndDate, 'MMMM d, yyyy')}
         </div>
         <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
             onClick={moveCalendarBackward}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
             onClick={moveCalendarForward}
           >
             <ChevronRight className="h-4 w-4" />
@@ -128,10 +128,10 @@ export function ScheduleCalendar({ schedule, startDate, endDate }: ScheduleCalen
           const isInRange = isWithinInterval(day, { start: startDate, end: endDate });
 
           return (
-            <div 
-              key={day.toISOString()} 
+            <div
+              key={day.toISOString()}
               className={`
-                min-h-[100px] border rounded-md p-1 
+                min-h-[100px] border rounded-md p-1
                 ${isToday ? 'bg-accent border-primary-500' : ''}
                 ${!isInRange ? 'bg-gray-50' : ''}
               `}
@@ -146,8 +146,8 @@ export function ScheduleCalendar({ schedule, startDate, endDate }: ScheduleCalen
               </div>
               <div className="space-y-1 mt-1 max-h-[80px] overflow-y-auto">
                 {dayRecords.map(record => (
-                  <div 
-                    key={record.id} 
+                  <div
+                    key={record.id}
                     className={`
                       text-xs p-1 border-l-2 rounded truncate cursor-pointer hover:bg-muted
                       ${getMaintenanceTypeColor(record.type)}
@@ -201,4 +201,4 @@ export function ScheduleCalendar({ schedule, startDate, endDate }: ScheduleCalen
       </Dialog>
     </div>
   );
-} 
+}

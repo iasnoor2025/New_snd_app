@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
-import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
-import { BreadcrumbItem } from '@/Modules/EmployeeManagement/Resources/js/types';
-import { Breadcrumb } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/breadcrumb';
+// Minimal type definitions for build
+type PageProps = { [key: string]: any };
+type BreadcrumbItem = { title: string; href: string };
+import AdminLayout from '../../../layouts/AdminLayout';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/card';
-import { PaymentHistory } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/advances/PaymentHistory';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/button';
+} from '@/components/ui/card';
+import PaymentHistory from '../../../../../../Payroll/resources/js/components/advances/PaymentHistory';
+import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
 interface Employee {
@@ -50,7 +51,7 @@ interface Props extends PageProps {
   };
 }
 
-export default function History({ auth, employee, monthlyHistory, totalRepaid, pagination }: Props) {
+export default function History({ employee, monthlyHistory, totalRepaid, pagination }: Props) {
   const { t } = useTranslation('employee');
 
   const [isLoading, setIsLoading] = useState(false);

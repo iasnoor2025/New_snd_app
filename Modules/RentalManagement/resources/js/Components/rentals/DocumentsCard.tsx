@@ -166,6 +166,7 @@ export default function DocumentsCard({
               variant="outline"
               size="sm"
               onClick={() => setIsUploadDialogOpen(true)}
+            >
               <Upload className="mr-2 h-4 w-4" />
               Upload
             </Button>
@@ -183,6 +184,7 @@ export default function DocumentsCard({
                 size="sm"
                 onClick={() => setIsUploadDialogOpen(true)}
                 className="mt-2"
+              >
                 <Upload className="mr-2 h-4 w-4" />
                 {t('ttl_upload_document')}
               </Button>
@@ -220,6 +222,7 @@ export default function DocumentsCard({
                         size="icon"
                         asChild
                         className="h-8 w-8"
+                      >
                         <a href={document.url} target="_blank" rel="noopener noreferrer">
                           <Eye className="h-4 w-4" />
                           <span className="sr-only">View</span>
@@ -230,6 +233,7 @@ export default function DocumentsCard({
                         size="icon"
                         asChild
                         className="h-8 w-8"
+                      >
                         <a href={`${document.url}?download=1`}>
                           <Download className="h-4 w-4" />
                           <span className="sr-only">Download</span>
@@ -241,6 +245,7 @@ export default function DocumentsCard({
                           size="icon"
                           className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
                           onClick={() => confirmDelete(document)}
+                        >
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Delete</span>
                         </Button>
@@ -284,6 +289,7 @@ export default function DocumentsCard({
             <Button
               onClick={handleUpload}
               disabled={processing || !data.document}
+            >
               {processing ? "Uploading..." : "Upload"}
             </Button>
           </DialogFooter>
@@ -307,6 +313,7 @@ export default function DocumentsCard({
               variant="destructive"
               onClick={handleDelete}
               disabled={processing}
+            >
               {processing ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>

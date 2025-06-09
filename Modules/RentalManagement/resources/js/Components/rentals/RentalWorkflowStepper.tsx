@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { RentalStatus } from '@/types/models';
+// import { RentalStatus } from '@/types/models';
+type RentalStatus = string;
 import { Check, Clock, AlertCircle } from 'lucide-react';
 
 interface WorkflowStep {
@@ -91,7 +92,7 @@ export function RentalWorkflowStepper({
 
     // Find the exact step matching the current status
     const currentIndex = workflowSteps.findIndex(
-        (step) => step.status === validStatus;
+        (step) => step.status === validStatus
     );
 
     console.log('Found status index:', currentIndex, 'for status:', validStatus);
@@ -125,6 +126,7 @@ export function RentalWorkflowStepper({
                                     'relative flex items-start gap-4',
                                     isCurrent && 'bg-gray-50 p-2 rounded-md shadow-sm' // Highlight current step
                                 )}
+                            >
                                 {/* Step indicator */}
                                 <div
                                     className={cn(
@@ -133,6 +135,7 @@ export function RentalWorkflowStepper({
                                         isCurrent && 'border-primary border-2',
                                         isUpcoming && 'border-gray-200'
                                     )}
+                                >
                                     {isCompleted ? (
                                         <Check className="h-4 w-4 text-white" />
                                     ) : isCurrent ? (
@@ -151,6 +154,7 @@ export function RentalWorkflowStepper({
                                             isCurrent && 'text-primary font-bold', // Make current text bolder
                                             isUpcoming && 'text-gray-500'
                                         )}
+                                    >
                                         {step.label || 'Unknown Step'}
                                         {isCurrent && (
                                             <span className="ml-2 inline-block bg-primary text-white text-xs px-2 py-0.5 rounded-full">

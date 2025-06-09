@@ -119,6 +119,7 @@ export default function InvoicesCard({
               variant="outline"
               size="sm"
               onClick={handleCreateInvoice}
+            >
               <FilePlus className="mr-2 h-4 w-4" />
               Create Invoice
             </Button>
@@ -136,6 +137,7 @@ export default function InvoicesCard({
                 size="sm"
                 onClick={handleCreateInvoice}
                 className="mt-2"
+              >
                 <FilePlus className="mr-2 h-4 w-4" />
                 Create Invoice
               </Button>
@@ -170,6 +172,7 @@ export default function InvoicesCard({
                         size="icon"
                         asChild
                         className="h-8 w-8"
+                      >
                         <a href={route('invoices.show', invoice.id)}>
                           <Eye className="h-4 w-4" />
                           <span className="sr-only">View</span>
@@ -180,6 +183,7 @@ export default function InvoicesCard({
                         size="icon"
                         asChild
                         className="h-8 w-8"
+                      >
                         <a href={route('invoices.download', invoice.id)}>
                           <Download className="h-4 w-4" />
                           <span className="sr-only">Download</span>

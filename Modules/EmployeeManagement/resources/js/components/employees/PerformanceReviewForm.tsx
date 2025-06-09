@@ -74,10 +74,10 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
 
   // Calculate rating category
   const getRatingCategory = (rating: number) => {
-  const { t } = useTranslation('employee');
+    const { t } = useTranslation('employee');
 
     const category = PERFORMANCE_RATING_CATEGORIES.find(
-      cat => rating >= cat.min && rating <= cat.max;
+      cat => rating >= cat.min && rating <= cat.max
     );
     return category || PERFORMANCE_RATING_CATEGORIES[2]; // Default to "Good" if not found
   };
@@ -117,9 +117,9 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
     watch('job_knowledge_rating'),
     watch('work_quality_rating'),
     watch('attendance_rating'),
-    watch('communication_rating'),;
-    watch('teamwork_rating'),;
-    watch('initiative_rating');
+    watch('communication_rating'),
+    watch('teamwork_rating'),
+    watch('initiative_rating'),
   ];
 
   // Helper function to map PerformanceReview to form values
@@ -280,6 +280,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       value={field.value.toString()}
                       onValueChange={(value) => field.onChange(parseInt(value))}
                       disabled={!!employeeId || isLoading}
+                    >
                       <SelectTrigger id="employee_id">
                         <SelectValue placeholder={t('ph_select_employee')} />
                       </SelectTrigger>
@@ -308,6 +309,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       value={field.value.toString()}
                       onValueChange={(value) => field.onChange(parseInt(value))}
                       disabled={isLoading}
+                    >
                       <SelectTrigger id="reviewer_id">
                         <SelectValue placeholder={t('ph_select_reviewer')} />
                       </SelectTrigger>
@@ -540,6 +542,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       type="button"
                       onClick={() => handleRemoveItem('strengths', index)}
                       className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -571,6 +574,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       type="button"
                       onClick={() => handleRemoveItem('weaknesses', index)}
                       className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -602,6 +606,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                       type="button"
                       onClick={() => handleRemoveItem('goals', index)}
                       className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -628,6 +633,7 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
                 variant="outline"
                 onClick={onCancel}
                 disabled={isLoading}
+              >
                 Cancel
               </Button>
             )}
@@ -635,11 +641,14 @@ const PerformanceReviewForm: React.FC<PerformanceReviewFormProps> = ({
             <Button
               type="submit"
               disabled={isLoading}
+            >
               {isLoading ? (
+                <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saving...
                 </>
               ) : (
+                <>
                   <Save className="mr-2 h-4 w-4" />
                   {review ? 'Update Review' : 'Create Review'}
                 </>

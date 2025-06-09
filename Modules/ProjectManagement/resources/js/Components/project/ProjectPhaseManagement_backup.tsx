@@ -175,7 +175,7 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
   };
 
   const openEditPhaseDialog = (phase: Phase) => {
-  const { t } = useTranslation('project');
+    const { t } = useTranslation('project');
 
     setSelectedPhase(phase);
     setEditName(phase.name);
@@ -261,260 +261,170 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
         </div>
       ) : (
         project ? (
-          <div>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>{project.name}</CardTitle>
-                    <CardDescription>{project.description}</CardDescription>
-                  </div>
-                  {getProjectStatusBadge(project.status)}
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">{t('date_range')}</h3>
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span>{formatDate(project.start_date)} - {project.actual_end_date ? formatDate(project.actual_end_date) : formatDate(project.expected_end_date)}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">Budget</h3>
-                    <div className="font-semibold">{formatCurrency(project.budget)}</div>
-                  </div>
-                </div>
-
-                <div className="space-y-2 mb-6">
+          <>
+            <div>
+              <Card>
+                <CardHeader>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">{t('overall_progress')}</h3>
-                    <span className="text-sm">{calculateOverallProgress()}%</span>
+                    <div>
+                      <CardTitle>{project.name}</CardTitle>
+                      <CardDescription>{project.description}</CardDescription>
+                    </div>
+                    {getProjectStatusBadge(project.status)}
                   </div>
-                  <Progress value={calculateOverallProgress()} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">{t('date_range')}</h3>
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span>{formatDate(project.start_date)} - {project.actual_end_date ? formatDate(project.actual_end_date) : formatDate(project.expected_end_date)}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">Budget</h3>
+                      <div className="font-semibold">{formatCurrency(project.budget)}</div>
+                    </div>
+                  </div>
 
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold tracking-tight">{t('project_phases')}</h2>
-            <Button onClick={() => {
-              setPhaseOrder(getNextPhaseOrder());
-              setShowAddPhaseDialog(true);
-            }}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Phase
-            </Button>
-          </div>
-
-          {phases.length === 0 ? (
-            <Card>
-              <CardContent className="py-10">
-                <div className="text-center text-muted-foreground">
-                  <p>No phases have been defined for this project.</p>
-                  <p className="mt-2">Create your first phase to get started.</p>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {phases.map((phase) => (
-                <Card key={phase.id} className={phase.status === 'in_progress' ? 'border-primary' : ''}>
-                  <CardHeader className="pb-2">
+                  <div className="space-y-2 mb-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <span className="bg-muted rounded-full h-6 w-6 flex items-center justify-center text-xs mr-3">
-                          {phase.order}
-                        </span>
-                        <CardTitle className="text-lg">{phase.name}</CardTitle>
-                      </div>
-                      {getStatusBadge(phase.status)}
+                      <h3 className="text-sm font-medium">{t('overall_progress')}</h3>
+                      <span className="text-sm">{calculateOverallProgress()}%</span>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">{phase.description}</p>
-
-                    <div className="grid grid-cols-3 gap-6 mb-4">
-                      <div>
-                        <p className="text-sm font-medium">{t('lbl_start_date')}</p>
-                        <p className="text-sm">{formatDate(phase.start_date)}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{t('expected_end_date')}</p>
-                        <p className="text-sm">{formatDate(phase.expected_end_date)}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{t('actual_end_date')}</p>
-                        <p className="text-sm">{formatDate(phase.actual_end_date)}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium">Progress</p>
-                        <span className="text-sm">{phase.progress}%</span>
-                      </div>
-                      <Progress value={phase.progress} className="h-2" />
-                    </div>
-
-                    <div className="flex justify-end mt-4">
-                      <Button
-                        variant="ghost"
-                        onClick={() => openEditPhaseDialog(phase)}
-                        className="flex items-center space-x-1"
-                        <Edit className="h-4 w-4 mr-1" />
-                        {t('ttl_edit_phase')}
-                      </Button>
-
-                      {phase.status !== 'completed' && (
-                        <Button
-                          variant="outline"
-                          className="ml-2 flex items-center space-x-1"
-                          onClick={async () => {
-                            try {
-                              await axios.post(`/api/projects/${projectId}/phases/${phase.id}/complete`);
-                              toast.success('Phase marked as completed');
-                              fetchProjectData();
-                            } catch (error) {
-                              console.error('Error completing phase:', error);
-                              toast.error('Failed to complete phase');
-                            }
-                          }}
-                          <CheckCircle2 className="h-4 w-4 mr-1" />
-                          Mark Complete
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    <Progress value={calculateOverallProgress()} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          )}
 
-          {/* Add Phase Dialog */}
-          <Dialog open={showAddPhaseDialog} onOpenChange={setShowAddPhaseDialog}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{t('ttl_add_project_phase')}</DialogTitle>
-                <DialogDescription>
-                  Create a new phase for this project
-                </DialogDescription>
-              </DialogHeader>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold tracking-tight">{t('project_phases')}</h2>
+              <Button onClick={() => {
+                setPhaseOrder(getNextPhaseOrder());
+                setShowAddPhaseDialog(true);
+              }}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Phase
+              </Button>
+            </div>
 
-              <div className="grid gap-4 py-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">{t('lbl_phase_name')}</Label>
-                  <Input
-                    id="name"
-                    value={phaseName}
-                    onChange={(e) => setPhaseName(e.target.value)}
-                    placeholder={t('ph_eg_research_planning')}
-                    disabled={submitting}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={phaseDescription}
-                    onChange={(e) => setPhaseDescription(e.target.value)}
-                    placeholder={t('ph_describe_the_objectives_and_activities_of_this')}
-                    rows={3}
-                    disabled={submitting}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{t('lbl_start_date')}</Label>
-                    <DatePicker
-                      date={phaseStartDate}
-                      setDate={setPhaseStartDate}
-                      disabled={submitting}
-                    />
+            {phases.length === 0 ? (
+              <Card>
+                <CardContent className="py-10">
+                  <div className="text-center text-muted-foreground">
+                    <p>No phases have been defined for this project.</p>
+                    <p className="mt-2">Create your first phase to get started.</p>
                   </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {phases.map((phase) => (
+                  <Card key={phase.id} className={phase.status === 'in_progress' ? 'border-primary' : ''}>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <span className="bg-muted rounded-full h-6 w-6 flex items-center justify-center text-xs mr-3">
+                            {phase.order}
+                          </span>
+                          <CardTitle className="text-lg">{phase.name}</CardTitle>
+                        </div>
+                        {getStatusBadge(phase.status)}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground mb-4">{phase.description}</p>
 
-                  <div className="space-y-2">
-                    <Label>{t('expected_end_date')}</Label>
-                    <DatePicker
-                      date={phaseEndDate}
-                      setDate={setPhaseEndDate}
-                      disabled={submitting}
-                    />
-                  </div>
-                </div>
+                      <div className="grid grid-cols-3 gap-6 mb-4">
+                        <div>
+                          <p className="text-sm font-medium">{t('lbl_start_date')}</p>
+                          <p className="text-sm">{formatDate(phase.start_date)}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{t('expected_end_date')}</p>
+                          <p className="text-sm">{formatDate(phase.expected_end_date)}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{t('actual_end_date')}</p>
+                          <p className="text-sm">{formatDate(phase.actual_end_date)}</p>
+                        </div>
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="order">{t('lbl_phase_order')}</Label>
-                  <Input
-                    id="order"
-                    type="number"
-                    value={phaseOrder}
-                    onChange={(e) => setPhaseOrder(e.target.value)}
-                    min="1"
-                    disabled={submitting}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Defines the sequence of phases in the project timeline
-                  </p>
-                </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium">Progress</p>
+                          <span className="text-sm">{phase.progress}%</span>
+                        </div>
+                        <Progress value={phase.progress} className="h-2" />
+                      </div>
+
+                      <div className="flex justify-end mt-4">
+                        <Button
+                          variant="ghost"
+                          onClick={() => openEditPhaseDialog(phase)}
+                          className="flex items-center space-x-1"
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          {t('ttl_edit_phase')}
+                        </Button>
+
+                        {phase.status !== 'completed' && (
+                          <Button
+                            variant="outline"
+                            className="ml-2 flex items-center space-x-1"
+                            onClick={async () => {
+                              try {
+                                await axios.post(`/api/projects/${projectId}/phases/${phase.id}/complete`);
+                                toast.success('Phase marked as completed');
+                                fetchProjectData();
+                              } catch (error) {
+                                console.error('Error completing phase:', error);
+                                toast.error('Failed to complete phase');
+                              }
+                            }}
+                          >
+                            <CheckCircle2 className="h-4 w-4 mr-1" />
+                            Mark Complete
+                          </Button>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
+            )}
 
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowAddPhaseDialog(false)}
-                  disabled={submitting}
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAddPhase}
-                  disabled={submitting}
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Adding...
-                    </>
-                  ) : (
-                    'Add Phase'
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+            {/* Add Phase Dialog */}
+            <Dialog open={showAddPhaseDialog} onOpenChange={setShowAddPhaseDialog}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t('ttl_add_project_phase')}</DialogTitle>
+                  <DialogDescription>
+                    Create a new phase for this project
+                  </DialogDescription>
+                </DialogHeader>
 
-          {/* Edit Phase Dialog */}
-          <Dialog open={showEditPhaseDialog} onOpenChange={setShowEditPhaseDialog}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{t('ttl_edit_project_phase')}</DialogTitle>
-                <DialogDescription>
-                  Update details for this project phase
-                </DialogDescription>
-              </DialogHeader>
-
-              {selectedPhase && (
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="edit-name">{t('lbl_phase_name')}</Label>
+                    <Label htmlFor="name">{t('lbl_phase_name')}</Label>
                     <Input
-                      id="edit-name"
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
+                      id="name"
+                      value={phaseName}
+                      onChange={(e) => setPhaseName(e.target.value)}
+                      placeholder={t('ph_eg_research_planning')}
                       disabled={submitting}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="edit-description">Description</Label>
+                    <Label htmlFor="description">Description</Label>
                     <Textarea
-                      id="edit-description"
-                      value={editDescription}
-                      onChange={(e) => setEditDescription(e.target.value)}
+                      id="description"
+                      value={phaseDescription}
+                      onChange={(e) => setPhaseDescription(e.target.value)}
+                      placeholder={t('ph_describe_the_objectives_and_activities_of_this')}
                       rows={3}
                       disabled={submitting}
                     />
@@ -524,8 +434,8 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                     <div className="space-y-2">
                       <Label>{t('lbl_start_date')}</Label>
                       <DatePicker
-                        date={editStartDate}
-                        setDate={setEditStartDate}
+                        date={phaseStartDate}
+                        setDate={setPhaseStartDate}
                         disabled={submitting}
                       />
                     </div>
@@ -533,82 +443,177 @@ export const ProjectPhaseManagement: React.FC<{ projectId: number }> = ({ projec
                     <div className="space-y-2">
                       <Label>{t('expected_end_date')}</Label>
                       <DatePicker
-                        date={editEndDate}
-                        setDate={setEditEndDate}
+                        date={phaseEndDate}
+                        setDate={setPhaseEndDate}
                         disabled={submitting}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label>{t('actual_end_date')}</Label>
-                    <DatePicker
-                      date={editActualEndDate}
-                      setDate={setEditActualEndDate}
+                    <Label htmlFor="order">{t('lbl_phase_order')}</Label>
+                    <Input
+                      id="order"
+                      type="number"
+                      value={phaseOrder}
+                      onChange={(e) => setPhaseOrder(e.target.value)}
+                      min="1"
                       disabled={submitting}
                     />
                     <p className="text-sm text-muted-foreground">
-                      Only set this when the phase is fully completed
+                      Defines the sequence of phases in the project timeline
                     </p>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="status">Status</Label>
-                    <Select
-                      value={editStatus}
-                      onValueChange={setEditStatus}
-                      disabled={submitting}
-                    >
-                      <SelectTrigger id="status">
-                        <SelectValue placeholder={t('ph_select_status')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="in_progress">{t('in_progress')}</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="progress">Progress (%)</Label>
-                    <Input
-                      id="progress"
-                      type="number"
-                      value={editProgress}
-                      onChange={(e) => setEditProgress(e.target.value)}
-                      min="0"
-                      max="100"
-                      disabled={submitting}
-                    />
-                  </div>
                 </div>
-              )}
 
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowEditPhaseDialog(false)}
-                  disabled={submitting}
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleEditPhase}
-                  disabled={submitting}
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Updating...
-                    </>
-                  ) : (
-                    'Update Phase'
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAddPhaseDialog(false)}
+                    disabled={submitting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleAddPhase}
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Adding...
+                      </>
+                    ) : (
+                      'Add Phase'
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            {/* Edit Phase Dialog */}
+            <Dialog open={showEditPhaseDialog} onOpenChange={setShowEditPhaseDialog}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t('ttl_edit_project_phase')}</DialogTitle>
+                  <DialogDescription>
+                    Update details for this project phase
+                  </DialogDescription>
+                </DialogHeader>
+
+                {selectedPhase && (
+                  <div className="grid gap-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="edit-name">{t('lbl_phase_name')}</Label>
+                      <Input
+                        id="edit-name"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        disabled={submitting}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="edit-description">Description</Label>
+                      <Textarea
+                        id="edit-description"
+                        value={editDescription}
+                        onChange={(e) => setEditDescription(e.target.value)}
+                        rows={3}
+                        disabled={submitting}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>{t('lbl_start_date')}</Label>
+                        <DatePicker
+                          date={editStartDate}
+                          setDate={setEditStartDate}
+                          disabled={submitting}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>{t('expected_end_date')}</Label>
+                        <DatePicker
+                          date={editEndDate}
+                          setDate={setEditEndDate}
+                          disabled={submitting}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>{t('actual_end_date')}</Label>
+                      <DatePicker
+                        date={editActualEndDate}
+                        setDate={setEditActualEndDate}
+                        disabled={submitting}
+                      />
+                      <p className="text-sm text-muted-foreground">
+                        Only set this when the phase is fully completed
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="status">Status</Label>
+                      <Select
+                        value={editStatus}
+                        onValueChange={setEditStatus}
+                        disabled={submitting}
+                      >
+                        <SelectTrigger id="status">
+                          <SelectValue placeholder={t('ph_select_status')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="in_progress">{t('in_progress')}</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="progress">Progress (%)</Label>
+                      <Input
+                        id="progress"
+                        type="number"
+                        value={editProgress}
+                        onChange={(e) => setEditProgress(e.target.value)}
+                        min="0"
+                        max="100"
+                        disabled={submitting}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowEditPhaseDialog(false)}
+                    disabled={submitting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleEditPhase}
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      'Update Phase'
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </>
         ) : null
       )}
     </div>

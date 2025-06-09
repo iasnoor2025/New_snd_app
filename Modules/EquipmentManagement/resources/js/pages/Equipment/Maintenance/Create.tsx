@@ -1,40 +1,64 @@
 import React, { useState } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { Equipment } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/label';
-import { Textarea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/textarea';
+// Define PageProps inline if needed
+type PageProps = Record<string, unknown>;
+import AdminLayout from '@/layouts/AdminLayout';
+// Define Equipment inline if needed
+interface Equipment {
+  id: number;
+  name: string;
+  model: string;
+  serial_number?: string;
+  status?: string;
+  category?: string;
+  purchase_date?: string;
+  door_number?: string;
+}
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
+} from '@/components/ui/select';
 import { ArrowLeft as ArrowLeftIcon } from 'lucide-react';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/form';
+} from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/popover';
-import { Calendar } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/calendar';
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
-import { cn } from '@/Modules/EquipmentManagement/Resources/js/lib/utils';
+import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+// Define BreadcrumbItem inline
+type BreadcrumbItem = { title: string; href: string };
 
 interface Props extends PageProps {
   equipment: Equipment;
@@ -45,7 +69,7 @@ type MaintenanceType = 'preventive' | 'repair' | 'inspection';
 export default function MaintenanceCreate({ equipment }: Props) {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  
+
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: route('dashboard') },
     { title: 'Equipment', href: route('equipment.index') },
@@ -209,4 +233,4 @@ export default function MaintenanceCreate({ equipment }: Props) {
       </div>
     </AdminLayout>
   );
-} 
+}

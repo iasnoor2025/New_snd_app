@@ -20,7 +20,7 @@ import {
     Info,
     Terminal
 } from 'lucide-react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '@/layouts/auth-layout';
 
 interface Props {
     apiVersion: string;

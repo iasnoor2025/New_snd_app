@@ -21,7 +21,7 @@ import {
   PieChart,
   TrendingUp
 } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -44,7 +44,6 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import Pagination from '@/components/Pagination';
 import { formatDateTime } from '@/utils/date';
 import { cn } from '@/lib/utils';
 import useTranslation from '@/hooks/useTranslation';
@@ -257,15 +256,15 @@ function GenerateReportDialog({ onGenerate }: { onGenerate: (data: any) => void 
             <div className="space-y-2">
               <Label>Period Start</Label>
               <DatePicker
-                date={formData.period_start}
-                setDate={(date) => setFormData(prev => ({ ...prev, period_start: date }))}
+                date={formData.period_start === null ? undefined : formData.period_start}
+                setDate={(date) => setFormData(prev => ({ ...prev, period_start: date ?? null }))}
               />
             </div>
             <div className="space-y-2">
               <Label>Period End</Label>
               <DatePicker
-                date={formData.period_end}
-                setDate={(date) => setFormData(prev => ({ ...prev, period_end: date }))}
+                date={formData.period_end === null ? undefined : formData.period_end}
+                setDate={(date) => setFormData(prev => ({ ...prev, period_end: date ?? null }))}
               />
             </div>
           </div>
@@ -416,8 +415,8 @@ export default function ComplianceReports({
   const [formState, setFormState] = useState({
     type: filters.type || '',
     status: filters.status || '',
-    from_date: filters.from_date ? new Date(filters.from_date) : null,
-    to_date: filters.to_date ? new Date(filters.to_date) : null,
+    from_date: filters.from_date ? new Date(filters.from_date) : undefined,
+    to_date: filters.to_date ? new Date(filters.to_date) : undefined,
   });
 
   const handleFilterChange = (name: string, value: any) => {
@@ -436,8 +435,8 @@ export default function ComplianceReports({
     setFormState({
       type: '',
       status: '',
-      from_date: null,
-      to_date: null,
+      from_date: undefined,
+      to_date: undefined,
     });
     router.get(route('compliance.reports'));
   };
@@ -446,19 +445,19 @@ export default function ComplianceReports({
     router.post(route('compliance.reports.store'), data);
   };
 
+  const renderHeader = () => (
+    <div className="flex items-center justify-between">
+      <h2 className="font-semibold text-xl text-gray-800 leading-tight flex items-center space-x-2">
+        <BarChart3 className="h-6 w-6" />
+        <span>Compliance Reports</span>
+      </h2>
+      <GenerateReportDialog onGenerate={handleGenerateReport} />
+    </div>
+  );
+
   return (
-    <AppLayout
-      title="Compliance Reports"
-      renderHeader={() => (
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight flex items-center space-x-2">
-            <BarChart3 className="h-6 w-6" />
-            <span>Compliance Reports</span>
-          </h2>
-          <GenerateReportDialog onGenerate={handleGenerateReport} />
-        </div>
-      )}
-    >
+    <AppLayout>
+      <div className="mb-6">{renderHeader()}</div>
       <Head title="Compliance Reports" />
 
       <div className="py-12">
@@ -597,9 +596,6 @@ export default function ComplianceReports({
             </CardHeader>
             <CardContent>
               <ReportsTable reports={reports.data} />
-              <div className="mt-6">
-                <Pagination links={reports.links} />
-              </div>
             </CardContent>
           </Card>
         </div>

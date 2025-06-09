@@ -386,7 +386,4 @@ export default function TimesheetEdit({ auth, timesheet, employees = [], project
     </AdminLayout>
   );
 }
-</Input>
-</Input>
-</Input>
 

@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { differenceInDays, format } from "date-fns";
 import { AlertCircle, AlertTriangle, CalendarClock, CreditCard, Printer, Send } from "lucide-react";
-import RentalItemsCard from "@/components/rentals/RentalItemsCard";
-import InvoicesCard from "@/components/rentals/InvoicesCard";
-import { formatCurrency } from "@/lib/utils";
+import RentalItemsCard from "../../rentals/RentalItemsCard";
+import InvoicesCard from "../../rentals/InvoicesCard";
+import { formatCurrency } from "@/utils/format";
 import { Progress } from '@/components/ui/progress';
 
 // Interface for OverdueSection props
@@ -63,8 +63,8 @@ export default function OverdueSection({
     if (!invoices.data || invoices.data.length === 0) return 0;
 
     const totalAmount = invoices.data.reduce((sum, inv) => sum + (inv.amount || 0), 0);
-    const paidAmount = invoices.data;
-      .filter(inv => inv.status === 'paid');
+    const paidAmount = invoices.data
+      .filter(inv => inv.status === 'paid')
       .reduce((sum, inv) => sum + (inv.amount || 0), 0);
 
     if (totalAmount === 0) return 0;
@@ -195,6 +195,7 @@ export default function OverdueSection({
                 className="flex-1"
                 onClick={handleSendReminder}
                 disabled={isSendingReminder}
+              >
                 <Send className="mr-2 h-4 w-4" />
                 Send Payment Reminder
               </Button>
@@ -204,6 +205,7 @@ export default function OverdueSection({
                 className="flex-1"
                 onClick={handlePrintInvoice}
                 disabled={isPrintingInvoice}
+              >
                 <Printer className="mr-2 h-4 w-4" />
                 Print Invoice
               </Button>

@@ -9,6 +9,8 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 
 // Custom BarChart wrapper component
 interface BarChartProps {

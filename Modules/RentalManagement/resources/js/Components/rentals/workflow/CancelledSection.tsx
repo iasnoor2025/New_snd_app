@@ -169,6 +169,7 @@ export default function CancelledSection({
                     className="flex-1"
                     onClick={handleDuplicateRental}
                     disabled={isDuplicating || !permissions.update}
+                  >
                     <Copy className="mr-2 h-4 w-4" />
                     {isDuplicating ? "Processing..." : "Duplicate as New Rental"}
                   </Button>

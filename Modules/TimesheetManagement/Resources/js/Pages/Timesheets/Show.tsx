@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/TimesheetManagement/Resources/js/types';
-import AdminLayout from '@/Modules/TimesheetManagement/Resources/js/layouts/AdminLayout';
-import { Button } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/button';
+import { PageProps, BreadcrumbItem } from '@/types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/badge';
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Clock as ClockIcon,
   ArrowLeft as ArrowLeftIcon,
@@ -24,16 +24,16 @@ import {
   Briefcase as BriefcaseIcon,
   User as UserIcon
 } from 'lucide-react';
-import { useToast } from '@/Modules/TimesheetManagement/Resources/js/Modules/TimesheetManagement/Resources/js/components/ui/use-toast';
-import { Timesheet } from '@/Modules/TimesheetManagement/Resources/js/types/models';
-import { formatDate } from '@/Modules/TimesheetManagement/Resources/js/utils/format';
-import { usePermission } from '@/Modules/TimesheetManagement/Resources/js/hooks/usePermission';
+import { useToast } from '@/components/ui/use-toast';
+import { Timesheet } from '../../../../resources/js/types/models';
+import { formatDate } from '@/utils/format';
+import { usePermission } from '@/hooks/usePermission';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/Modules/TimesheetManagement/Resources/js/components/ui/tooltip';
+} from '@/components/ui/tooltip';
 import { format } from 'date-fns';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -125,8 +125,10 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
   };
 
   // Calculate total hours
-  const totalHours = (parseFloat(timesheet.hours_worked?.toString() || '0') +;
-                      parseFloat(timesheet.overtime_hours?.toString() || '0')).toFixed(1);
+  const totalHours = (
+    parseFloat(timesheet.hours_worked?.toString() || '0') +
+    parseFloat(timesheet.overtime_hours?.toString() || '0')
+  ).toFixed(1);
 
   return (
     <AdminLayout title={t('ttl_view_timesheet')} breadcrumbs={breadcrumbs} requiredPermission="timesheets.view">
@@ -296,7 +298,7 @@ export default function TimesheetShow({ auth, timesheet }: Props) {
                 <div className="mt-6 pt-4 border-t">
                   <h3 className="text-sm font-medium mb-3">{t('recent_timesheets')}</h3>
                   <div className="space-y-3">
-                    {timesheet.employee.recent_timesheets.map((entry, index) => (
+                    {timesheet.employee.recent_timesheets.map((entry: { date: string; hours_worked: number; overtime_hours: number; status: string }, index: number) => (
                       <div key={index} className="flex justify-between items-center text-sm">
                         <div className="flex items-center">
                           <CalendarIcon className="h-3 w-3 mr-2 text-muted-foreground" />

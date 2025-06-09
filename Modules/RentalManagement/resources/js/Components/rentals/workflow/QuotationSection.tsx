@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, Download, CheckCircle2, FileText, Send, X } from "lucide-react";
-import RentalItemsCard from "@/components/rentals/RentalItemsCard";
+import RentalItemsCard from "../../rentals/RentalItemsCard";
 import { format } from "date-fns";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/utils/format";
 import { Progress } from '@/components/ui/progress';
 
 // Interface for QuotationSection props
@@ -185,11 +185,14 @@ export default function QuotationSection({
                     className="flex-1"
                     onClick={handleEmailQuotation}
                     disabled={isEmailingSent}
+                  >
                     {isEmailingSent ? (
+                      <>
                         <Clock className="mr-2 h-4 w-4 animate-spin" />
                         Sending...
                       </>
                     ) : (
+                      <>
                         <Send className="mr-2 h-4 w-4" />
                         Email to Customer
                       </>
@@ -203,6 +206,7 @@ export default function QuotationSection({
                 variant="destructive"
                 onClick={handleRejectQuotation}
                 disabled={isRejecting || !permissions.update}
+              >
                 <X className="mr-2 h-4 w-4" />
                 Reject Quotation
               </Button>
@@ -211,6 +215,7 @@ export default function QuotationSection({
                 variant="default"
                 onClick={handleApproveQuotation}
                 disabled={isApproving || !permissions.approve}
+              >
                 <CheckCircle2 className="mr-2 h-4 w-4" />
                 Approve Quotation
               </Button>

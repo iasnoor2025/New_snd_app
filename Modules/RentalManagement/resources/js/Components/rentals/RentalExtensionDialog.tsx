@@ -53,7 +53,7 @@ export default function RentalExtensionDialog({
   // Reset state when dialog opens
   useEffect(() => {
     if (isOpen) {
-      const endDate = typeof currentEndDate === 'string';
+      const endDate = typeof currentEndDate === 'string'
         ? new Date(currentEndDate)
         : currentEndDate;
 
@@ -126,6 +126,7 @@ export default function RentalExtensionDialog({
                         !newEndDate && "text-muted-foreground"
                       )}
                       disabled={isSubmitting}
+                    >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {newEndDate ? format(newEndDate, "PPP") : <span>{t('pick_a_date')}</span>}
                     </Button>

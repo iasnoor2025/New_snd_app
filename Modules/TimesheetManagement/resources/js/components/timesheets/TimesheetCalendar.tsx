@@ -117,6 +117,7 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
           <div
             key={idx}
             className="bg-white p-2 text-center text-sm font-medium"
+          >
             {day}
           </div>
         ))}
@@ -144,11 +145,13 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
                   ? 'bg-gray-50'
                   : ''
               } ${isCurrentDay ? 'ring-2 ring-blue-500 ring-inset' : ''}`}
+            >
               <div className="flex justify-between items-start">
                 <span
                   className={`text-sm font-medium ${
                     isCurrentDay ? 'text-blue-600' : ''
                   }`}
+                >
                   {format(day, 'd')}
                 </span>
 
@@ -159,6 +162,7 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
                       size="icon"
                       className="h-6 w-6"
                       onClick={() => handleAddTimesheet(day)}
+                    >
                       <Plus className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -175,19 +179,22 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
                         getStatusColor(timesheet.status)
                       }`}
                       onClick={() => handleEditTimesheet(timesheet)}
-                      {timesheet.status === 'approved' ? (
-                        <CheckCircle2 className="h-3 w-3" />
-                      ) : timesheet.status === 'rejected' ? (
-                        <XCircle className="h-3 w-3" />
-                      ) : (
-                        <Clock3 className="h-3 w-3" />
-                      )}
-                      <span className="truncate">
-                        {timesheet.employee?.first_name} {timesheet.employee?.last_name}
-                      </span>
-                      <span className="whitespace-nowrap ml-auto">
-                        {timesheet.regular_hours + timesheet.overtime_hours}h
-                      </span>
+                    >
+                      <>
+                        {timesheet.status === 'approved' ? (
+                          <CheckCircle2 className="h-3 w-3" />
+                        ) : timesheet.status === 'rejected' ? (
+                          <XCircle className="h-3 w-3" />
+                        ) : (
+                          <Clock3 className="h-3 w-3" />
+                        )}
+                        <span className="truncate">
+                          {timesheet.employee?.first_name} {timesheet.employee?.last_name}
+                        </span>
+                        <span className="whitespace-nowrap ml-auto">
+                          {timesheet.regular_hours + timesheet.overtime_hours}h
+                        </span>
+                      </>
                     </div>
                   ))}
                 </div>

@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, User, Calendar, Database, FileText, Eye, EyeOff, Copy, Check } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

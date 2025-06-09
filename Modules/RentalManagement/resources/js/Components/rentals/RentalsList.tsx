@@ -159,6 +159,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                       <Link
                         href={route("rentals.show", rental.id)}
                         className="text-primary hover:underline"
+                      >
                         {rental.rental_number}
                       </Link>
                     </TableCell>
@@ -218,6 +219,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                                 <Link
                                   href={route("rentals.show", rental.id)}
                                   className="flex items-center w-full"
+                                >
                                   <Eye className="mr-2 h-4 w-4" />
                                   {t('employee:ttl_view_details')}
                                 </Link>
@@ -228,6 +230,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                                 <Link
                                   href={route("rentals.edit", rental.id)}
                                   className="flex items-center w-full"
+                                >
                                   <Pencil className="mr-2 h-4 w-4" />
                                   {t('ttl_edit_rental')}
                                 </Link>
@@ -239,6 +242,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                                   href={route("rentals.print", rental.id)}
                                   target="_blank"
                                   className="flex items-center w-full"
+                                >
                                   <Printer className="mr-2 h-4 w-4" />
                                   Print Document
                                 </Link>
@@ -249,6 +253,7 @@ export default function RentalsList({ rentals, onDelete }: Props) {
                               <DropdownMenuItem
                                 onClick={() => onDelete(rental)}
                                 className="text-destructive focus:text-destructive"
+                              >
                                 <Trash className="mr-2 h-4 w-4" />
                                 Delete Rental
                               </DropdownMenuItem>

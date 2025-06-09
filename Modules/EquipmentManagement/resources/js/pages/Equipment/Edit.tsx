@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import type { PageProps } from '../../../../../../resources/js/types';
-import AdminLayout from '../../../../../../resources/js/layouts/AdminLayout';
+import AdminLayout from '@/layouts/app-layout';
 import { format } from 'date-fns';
 import { Button } from '../../../../../../resources/js/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../../../../resources/js/components/ui/card';

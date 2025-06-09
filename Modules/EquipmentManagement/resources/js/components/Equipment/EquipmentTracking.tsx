@@ -161,6 +161,7 @@ export function EquipmentTracking({ equipmentId }: EquipmentTrackingProps) {
                                     center={[location.latitude, location.longitude]}
                                     zoom={13}
                                     style={{ height: '100%', width: '100%' }}
+                                >
                                     <TileLayer
                                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -168,6 +169,7 @@ export function EquipmentTracking({ equipmentId }: EquipmentTrackingProps) {
                                     <Marker
                                         position={[location.latitude, location.longitude]}
                                         icon={customIcon}
+                                    >
                                         <Popup>
                                             <div>
                                                 <p className="font-medium">Equipment Location</p>
@@ -206,6 +208,7 @@ export function EquipmentTracking({ equipmentId }: EquipmentTrackingProps) {
                                 <div
                                     key={alert.id}
                                     className="flex items-start justify-between p-3 rounded-lg border"
+                                >
                                     <div className="space-y-1">
                                         <div className="flex items-center space-x-2">
                                             <Badge className={getSeverityColor(alert.severity)}>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { Search, Filter, Download, Eye, Calendar, User, Database, AlertCircle } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
-import Pagination from '@/components/Pagination';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { formatDateTime } from '@/utils/date';
 import { cn } from '@/lib/utils';
 import useTranslation from '@/hooks/useTranslation';
 
@@ -97,7 +95,7 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
 
     const handleSearch = () => {
         setIsLoading(true);
-        router.get(route('audit-compliance.audit-logs.index'), formData, {
+        router.get(route('audit-compliance.audit-logs.index'), formData as any, {
             preserveState: true,
             preserveScroll: true,
             onFinish: () => setIsLoading(false)
@@ -116,13 +114,13 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
         };
         setFormData(resetData);
         setIsLoading(true);
-        router.get(route('audit-compliance.audit-logs.index'), resetData, {
+        router.get(route('audit-compliance.audit-logs.index'), resetData as any, {
             onFinish: () => setIsLoading(false)
         });
     };
 
     const exportLogs = () => {
-        router.get(route('audit-compliance.audit-logs.export'), formData);
+        router.get(route('audit-compliance.audit-logs.export'), formData as any);
     };
 
   const formatDate = (date: Date | null): string | null => {
@@ -130,21 +128,19 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
     return date.toISOString().split('T')[0];
   };
 
-  const getEventBadge = (event: string) => {
-    const eventConfig = {
-      'created': { variant: 'default', color: 'bg-green-100 text-green-800', label: 'Created' },
-      'updated': { variant: 'secondary', color: 'bg-blue-100 text-blue-800', label: 'Updated' },
-      'deleted': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: 'Deleted' },
-      'restored': { variant: 'outline', color: 'bg-purple-100 text-purple-800', label: 'Restored' },
-      'login': { variant: 'default', color: 'bg-green-100 text-green-800', label: 'Login' },
-      'logout': { variant: 'secondary', color: 'bg-gray-100 text-gray-800', label: 'Logout' },
-      'failed_login': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: 'Failed Login' },
-      'password_changed': { variant: 'outline', color: 'bg-yellow-100 text-yellow-800', label: 'Password Changed' },
-      'permission_granted': { variant: 'default', color: 'bg-green-100 text-green-800', label: 'Permission Granted' },
-      'permission_revoked': { variant: 'destructive', color: 'bg-red-100 text-red-800', label: 'Permission Revoked' }
-    };
+  const statusMap: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; color: string; label: string }> = {
+    created: { variant: 'default', color: 'green', label: 'Created' },
+    updated: { variant: 'secondary', color: 'blue', label: 'Updated' },
+    deleted: { variant: 'destructive', color: 'red', label: 'Deleted' },
+    restored: { variant: 'outline', color: 'green', label: 'Restored' },
+    login: { variant: 'default', color: 'blue', label: 'Login' },
+    logout: { variant: 'secondary', color: 'blue', label: 'Logout' },
+    permission_granted: { variant: 'default', color: 'green', label: 'Permission Granted' },
+    permission_revoked: { variant: 'destructive', color: 'red', label: 'Permission Revoked' },
+  };
 
-    const config = eventConfig[event] || { variant: 'default', color: 'bg-gray-100 text-gray-800', label: event };
+  const getEventBadge = (event: string) => {
+    const config = statusMap[event] || { variant: 'default', color: 'bg-gray-100 text-gray-800', label: event };
 
     return (
       <Badge
@@ -156,15 +152,15 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
     );
   };
 
+  const renderHeader = () => (
+    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+      Audit Logs
+    </h2>
+  );
+
   return (
-    <AppLayout
-      title="Audit Logs"
-      renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Audit Logs
-        </h2>
-      )}
-    >
+    <AppLayout>
+      <div className="mb-6">{renderHeader()}</div>
       <Head title="Audit Logs" />
 
       <div className="py-12">
@@ -237,16 +233,16 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
                 <div>
                   <label className="block text-sm font-medium mb-1">From Date</label>
                   <DatePicker
-                    date={formData.from_date}
-                    setDate={(date) => handleChange('from_date', date)}
+                    date={typeof formData.from_date === 'string' ? formData.from_date : ''}
+                    setDate={(date) => handleChange('from_date', typeof date === 'string' ? date : '')}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">To Date</label>
                   <DatePicker
-                    date={formData.to_date}
-                    setDate={(date) => handleChange('to_date', date)}
+                    date={typeof formData.to_date === 'string' ? formData.to_date : ''}
+                    setDate={(date) => handleChange('to_date', typeof date === 'string' ? date : '')}
                   />
                 </div>
               </div>
@@ -289,9 +285,9 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
                             <TableCell className="font-mono text-sm">{log.id}</TableCell>
                             <TableCell className="text-sm">
                               <div className="flex flex-col">
-                                <span>{formatDateTime(log.created_at)}</span>
+                                <span>{typeof log.created_at === 'string' ? new Date(log.created_at).toLocaleString() : ''}</span>
                                 <span className="text-xs text-gray-500">
-                                  {new Date(log.created_at).toLocaleDateString()}
+                                  {typeof log.created_at === 'string' ? new Date(log.created_at).toLocaleDateString() : ''}
                                 </span>
                               </div>
                             </TableCell>
@@ -331,12 +327,6 @@ const Index: React.FC<IndexProps> = ({ logs, filters, eventTypes, modelTypes, st
                       </TableBody>
                     </Table>
                   </div>
-
-                  {logs.links && (
-                    <div className="mt-6">
-                      <Pagination links={logs.links} />
-                    </div>
-                  )}
                 </>
               ) : (
                 <div className="text-center py-12">

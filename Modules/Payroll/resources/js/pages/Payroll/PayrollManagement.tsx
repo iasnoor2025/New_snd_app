@@ -7,17 +7,18 @@ import { Employee } from '../../types/employee';
 import PayrollList from '../../components/payroll/PayrollList';
 import PayrollGeneration from '../../components/payroll/PayrollGeneration';
 import PayrollDetails from '../../components/payroll/PayrollDetails';
-import { Breadcrumbs } from '../../components/ui/breadcrumbs';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { Calendar, ChevronDown, Download, Plus, RefreshCw } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 const PayrollManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('list');
@@ -59,8 +60,6 @@ const PayrollManagement: React.FC = () => {
   };
 
   const handleGeneratePayroll = () => {
-  const { t } = useTranslation('payroll');
-
     setActiveTab('generate');
   };
 

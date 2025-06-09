@@ -211,7 +211,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
 
   const getRatingBadge = (rating: number) => {
     const category = PERFORMANCE_RATING_CATEGORIES.find(
-      cat => rating >= cat.min && rating <= cat.max;
+      cat => rating >= cat.min && rating <= cat.max
     );
 
     return (
@@ -263,6 +263,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
             <Select
               value={statusFilter}
               onValueChange={setStatusFilter}
+            >
               <SelectTrigger className="w-[130px]">
                 <SelectValue placeholder={t('ph_status')} />
               </SelectTrigger>
@@ -364,6 +365,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
                             Delete
                           </DropdownMenuItem>
                           {review.status === 'pending' && (
+                            <>
                               <DropdownMenuItem onClick={() => handleApprove(review.id)}>
                                 <CheckCircle className="mr-2 h-4 w-4" />
                                 Approve

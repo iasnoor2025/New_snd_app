@@ -22,9 +22,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Pagination, PaginationProps } from "@/components/ui/pagination";
 import { RefreshCw } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import axios from 'axios';
 
 interface Payment {
   id: number;
@@ -279,3 +280,5 @@ export function PaymentHistory({
     </div>
   );
 }
+
+export default PaymentHistory;

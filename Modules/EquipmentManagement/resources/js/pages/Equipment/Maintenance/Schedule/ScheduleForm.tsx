@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/label';
-import { Switch } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
-import { Textarea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/textarea';
-import { DatePicker } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/date-picker';
-import { Alert, AlertDescription } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/alert';
-import { Equipment, User } from '@/Modules/EquipmentManagement/Resources/js/types/models';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Equipment, User } from '@/types/models';
 import { TechnicianSelector } from './TechnicianSelector';
 
 interface ScheduleFormProps {
@@ -87,7 +87,7 @@ export default function ScheduleForm({ equipment, technicians, onSuccess }: Sche
             <DatePicker
               id="scheduled_date"
               date={data.scheduled_date ? new Date(data.scheduled_date) : undefined}
-              onSelect={(date) => setData('scheduled_date', date?.toISOString() || '')}
+              onSelect={(date: { toISOString: () => string; }) => setData('scheduled_date', date?.toISOString() || '')}
               placeholder="Select a date"
             />
             {errors.scheduled_date && (
@@ -101,7 +101,7 @@ export default function ScheduleForm({ equipment, technicians, onSuccess }: Sche
               checked={isRecurring}
               onCheckedChange={(checked) => {
                 setIsRecurring(checked);
-                setData('is_recurring', checked);
+                setData('is_recurring', checked as boolean);
               }}
             />
             <Label htmlFor="is_recurring">Recurring Maintenance</Label>
@@ -184,4 +184,4 @@ export default function ScheduleForm({ equipment, technicians, onSuccess }: Sche
       </CardFooter>
     </Card>
   );
-} 
+}

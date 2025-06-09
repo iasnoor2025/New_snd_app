@@ -1,8 +1,8 @@
 import { format, parseISO } from 'date-fns';
-import { Avatar, AvatarFallback, AvatarImage } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/avatar';
-import { Card, CardContent } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { Progress } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/progress';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 interface Equipment {
   id: number;
@@ -88,9 +88,9 @@ export function TechnicianWorkload({ workload }: TechnicianWorkloadProps) {
           <Card key={data.technician.id} className="overflow-hidden">
             <div className="p-4 bg-muted flex items-center space-x-4">
               <Avatar className="h-12 w-12">
-                <AvatarImage 
-                  src={data.technician.profile_photo_url} 
-                  alt={data.technician.name} 
+                <AvatarImage
+                  src={data.technician.profile_photo_url}
+                  alt={data.technician.name}
                 />
                 <AvatarFallback>{data.technician.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -107,8 +107,8 @@ export function TechnicianWorkload({ workload }: TechnicianWorkloadProps) {
                     {getWorkloadText(data.scheduled_count)}
                   </span>
                 </div>
-                <Progress 
-                  value={Math.min(data.scheduled_count * 10, 100)} 
+                <Progress
+                  value={Math.min(data.scheduled_count * 10, 100)}
                   className={getProgressColor(data.scheduled_count)}
                 />
               </div>
@@ -141,4 +141,4 @@ export function TechnicianWorkload({ workload }: TechnicianWorkloadProps) {
       )}
     </div>
   );
-} 
+}

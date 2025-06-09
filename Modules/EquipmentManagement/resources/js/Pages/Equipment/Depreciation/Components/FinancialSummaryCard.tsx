@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Progress } from '@/Modules/EquipmentManagement/Resources/js/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { DollarSign } from 'lucide-react';
 
 interface FinancialSummaryProps {
@@ -48,7 +48,6 @@ const FinancialSummaryCard: React.FC<FinancialSummaryProps> = ({ summary }) => {
             <Progress
               value={(summary.total_current_value / summary.total_original_value) * 100}
               className="h-2 bg-gray-200"
-              indicatorClassName="bg-green-500"
             />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <div>Current Value</div>
@@ -66,7 +65,6 @@ const FinancialSummaryCard: React.FC<FinancialSummaryProps> = ({ summary }) => {
             <Progress
               value={summary.depreciation_rate}
               className="h-2 bg-gray-200"
-              indicatorClassName="bg-amber-500"
             />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <div>{formatPercent(summary.depreciation_rate)} Depreciated</div>

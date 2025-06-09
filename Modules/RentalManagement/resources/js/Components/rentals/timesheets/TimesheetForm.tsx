@@ -955,8 +955,8 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
               <Button
                 type="submit"
                 disabled={submitting}
-                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               >
+                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isEditing ? "Update" : "Create"} Timesheet
               </Button>
             </div>
@@ -1012,19 +1012,21 @@ export default function TimesheetForm({ rentals = [], rentalItems = [], operator
                   <span>{operatorAbsent ? "0" : form.data.hours_used}</span>
                 </div>
                 {selectedRentalItem && (
-                  <div className="grid grid-cols-2">
-                    <span>Rate:</span>
-                    <span>${getRentalItemRate(selectedRentalItem)}/hr</span>
-                  </div>
-                  <div className="grid grid-cols-2 font-bold">
-                    <span>Total:</span>
-                    <span>
-                      ${operatorAbsent ?
-                        "0.00" :
-                        (getRentalItemRate(selectedRentalItem) * (parseFloat(form.data.hours_used) || 0)).toFixed(2)
-                      }
-                    </span>
-                  </div>
+                  <>
+                    <div className="grid grid-cols-2">
+                      <span>Rate:</span>
+                      <span>${getRentalItemRate(selectedRentalItem)}/hr</span>
+                    </div>
+                    <div className="grid grid-cols-2 font-bold">
+                      <span>Total:</span>
+                      <span>
+                        ${operatorAbsent ?
+                          "0.00" :
+                          (getRentalItemRate(selectedRentalItem) * (parseFloat(form.data.hours_used) || 0)).toFixed(2)
+                        }
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
             </CardContent>

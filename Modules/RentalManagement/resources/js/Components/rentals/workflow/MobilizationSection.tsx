@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Truck, MapPin, Calendar, Loader2, Clock, Phone, CheckSquare, CalendarClock } from "lucide-react";
-import RentalItemsCard from "@/components/rentals/RentalItemsCard";
+import RentalItemsCard from "../../rentals/RentalItemsCard";
 import { format } from "date-fns";
-import MapView from "@/components/maps/MapView";
+// import MapView from "@/components/maps/MapView";
 import { Progress } from '@/components/ui/progress';
 
 // Interface for MobilizationSection props
@@ -77,7 +77,7 @@ export default function MobilizationSection({
   const getMobilizationProgress = () => {
     // In a real implementation, this would come from the server
     // For demo, generate a random stage
-    const stages = [;
+    const stages = [
       { name: 'Equipment Prepared', complete: true, timestamp: '2 hours ago' },
       { name: 'Loading Complete', complete: true, timestamp: '1 hour ago' },
       { name: 'In Transit', complete: true, timestamp: '45 minutes ago' },
@@ -199,11 +199,14 @@ export default function MobilizationSection({
                     className="flex-1"
                     onClick={handleMarkComplete}
                     disabled={isMarkingComplete || !permissions.update}
+                  >
                     {isMarkingComplete ? (
+                      <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Processing...
                       </>
                     ) : (
+                      <>
                         <CheckSquare className="mr-2 h-4 w-4" />
                         Mark Delivery Complete
                       </>
@@ -214,6 +217,7 @@ export default function MobilizationSection({
                     variant="outline"
                     className="flex-1"
                     onClick={() => setIsMapViewOpen(true)}
+                  >
                     <MapPin className="mr-2 h-4 w-4" />
                     View Location
                   </Button>
@@ -253,12 +257,9 @@ export default function MobilizationSection({
                   </div>
 
                   {(rental.location.latitude && rental.location.longitude) ? (
-                    <div className="h-[300px] rounded-md overflow-hidden border">
-                      <MapView
-                        latitude={rental.location.latitude}
-                        longitude={rental.location.longitude}
-                        zoom={14}
-                      />
+                    <div className="h-[300px] rounded-md overflow-hidden border text-center flex items-center justify-center">
+                      {/* MapView component is missing. Please implement or restore this component. */}
+                      <span className="text-muted-foreground">Map preview unavailable</span>
                     </div>
                   ) : (
                     <div className="text-center py-8 bg-secondary/10 rounded-md">

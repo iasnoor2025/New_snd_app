@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 import { Equipment, MaintenanceRecord } from '@/Modules/EquipmentManagement/Resources/js/types/models';
 import { formatCurrency, formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -14,8 +14,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
+} from '@/components/ui/table';
+import { useToast } from '@/components/ui/use-toast';
 import {
   Calendar as CalendarIcon,
   Clock as ClockIcon,
@@ -27,7 +27,7 @@ import {
   Eye as EyeIcon,
   XCircle as XCircleIcon
 } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Props extends PageProps {
   equipment: Equipment;
@@ -200,7 +200,7 @@ export default function MaintenanceIndex({ equipment, history, costs, performanc
             <TabsTrigger value="costs">Cost Analysis</TabsTrigger>
             <TabsTrigger value="performance">Performance</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="history" className="space-y-4">
             <Card>
               <CardHeader>
@@ -258,7 +258,7 @@ export default function MaintenanceIndex({ equipment, history, costs, performanc
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="costs" className="space-y-4">
             <Card>
               <CardHeader>
@@ -298,7 +298,7 @@ export default function MaintenanceIndex({ equipment, history, costs, performanc
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="performance" className="space-y-4">
             <Card>
               <CardHeader>
@@ -366,4 +366,4 @@ export default function MaintenanceIndex({ equipment, history, costs, performanc
       </div>
     </AdminLayout>
   );
-} 
+}

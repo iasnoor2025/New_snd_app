@@ -324,6 +324,7 @@ const RentalExtensionForm = ({
                   variant="outline"
                   size="sm"
                   onClick={handleAddEquipment}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   {t('project:ttl_add_equipment')}
                 </Button>
@@ -338,6 +339,7 @@ const RentalExtensionForm = ({
                       variant="ghost"
                       size="sm"
                       onClick={() => handleRemoveEquipment(index)}
+                    >
                       <Trash className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -348,6 +350,7 @@ const RentalExtensionForm = ({
                       <Select
                         value={item.equipment_id}
                         onValueChange={(value) => handleEquipmentChange(index, 'equipment_id', value)}
+                      >
                         <SelectTrigger className={!item.equipment_id ? "border-red-300 focus:ring-red-500" : ""}>
                           <SelectValue placeholder={t('ph_select_equipment')} />
                         </SelectTrigger>
@@ -394,6 +397,7 @@ const RentalExtensionForm = ({
                       <Select
                         value={item.operator_id?.toString() || ""}
                         onValueChange={(value) => handleEquipmentChange(index, 'operator_id', parseInt(value))}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder={t('ph_select_an_operator')} />
                         </SelectTrigger>
@@ -424,6 +428,7 @@ const RentalExtensionForm = ({
                 reason.trim().length < 10 ||
                 (additionalEquipment.length > 0 && additionalEquipment.some(item => !item.equipment_id))
               }
+            >
               {isSubmitting ? (
                 <div className="flex items-center gap-1">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />

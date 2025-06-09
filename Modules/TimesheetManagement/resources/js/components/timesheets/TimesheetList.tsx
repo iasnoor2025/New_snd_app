@@ -154,12 +154,18 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
             onClick={handleBulkApprove}
             disabled={processing}
             className="flex items-center gap-1"
+          >
             {processing ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Approve Selected
+              </>
             ) : (
-              <Check className="h-4 w-4" />
+              <>
+                <Check className="h-4 w-4" />
+                Approve Selected
+              </>
             )}
-            Approve Selected
           </Button>
         </div>
       )}
@@ -293,13 +299,16 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
               variant="outline"
               onClick={() => setShowRejectDialog(false)}
               disabled={processing}
+            >
               Cancel
             </Button>
             <Button
               variant="destructive"
               onClick={handleReject}
               disabled={processing || !rejectReason.trim()}
+            >
               {processing ? (
+                <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Rejecting...
                 </>

@@ -1,8 +1,15 @@
 import { useState } from 'react';
-import { User } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/avatar';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  profile_photo_url?: string;
+  workload?: number;
+}
 
 interface TechnicianSelectorProps {
   technicians: User[];
@@ -53,4 +60,4 @@ function getBadgeVariant(workload: number): 'default' | 'secondary' | 'destructi
   if (workload <= 3) return 'default';
   if (workload <= 6) return 'secondary';
   return 'destructive';
-} 
+}

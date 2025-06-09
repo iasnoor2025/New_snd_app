@@ -73,7 +73,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
           onUploadProgress: (progressEvent) => {
             if (progressEvent.total) {
               const progress = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total;
+                (progressEvent.loaded * 100) / progressEvent.total
               );
               setUploadProgress(progress);
             }
@@ -117,9 +117,9 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
 
     // Create a template CSV content
     const csvContent = [
-      'employee_id,date,regular_hours,overtime_hours,project_id,location,notes',;
-      '1,2023-05-10,8,1,101,Site A,Regular shift',;
-      '2,2023-05-10,7.5,0,,Office,Half day',;
+      'employee_id,date,regular_hours,overtime_hours,project_id,location,notes',
+      '1,2023-05-10,8,1,101,Site A,Regular shift',
+      '2,2023-05-10,7.5,0,,Office,Half day',
     ].join('\n');
 
     // Create a Blob with the CSV content
@@ -154,6 +154,7 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
                   size="sm"
                   onClick={downloadTemplate}
                   className="flex items-center gap-1"
+                >
                   <Download className="h-4 w-4" />
                   Template
                 </Button>
@@ -197,11 +198,14 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
                   type="submit"
                   disabled={isUploading}
                   className="w-full flex items-center justify-center gap-1"
+                >
                   {isUploading ? (
+                    <>
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Uploading...
                     </>
                   ) : (
+                    <>
                       <Upload className="h-4 w-4" />
                       {t('upload_timesheets')}
                     </>

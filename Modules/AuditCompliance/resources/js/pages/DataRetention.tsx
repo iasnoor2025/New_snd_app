@@ -23,7 +23,7 @@ import {
   FileText,
   Eye
 } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,8 +46,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import Pagination from '@/components/Pagination';
-import { formatDateTime } from '@/utils/date';
 import { cn } from '@/lib/utils';
 import useTranslation from '@/hooks/useTranslation';
 
@@ -428,7 +426,6 @@ function PoliciesTable({ policies, modelTypes }: { policies: DataRetentionPolicy
                   <Switch
                     checked={policy.is_active}
                     onCheckedChange={(checked) => handleTogglePolicy(policy.id, checked)}
-                    size="sm"
                   />
                   <span className="text-sm">
                     {policy.is_active ? 'Active' : 'Inactive'}
@@ -438,10 +435,10 @@ function PoliciesTable({ policies, modelTypes }: { policies: DataRetentionPolicy
               <TableCell>
                 {policy.last_executed_at ? (
                   <div className="text-sm">
-                    <div>{formatDateTime(policy.last_executed_at)}</div>
+                    <div>{new Date(policy.last_executed_at).toLocaleString()}</div>
                     {policy.next_execution_at && (
                       <div className="text-muted-foreground">
-                        Next: {formatDateTime(policy.next_execution_at)}
+                        Next: {new Date(policy.next_execution_at).toLocaleString()}
                       </div>
                     )}
                   </div>
@@ -527,7 +524,7 @@ function ExecutionsTable({ executions }: { executions: RetentionExecution[] }) {
                 </div>
               </TableCell>
               <TableCell>{getStatusBadge(execution.status)}</TableCell>
-              <TableCell>{formatDateTime(execution.started_at)}</TableCell>
+              <TableCell>{new Date(execution.started_at).toLocaleString()}</TableCell>
               <TableCell>
                 {duration !== null ? `${duration}min` : '-'}
               </TableCell>
@@ -587,19 +584,18 @@ export default function DataRetention({
     router.post(route('data-retention.policies.store'), data);
   };
 
+  const renderHeader = () => (
+    <div className="flex items-center justify-between">
+      <h2 className="font-semibold text-xl text-gray-800 leading-tight flex items-center space-x-2">
+        <Database className="h-6 w-6" />
+        <span>Data Retention Management</span>
+      </h2>
+      <PolicyFormDialog onSave={handleSavePolicy} modelTypes={modelTypes} />
+    </div>
+  );
+
   return (
-    <AppLayout
-      title="Data Retention Management"
-      renderHeader={() => (
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight flex items-center space-x-2">
-            <Database className="h-6 w-6" />
-            <span>Data Retention Management</span>
-          </h2>
-          <PolicyFormDialog onSave={handleSavePolicy} modelTypes={modelTypes} />
-        </div>
-      )}
-    >
+    <AppLayout>
       <Head title="Data Retention Management" />
 
       <div className="py-12">
@@ -649,10 +645,13 @@ export default function DataRetention({
           </Card>
 
           {/* Main Content */}
+          <div className="mb-6">
+            {renderHeader()}
+          </div>
           <Tabs defaultValue="policies" className="w-full">
             <TabsList>
-              <TabsTrigger value="policies">Retention Policies</TabsTrigger>
-              <TabsTrigger value="executions">Execution History</TabsTrigger>
+              <TabsTrigger value="policies">Policies</TabsTrigger>
+              <TabsTrigger value="executions">Executions</TabsTrigger>
             </TabsList>
 
             <TabsContent value="policies">
@@ -662,9 +661,6 @@ export default function DataRetention({
                 </CardHeader>
                 <CardContent>
                   <PoliciesTable policies={policies.data} modelTypes={modelTypes} />
-                  <div className="mt-6">
-                    <Pagination links={policies.links} />
-                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -676,9 +672,6 @@ export default function DataRetention({
                 </CardHeader>
                 <CardContent>
                   <ExecutionsTable executions={executions.data} />
-                  <div className="mt-6">
-                    <Pagination links={executions.links} />
-                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

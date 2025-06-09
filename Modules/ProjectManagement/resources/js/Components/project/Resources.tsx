@@ -313,8 +313,8 @@ export default function Resources({ project }: { project: any }) {
 
     // Memoize the resource types array
     const resourceTypes = useMemo(() =>
-        ['manpower', 'equipment', 'material', 'fuel', 'expense'] as ResourceType[],;
-        [];
+        ['manpower', 'equipment', 'material', 'fuel', 'expense'] as ResourceType[],
+        []
     );
 
     // Memoize the dialog content to prevent unnecessary re-renders
@@ -392,6 +392,7 @@ export default function Resources({ project }: { project: any }) {
                         variant="outline"
                         onClick={() => setShowFilters(!showFilters)}
                         className="flex items-center gap-2"
+                    >
                         <Filter className="h-4 w-4" />
                         Filters
                         <ChevronDown className="h-4 w-4" />
@@ -478,10 +479,11 @@ export default function Resources({ project }: { project: any }) {
                                                 checked={filters.status.includes(status)}
                                                 onCheckedChange={(checked) => {
                                                     const newStatus = checked
-                                                        ? [...filters.status, status];
+                                                        ? [...filters.status, status]
                                                         : filters.status.filter(s => s !== status);
                                                     handleFilterChange('status', newStatus);
                                                 }}
+                                            >
                                                 {status}
                                             </DropdownMenuCheckboxItem>
                                         ))}

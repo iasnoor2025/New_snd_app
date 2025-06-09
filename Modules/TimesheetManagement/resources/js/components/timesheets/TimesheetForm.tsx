@@ -156,7 +156,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
 
   // Toggle between time clock and direct hours input
   const toggleTimeClockMode = () => {
-  const { t } = useTranslation('timesheet');
+    const { t } = useTranslation('timesheet');
 
     setUseTimeClock(!useTimeClock);
     if (!useTimeClock) {
@@ -243,6 +243,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                   value={field.value}
                   onValueChange={field.onChange}
                   disabled={isLoading}
+                >
                   <SelectTrigger id="employee_id" className="w-full">
                     <SelectValue placeholder={t('ph_select_employee')} />
                   </SelectTrigger>
@@ -251,6 +252,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                       <SelectItem
                         key={employee.id}
                         value={employee.id.toString()}
+                      >
                         {employee.first_name} {employee.last_name}
                       </SelectItem>
                     ))}
@@ -293,6 +295,7 @@ const TimesheetForm: React.FC<TimesheetFormProps> = ({
                   value={field.value}
                   onValueChange={field.onChange}
                   disabled={isLoading}
+                >
                   <SelectTrigger id="project_id" className="w-full">
                     <SelectValue placeholder={t('ph_select_project')} />
                   </SelectTrigger>

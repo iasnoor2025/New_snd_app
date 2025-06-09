@@ -20,7 +20,7 @@ import {
     Eye,
     EyeOff
 } from 'lucide-react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '@/layouts/auth-layout';
 import {
     Dialog,
     DialogContent,
@@ -30,17 +30,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -165,108 +154,105 @@ const ApiTokensIndex: React.FC<Props> = ({ tokens, auth, flash }) => {
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-4">
-                        <Link href="/api">
-                            <Button variant="outline" size="sm">
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                Back to API
-                            </Button>
-                        </Link>
-                        <div>
-                            <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                                API Tokens
-                            </h2>
-                            <p className="text-sm text-gray-600 mt-1">
-                                Manage your API tokens for secure access
-                            </p>
-                        </div>
+        <AuthenticatedLayout title="API Tokens" description="Manage your API tokens for secure access">
+            <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center space-x-4">
+                    <Link href="/api">
+                        <Button variant="outline" size="sm">
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Back to API
+                        </Button>
+                    </Link>
+                    <div>
+                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                            API Tokens
+                        </h2>
+                        <p className="text-sm text-gray-600 mt-1">
+                            Manage your API tokens for secure access
+                        </p>
                     </div>
-                    <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-                        <DialogTrigger asChild>
-                            <Button>
-                                <Plus className="w-4 h-4 mr-2" />
-                                Create Token
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-md">
-                            <form onSubmit={handleCreateToken}>
-                                <DialogHeader>
-                                    <DialogTitle>Create API Token</DialogTitle>
-                                    <DialogDescription>
-                                        Create a new API token with specific permissions and expiration.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4 py-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="token-name">Token Name</Label>
-                                        <Input
-                                            id="token-name"
-                                            placeholder="e.g., Mobile App, Integration Service"
-                                            value={newTokenName}
-                                            onChange={(e) => setNewTokenName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
+                </div>
+                <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create Token
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                        <form onSubmit={handleCreateToken}>
+                            <DialogHeader>
+                                <DialogTitle>Create API Token</DialogTitle>
+                                <DialogDescription>
+                                    Create a new API token with specific permissions and expiration.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="token-name">Token Name</Label>
+                                    <Input
+                                        id="token-name"
+                                        placeholder="e.g., Mobile App, Integration Service"
+                                        value={newTokenName}
+                                        onChange={(e) => setNewTokenName(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                                    <div className="space-y-2">
-                                        <Label>Permissions</Label>
-                                        <div className="space-y-2 max-h-40 overflow-y-auto">
-                                            {availableAbilities.map((ability) => (
-                                                <div key={ability.value} className="flex items-start space-x-2">
-                                                    <Checkbox
-                                                        id={ability.value}
-                                                        checked={selectedAbilities.includes(ability.value)}
-                                                        onCheckedChange={(checked) =>
-                                                            handleAbilityChange(ability.value, checked as boolean)
-                                                        }
-                                                    />
-                                                    <div className="grid gap-1.5 leading-none">
-                                                        <label
-                                                            htmlFor={ability.value}
-                                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                        >
-                                                            {ability.label}
-                                                        </label>
-                                                        <p className="text-xs text-muted-foreground">
-                                                            {ability.description}
-                                                        </p>
-                                                    </div>
+                                <div className="space-y-2">
+                                    <Label>Permissions</Label>
+                                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                                        {availableAbilities.map((ability) => (
+                                            <div key={ability.value} className="flex items-start space-x-2">
+                                                <Checkbox
+                                                    id={ability.value}
+                                                    checked={selectedAbilities.includes(ability.value)}
+                                                    onCheckedChange={(checked) =>
+                                                        handleAbilityChange(ability.value, checked as boolean)
+                                                    }
+                                                />
+                                                <div className="grid gap-1.5 leading-none">
+                                                    <label
+                                                        htmlFor={ability.value}
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    >
+                                                        {ability.label}
+                                                    </label>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {ability.description}
+                                                    </p>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="expires-in">Expires In</Label>
-                                        <Select value={expiresIn} onValueChange={setExpiresIn}>
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {expirationOptions.map((option) => (
-                                                    <SelectItem key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                                <DialogFooter>
-                                    <Button type="submit" disabled={isSubmitting || !newTokenName.trim()}>
-                                        {isSubmitting ? 'Creating...' : 'Create Token'}
-                                    </Button>
-                                </DialogFooter>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-            }
-        >
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="expires-in">Expires In</Label>
+                                    <Select value={expiresIn} onValueChange={setExpiresIn}>
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {expirationOptions.map((option) => (
+                                                <SelectItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button type="submit" disabled={isSubmitting || !newTokenName.trim()}>
+                                    {isSubmitting ? 'Creating...' : 'Create Token'}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+            </div>
+
             <Head title="API Tokens" />
 
             <div className="py-12">
@@ -372,31 +358,31 @@ const ApiTokensIndex: React.FC<Props> = ({ tokens, auth, flash }) => {
                                                             <StatusIcon className="w-3 h-3 mr-1" />
                                                             {tokenStatus.status}
                                                         </Badge>
-                                                        <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
+                                                        <Dialog>
+                                                            <DialogTrigger asChild>
                                                                 <Button variant="outline" size="sm">
                                                                     <Trash2 className="w-4 h-4" />
                                                                 </Button>
-                                                            </AlertDialogTrigger>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>Delete API Token</AlertDialogTitle>
-                                                                    <AlertDialogDescription>
+                                                            </DialogTrigger>
+                                                            <DialogContent>
+                                                                <DialogHeader>
+                                                                    <DialogTitle>Delete API Token</DialogTitle>
+                                                                    <DialogDescription>
                                                                         Are you sure you want to delete the token "{token.name}"?
                                                                         This action cannot be undone and will immediately revoke access.
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                    <AlertDialogAction
+                                                                    </DialogDescription>
+                                                                </DialogHeader>
+                                                                <DialogFooter>
+                                                                    <Button variant="outline">Cancel</Button>
+                                                                    <Button
                                                                         onClick={() => handleDeleteToken(token.id)}
                                                                         className="bg-red-600 hover:bg-red-700"
                                                                     >
                                                                         Delete Token
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                                                        </AlertDialog>
+                                                                    </Button>
+                                                                </DialogFooter>
+                                                            </DialogContent>
+                                                        </Dialog>
                                                     </div>
                                                 </div>
 

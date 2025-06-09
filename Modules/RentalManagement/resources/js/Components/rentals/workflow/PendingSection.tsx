@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Clock, FileText, Loader2 } from "lucide-react";
-import RentalItemsCard from "@/components/rentals/RentalItemsCard";
+import RentalItemsCard from "../../rentals/RentalItemsCard";
 import { format } from "date-fns";
 import { Progress } from '@/components/ui/progress';
 
@@ -107,11 +107,14 @@ export default function PendingSection({
               <Button
                 onClick={handleGenerateQuotation}
                 disabled={isGeneratingQuotation || !permissions.generate_invoice}
+              >
                 {isGeneratingQuotation ? (
+                  <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Generating Quotation...
                   </>
                 ) : (
+                  <>
                     <FileText className="mr-2 h-4 w-4" />
                     Generate Quotation
                   </>
