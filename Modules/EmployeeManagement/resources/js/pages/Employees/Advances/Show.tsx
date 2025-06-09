@@ -1,8 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
-import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '../../../layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
+import { format } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import AdminLayout from '@/layouts/AdminLayout';
 import {
   Card,
   CardContent,
@@ -11,19 +22,6 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
-import { format } from 'date-fns';
-import { Badge } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/Modules/EmployeeManagement/Resources/js/components/ui/dialog';
-import { ToastService } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/shared/ToastManager';
 
 interface User {
   id: number;
@@ -56,12 +54,13 @@ interface Employee {
   employee_id: string;
 }
 
-interface Props extends PageProps {
+// Minimal Props type for build
+type Props = {
   employee: Employee;
   advance: Advance;
-}
+};
 
-export default function Show({ auth, employee, advance }: Props) {
+export default function Show({ employee, advance }: Props) {
   const { t } = useTranslation('employee');
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
@@ -90,7 +89,7 @@ export default function Show({ auth, employee, advance }: Props) {
   ];
 
   const handleDelete = () => {
-    router.delete(route('advances.destroy', { employee: employee.id, advance: advance.id }), {
+    router.delete(`/employees/${employee.id}/advances/${advance.id}`, {
       onSuccess: () => {
         ToastService.success('Advance payment deleted successfully');
         router.visit(`/employees/${employee.id}/advances`);
@@ -142,7 +141,7 @@ export default function Show({ auth, employee, advance }: Props) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => router.visit(route('advances.edit', { employee: employee.id, advance: advance.id }))}
+              onClick={() => router.visit(`/employees/${employee.id}/advances/${advance.id}/edit`)}
               className="flex items-center gap-2"
             >
               <Edit className="h-4 w-4" />
@@ -284,5 +283,10 @@ export default function Show({ auth, employee, advance }: Props) {
     </AdminLayout>
   );
 }
+
+const ToastService = {
+  success: (msg: string) => alert(msg),
+  error: (msg: string) => alert(msg),
+};
 
 

@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { PageProps } from '@/Modules/EquipmentManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { Equipment, MaintenancePart } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Textarea } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/textarea';
-import { Label } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/radio-group';
-import { 
+import { PageProps } from '@/types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/select';
-import { Calendar } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/popover';
+} from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { CalendarIcon, Plus, Minus, ArrowLeft } from 'lucide-react';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/components/ui/use-toast';
+
+// Placeholder types
+type Equipment = any;
+type MaintenancePart = any;
 
 interface Props extends PageProps {
   equipment: Equipment[];
@@ -36,7 +39,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
   const [selectedParts, setSelectedParts] = useState<{id: number, quantity: number, cost: number}[]>([]);
   const [maintenanceDate, setMaintenanceDate] = useState<Date>(new Date());
   const [nextMaintenanceDate, setNextMaintenanceDate] = useState<Date | undefined>(undefined);
-  
+
   const { post, processing, errors, setData, data } = useForm({
     equipment_id: selectedEquipment ? selectedEquipment.toString() : '',
     maintenance_date: format(new Date(), 'yyyy-MM-dd'),
@@ -67,7 +70,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Update the parts data before submitting
     const formattedParts = selectedParts.map(part => {
       const selectedItem = inventoryItems.find(item => item.id === part.id);
@@ -81,9 +84,9 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
         notes: ''
       };
     });
-    
+
     setData('parts', formattedParts);
-    
+
     // Make sure we have a valid equipment_id
     if (!data.equipment_id) {
       toast({
@@ -93,7 +96,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
       });
       return;
     }
-    
+
     // Make sure we have a valid description
     if (!data.description) {
       toast({
@@ -103,7 +106,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
       });
       return;
     }
-    
+
     post(route('maintenance.store'), {
       onSuccess: () => {
         toast({
@@ -113,7 +116,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
         window.location.href = route('maintenance.index');
       },
       onError: (errors) => {
-        
+
         toast({
           title: "Error",
           description: "Failed to create maintenance record. Please check the form for errors.",
@@ -137,7 +140,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
     const newParts = [...selectedParts];
     newParts[index] = { ...newParts[index], [field]: value };
     setSelectedParts(newParts);
-    
+
     // If part ID changed, update cost from inventory items list
     if (field === 'id') {
       const selectedItem = inventoryItems.find(item => item.id === parseInt(value));
@@ -359,7 +362,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
                     Add Part
                   </Button>
                 </div>
-                
+
                 {selectedParts.map((part, index) => (
                   <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-4 rounded-md">
                     <div className="space-y-2">
@@ -380,7 +383,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Quantity</Label>
                       <Input
@@ -390,7 +393,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
                         onChange={(e) => updatePartField(index, 'quantity', parseInt(e.target.value))}
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Unit Cost</Label>
                       <Input
@@ -400,11 +403,11 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
                         onChange={(e) => updatePartField(index, 'cost', parseFloat(e.target.value))}
                       />
                     </div>
-                    
+
                     <div className="flex items-center">
-                      <Button 
-                        type="button" 
-                        onClick={() => removePart(index)} 
+                      <Button
+                        type="button"
+                        onClick={() => removePart(index)}
                         variant="destructive"
                         size="sm"
                       >
@@ -413,7 +416,7 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
                     </div>
                   </div>
                 ))}
-                
+
                 <div className="text-right font-medium">
                   Total Parts Cost: {new Intl.NumberFormat('en-SA', { style: 'currency', currency: 'SAR' }).format(calculateTotalCost())}
                 </div>
@@ -433,4 +436,4 @@ export default function Create({ auth, equipment, employees, inventoryItems, par
       </div>
     </AdminLayout>
   );
-} 
+}

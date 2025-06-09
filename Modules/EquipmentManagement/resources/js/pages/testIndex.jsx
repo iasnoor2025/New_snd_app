@@ -1,11 +1,11 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/Modules/EquipmentManagement/Resources/js/Layouts/AppLayout';
-import Pagination from '@/Modules/EquipmentManagement/Resources/js/components/Pagination';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/EquipmentManagement/Resources/js/components/ui/table';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/date';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Pagination } from '@/components/ui/pagination';
+import { Button } from '@/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { formatDate } from '@/utils/format';
 import { getTranslation } from '@/utils/translation';
 
 const Index = ({ equipment }) => {
@@ -26,7 +26,7 @@ const Index = ({ equipment }) => {
   };
 
   return (
-    <AppLayout
+    <AdminLayout
       title="Equipment Management"
       renderHeader={() => (
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
@@ -100,7 +100,7 @@ const Index = ({ equipment }) => {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 };
 

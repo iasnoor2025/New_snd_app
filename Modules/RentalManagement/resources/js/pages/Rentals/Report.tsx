@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Rental, customer } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
+import { PageProps } from '@/types';
+import { Rental, customer } from '@/types/models';
+import AdminLayout from '@/layouts/AdminLayout';
 
 // Shadcn UI components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/RentalManagement/Resources/js/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -16,14 +16,14 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+} from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/select';
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -32,18 +32,18 @@ import {
   TableHeader,
   TableRow,
   TableFooter,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/table';
-import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
-import { Separator } from '@/Modules/RentalManagement/Resources/js/components/ui/separator';
-import { Calendar } from '@/Modules/RentalManagement/Resources/js/components/ui/calendar';
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/popover';
-import { Skeleton } from '@/Modules/RentalManagement/Resources/js/components/ui/skeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/RentalManagement/Resources/js/components/ui/tabs';
+} from '@/components/ui/popover';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Icons
 import {

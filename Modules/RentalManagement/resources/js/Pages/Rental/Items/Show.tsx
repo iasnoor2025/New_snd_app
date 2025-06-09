@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Badge } from '@/Modules/RentalManagement/Resources/js/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Edit, History, Calendar } from 'lucide-react';
 import { RentalItem } from '@/Modules/RentalManagement/Resources/js/Types/rental';
 

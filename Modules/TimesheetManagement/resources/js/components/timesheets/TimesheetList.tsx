@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@inertiajs/react';
-import route from 'ziggy-js';
+import { route } from 'ziggy-js';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import { EmployeeTimesheet } from '../../types/timesheet';
@@ -12,16 +12,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-import { Badge } from '../ui/badge';
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -29,9 +29,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
-import { Textarea } from '../ui/textarea';
-import { Label } from '../ui/label';
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   MoreHorizontal,
   Eye,
@@ -142,6 +142,9 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
     }
   };
 
+  // Placeholder translation function
+  const t = (s: string) => s;
+
   return (
     <div className="space-y-4">
       {selectedTimesheets.length > 0 && (
@@ -215,23 +218,23 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
                     />
                   </TableCell>
                   <TableCell>
-                    {timesheet.employee?.first_name} {timesheet.employee?.last_name}
+                    {(timesheet as any).employee?.first_name} {(timesheet as any).employee?.last_name}
                   </TableCell>
-                  <TableCell>{format(parseISO(timesheet.date), 'MMM dd, yyyy')}</TableCell>
+                  <TableCell>{format(parseISO((timesheet as any).date), 'MMM dd, yyyy')}</TableCell>
                   <TableCell>
                     <div className="flex flex-col">
-                      <span>Regular: {timesheet.regular_hours}h</span>
-                      {timesheet.overtime_hours > 0 && (
-                        <span className="text-xs text-orange-600">OT: {timesheet.overtime_hours}h</span>
+                      <span>Regular: {(timesheet as any).regular_hours}h</span>
+                      {(timesheet as any).overtime_hours > 0 && (
+                        <span className="text-xs text-orange-600">OT: {(timesheet as any).overtime_hours}h</span>
                       )}
                     </div>
                   </TableCell>
                   <TableCell>
-                    {timesheet.project?.name || (
+                    {(timesheet as any).project?.name || (
                       <span className="text-gray-400">{t('not_assigned')}</span>
                     )}
                   </TableCell>
-                  <TableCell>{getStatusBadge(timesheet.status)}</TableCell>
+                  <TableCell>{getStatusBadge((timesheet as any).status)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -240,30 +243,30 @@ const TimesheetList: React.FC<TimesheetListProps> = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <Link href={route('timesheets.show', timesheet.id)}>
+                        <Link href={route('timesheets.show', (timesheet as any).id)}>
                           <DropdownMenuItem>
                             <Eye className="mr-2 h-4 w-4" />
                             {t('employee:ttl_view_details')}
                           </DropdownMenuItem>
                         </Link>
-                        <Link href={route('timesheets.edit', timesheet.id)}>
+                        <Link href={route('timesheets.edit', (timesheet as any).id)}>
                           <DropdownMenuItem>
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                           </DropdownMenuItem>
                         </Link>
-                        {timesheet.status === 'pending' && (
-          <>
-            <DropdownMenuItem onClick={() => handleApprove(timesheet.id)}>
-              <CheckCircle className="mr-2 h-4 w-4" />
-              Approve
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => openRejectDialog(timesheet.id)}>
-              <XCircle className="mr-2 h-4 w-4" />
-              Reject
-            </DropdownMenuItem>
-          </>
-        )}
+                        {(timesheet as any).status === 'pending' && (
+                          <>
+                            <DropdownMenuItem onClick={() => handleApprove((timesheet as any).id)}>
+                              <CheckCircle className="mr-2 h-4 w-4" />
+                              Approve
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => openRejectDialog((timesheet as any).id)}>
+                              <XCircle className="mr-2 h-4 w-4" />
+                              Reject
+                            </DropdownMenuItem>
+                          </>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, useForm } from '@inertiajs/react';
-import MainLayout from '@/Modules/TimesheetManagement/Resources/js/Layouts/MainLayout';
-import Card from '@/Modules/TimesheetManagement/Resources/js/components/Card';
-import Button from '@/Modules/TimesheetManagement/Resources/js/components/Button';
-import Modal from '@/Modules/TimesheetManagement/Resources/js/components/Modal';
+import AppLayout from '@/layouts/AppLayout';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Modal from '@/Modules/TimesheetManagement/Resources/js/components/Modal.tsx';
 import TextInput from '@/Modules/TimesheetManagement/Resources/js/components/TextInput';
 import TextArea from '@/Modules/TimesheetManagement/Resources/js/components/TextArea';
 import Label from '@/Modules/TimesheetManagement/Resources/js/components/Label';
@@ -70,7 +70,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
   };
 
   return (
-    <MainLayout>
+    <AppLayout>
       <Head title={t('timesheet_approvals')} />
 
       <div className="py-6">
@@ -78,10 +78,12 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
           <h1 className="text-2xl font-semibold text-gray-900">{t('timesheet_approvals')}</h1>
 
           <Card className="mt-4">
-            <Card.Header>
-              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
-            </Card.Header>
-            <Card.Body>
+            <CardHeader>
+              <CardTitle>
+                <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="employee_id">Employee</Label>
@@ -124,14 +126,16 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
                   </div>
                 )}
               </div>
-            </Card.Body>
+            </CardContent>
           </Card>
 
           <Card className="mt-4">
-            <Card.Header>
-              <h2 className="text-lg font-medium text-gray-900">{t('timesheets_pending_approval')}</h2>
-            </Card.Header>
-            <Card.Body className="p-0">
+            <CardHeader>
+              <CardTitle>
+                <h2 className="text-lg font-medium text-gray-900">{t('timesheets_pending_approval')}</h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
               <Table>
                 <Table.Header>
                   <Table.Row>
@@ -200,7 +204,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
               <div className="px-4 py-3 border-t border-gray-200">
                 <Pagination links={timesheets.links} />
               </div>
-            </Card.Body>
+            </CardContent>
           </Card>
         </div>
       </div>
@@ -318,7 +322,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
           </div>
         </div>
       </Modal>
-    </MainLayout>
+    </AppLayout>
   );
 };
 

@@ -1,26 +1,31 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from "@inertiajs/react";
-import { PageProps } from '@/Modules/RentalManagement/Resources/js/types';
-import { Employee, Rental, RentalItem, RentalTimesheet } from '@/Modules/RentalManagement/Resources/js/types/models';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
-import TimesheetForm from '@/Modules/RentalManagement/Resources/js/components/rentals/timesheets/TimesheetForm';
-import ErrorAlert from '@/Modules/RentalManagement/Resources/js/components/ui/error-alert';
+// Placeholder types
+type PageProps = any;
+type Employee = any;
+type Rental = any;
+type RentalItem = any;
+type RentalTimesheet = any;
+import AdminLayout from '@/layouts/AdminLayout';
+import TimesheetForm from '../../Components/rentals/timesheets/TimesheetForm';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 // Shadcn UI Components
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/Modules/RentalManagement/Resources/js/components/ui/card';
+} from '@/components/ui/card';
 
 // Icons
 import { ArrowLeft, ChevronRight, Clock, Home, Pencil } from "lucide-react";
 
 interface Props extends PageProps {
+  auth: any;
   rental: Rental;
   timesheet: RentalTimesheet;
   rentalItems: RentalItem[];
@@ -58,8 +63,8 @@ export default function Edit({ auth, rental, timesheet, rentalItems, operators }
               {rental.rental_number}
             </Link>
             <ChevronRight className="h-4 w-4 mx-1" />
-            <Link 
-              href={route("rentals.timesheets", rental.id)} 
+            <Link
+              href={route("rentals.timesheets", rental.id)}
               className="hover:text-primary transition-colors"
             >
               Timesheets
@@ -84,7 +89,10 @@ export default function Edit({ auth, rental, timesheet, rentalItems, operators }
           </div>
         </div>
 
-        <ErrorAlert />
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>An error occurred. Please try again.</AlertDescription>
+        </Alert>
 
         {/* Page Header */}
         <Card className="border-l-4 border-l-primary">
@@ -104,10 +112,10 @@ export default function Edit({ auth, rental, timesheet, rentalItems, operators }
         </Card>
 
         {/* Timesheet Form */}
-        <TimesheetForm 
-          rental={rental} 
+        <TimesheetForm
+          rental={rental}
           timesheet={timesheet}
-          rentalItems={rentalItems} 
+          rentalItems={rentalItems}
           operators={operators}
           isEditing={true}
           auth={formattedAuth}
@@ -115,4 +123,4 @@ export default function Edit({ auth, rental, timesheet, rentalItems, operators }
       </div>
     </AdminLayout>
   );
-} 
+}

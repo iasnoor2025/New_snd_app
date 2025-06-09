@@ -150,7 +150,7 @@ const ReportsIndex: React.FC<ReportsIndexProps> = ({ stats, recentActivity, char
 
   const handleCustomReportExport = async (type: 'csv' | 'pdf') => {
     let endpoint = '/reports/builder/export';
-    let data = {
+    const data = {
       reportType: customReportType,
       dateFrom: customDateFrom,
       dateTo: customDateTo,

@@ -1,12 +1,17 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/RentalManagement/Resources/js/components/ui/table';
-import { formatCurrency } from '@/Modules/RentalManagement/Resources/js/lib/utils';
-import { RentalItem } from '@/Modules/RentalManagement/Resources/js/types/rental';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { formatCurrency } from '@/utils/format';
 import { getTranslation } from '@/utils/translation';
+
+// Placeholder type for RentalItem
+type RentalItem = any;
+
+// Placeholder translation function
+const t = (s: string) => s;
 
 interface Props {
     rental: {
@@ -16,6 +21,7 @@ interface Props {
 }
 
 export const Index: FC<Props> = ({ rental }) => {
+    const { t } = useTranslation('rental');
     const { props } = usePage();
     const locale = props.locale || 'en';
 

@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
-import { LineChart, BarChart, PieChart, MapChart } from '@/Modules/RentalManagement/Resources/js/components/ui/charts';
-import { formatCurrency, formatPercentage } from '@/Modules/RentalManagement/Resources/js/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+// import { LineChart, BarChart, PieChart, MapChart } from '@/components/ui/charts';
+import { formatCurrency, formatPercentage } from '@/utils/format';
 
 interface Props {
     analytics: {
@@ -81,9 +81,8 @@ interface Props {
 }
 
 export const Dashboard: FC<Props> = ({ analytics, period }) => {
+    const { t } = useTranslation('rental');
     const handlePeriodChange = (value: string) => {
-  const { t } = useTranslation('rental');
-
         window.location.href = route('rentals.analytics.index', { period: value });
     };
 
@@ -211,12 +210,12 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                             <CardTitle>{t('ttl_revenue_trends')}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <LineChart
+                            {/* <LineChart
                                 data={analytics.revenue.trends}
                                 xKey="date"
                                 yKey="amount"
                                 height={300}
-                            />
+                            /> */}
                         </CardContent>
                     </Card>
 
@@ -225,13 +224,13 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                             <CardTitle>{t('ttl_revenue_by_status')}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <PieChart
+                            {/* <PieChart
                                 data={Object.entries(analytics.revenue.by_status).map(([key, value]) => ({
                                     name: key,
                                     value,
                                 }))}
                                 height={300}
-                            />
+                            /> */}
                         </CardContent>
                     </Card>
 
@@ -240,10 +239,10 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                             <CardTitle>{t('ttl_equipment_locations')}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <MapChart
+                            {/* <MapChart
                                 data={analytics.gps_tracking.equipment_locations}
                                 height={400}
-                            />
+                            /> */}
                         </CardContent>
                     </Card>
 
@@ -252,11 +251,11 @@ export const Dashboard: FC<Props> = ({ analytics, period }) => {
                             <CardTitle>{t('ttl_recent_movements')}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <MapChart
+                            {/* <MapChart
                                 data={analytics.gps_tracking.location_history.recent_movements}
                                 height={400}
                                 showPaths
-                            />
+                            /> */}
                         </CardContent>
                     </Card>
                 </div>

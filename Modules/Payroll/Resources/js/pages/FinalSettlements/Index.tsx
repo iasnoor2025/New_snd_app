@@ -1,32 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
-import { PageProps } from '@/Modules/Payroll/Resources/js/types';
-import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/card';
+import { PageProps } from '../../types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Plus } from 'lucide-react';
-import { Badge } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/badge';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/table';
-import { Input } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/select';
-import { usePermission } from '@/Modules/Payroll/Resources/js/hooks/usePermission';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { usePermission } from '../../hooks/usePermission';
 
 interface Props extends PageProps {
+    auth?: any;
     settlements: {
         data: Array<{
             id: number;
@@ -89,7 +77,7 @@ export default function Index({ auth, settlements, filters }: Props) {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-2xl font-bold">{t('ttl_final_settlements')}</CardTitle>
-                        {hasPermission('final-settlements.create') && (
+                        {hasPermission() && (
                             <Button asChild>
                                 <Link href={route('final-settlements.create')}>
                                     <Plus className="mr-2 h-4 w-4" />

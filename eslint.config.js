@@ -13,10 +13,9 @@ export default [
         ...react.configs.flat.recommended,
         ...react.configs.flat['jsx-runtime'], // Required for React 17+
         languageOptions: {
-            globals: {
-                ...globals.browser,
-                // FIX: Ensure no whitespace in global keys (e.g., 'AudioWorkletGlobalScope')
-            },
+            globals: Object.fromEntries(
+                Object.entries(globals.browser).map(([key, value]) => [key.trim(), value])
+            ),
         },
         rules: {
             'react/react-in-jsx-scope': 'off',

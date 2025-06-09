@@ -138,7 +138,7 @@ export default function Show({ auth, rental, timesheet }: Props) {
 
   // Format time
   const formatTime = (time: string | null) => {
-    if (!time) return "â€";
+    if (!time) return "ï¿½";
 
     try {
       // Check if the time is just a time string (HH:MM or HH:MM:SS)
@@ -155,13 +155,13 @@ export default function Show({ auth, rental, timesheet }: Props) {
       const parsedDate = new Date(time);
       if (isNaN(parsedDate.getTime())) {
 
-        return "â€";
+        return "ï¿½";
       }
 
       return format(parsedDate, "h:mm a");
     } catch (error) {
 
-      return "â€";
+      return "ï¿½";
     }
   };
 

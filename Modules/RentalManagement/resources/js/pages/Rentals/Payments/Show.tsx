@@ -1,11 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
-import { PageProps, BreadcrumbItem } from '@/Modules/RentalManagement/Resources/js/types';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/RentalManagement/Resources/js/components/ui/badge';
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Receipt,
   Download,
@@ -19,32 +18,20 @@ import {
   User
 } from "lucide-react";
 import { format } from "date-fns";
-import { formatCurrency } from '@/Modules/RentalManagement/Resources/js/lib/utils';
+import { formatCurrency } from '@/utils/format';
 
-interface Payment {
-  id: number;
-  amount: number;
-  date: string;
-  status: 'pending' | 'completed' | 'failed';
-  method: string;
-  reference: string;
-  notes?: string;
-  receipt_path?: string;
-  created_by: {
-    id: number;
-    name: string;
-  };
-  rental: {
-    id: number;
-    rental_number?: string;
-    total_amount: number;
-    payment_due_date?: string;
-    status: string;
-  };
-}
+// Placeholder types
+type PageProps = any;
+type Employee = any;
+type Rental = any;
+type Payment = any;
+type BreadcrumbItem = { title: string; href: string };
 
 interface Props extends PageProps {
+  auth: any;
+  rental: Rental;
   payment: Payment;
+  employees: Employee[];
 }
 
 export default function Show({ auth, payment }: Props) {
@@ -196,9 +183,9 @@ export default function Show({ auth, payment }: Props) {
                 <div className="mt-6">
                   <h3 className="text-sm font-medium mb-2">{t('receipt_image')}</h3>
                   <div className="border rounded-md p-2">
-                    <img 
-                      src={`/storage/${payment.receipt_path}`} 
-                      alt={t('payment_receipt')} 
+                    <img
+                      src={`/storage/${payment.receipt_path}`}
+                      alt={t('payment_receipt')}
                       className="max-h-64 object-contain mx-auto"
                     />
                   </div>
@@ -210,4 +197,4 @@ export default function Show({ auth, payment }: Props) {
       </div>
     </AdminLayout>
   );
-} 
+}

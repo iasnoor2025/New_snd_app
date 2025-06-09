@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/components/ui/button';
-import { Input } from '@/Modules/Payroll/Resources/js/components/ui/input';
-import { Select } from '@/Modules/Payroll/Resources/js/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/components/ui/card';
-import { Label } from '@/Modules/Payroll/Resources/js/components/ui/label';
+import AppLayout from '@/layouts/AppLayout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 export default function Create({ auth, employees, currentMonth }) {
   const { t } = useTranslation('payroll');
@@ -22,9 +22,8 @@ export default function Create({ auth, employees, currentMonth }) {
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('generate_payroll')}</h2>}
+        <AppLayout
+            title={t('generate_payroll')}
         >
             <Head title={t('generate_payroll')} />
 
@@ -92,6 +91,6 @@ export default function Create({ auth, employees, currentMonth }) {
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 }

@@ -1,13 +1,16 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
-import { Textarea } from '@/Modules/RentalManagement/Resources/js/components/ui/textarea';
-import { Equipment, Employee } from '@/Modules/RentalManagement/Resources/js/types';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+
+// Placeholder types
+type Equipment = { id: number; name: string };
+type Employee = { id: number; name: string };
 
 interface Props {
     rental: {
@@ -18,6 +21,7 @@ interface Props {
 }
 
 const Create: FC<Props> = ({ rental, equipment, operators }) => {
+    const { t } = useTranslation('rental');
     const { data, setData, post, processing, errors } = useForm({
         equipment_id: '',
         operator_id: '',
@@ -29,8 +33,6 @@ const Create: FC<Props> = ({ rental, equipment, operators }) => {
     });
 
     const handleSubmit = (e: React.FormEvent) => {
-  const { t } = useTranslation('rental');
-
         e.preventDefault();
         post(`/rentals/${rental.id}/items`);
     };

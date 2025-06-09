@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Input } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/label';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
 import { PlusCircle, Trash2 } from 'lucide-react';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
-import { Numeric } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/numeric';
+import { Separator } from '@/components/ui/separator';
+import { Numeric } from '@/components/ui/numeric';
 
 interface Part {
   id: number;
@@ -36,7 +36,7 @@ interface MaintenancePartsProps {
 
 export function MaintenanceParts({ maintenanceId, parts, availableParts, onSuccess }: MaintenancePartsProps) {
   const [isAddingPart, setIsAddingPart] = useState(false);
-  
+
   const { data, setData, post, processing, errors, reset } = useForm({
     maintenance_id: maintenanceId,
     part_id: '',
@@ -120,9 +120,9 @@ export function MaintenanceParts({ maintenanceId, parts, availableParts, onSucce
               </div>
 
               <div className="flex justify-end space-x-2">
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => setIsAddingPart(false)}
                 >
                   Cancel
@@ -184,9 +184,9 @@ export function MaintenanceParts({ maintenanceId, parts, availableParts, onSucce
                   ))}
                 </TableBody>
               </Table>
-              
+
               <Separator className="my-4" />
-              
+
               <div className="flex justify-end">
                 <div className="text-sm font-medium">
                   Total Cost: <span className="text-lg ml-2">${totalPartsCost.toFixed(2)}</span>
@@ -198,4 +198,4 @@ export function MaintenanceParts({ maintenanceId, parts, availableParts, onSucce
       </CardContent>
     </Card>
   );
-} 
+}

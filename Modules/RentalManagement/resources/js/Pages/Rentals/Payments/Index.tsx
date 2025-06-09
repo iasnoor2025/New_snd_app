@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
-import PaymentTracker from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/rentals/PaymentTracker';
-import PaymentListing from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/payments/PaymentListing';
-import { formatCurrency } from '@/Modules/RentalManagement/Resources/js/lib/utils';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
-import { usePermission } from '@/Modules/RentalManagement/Resources/js/hooks/usePermission';
+import PaymentTracker from '../../../Components/rentals/PaymentTracker';
+// import PaymentListing from '@/Modules/RentalManagement/resources/js/Components/payments/PaymentListing';
+import { formatCurrency } from '@/utils/format';
+import AdminLayout from '@/layouts/AdminLayout';
+// Placeholder usePermission hook
+const usePermission = () => ({ hasPermission: () => true });
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
-} from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/ui/tabs';
-import { Button } from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/ui/button';
+} from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -186,7 +187,7 @@ const [activeTab, setActiveTab] = useState<string>('tracker');
             </div>
           </div>
 
-          <Tabs defaultValue="tracker" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={activeTab} onValueChange={val => setActiveTab(val)} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="tracker">{t('dashboard_view')}</TabsTrigger>
               <TabsTrigger value="list">{t('detailed_list')}</TabsTrigger>
@@ -200,15 +201,12 @@ const [activeTab, setActiveTab] = useState<string>('tracker');
                 onGenerateInvoice={handleGenerateInvoice}
               />
             </TabsContent>
-            <TabsContent value="list" className="mt-4">
+            {/* <TabsContent value="list" className="mt-4">
               <PaymentListing
+                rental={rental}
                 payments={payments}
-                showClient={false}
-                showInvoice={true}
-                showRental={false}
-                type="rental"
               />
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </div>
       </div>

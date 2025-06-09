@@ -1,13 +1,12 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
-import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
-import { Textarea } from '@/Modules/RentalManagement/Resources/js/components/ui/textarea';
-import { Equipment, Employee } from '@/Modules/RentalManagement/Resources/js/types';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2 } from 'lucide-react';
 
 interface Props {
@@ -19,6 +18,7 @@ interface Props {
 }
 
 interface RentalItemForm {
+    [key: string]: string;
     equipment_id: string;
     operator_id: string;
     rate: string;
@@ -28,7 +28,12 @@ interface RentalItemForm {
     notes: string;
 }
 
+// Placeholder types
+type Equipment = { id: number; name: string };
+type Employee = { id: number; name: string };
+
 const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
+    const { t } = useTranslation('rental');
     const [items, setItems] = useState<RentalItemForm[]>([
         {
             equipment_id: '',
@@ -41,19 +46,17 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
         },
     ]);
 
-    const { post, processing, errors } = useForm({
-        items: items,
+    const { post, processing, errors, setData } = useForm({
+        items,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
-  const { t } = useTranslation('rental');
-
         e.preventDefault();
         post(`/rentals/${rental.id}/items/bulk`);
     };
 
     const addItem = () => {
-        setItems([
+        const newItems = [
             ...items,
             {
                 equipment_id: '',
@@ -64,17 +67,22 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                 discount_percentage: '0',
                 notes: '',
             },
-        ]);
+        ];
+        setItems(newItems);
+        setData('items', newItems);
     };
 
     const removeItem = (index: number) => {
-        setItems(items.filter((_, i) => i !== index));
+        const newItems = items.filter((_, i) => i !== index);
+        setItems(newItems);
+        setData('items', newItems);
     };
 
     const updateItem = (index: number, field: keyof RentalItemForm, value: string) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [field]: value };
         setItems(newItems);
+        setData('items', newItems);
     };
 
     return (
@@ -122,8 +130,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
-                                            {errors[`items.${index}.equipment_id`] && (
-                                                <p className="text-sm text-red-500">{errors[`items.${index}.equipment_id`]}</p>
+                                            {(errors as any)[`items.${index}.equipment_id`] && (
+                                                <p className="text-sm text-red-500">{(errors as any)[`items.${index}.equipment_id`]}</p>
                                             )}
                                         </div>
 
@@ -144,8 +152,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
-                                            {errors[`items.${index}.operator_id`] && (
-                                                <p className="text-sm text-red-500">{errors[`items.${index}.operator_id`]}</p>
+                                            {(errors as any)[`items.${index}.operator_id`] && (
+                                                <p className="text-sm text-red-500">{(errors as any)[`items.${index}.operator_id`]}</p>
                                             )}
                                         </div>
 
@@ -159,8 +167,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                     value={item.rate}
                                                     onChange={(e) => updateItem(index, 'rate', e.target.value)}
                                                 />
-                                                {errors[`items.${index}.rate`] && (
-                                                    <p className="text-sm text-red-500">{errors[`items.${index}.rate`]}</p>
+                                                {(errors as any)[`items.${index}.rate`] && (
+                                                    <p className="text-sm text-red-500">{(errors as any)[`items.${index}.rate`]}</p>
                                                 )}
                                             </div>
 
@@ -180,8 +188,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                         <SelectItem value="monthly">Monthly</SelectItem>
                                                     </SelectContent>
                                                 </Select>
-                                                {errors[`items.${index}.rate_type`] && (
-                                                    <p className="text-sm text-red-500">{errors[`items.${index}.rate_type`]}</p>
+                                                {(errors as any)[`items.${index}.rate_type`] && (
+                                                    <p className="text-sm text-red-500">{(errors as any)[`items.${index}.rate_type`]}</p>
                                                 )}
                                             </div>
                                         </div>
@@ -195,8 +203,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                     value={item.days}
                                                     onChange={(e) => updateItem(index, 'days', e.target.value)}
                                                 />
-                                                {errors[`items.${index}.days`] && (
-                                                    <p className="text-sm text-red-500">{errors[`items.${index}.days`]}</p>
+                                                {(errors as any)[`items.${index}.days`] && (
+                                                    <p className="text-sm text-red-500">{(errors as any)[`items.${index}.days`]}</p>
                                                 )}
                                             </div>
 
@@ -209,8 +217,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                     value={item.discount_percentage}
                                                     onChange={(e) => updateItem(index, 'discount_percentage', e.target.value)}
                                                 />
-                                                {errors[`items.${index}.discount_percentage`] && (
-                                                    <p className="text-sm text-red-500">{errors[`items.${index}.discount_percentage`]}</p>
+                                                {(errors as any)[`items.${index}.discount_percentage`] && (
+                                                    <p className="text-sm text-red-500">{(errors as any)[`items.${index}.discount_percentage`]}</p>
                                                 )}
                                             </div>
                                         </div>
@@ -222,8 +230,8 @@ const BulkCreate: FC<Props> = ({ rental, equipment, operators }) => {
                                                 value={item.notes}
                                                 onChange={(e) => updateItem(index, 'notes', e.target.value)}
                                             />
-                                            {errors[`items.${index}.notes`] && (
-                                                <p className="text-sm text-red-500">{errors[`items.${index}.notes`]}</p>
+                                            {(errors as any)[`items.${index}.notes`] && (
+                                                <p className="text-sm text-red-500">{(errors as any)[`items.${index}.notes`]}</p>
                                             )}
                                         </div>
                                     </div>

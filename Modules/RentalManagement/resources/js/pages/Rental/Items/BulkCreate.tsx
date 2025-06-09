@@ -1,16 +1,17 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Input } from '@/Modules/RentalManagement/Resources/js/components/ui/input';
-import { Select } from '@/Modules/RentalManagement/Resources/js/components/ui/select';
-import { Textarea } from '@/Modules/RentalManagement/Resources/js/components/ui/textarea';
-import { Label } from '@/Modules/RentalManagement/Resources/js/components/ui/label';
-import { Alert, AlertDescription } from '@/Modules/RentalManagement/Resources/js/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 
 interface ItemTemplate {
+    [key: string]: string;
     name: string;
     description: string;
     category: string;
@@ -21,6 +22,7 @@ interface ItemTemplate {
 }
 
 export const BulkCreate: FC = () => {
+    const { t } = useTranslation('rental');
     const [items, setItems] = useState<ItemTemplate[]>([
         {
             name: '',
@@ -34,12 +36,10 @@ export const BulkCreate: FC = () => {
     ]);
 
     const { post, processing, errors } = useForm({
-        items: items
+        items
     });
 
     const addItem = () => {
-  const { t } = useTranslation('rental');
-
         setItems([
             ...items,
             {
@@ -131,9 +131,9 @@ export const BulkCreate: FC = () => {
                                                     onChange={e => updateItem(index, 'name', e.target.value)}
                                                     required
                                                 />
-                                                {errors[`items.${index}.name`] && (
+                                                {(errors as any)[`items.${index}.name`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.name`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.name`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>
@@ -141,19 +141,17 @@ export const BulkCreate: FC = () => {
                                             <div className="space-y-2">
                                                 <Label htmlFor={`category-${index}`}>Category</Label>
                                                 <Select
-                                                    id={`category-${index}`}
                                                     value={item.category}
-                                                    onChange={e => updateItem(index, 'category', e.target.value)}
-                                                    required
+                                                    onValueChange={value => updateItem(index, 'category', value)}
                                                 >
                                                     <option value="">{t('select_category')}</option>
                                                     <option value="equipment">Equipment</option>
                                                     <option value="tools">Tools</option>
                                                     <option value="vehicles">Vehicles</option>
                                                 </Select>
-                                                {errors[`items.${index}.category`] && (
+                                                {(errors as any)[`items.${index}.category`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.category`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.category`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>
@@ -169,9 +167,9 @@ export const BulkCreate: FC = () => {
                                                     onChange={e => updateItem(index, 'daily_rate', e.target.value)}
                                                     required
                                                 />
-                                                {errors[`items.${index}.daily_rate`] && (
+                                                {(errors as any)[`items.${index}.daily_rate`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.daily_rate`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.daily_rate`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>
@@ -179,10 +177,8 @@ export const BulkCreate: FC = () => {
                                             <div className="space-y-2">
                                                 <Label htmlFor={`condition-${index}`}>Condition</Label>
                                                 <Select
-                                                    id={`condition-${index}`}
                                                     value={item.condition}
-                                                    onChange={e => updateItem(index, 'condition', e.target.value)}
-                                                    required
+                                                    onValueChange={value => updateItem(index, 'condition', value)}
                                                 >
                                                     <option value="new">New</option>
                                                     <option value="like_new">{t('like_new')}</option>
@@ -190,9 +186,9 @@ export const BulkCreate: FC = () => {
                                                     <option value="fair">Fair</option>
                                                     <option value="poor">Poor</option>
                                                 </Select>
-                                                {errors[`items.${index}.condition`] && (
+                                                {(errors as any)[`items.${index}.condition`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.condition`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.condition`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>
@@ -204,9 +200,9 @@ export const BulkCreate: FC = () => {
                                                     value={item.serial_number}
                                                     onChange={e => updateItem(index, 'serial_number', e.target.value)}
                                                 />
-                                                {errors[`items.${index}.serial_number`] && (
+                                                {(errors as any)[`items.${index}.serial_number`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.serial_number`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.serial_number`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>
@@ -219,9 +215,9 @@ export const BulkCreate: FC = () => {
                                                     onChange={e => updateItem(index, 'description', e.target.value)}
                                                     required
                                                 />
-                                                {errors[`items.${index}.description`] && (
+                                                {(errors as any)[`items.${index}.description`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.description`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.description`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>
@@ -233,9 +229,9 @@ export const BulkCreate: FC = () => {
                                                     value={item.notes}
                                                     onChange={e => updateItem(index, 'notes', e.target.value)}
                                                 />
-                                                {errors[`items.${index}.notes`] && (
+                                                {(errors as any)[`items.${index}.notes`] && (
                                                     <Alert variant="destructive">
-                                                        <AlertDescription>{errors[`items.${index}.notes`]}</AlertDescription>
+                                                        <AlertDescription>{(errors as any)[`items.${index}.notes`]}</AlertDescription>
                                                     </Alert>
                                                 )}
                                             </div>

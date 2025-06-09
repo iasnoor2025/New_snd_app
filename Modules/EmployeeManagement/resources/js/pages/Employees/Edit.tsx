@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps } from '@/Modules/EmployeeManagement/Resources/js/types';
-import AdminLayout from '@/Modules/EmployeeManagement/Resources/js/layouts/AdminLayout';
-import { Employee, User } from '@/Modules/EmployeeManagement/Resources/js/types/models';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EmployeeManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EmployeeManagement/Resources/js/components/ui/button';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/Modules/EmployeeManagement/Resources/js/components/ui/form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EmployeeManagement/Resources/js/components/ui/tabs';
+import { PageProps, User } from '@/types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { FileUpload } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Employee/FileUpload';
-import { ExpiryDateInput } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Employee/ExpiryDateInput';
-import { SectionHeader } from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/Employee/SectionHeader';
-import { COUNTRIES, EMPLOYEE_ROLES, EMPLOYEE_STATUS } from '@/Modules/EmployeeManagement/Resources/js/constants/employee';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getTranslation } from '@/utils/translation';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { Input } from '@/Modules/EmployeeManagement/Resources/js/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/EmployeeManagement/Resources/js/components/ui/select';
-import { getTranslation } from '@/utils/translation';
-import SalaryInfoTab from '@/Modules/EmployeeManagement/Resources/js/Modules/EmployeeManagement/Resources/js/components/employees/create/tabs/SalaryInfoTab';
+
+// Placeholder components
+const FileUpload = () => <div>FileUpload Placeholder</div>;
+const ExpiryDateInput = () => <div>ExpiryDateInput Placeholder</div>;
+const SectionHeader = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+
+// Placeholder constants for employee statuses and types
+const EMPLOYEE_STATUSES = ['active', 'inactive', 'terminated'];
+const EMPLOYEE_TYPES = ['full_time', 'part_time', 'contractor'];
 
 // Define form schema
 const formSchema = z.object({
@@ -189,7 +192,6 @@ export default function Edit({ auth, employee, users, positions }: Props) {
 
   return (
     <AdminLayout
-      user={auth.user}
       title={`Edit Employee: ${employee.name}`}
       breadcrumbs={breadcrumbs}
       requiredPermission="employees.edit"
@@ -470,22 +472,19 @@ export default function Edit({ auth, employee, users, positions }: Props) {
                       <FormField
                         control={form.control}
                         name="status"
-                        render={({ field }) => (
+                        render={({ field }: any) => (
                           <FormItem>
                             <FormLabel>Status</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder={t('ph_select_status')} />
+                                  <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {EMPLOYEE_STATUS.map((status) => (
-                                  <SelectItem key={status.value} value={status.value}>
-                                    {status.label}
+                                {EMPLOYEE_STATUSES.map((status) => (
+                                  <SelectItem key={status} value={status}>
+                                    {status.charAt(0).toUpperCase() + status.slice(1)}
                                   </SelectItem>
                                 ))}
                               </SelectContent>

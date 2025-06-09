@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { PageProps } from '@/Modules/Payroll/Resources/js/types';
-import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/layouts/AuthenticatedLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/button';
-import { Input } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/input';
-import { Label } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/card';
+import { PageProps } from '../../types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 
 interface Employee {
@@ -17,6 +17,7 @@ interface Employee {
 }
 
 interface Props extends PageProps {
+    auth?: any;
     employees: Employee[];
 }
 
@@ -50,7 +51,7 @@ export default function Create({ auth, employees }: Props) {
     };
 
     return (
-        <AuthenticatedLayout
+        <AdminLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('ttl_create_payroll')}</h2>}
         >
@@ -196,6 +197,6 @@ export default function Create({ auth, employees }: Props) {
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AdminLayout>
     );
 }

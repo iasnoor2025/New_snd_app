@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AppLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
+import AppLayout from '@/layouts/AppLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/tabs';
+} from '@/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -16,22 +16,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
+} from '@/components/ui/table';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import {
   DepreciationSummary,
   EquipmentNeedingReplacement
-} from '@/Modules/EquipmentManagement/Resources/js/types/DepreciationTypes';
-import DepreciationTrackingService from '@/Modules/EquipmentManagement/Resources/js/services/DepreciationTrackingService';
+} from '../../../types/DepreciationTypes';
+import DepreciationTrackingService from '../../../services/DepreciationTrackingService';
 import FinancialSummaryCard from './components/FinancialSummaryCard';
 import EquipmentCountsCard from './components/EquipmentCountsCard';
 import ReplacementNeedsTable from './components/ReplacementNeedsTable';
 import DepreciationByCategoryChart from './components/DepreciationByCategoryChart';
 import AssetValueTrendChart from './components/AssetValueTrendChart';
 import CategorySummaryTable from './components/CategorySummaryTable';
-import { LoadingSpinner } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/LoadingSpinner';
-import { AlertTriangle, TrendingDown, Calculator, Clock, BarChart, PieChart } from 'lucide-react';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
+import { AlertTriangle, TrendingDown, Calculator, Clock, BarChart } from 'lucide-react';
 
 const DepreciationDashboard: React.FC = () => {
   const [summary, setSummary] = useState<DepreciationSummary | null>(null);
@@ -192,15 +192,13 @@ const DepreciationDashboard: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <div style={{ height: '300px' }}>
-                        <PieChart
+                        {/* <PieChart
                           data={summary.category_summary.map(cat => ({
                             name: cat.category_name,
                             value: cat.depreciation
                           }))}
                           dataKey="value"
-                          nameKey="name"
-                          colors={['#2563EB', '#7C3AED', '#DB2777', '#F59E0B', '#10B981', '#6B7280']}
-                        />
+                        /> */}
                       </div>
                     </CardContent>
                   </Card>
@@ -211,15 +209,13 @@ const DepreciationDashboard: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <div style={{ height: '300px' }}>
-                        <PieChart
+                        {/* <PieChart
                           data={summary.category_summary.map(cat => ({
                             name: cat.category_name,
                             value: cat.current_value
                           }))}
                           dataKey="value"
-                          nameKey="name"
-                          colors={['#2563EB', '#7C3AED', '#DB2777', '#F59E0B', '#10B981', '#6B7280']}
-                        />
+                        /> */}
                       </div>
                     </CardContent>
                   </Card>

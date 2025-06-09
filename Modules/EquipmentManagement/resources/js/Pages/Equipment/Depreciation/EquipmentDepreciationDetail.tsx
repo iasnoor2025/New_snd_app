@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Head } from '@inertiajs/react';
 import { useParams, Link } from 'react-router-dom';
-import AppLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AppLayout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { Alert, AlertTitle, AlertDescription } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/alert';
+import AppLayout from '@/layouts/AppLayout';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import {
   Table,
   TableBody,
@@ -14,13 +14,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
+} from '@/components/ui/table';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/tabs';
+} from '@/components/ui/tabs';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import {
   LineChart as RechartsLineChart,
   Line,
@@ -34,9 +35,8 @@ import {
 import {
   DepreciationReport,
   ValuationHistory
-} from '@/Modules/EquipmentManagement/Resources/js/types/DepreciationTypes';
-import DepreciationTrackingService from '@/Modules/EquipmentManagement/Resources/js/services/DepreciationTrackingService';
-import { LoadingSpinner } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/shared/LoadingSpinner';
+} from '../../../types/DepreciationTypes';
+import DepreciationTrackingService from '../../../services/DepreciationTrackingService';
 import {
   Clock,
   DollarSign,

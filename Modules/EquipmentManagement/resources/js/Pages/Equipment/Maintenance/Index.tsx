@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { PageProps, BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
 import AdminLayout from '@/layouts/AdminLayout';
 import { Equipment, MaintenanceRecord } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { formatCurrency, formatDate } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
+import { formatDate, formatCurrency } from '@/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

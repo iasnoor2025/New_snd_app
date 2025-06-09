@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import TimesheetForm from '@/Modules/RentalManagement/resources/js/components/rentals/timesheets/TimesheetForm';
+import TimesheetForm from '../../Components/rentals/timesheets/TimesheetForm';
 
 // Icons
 import { AlertCircle } from "lucide-react";

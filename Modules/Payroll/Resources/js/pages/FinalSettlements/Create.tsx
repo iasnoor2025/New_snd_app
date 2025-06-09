@@ -1,23 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import { PageProps } from '@/Modules/Payroll/Resources/js/types';
-import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
-import { Breadcrumb } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/breadcrumb';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/card';
-import { Button } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/button';
-import { Input } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/input';
-import { Label } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/label';
-import { Textarea } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/textarea';
+import { PageProps } from '../../types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
-import { usePermission } from '@/Modules/Payroll/Resources/js/hooks/usePermission';
+import { usePermission } from '../../hooks/usePermission';
 
 const breadcrumbs = [
     {
@@ -35,6 +29,7 @@ const breadcrumbs = [
 ];
 
 interface Props extends PageProps {
+    auth?: any;
     employee: {
         id: number;
         employee_id: string;

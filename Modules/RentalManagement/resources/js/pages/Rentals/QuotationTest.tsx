@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
-import AdminLayout from '@/Modules/RentalManagement/Resources/js/layouts/AdminLayout';
-import { Button } from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/RentalManagement/Resources/js/Modules/RentalManagement/Resources/js/components/ui/card';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 
-export default function QuotationTest({ auth }) {
+export default function QuotationTest({ auth }: { auth?: any }) {
   const { t } = useTranslation('rental');
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -64,7 +64,7 @@ export default function QuotationTest({ auth }) {
   };
 
   return (
-    <AdminLayout user={auth.user}>
+    <AdminLayout>
       <Head title={t('ttl_quotation_test')} />
 
       <div className="container mx-auto py-6">

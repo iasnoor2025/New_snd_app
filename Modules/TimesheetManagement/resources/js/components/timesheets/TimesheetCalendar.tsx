@@ -11,16 +11,15 @@ import {
   parseISO,
   isWeekend
 } from 'date-fns';
-import { EmployeeTimesheet, TimesheetStatus } from '../../types/timesheet';
 import { Employee } from '../../types/employee';
-import { Button } from '../ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '../ui/tooltip';
-import { Card } from '../ui/card';
+} from '@/components/ui/tooltip';
+import { Card } from '@/components/ui/card';
 import {
   Calendar,
   Clock,
@@ -35,10 +34,21 @@ import {
 import TimesheetForm from './TimesheetForm';
 
 interface TimesheetCalendarProps {
-  timesheets: EmployeeTimesheet[];
+  timesheets: LocalEmployeeTimesheet[];
   currentMonth: Date;
   employees: Employee[];
   onTimesheetCreated: () => void;
+}
+
+// Placeholder for EmployeeTimesheet and TimesheetStatus
+type TimesheetStatus = 'approved' | 'rejected' | 'pending';
+interface LocalEmployeeTimesheet {
+  id: number;
+  date: string;
+  status: TimesheetStatus;
+  employee?: { first_name: string; last_name: string };
+  regular_hours?: number;
+  overtime_hours?: number;
 }
 
 const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
@@ -49,7 +59,8 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
 }) => {
   const [showTimesheetForm, setShowTimesheetForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTimesheet, setSelectedTimesheet] = useState<EmployeeTimesheet | null>(null);
+  const [selectedTimesheet, setSelectedTimesheet] = useState<LocalEmployeeTimesheet | undefined>(undefined);
+  const { t } = useTranslation('timesheet');
 
   // Group timesheets by date
   const groupedTimesheets = timesheets.reduce((acc, timesheet) => {
@@ -59,7 +70,7 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
     }
     acc[date].push(timesheet);
     return acc;
-  }, {} as Record<string, EmployeeTimesheet[]>);
+  }, {} as Record<string, LocalEmployeeTimesheet[]>);
 
   // Get days of the month
   const monthStart = startOfMonth(currentMonth);
@@ -83,14 +94,12 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
   };
 
   const handleAddTimesheet = (date: Date) => {
-  const { t } = useTranslation('timesheet');
-
     setSelectedDate(date);
-    setSelectedTimesheet(null);
+    setSelectedTimesheet(undefined);
     setShowTimesheetForm(true);
   };
 
-  const handleEditTimesheet = (timesheet: EmployeeTimesheet) => {
+  const handleEditTimesheet = (timesheet: LocalEmployeeTimesheet) => {
     setSelectedTimesheet(timesheet);
     setSelectedDate(parseISO(timesheet.date));
     setShowTimesheetForm(true);
@@ -99,13 +108,13 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
   const handleFormClose = () => {
     setShowTimesheetForm(false);
     setSelectedDate(null);
-    setSelectedTimesheet(null);
+    setSelectedTimesheet(undefined);
   };
 
   const handleTimesheetSaved = () => {
     setShowTimesheetForm(false);
     setSelectedDate(null);
-    setSelectedTimesheet(null);
+    setSelectedTimesheet(undefined);
     onTimesheetCreated();
   };
 
@@ -192,7 +201,7 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
                           {timesheet.employee?.first_name} {timesheet.employee?.last_name}
                         </span>
                         <span className="whitespace-nowrap ml-auto">
-                          {timesheet.regular_hours + timesheet.overtime_hours}h
+                          {(timesheet.regular_hours ?? 0) + (timesheet.overtime_hours ?? 0)}h
                         </span>
                       </>
                     </div>
@@ -223,11 +232,12 @@ const TimesheetCalendar: React.FC<TimesheetCalendarProps> = ({
           </DialogHeader>
 
           <TimesheetForm
-            employees={employees}
+            open={showTimesheetForm}
+            onClose={handleFormClose}
+            onSaved={handleTimesheetSaved}
             date={selectedDate}
-            timesheet={selectedTimesheet}
-            onSave={handleTimesheetSaved}
-            onCancel={handleFormClose}
+            timesheet={selectedTimesheet as any}
+            employees={employees}
           />
         </DialogContent>
       </Dialog>

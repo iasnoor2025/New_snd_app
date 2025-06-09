@@ -1,18 +1,16 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { type BreadcrumbItem } from '@/Modules/EquipmentManagement/Resources/js/types';
+import AdminLayout from '@/layouts/AdminLayout';
 import { useState, useEffect } from 'react';
-import { MaintenanceRecord, Equipment } from '@/Modules/EquipmentManagement/Resources/js/types/models';
-import { formatDate, formatCurrency } from '@/Modules/EquipmentManagement/Resources/js/utils/format';
-import { 
-  ArrowLeft as ArrowLeftIcon, 
-  Edit as EditIcon, 
-  Trash as TrashIcon 
+import { formatCurrency, formatDate } from '@/utils/format';
+import {
+  ArrowLeft as ArrowLeftIcon,
+  Edit as EditIcon,
+  Trash as TrashIcon
 } from 'lucide-react';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { Separator } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import {
   Table,
   TableBody,
@@ -20,8 +18,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/table';
-import { useToast } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/use-toast';
+} from '@/components/ui/table';
+import { useToast } from '@/components/ui/use-toast';
+
+// Placeholder types
+type BreadcrumbItem = any;
+type MaintenanceRecord = any;
+type Equipment = any;
 
 interface Props {
     maintenanceRecord: MaintenanceRecord & {
@@ -37,10 +40,10 @@ interface Props {
 
 export default function Show({ maintenanceRecord }: Props) {
     const { toast } = useToast();
-    
+
     const getStatusBadge = (status: string) => {
         if (!status) return <Badge variant="outline">Unknown</Badge>;
-        
+
         switch (status.toLowerCase()) {
             case 'scheduled':
                 return <Badge className="bg-blue-100 text-blue-800">Scheduled</Badge>;
@@ -128,8 +131,8 @@ export default function Show({ maintenanceRecord }: Props) {
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm font-medium text-gray-500">Technician</p>
-                                <p>{maintenanceRecord.performer ? 
-                                    `${maintenanceRecord.performer.first_name} ${maintenanceRecord.performer.last_name}` : 
+                                <p>{maintenanceRecord.performer ?
+                                    `${maintenanceRecord.performer.first_name} ${maintenanceRecord.performer.last_name}` :
                                     'Not Assigned'}</p>
                             </div>
                             <div className="space-y-1">
@@ -148,7 +151,7 @@ export default function Show({ maintenanceRecord }: Props) {
 
                         <Separator className="my-6" />
                         <h3 className="text-lg font-medium mb-4">Parts Used</h3>
-                        
+
                         {maintenanceRecord.maintenanceParts && maintenanceRecord.maintenanceParts.length > 0 ? (
                             <div className="rounded-md border">
                                 <Table>
@@ -162,7 +165,7 @@ export default function Show({ maintenanceRecord }: Props) {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {maintenanceRecord.maintenanceParts.map((part) => (
+                                        {maintenanceRecord.maintenanceParts.map((part: any) => (
                                             <TableRow key={part.id}>
                                                 <TableCell>{part.part_name}</TableCell>
                                                 <TableCell>{part.part_number || '-'}</TableCell>

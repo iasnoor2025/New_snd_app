@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-// @ts-ignore
-import { Button } from '../../../../../../resources/js/components/ui/button';
-// @ts-ignore
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '../../../../../../resources/js/components/ui/card';
-// @ts-ignore
-import { Input } from '../../../../../../resources/js/components/ui/input';
-// @ts-ignore
-import { Badge } from '../../../../../../resources/js/components/ui/badge';
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../../../../resources/js/components/ui/select';
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -29,27 +25,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../../../../../resources/js/components/ui/table';
-// import { ToastService } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/shared/ToastManager';
-import {
-  Plus as PlusIcon,
-  Eye as EyeIcon,
-  Pencil as PencilIcon,
-  Trash as TrashIcon,
-  RotateCw as ArrowPathIcon,
-  Check as CheckIcon,
-  X as XIcon
-} from 'lucide-react';
-// @ts-ignore
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../../../../../../resources/js/components/ui/tooltip';
-// import { Tooltip } from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ui/tooltip';
-// import ErrorBoundary from '@/Modules/LeaveManagement/Resources/js/Modules/LeaveManagement/Resources/js/components/ErrorBoundary';
-// @ts-ignore
+} from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   Dialog,
   DialogClose,
@@ -59,9 +36,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../../../../resources/js/components/ui/dialog';
-// @ts-ignore
-import AdminLayout from '../../../../../EmployeeManagement/resources/js/layouts/AdminLayout';
+} from '@/components/ui/dialog';
+import AdminLayout from '@/layouts/AdminLayout';
+import {
+  Plus as PlusIcon,
+  Eye as EyeIcon,
+  Pencil as PencilIcon,
+  Trash as TrashIcon,
+  RotateCw as ArrowPathIcon,
+  Check as CheckIcon,
+  X as XIcon
+} from 'lucide-react';
 
 // Define the LeaveRequest interface here to ensure it has all required properties
 interface Employee {
@@ -90,8 +75,8 @@ function usePermission() {
   const auth = (props?.auth || {}) as Record<string, any>;
   // DEBUG: Log the full auth object
   console.log('auth object:', auth);
-  let hasRole = auth.hasRole || (auth.user && auth.user.roles) || [];
-  let hasPermission = auth.hasPermission || (auth.user && auth.user.permissions) || [];
+  const hasRole = auth.hasRole || (auth.user && auth.user.roles) || [];
+  const hasPermission = auth.hasPermission || (auth.user && auth.user.permissions) || [];
   // DEBUG: Log roles and permissions arrays
   console.log('roles:', hasRole, 'permissions:', hasPermission);
   const isAdmin = Array.isArray(hasRole) && hasRole.some(role => role && (role === 'admin' || role === 'Admin' || role.name === 'admin' || role.name === 'Admin'));

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, useForm } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/Layouts/AuthenticatedLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/components/ui/button';
-import { Input } from '@/Modules/Payroll/Resources/js/components/ui/input';
-import { Select } from '@/Modules/Payroll/Resources/js/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Modules/Payroll/Resources/js/components/ui/table';
-import { Badge } from '@/Modules/Payroll/Resources/js/components/ui/badge';
+import AppLayout from '@/layouts/AppLayout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 
 export default function Index({ auth, payrolls, filters }) {
@@ -43,9 +43,8 @@ export default function Index({ auth, payrolls, filters }) {
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('payroll_management')}</h2>}
+        <AppLayout
+            title={t('payroll_management')}
         >
             <Head title={t('payroll_management')} />
 
@@ -158,6 +157,6 @@ export default function Index({ auth, payrolls, filters }) {
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 }

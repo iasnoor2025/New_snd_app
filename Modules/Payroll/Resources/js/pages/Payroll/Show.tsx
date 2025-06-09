@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
-import { PageProps } from '@/Modules/Payroll/Resources/js/types';
-import AuthenticatedLayout from '@/Modules/Payroll/Resources/js/layouts/AuthenticatedLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/card';
+import { PageProps } from '../../types';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 
 interface PayrollItem {
     id: number;
@@ -36,6 +37,7 @@ interface Payroll {
 
 interface Props extends PageProps {
     payroll: Payroll;
+    auth?: any;
 }
 
 export default function Show({ auth, payroll }: Props) {
@@ -57,7 +59,7 @@ export default function Show({ auth, payroll }: Props) {
     };
 
     return (
-        <AuthenticatedLayout
+        <AdminLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">{t('ttl_payroll_details')}</h2>}
         >
@@ -240,6 +242,6 @@ export default function Show({ auth, payroll }: Props) {
                     )}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AdminLayout>
     );
 }

@@ -5,16 +5,16 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import useLoadingState from '../../hooks/useLoadingState';
-import { Card, CardContent } from '../ui/card';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from '../ui/alert';
-import { Progress } from '../ui/progress';
+} from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
 import {
   AlertCircle,
   CheckCircle,
@@ -49,6 +49,7 @@ const uploadSchema = z.object({
 })
 
 const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadComplete }) => {
+  const { t } = useTranslation('timesheet');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadSummary, setUploadSummary] = useState<UploadSummary | null>(null);
@@ -113,8 +114,6 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
   };
 
   const downloadTemplate = () => {
-  const { t } = useTranslation('timesheet');
-
     // Create a template CSV content
     const csvContent = [
       'employee_id,date,regular_hours,overtime_hours,project_id,location,notes',
@@ -167,8 +166,11 @@ const BulkTimesheetUpload: React.FC<BulkTimesheetUploadProps> = ({ onUploadCompl
                     id="file"
                     type="file"
                     accept=".csv"
-                    ref={fileInputRef}
                     {...register('file')}
+                    ref={el => {
+                      register('file').ref(el);
+                      fileInputRef.current = el;
+                    }}
                     disabled={isUploading}
                   />
                   {errors.file && (

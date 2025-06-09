@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Head } from '@inertiajs/react';
-import AdminLayout from '@/Modules/EquipmentManagement/Resources/js/layouts/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/tabs';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from 'lucide-react';
-import { DatePicker } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/date-picker';
-import { Dialog, DialogContent, DialogTrigger } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/dialog';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import ScheduleForm from './ScheduleForm';
 import { ScheduleCalendar } from './ScheduleCalendar';
 import { ScheduleList } from './ScheduleList';
 import { TechnicianWorkload } from './TechnicianWorkload';
-import { PageBreadcrumb } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/PageBreadcrumb';
+import { PageBreadcrumb } from '../../../../components/PageBreadcrumb';
 
 interface MaintenanceRecord {
   id: number;
@@ -95,13 +95,13 @@ export default function Index({
             <div className="flex items-center space-x-2">
               <DatePicker
                 date={startDate}
-                onSelect={(date) => date && setStartDate(date)}
+                setDate={(date) => date && setStartDate(date)}
                 placeholder="Start date"
               />
               <span>to</span>
               <DatePicker
                 date={endDate}
-                onSelect={(date) => date && setEndDate(date)}
+                setDate={(date) => date && setEndDate(date)}
                 placeholder="End date"
               />
             </div>

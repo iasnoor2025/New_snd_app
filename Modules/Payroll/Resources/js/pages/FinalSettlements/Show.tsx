@@ -2,15 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/Modules/Payroll/Resources/js/types';
-import AdminLayout from '@/Modules/Payroll/Resources/js/layouts/AdminLayout';
-import { Button } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/card';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { ArrowLeft, Download, Printer } from 'lucide-react';
-import { useToast } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/use-toast';
-import { Badge } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/badge';
-import { Separator } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/separator';
-import { Alert, AlertDescription } from '@/Modules/Payroll/Resources/js/Modules/Payroll/Resources/js/components/ui/alert';
+import { useToast } from '@/components/ui/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 
 interface Props extends PageProps {

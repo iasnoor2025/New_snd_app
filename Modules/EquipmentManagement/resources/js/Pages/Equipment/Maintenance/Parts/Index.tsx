@@ -1,10 +1,10 @@
 import { Head } from '@inertiajs/react';
-import AdminLayout from '../../../../../../../EmployeeManagement/resources/js/layouts/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/card';
-import { Badge } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/badge';
-import { Button } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/ui/button';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { format, parseISO } from 'date-fns';
-import { PageBreadcrumb } from '@/Modules/EquipmentManagement/Resources/js/Modules/EquipmentManagement/Resources/js/components/PageBreadcrumb';
+import { PageBreadcrumb } from '../../../../components/PageBreadcrumb';
 import { MaintenanceParts } from '../Schedule/MaintenanceParts';
 import { TruckIcon, Calendar, WrenchIcon, User } from 'lucide-react';
 

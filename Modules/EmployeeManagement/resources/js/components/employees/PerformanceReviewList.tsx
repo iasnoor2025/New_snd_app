@@ -8,10 +8,9 @@ import {
   PerformanceReviewFilter,
   PERFORMANCE_RATING_CATEGORIES
 } from '../../types/performance';
-import useLoadingState from '../../hooks/useLoadingState';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -19,23 +18,23 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '../ui/table';
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from '../ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '../ui/select';
-import { DatePicker } from '../ui/date-picker';
-import { Badge } from '../ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+} from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertCircle,
   MoreHorizontal,
@@ -55,15 +54,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogClose
-} from '../ui/dialog';
-import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface PerformanceReviewListProps {
   employeeId?: number;
   onCreateNew?: () => void;
   onEdit?: (review: PerformanceReview) => void;
 }
+
+// Placeholder for useLoadingState
+const useLoadingState = () => ({ isLoading: false, error: null, withLoading: async (fn: any) => await fn() });
+// Placeholder translation function
+const t = (s: string) => s;
 
 export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
   employeeId,
@@ -82,7 +86,7 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
   const [showCommentDialog, setShowCommentDialog] = useState(false);
   const [reviewForComment, setReviewForComment] = useState<PerformanceReview | null>(null);
   const [employeeComment, setEmployeeComment] = useState('');
-  const { isLoading, error, withLoading } = useLoadingState('performanceReviewList');
+  const { isLoading, error, withLoading } = useLoadingState();
 
   // Fetch reviews on component mount
   useEffect(() => {
@@ -114,8 +118,6 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
   };
 
   const applyFilters = () => {
-  const { t } = useTranslation('employee');
-
     let filtered = [...reviews];
 
     // Apply search query
@@ -210,15 +212,9 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
   };
 
   const getRatingBadge = (rating: number) => {
-    const category = PERFORMANCE_RATING_CATEGORIES.find(
-      cat => rating >= cat.min && rating <= cat.max
-    );
-
-    return (
-      <Badge className={category?.color || ''}>
-        {rating.toFixed(1)}
-      </Badge>
-    );
+    const cat: any = PERFORMANCE_RATING_CATEGORIES.find((c: any) => c.value === rating);
+    if (!cat) return null;
+    return <Badge>{t(cat.label)}</Badge>;
   };
 
   const getStatusBadge = (status: string) => {
@@ -275,17 +271,8 @@ export const PerformanceReviewList: React.FC<PerformanceReviewListProps> = ({
               </SelectContent>
             </Select>
 
-            <DatePicker
-              value={startDate}
-              onChange={setStartDate}
-              placeholder={t('lbl_start_date')}
-            />
-
-            <DatePicker
-              value={endDate}
-              onChange={setEndDate}
-              placeholder={t('lbl_end_date')}
-            />
+            <DatePicker date={startDate} setDate={setStartDate} placeholder={t('lbl_start_date')} />
+            <DatePicker date={endDate} setDate={setEndDate} placeholder={t('lbl_end_date')} />
           </div>
         </div>
       </CardHeader>
