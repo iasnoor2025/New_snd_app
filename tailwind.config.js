@@ -18,6 +18,7 @@ export default {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('tailwindcss-animate'),
+    require('tailwindcss-rtl'),
     // RTL support plugin
     function({ addUtilities }) {
       const newUtilities = {

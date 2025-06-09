@@ -40,6 +40,7 @@ import type { PageProps } from '../types';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { Button } from "@/components/ui/button";
 
 // Map module names to their respective icon, route, and required permission
 const moduleMap: Record<string, { icon: any; route: string; permission: string; subItems?: Array<{ title: string; route: string; permission: string }> }> = {
@@ -213,39 +214,36 @@ export function AppSidebar() {
 
     const footerNavItems: NavItem[] = [];
 
+    // --- UI ---
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
-                                <AppLogo />
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader>
-
-            <SidebarContent>
+        <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r border-gray-200 flex flex-col shadow-lg overflow-x-hidden">
+            <div className="flex items-center gap-2 h-16 px-6 border-b border-gray-100">
+                <Link href="/dashboard" prefetch className="flex items-center gap-2">
+                    <AppLogo />
+                    <span className="font-bold text-lg text-gray-800">Dashboard</span>
+                </Link>
+                <Button variant="ghost" size="icon" className="ml-auto">
+                    <span className="sr-only">Toggle Sidebar</span>
+                    {/* Add your toggle icon here if needed */}
+                </Button>
+            </div>
+            <nav className="flex-1 overflow-y-auto px-2 py-4">
                 {isLoading ? (
-                    // Show loading state
-                    <div className="px-3 py-2">
-                        <div className="h-6 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700 mb-4"></div>
+                    <div className="space-y-4">
+                        <div className="h-6 w-24 animate-pulse rounded bg-gray-200 mb-4"></div>
                         {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="h-10 w-full animate-pulse rounded bg-gray-100 dark:bg-gray-800 mb-2"></div>
+                            <div key={i} className="h-10 w-full animate-pulse rounded bg-gray-100 mb-2"></div>
                         ))}
                     </div>
                 ) : (
                     <NavMain items={moduleItems} />
                 )}
-            </SidebarContent>
-
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+            </nav>
+            <div className="mt-auto border-t border-gray-100 p-4">
+                <NavFooter items={footerNavItems} />
                 <NavUser />
-            </SidebarFooter>
-        </Sidebar>
+            </div>
+        </aside>
     );
 }
 

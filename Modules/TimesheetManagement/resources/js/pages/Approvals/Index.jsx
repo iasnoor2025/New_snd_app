@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/AppLayout';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Modal from '../../../../../../Modules/TimesheetManagement/resources/js/components/Modal';
-import TextArea from '@/components/ui/textarea';
+import { Textarea } from '@/components/ui/textarea';
 
 // Minimal placeholder formatDate and formatHours functions
 const formatDate = (date) => date ? String(date) : '';
@@ -256,7 +256,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
 
             <div className="mt-4">
               <Label htmlFor="approval_notes" value="Notes (Optional)" />
-              <TextArea
+              <Textarea
                 id="approval_notes"
                 className="mt-1 block w-full"
                 value={approvalForm.data.notes}
@@ -312,7 +312,7 @@ const TimesheetApprovalsIndex = ({ timesheets, employees, filters, canViewAll })
 
             <div className="mt-4">
               <Label htmlFor="rejection_reason" value="Reason for Rejection *" />
-              <TextArea
+              <Textarea
                 id="rejection_reason"
                 className="mt-1 block w-full"
                 value={rejectionForm.data.rejection_reason}
