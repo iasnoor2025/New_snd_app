@@ -52,7 +52,7 @@ class User extends CoreUser implements HasMedia
     /**
      * Register media conversions for the model
      */
-    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {
         // Register avatar conversions from HasAvatar trait
         $this->registerAvatarMediaConversions($media);
