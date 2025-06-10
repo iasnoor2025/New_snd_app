@@ -122,7 +122,7 @@ const manpowerSchema = z.object({
 }, {
     message: 'End date must be after or equal to start date',
     path: ['end_date']
-})
+});
 
 const materialSchema = z.object({
     material_id: z.number().min(1, 'Material selection is required'),
@@ -451,23 +451,23 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
             switch (type) {
                 case 'manpower':
                     validationSchema = manpowerSchema;
-                    console.log('Using manpower schema - should validate:', Object.keys(manpowerSchema.shape));
+                    console.log('Using manpower schema - should validate:', manpowerSchema?.shape ? Object.keys(manpowerSchema.shape) : 'Schema not available');
                     break;
                 case 'material':
                     validationSchema = materialSchema;
-                    console.log('Using material schema - should validate:', Object.keys(materialSchema.shape));
+                    console.log('Using material schema - should validate:', materialSchema?.shape ? Object.keys(materialSchema.shape) : 'Schema not available');
                     break;
                 case 'equipment':
                     validationSchema = equipmentSchema;
-                    console.log('Using equipment schema - should validate:', Object.keys(equipmentSchema.shape));
+                    console.log('Using equipment schema - should validate:', equipmentSchema?.shape ? Object.keys(equipmentSchema.shape) : 'Schema not available');
                     break;
                 case 'fuel':
                     validationSchema = fuelSchema;
-                    console.log('Using fuel schema - should validate:', Object.keys(fuelSchema.shape));
+                    console.log('Using fuel schema - should validate:', fuelSchema?.shape ? Object.keys(fuelSchema.shape) : 'Schema not available');
                     break;
                 case 'expense':
                     validationSchema = expenseSchema;
-                    console.log('Using expense schema - should validate:', Object.keys(expenseSchema.shape));
+                    console.log('Using expense schema - should validate:', expenseSchema?.shape ? Object.keys(expenseSchema.shape) : 'Schema not available');
                     break;
                 default:
                     console.error('Unknown resource type:', type);
@@ -588,7 +588,7 @@ function ResourceFormContent({ type, projectId, projectEndDate, onSuccess, initi
             }
 
             // Validate form data before submission
-            let finalSubmissionData;
+            let finalSubmissionData: { status: any; resource_type: "manpower" | "equipment" | "material" | "fuel" | "expense"; job_title: string; start_date: string; daily_rate: number; total_days: number; employee_id: any; worker_name: any; end_date: string | null; notes: any; project_id: number; base_daily_rate: any; quantity: any; unit_price: any; unit_cost: any; hourly_rate: any; usage_hours: any; maintenance_cost: any; amount: any; description: any; equipment_id: any; name: any; unit: any; date_used: any; fuel_type: any; date: any; category: any; total_cost: any; material_id: any; } | { status: any; resource_type: "manpower" | "equipment" | "material" | "fuel" | "expense"; material_id: number; name: string; unit: string; quantity: number; unit_price: number; total_cost: number; date_used: string; notes: any; description: any; project_id: number; employee_id: any; worker_name: any; daily_rate: any; base_daily_rate: any; total_days: any; unit_cost: any; hourly_rate: any; usage_hours: any; maintenance_cost: any; amount: any; job_title: any; start_date: string; end_date: string; equipment_id: any; fuel_type: any; date: any; category: any; } | { status: any; resource_type: "manpower" | "equipment" | "material" | "fuel" | "expense"; start_date: string; equipment_id: number; hourly_rate: number; usage_hours: number; end_date: string; description: any; maintenance_cost: any; project_id: number; employee_id: any; worker_name: any; daily_rate: any; base_daily_rate: any; total_days: any; quantity: any; unit_price: any; unit_cost: any; amount: any; job_title: any; notes: any; name: any; unit: any; date_used: any; fuel_type: any; date: any; category: any; total_cost: any; material_id: any; } | { status: any; resource_type: "manpower" | "equipment" | "material" | "fuel" | "expense"; quantity: number; unit_price: number; total_cost: number; date: string; fuel_type: string; description: any; project_id: number; employee_id: any; worker_name: any; daily_rate: any; base_daily_rate: any; total_days: any; unit_cost: any; hourly_rate: any; usage_hours: any; maintenance_cost: any; amount: any; job_title: any; start_date: string; end_date: string; notes: any; equipment_id: any; name: any; unit: any; date_used: any; category: any; material_id: any; } | { status: any; resource_type: "manpower" | "equipment" | "material" | "fuel" | "expense"; total_cost: number; date: string; category: string; amount: number; description: any; project_id: number; employee_id: any; worker_name: any; daily_rate: any; base_daily_rate: any; total_days: any; quantity: any; unit_price: any; unit_cost: any; hourly_rate: any; usage_hours: any; maintenance_cost: any; job_title: any; start_date: string; end_date: string; notes: any; equipment_id: any; name: any; unit: any; date_used: any; fuel_type: any; material_id: any; };
             try {
                 const validatedData = validationSchema.parse(dataForValidation);
                 console.log('Validation passed:', validatedData);

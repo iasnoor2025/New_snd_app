@@ -14,16 +14,18 @@ import { route } from 'ziggy-js';
 // import CreateButton from '@/components/shared/CreateButton';
 // import CrudButtons from '@/components/shared/CrudButtons';
 
-const breadcrumbs = [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Customers', href: route('customers.index') },
-];
-
 interface Props extends PageProps {
   customers: Customer[];
 }
 
 const Index: React.FC<Props> = ({ customers }) => {
+  const { t } = useTranslation('customer');
+
+  const breadcrumbs = [
+    { title: t('nav_dashboard'), href: '/dashboard' },
+    { title: t('ttl_customers'), href: route('customers.index') },
+  ];
+
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
   const [city, setCity] = useState('all');
@@ -43,13 +45,12 @@ const Index: React.FC<Props> = ({ customers }) => {
   });
 
   const getStatusBadge = (status: string) => {
-  const { t } = useTranslation('customer');
 
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       active: 'default',
       inactive: 'secondary',
     };
-    return <Badge variant={variants[status] || 'outline'}>{status.charAt(0).toUpperCase() + status.slice(1)}</Badge>;
+    return <Badge variant={variants[status] || 'outline'}>{t(`status_${status}`)}</Badge>;
   };
 
   return (
@@ -58,7 +59,7 @@ const Index: React.FC<Props> = ({ customers }) => {
       <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-2xl font-bold">Customers</CardTitle>
+            <CardTitle className="text-2xl font-bold">{t('ttl_customers')}</CardTitle>
             {/* <Permission permission="customers.create"> */}
               {/* <CreateButton resourceType="customers" text="Add Customer" /> */}
               <Button asChild>
@@ -76,8 +77,8 @@ const Index: React.FC<Props> = ({ customers }) => {
               />
               <select className="w-full border rounded px-2 py-1" value={status} onChange={e => setStatus(e.target.value)}>
                 <option value="all">{t('all_statuses')}</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">{t('status_active')}</option>
+                <option value="inactive">{t('status_inactive')}</option>
               </select>
               <select className="w-full border rounded px-2 py-1" value={city} onChange={e => setCity(e.target.value)}>
                 <option value="all">{t('all_cities')}</option>
@@ -88,18 +89,18 @@ const Index: React.FC<Props> = ({ customers }) => {
             </div>
             {error && <div className="text-red-500 mb-2">{error}</div>}
             {loading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="text-center py-8">{t('msg_loading')}</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
+                    <TableHead>{t('lbl_name')}</TableHead>
                     <TableHead>{t('lbl_contact_person')}</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>City</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>{t('lbl_email')}</TableHead>
+                    <TableHead>{t('lbl_phone')}</TableHead>
+                    <TableHead>{t('lbl_city')}</TableHead>
+                    <TableHead>{t('lbl_status')}</TableHead>
+                    <TableHead>{t('lbl_actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -114,10 +115,10 @@ const Index: React.FC<Props> = ({ customers }) => {
                       <TableCell>
                         {/* <CrudButtons resourceType="customers" id={customer.id} /> */}
                         <Button asChild size="sm" variant="secondary" className="mr-2">
-                          <Link href={route('customers.show', customer.id)}>Show</Link>
+                          <Link href={route('customers.show', customer.id)}>{t('btn_show')}</Link>
                         </Button>
                         <Button asChild size="sm" variant="outline">
-                          <Link href={route('customers.edit', customer.id)}>Edit</Link>
+                          <Link href={route('customers.edit', customer.id)}>{t('btn_edit')}</Link>
                         </Button>
                       </TableCell>
                     </TableRow>

@@ -16,6 +16,7 @@ const breadcrumbs = [
 ];
 
 const CreateCustomer: React.FC<PageProps> = (props) => {
+  const { t } = useTranslation('customer');
   const { data, setData, post, processing, errors } = useForm({
     name: '',
     contact_person: '',
