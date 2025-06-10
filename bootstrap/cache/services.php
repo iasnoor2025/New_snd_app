@@ -44,8 +44,9 @@
     40 => 'App\\Providers\\AvatarServiceProvider',
     41 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
     42 => 'Modules\\Payroll\\Providers\\PayrollServiceProvider',
-    43 => 'App\\Providers\\AppServiceProvider',
-    44 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
+    43 => 'App\\Providers\\AuthServiceProvider',
+    44 => 'App\\Providers\\AppServiceProvider',
+    45 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
   ),
   'eager' => 
   array (
@@ -78,8 +79,9 @@
     26 => 'App\\Providers\\AvatarServiceProvider',
     27 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
     28 => 'Modules\\Payroll\\Providers\\PayrollServiceProvider',
-    29 => 'App\\Providers\\AppServiceProvider',
-    30 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
+    29 => 'App\\Providers\\AuthServiceProvider',
+    30 => 'App\\Providers\\AppServiceProvider',
+    31 => 'App\\Providers\\PermissionMiddlewareServiceProvider',
   ),
   'deferred' => 
   array (

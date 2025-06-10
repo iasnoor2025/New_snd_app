@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use Modules\Core\Domain\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class AdminUserSeeder extends Seeder
 {
@@ -15,27 +14,75 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create or update the admin role with the 'web' guard
-        $adminRole = Role::firstOrCreate([
-            'name' => 'admin',
-            'guard_name' => 'web',
-        ]);
-
-        // Get all permissions in the database (from all modules)
-        $allPermissions = Permission::all();
-        $adminRole->syncPermissions($allPermissions);
-
         // Create admin user if it doesn't exist
         $admin = User::firstOrCreate(
             ['email' => 'admin@ias.com'],
             [
-                'name' => 'Admin',
+                'name' => 'System Administrator',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
             ]
         );
 
-        // Assign admin role to the user (with correct guard)
-        $admin->assignRole('admin');
+        // Assign admin role to the user
+        if (!$admin->hasRole('admin')) {
+            $admin->assignRole('admin');
+        }
+
+        // Create manager user for testing
+        $manager = User::firstOrCreate(
+            ['email' => 'manager@rental.com'],
+            [
+                'name' => 'Rental Manager',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if (!$manager->hasRole('manager')) {
+            $manager->assignRole('manager');
+        }
+
+        // Create employee user for testing
+        $employee = User::firstOrCreate(
+            ['email' => 'employee@rental.com'],
+            [
+                'name' => 'Test Employee',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if (!$employee->hasRole('employee')) {
+            $employee->assignRole('employee');
+        }
+
+        // Create HR user for testing
+        $hr = User::firstOrCreate(
+            ['email' => 'hr@rental.com'],
+            [
+                'name' => 'HR Manager',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if (!$hr->hasRole('hr')) {
+            $hr->assignRole('hr');
+        }
+
+        // Create accountant user for testing
+        $accountant = User::firstOrCreate(
+            ['email' => 'accountant@rental.com'],
+            [
+                'name' => 'Chief Accountant',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if (!$accountant->hasRole('accountant')) {
+            $accountant->assignRole('accountant');
+        }
     }
 }

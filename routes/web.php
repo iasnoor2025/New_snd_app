@@ -11,7 +11,16 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        $user = auth()->user();
+        $user->load('roles.permissions');
+        
+        return Inertia::render('Dashboard', [
+            'auth' => [
+                'user' => $user,
+                'permissions' => $user->getAllPermissions()->pluck('name'),
+                'roles' => $user->roles->pluck('name'),
+            ]
+        ]);
     })->name('dashboard');
 });
 
