@@ -37,9 +37,13 @@ Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
         ->name('api.customers');
 
     // Rental routes
-    Route::resource('rentals', RentalController::class)->middleware([
+    Route::resource('rentals', RentalController::class)->except(['index'])->middleware([
         'permission:rentals.view',
     ]);
+
+    Route::get('rentals', [RentalController::class, 'index'])
+        ->name('rentals.index')
+        ->middleware('permission:rentals.view');
 
     // Extension routes
     // Route::resource('extensions', RentalExtensionController::class);
@@ -157,11 +161,6 @@ Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
     });
 
     // Routes from rentals.php
-
-    // Core CRUD routes
-    Route::get('rentals', [RentalController::class, 'index'])
-        ->name('rentals.index')
-        ->middleware('permission:rentals.view');
 
     Route::get('rentals/create', [RentalController::class, 'create'])
         ->name('create')

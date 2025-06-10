@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\RentalManagement\Providers\RouteServiceProvider;
 
 class RentalManagementServiceProvider extends ServiceProvider
 {
@@ -31,8 +32,6 @@ class RentalManagementServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
-        $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/web.php'));
-
         // Register observers
         $this->registerObservers();
     }
@@ -45,8 +44,8 @@ class RentalManagementServiceProvider extends ServiceProvider
     public function register()
     {
         // Temporarily comment out service provider registrations due to naming conflicts
-        // $this->app->register(RentalManagementRouteServiceProvider::class);
-        // $this->app->register(EventServiceProvider::class);
+        $this->app->register(RouteServiceProvider::class);
+        $this->app->register(EventServiceProvider::class);
     }
 
     /**

@@ -1,6 +1,7 @@
 import './bootstrap';
 import './i18n';
 import '../css/app.css';
+import { Ziggy } from './ziggy';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';

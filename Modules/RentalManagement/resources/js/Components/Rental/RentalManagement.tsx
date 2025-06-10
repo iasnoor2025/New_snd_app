@@ -1,11 +1,11 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Head } from '@inertiajs/react';
 import { RentalStatus } from '../RentalStatus';
 import { RentalWorkflowActions } from './RentalWorkflowActions';
 import { CustomerFilters } from '../CustomerFilters';
 import { CustomersDataTable } from '../CustomersDataTable';
-import { EquipmentDataTable } from '../EquipmentDataTable';
+import { EquipmentDataTable } from '../EquipmentDataTable'; 
 import { DocumentManager } from '../DocumentManager';
 
 interface Props {
@@ -15,10 +15,12 @@ interface Props {
 }
 
 export const RentalManagement: FC<Props> = ({ initialRentals = [], customers = [], equipment = [] }) => {
+    const { t } = useTranslation();
     const [selectedRental, setSelectedRental] = useState<any>(null);
     const [activeTab, setActiveTab] = useState<'rentals' | 'customers' | 'equipment'>('rentals');
 
     return (
+        <>
             <Head title={t('rental_management')} />
 
             <div className="py-12">
