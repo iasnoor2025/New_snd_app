@@ -44,7 +44,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = ({
   };
 
   const getStatusBadgeColor = (status: string) => {
-  const { t } = useTranslation('employee');
+    const { t } = useTranslation('employees');
 
     switch (status) {
       case 'active':

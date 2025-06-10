@@ -98,16 +98,16 @@ export default function Edit({ project, customers, locations }: Props) {
     ];
 
     return (
-        <AdminLayout title={`Edit ${project.name}`} breadcrumbs={breadcrumbs} requiredPermission="projects.edit">
+        <AdminLayout title={t('edit_project', { name: project.name })} breadcrumbs={breadcrumbs} requiredPermission="projects.edit">
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col space-y-2">
                     <Link href={route('projects.show', project.id)} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
                         <ArrowLeft className="h-4 w-4 mr-1" />
-                        Back to Project
+                        {t('back_to_project')}
                     </Link>
 
                     <h1 className="text-3xl font-bold tracking-tight">{t('edit_project')}</h1>
-                    <p className="text-muted-foreground">Update project details for {project.name}</p>
+                    <p className="text-muted-foreground">{t('update_project_details', { name: project.name })}</p>
                 </div>
 
                 <Separator />

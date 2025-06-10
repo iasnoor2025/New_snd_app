@@ -83,12 +83,12 @@ export default function Create({ customers, locations }: Props) {
     ];
 
     return (
-        <AdminLayout title="Create Project" breadcrumbs={breadcrumbs} requiredPermission="projects.create">
+        <AdminLayout title={t('create_project')} breadcrumbs={breadcrumbs} requiredPermission="projects.create">
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col space-y-2">
                     <Link href={window.route('projects.index')} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
                         <ArrowLeft className="h-4 w-4 mr-1" />
-                        Back to Projects
+                        {t('back_to_projects')}
                     </Link>
 
                     <h1 className="text-3xl font-bold tracking-tight">{t('create_new_project')}</h1>
@@ -315,7 +315,7 @@ export default function Create({ customers, locations }: Props) {
                                     className="flex items-center"
                                 >
                                     <Plus className="h-4 w-4 mr-2" />
-                                    Create Project
+                                    {t('create_project')}
                                 </Button>
                             </div>
                         </form>

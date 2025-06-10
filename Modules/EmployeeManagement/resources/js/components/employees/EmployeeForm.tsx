@@ -85,6 +85,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
   const [departments, setDepartments] = useState<Department[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
   const { isLoading, error, withLoading } = useLoadingState('employeeForm');
+  const { t } = useTranslation('employees');
 
   // Initialize form with React Hook Form and Zod validation
   const {
@@ -172,8 +173,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, onSave, onCancel 
 
   // Handle date change
   const handleDateChange = (field: keyof EmployeeFormValues, date: Date | undefined) => {
-  const { t } = useTranslation('employee');
-
     setValue(field, date);
   };
 

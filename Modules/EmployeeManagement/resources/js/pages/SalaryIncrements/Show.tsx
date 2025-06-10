@@ -9,6 +9,7 @@ import { ArrowLeft, Check, X, Calendar, Edit, User, DollarSign, TrendingUp, File
 import AdminLayout from '../../layouts/AdminLayout';
 import { PageProps } from '@/types';
 import { getTranslation } from '@/utils/translation';
+import { route } from 'ziggy-js';
 
 interface Employee {
     id: number;
@@ -75,7 +76,7 @@ interface Props extends PageProps {
 }
 
 export default function Show({ increment }: Props) {
-  const { t } = useTranslation('employee');
+  const { t } = useTranslation('employees');
 
     const formatCurrency = (amount: number | null | undefined) => {
         // Handle null, undefined, or NaN values
@@ -481,19 +482,19 @@ export default function Show({ increment }: Props) {
                                     <Link href={route('employees.show', increment.employee.id)} className="block">
                                         <Button variant="outline" className="w-full justify-start">
                                             <User className="h-4 w-4 mr-2" />
-                                            View Employee Profile
+                                            {t('view_employee_profile')}
                                         </Button>
                                     </Link>
                                     <Link href={route('employees.salary-history', increment.employee.id)} className="block">
                                         <Button variant="outline" className="w-full justify-start">
                                             <DollarSign className="h-4 w-4 mr-2" />
-                                            View Salary History
+                                            {t('view_salary_history')}
                                         </Button>
                                     </Link>
                                     <Link href={route('salary-increments.index')} className="block">
                                         <Button variant="outline" className="w-full justify-start">
                                             <TrendingUp className="h-4 w-4 mr-2" />
-                                            All Salary Increments
+                                            {t('all_salary_increments')}
                                         </Button>
                                     </Link>
                                 </CardContent>

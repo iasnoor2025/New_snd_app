@@ -6,6 +6,8 @@ interface Props {
     payroll: any;
 }
 
+const { t } = useTranslation('payrolls');
+
 export const Edit: FC<Props> = ({ payroll }) => {
     return (
         <>

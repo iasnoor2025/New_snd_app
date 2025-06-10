@@ -47,6 +47,7 @@ import { Label } from '../../../../../../resources/js/components/ui/label';
 import { cn } from '../../../../../../resources/js/lib/utils';
 import { toast } from 'sonner';
 import RiskManagement from './Risk/Management';
+import { t } from '../../../../../../resources/js/lib/i18n';
 
 interface Equipment {
   id: number;
@@ -456,7 +457,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div>
               <CardTitle className="text-2xl font-bold">
-                Equipment Details
+                {t('equipment_details')}
               </CardTitle>
               <CardDescription className="mt-1">
                 {/* Add more details as needed */}
@@ -466,7 +467,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
               <Button variant="outline" asChild>
                 <Link href={window.route('equipment.index')}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Equipment List
+                  {t('back_to_equipment_list')}
                 </Link>
               </Button>
               <Button variant="outline" asChild>
@@ -491,39 +492,39 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
               <TabsContent value="basic" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Equipment Name</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('equipment_name')}</Label>
                     <p className="text-sm">{equipment.name || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Model</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('model')}</Label>
                     <p className="text-sm">{equipment.model || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Serial Number</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('serial_number')}</Label>
                     <p className="text-sm">{equipment.serial_number || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Door Number</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('door_number')}</Label>
                     <p className="text-sm">{equipment.door_number || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Status</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('status')}</Label>
                     <div>{getStatusBadge(equipment.status)}</div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Category</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('category')}</Label>
                     <p className="text-sm">{equipment.category?.name || equipment.category || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Unit</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('unit')}</Label>
                     <p className="text-sm">{equipment.unit || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Location</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('location')}</Label>
                     <p className="text-sm">{equipment.location?.name || equipment.location || '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Active Status</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('active_status')}</Label>
                     <Badge variant={equipment.is_active ? 'default' : 'secondary'}>
                       {equipment.is_active ? 'Active' : 'Inactive'}
                     </Badge>
@@ -531,13 +532,13 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                 </div>
                 {equipment.description && (
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Description</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('description')}</Label>
                     <p className="text-sm">{equipment.description}</p>
                   </div>
                 )}
                 {equipment.notes && (
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Notes</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('notes')}</Label>
                     <p className="text-sm">{equipment.notes}</p>
                   </div>
                 )}
@@ -546,39 +547,39 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
               <TabsContent value="financial" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Daily Rate</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('daily_rate')}</Label>
                     <p className="text-sm font-semibold">{formatCurrency(equipment.daily_rate || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Weekly Rate</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('weekly_rate')}</Label>
                     <p className="text-sm font-semibold">{formatCurrency(equipment.weekly_rate || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Monthly Rate</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('monthly_rate')}</Label>
                     <p className="text-sm font-semibold">{formatCurrency(equipment.monthly_rate || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Default Unit Cost</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('default_unit_cost')}</Label>
                     <p className="text-sm">{formatCurrency(equipment.default_unit_cost || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Purchase Cost</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('purchase_cost')}</Label>
                     <p className="text-sm">{formatCurrency(equipment.purchase_cost || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Purchase Date</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('purchase_date')}</Label>
                     <p className="text-sm">{equipment.purchase_date ? new Date(equipment.purchase_date).toLocaleDateString() : '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Lifetime Maintenance Cost</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('lifetime_maintenance_cost')}</Label>
                     <p className="text-sm">{formatCurrency(equipment.lifetime_maintenance_cost || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Avg Cost per Hour</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('avg_cost_per_hour')}</Label>
                     <p className="text-sm">{formatCurrency(equipment.avg_operating_cost_per_hour || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Avg Cost per Mile</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('avg_cost_per_mile')}</Label>
                     <p className="text-sm">{formatCurrency(equipment.avg_operating_cost_per_mile || 0)}</p>
                   </div>
                 </div>
@@ -587,19 +588,19 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
               <TabsContent value="maintenance" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Last Maintenance</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('last_maintenance')}</Label>
                     <p className="text-sm">{equipment.last_maintenance_date ? new Date(equipment.last_maintenance_date).toLocaleDateString() : '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Next Maintenance</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('next_maintenance')}</Label>
                     <p className="text-sm">{equipment.next_maintenance_date ? new Date(equipment.next_maintenance_date).toLocaleDateString() : '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Next Performance Review</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('next_performance_review')}</Label>
                     <p className="text-sm">{equipment.next_performance_review ? new Date(equipment.next_performance_review).toLocaleDateString() : '—'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Efficiency Rating</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('efficiency_rating')}</Label>
                     <p className="text-sm">{equipment.efficiency_rating ? `${equipment.efficiency_rating}%` : '—'}</p>
                   </div>
                 </div>
@@ -608,39 +609,39 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
               <TabsContent value="metrics" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Current Operating Hours</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('current_operating_hours')}</Label>
                     <p className="text-sm">{equipment.current_operating_hours || '0'} hrs</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Current Mileage</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('current_mileage')}</Label>
                     <p className="text-sm">{equipment.current_mileage || '0'} miles</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Current Cycle Count</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('current_cycle_count')}</Label>
                     <p className="text-sm">{equipment.current_cycle_count || '0'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Initial Operating Hours</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('initial_operating_hours')}</Label>
                     <p className="text-sm">{equipment.initial_operating_hours || '0'} hrs</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Initial Mileage</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('initial_mileage')}</Label>
                     <p className="text-sm">{equipment.initial_mileage || '0'} miles</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Initial Cycle Count</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('initial_cycle_count')}</Label>
                     <p className="text-sm">{equipment.initial_cycle_count || '0'}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Avg Daily Usage (Hours)</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('avg_daily_usage_hours')}</Label>
                     <p className="text-sm">{equipment.avg_daily_usage_hours || '0'} hrs/day</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Avg Daily Usage (Miles)</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('avg_daily_usage_miles')}</Label>
                     <p className="text-sm">{equipment.avg_daily_usage_miles || '0'} miles/day</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">Last Metric Update</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('last_metric_update')}</Label>
                     <p className="text-sm">{equipment.last_metric_update ? new Date(equipment.last_metric_update).toLocaleDateString() : '—'}</p>
                   </div>
                 </div>
@@ -657,10 +658,10 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Car className="h-5 w-5" />
-                        Current Projects & Rentals
+                        {t('current_projects_rentals')}
                       </CardTitle>
                       <CardDescription>
-                        Equipment currently assigned to projects or rental agreements
+                        {t('equipment_currently_assigned_projects_rentals')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -669,7 +670,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                           {/* Rental Items */}
                           {rentalItems.data.length > 0 && (
                             <div>
-                              <h4 className="font-medium mb-3 text-sm text-muted-foreground">Active Rentals</h4>
+                              <h4 className="font-medium mb-3 text-sm text-muted-foreground">{t('active_rentals')}</h4>
                               <div className="space-y-2">
                                 {rentalItems.data.map((rental) => (
                                   <div key={rental.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -695,7 +696,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                           {/* Project History */}
                           {projectHistory.data.length > 0 && (
                             <div>
-                              <h4 className="font-medium mb-3 text-sm text-muted-foreground">Project Assignments</h4>
+                              <h4 className="font-medium mb-3 text-sm text-muted-foreground">{t('project_assignments')}</h4>
                               <div className="space-y-2">
                                 {projectHistory.data.map((project) => (
                                   <div key={project.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -704,7 +705,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                                       <div>
                                         <p className="font-medium text-sm">{project.project_name || 'Unknown Project'}</p>
                                         <p className="text-xs text-muted-foreground">
-                                          Assigned: {project.assigned_date ? new Date(project.assigned_date).toLocaleDateString() : 'Unknown'}
+                                          {t('assigned')}: {project.assigned_date ? new Date(project.assigned_date).toLocaleDateString() : 'Unknown'}
                                         </p>
                                       </div>
                                     </div>
@@ -720,7 +721,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
                           <Car className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>No current projects or rentals assigned</p>
+                          <p>{t('no_current_projects_rentals_assigned')}</p>
                         </div>
                       )}
                     </CardContent>
@@ -731,10 +732,10 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <History className="h-5 w-5" />
-                        Usage History
+                        {t('usage_history')}
                       </CardTitle>
                       <CardDescription>
-                        Historical usage across projects and rentals
+                        {t('historical_usage_across_projects_rentals')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -742,15 +743,15 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div className="text-center p-4 border rounded-lg">
                             <div className="text-2xl font-bold text-blue-600">{rentalItems.total}</div>
-                            <div className="text-sm text-muted-foreground">Total Rentals</div>
+                            <div className="text-sm text-muted-foreground">{t('total_rentals')}</div>
                           </div>
                           <div className="text-center p-4 border rounded-lg">
                             <div className="text-2xl font-bold text-green-600">{projectHistory.total}</div>
-                            <div className="text-sm text-muted-foreground">Total Projects</div>
+                            <div className="text-sm text-muted-foreground">{t('total_projects')}</div>
                           </div>
                           <div className="text-center p-4 border rounded-lg">
                             <div className="text-2xl font-bold text-purple-600">{equipment.current_operating_hours || 0}</div>
-                            <div className="text-sm text-muted-foreground">Operating Hours</div>
+                            <div className="text-sm text-muted-foreground">{t('operating_hours')}</div>
                           </div>
                         </div>
                       </div>
@@ -766,10 +767,10 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <FileText className="h-5 w-5" />
-                        Equipment Documents
+                        {t('equipment_documents')}
                       </CardTitle>
                       <CardDescription>
-                        RC (Registration Certificate), Insurance, and other important documents
+                        {t('rc_registration_certificate_insurance_important_documents')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -777,19 +778,19 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                         <div className="mb-6 p-4 border-2 border-dashed border-gray-300 rounded-lg">
                           <div className="text-center">
                             <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                            <p className="text-sm text-gray-600 mb-2">Upload Equipment Documents</p>
+                            <p className="text-sm text-gray-600 mb-2">{t('upload_equipment_documents')}</p>
                             <div className="flex gap-2 justify-center">
                               <Button size="sm" variant="outline">
                                 <Plus className="h-4 w-4 mr-1" />
-                                Upload RC
+                                {t('upload_rc')}
                               </Button>
                               <Button size="sm" variant="outline">
                                 <Plus className="h-4 w-4 mr-1" />
-                                Upload Insurance
+                                {t('upload_insurance')}
                               </Button>
                               <Button size="sm" variant="outline">
                                 <Plus className="h-4 w-4 mr-1" />
-                                Upload Other
+                                {t('upload_other')}
                               </Button>
                             </div>
                           </div>
@@ -851,8 +852,8 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                         ) : (
                           <div className="text-center py-8 text-muted-foreground">
                             <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                            <p>No documents uploaded yet</p>
-                            <p className="text-sm">Upload RC, insurance, and other important documents</p>
+                            <p>{t('no_documents_uploaded_yet')}</p>
+                            <p className="text-sm">{t('upload_rc_insurance_important_documents')}</p>
                           </div>
                         )}
                       </div>
@@ -864,35 +865,35 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Award className="h-5 w-5" />
-                        Document Categories
+                        {t('document_categories')}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="text-center p-4 border rounded-lg">
                           <IdCard className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                          <div className="font-medium text-sm">Registration Certificate</div>
+                          <div className="font-medium text-sm">{t('registration_certificate')}</div>
                           <div className="text-xs text-muted-foreground mt-1">
                             {mediaItems.filter(item => item.collection === 'istimara').length} files
                           </div>
                         </div>
                         <div className="text-center p-4 border rounded-lg">
                           <Award className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                          <div className="font-medium text-sm">Insurance Documents</div>
+                          <div className="font-medium text-sm">{t('insurance_documents')}</div>
                           <div className="text-xs text-muted-foreground mt-1">
                             {mediaItems.filter(item => item.collection === 'insurance').length} files
                           </div>
                         </div>
                         <div className="text-center p-4 border rounded-lg">
                           <FileText className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                          <div className="font-medium text-sm">Maintenance Records</div>
+                          <div className="font-medium text-sm">{t('maintenance_records')}</div>
                           <div className="text-xs text-muted-foreground mt-1">
                             {mediaItems.filter(item => item.collection === 'maintenance').length} files
                           </div>
                         </div>
                         <div className="text-center p-4 border rounded-lg">
                           <FileIcon className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-                          <div className="font-medium text-sm">Other Documents</div>
+                          <div className="font-medium text-sm">{t('other_documents')}</div>
                           <div className="text-xs text-muted-foreground mt-1">
                             {mediaItems.filter(item => !['istimara', 'insurance', 'maintenance'].includes(item.collection)).length} files
                           </div>

@@ -60,6 +60,7 @@ function ResourceDialog({
     initialData = null,
     onSuccess = () => {}
 }: ResourceDialogProps) {
+    const { t } = useTranslation(['projects', 'common']);
     const title = initialData
         ? `Edit ${initialType.charAt(0).toUpperCase() + initialType.slice(1)}`
         : `Add ${initialType.charAt(0).toUpperCase() + initialType.slice(1)}`;
@@ -476,24 +477,24 @@ export default function Show({ project, manpower = [], equipment = [], materials
                                     {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                                 </Badge>
                             </div>
-                            <p className="text-muted-foreground text-sm">Project ID: {project.id}</p>
+                            <p className="text-muted-foreground text-sm">{t('project_id')}: {project.id}</p>
                         </div>
                         <div className="flex items-center space-x-2 mt-3 md:mt-0">
                             <Button variant="outline" size="sm" asChild>
                                 <Link href={route('projects.index')}>
                                     <ArrowLeft className="h-4 w-4 mr-2" />
-                                    Back to Projects
+                                    {t('back_to_projects')}
                                 </Link>
                             </Button>
                             <Button variant="outline" size="sm" asChild>
                                 <Link href={route('projects.edit', project.id)}>
                                     <Edit className="h-4 w-4 mr-2" />
-                                    Edit
+                                    {t('edit')}
                                 </Link>
                             </Button>
                             <Button variant="destructive" size="sm" onClick={handleDeleteProject}>
                                 <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
+                                {t('delete')}
                             </Button>
                         </div>
                     </div>

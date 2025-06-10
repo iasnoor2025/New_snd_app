@@ -75,7 +75,7 @@ interface Props extends PageProps {
 }
 
 export default function Index({ auth, employees, filters, departments, positions }: Props) {
-  const { t } = useTranslation('employee');
+  const { t } = useTranslation('employees');
 
   const [search, setSearch] = useState(filters.search || '');
   const [status, setStatus] = useState(filters.status || 'all');

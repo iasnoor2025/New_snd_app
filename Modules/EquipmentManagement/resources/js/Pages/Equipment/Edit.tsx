@@ -54,6 +54,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../../resources/js/components/ui/tabs';
 import { Separator } from '../../../../../../resources/js/components/ui/separator';
 import { Badge } from '../../../../../../resources/js/components/ui/badge';
+import { useTranslation } from 'react-i18next';
 
 interface Props extends PageProps {
   equipment: any;
@@ -91,6 +92,7 @@ const breadcrumbs = [
 
 export default function Edit({ auth, equipment, categories = [], locations = [] }: Props) {
   const { processing, errors: serverErrors } = useForm();
+  const { t } = useTranslation('equipment');
 
   // Deduplicate locations based on name, city, and state
   const uniqueLocations = React.useMemo(() => {
@@ -226,10 +228,10 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
             </Button>
             <div>
               <h1 className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                Edit Equipment
+                {t('edit_equipment')}
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Update equipment details and settings
+                {t('update_equipment_details')}
               </p>
             </div>
           </div>

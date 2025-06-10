@@ -71,7 +71,7 @@ interface Props extends PageProps {
 }
 
 export default function Edit({ auth, employee, users, positions }: Props) {
-  const { t } = useTranslation('employee');
+  const { t } = useTranslation('employees');
 
   const [isLoading, setIsLoading] = useState(false);
   const [documents, setDocuments] = useState<any[]>([]);

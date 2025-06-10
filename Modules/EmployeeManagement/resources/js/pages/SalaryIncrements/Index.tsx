@@ -71,7 +71,7 @@ interface Props extends PageProps {
 }
 
 export default function Index({ increments, statistics, projectedCost, filters, employees }: Props) {
-  const { t } = useTranslation('employee');
+  const { t } = useTranslation('employees');
 
     const [searchTerm, setSearchTerm] = useState(filters.search || '');
     const [statusFilter, setStatusFilter] = useState(filters.status || 'all');
@@ -161,7 +161,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                         <Link href={route('salary-increments.create')}>
                             <Button>
                                 <Plus className="h-4 w-4 mr-2" />
-                                New Increment
+                                {t('new_increment')}
                             </Button>
                         </Link>
                     </div>
@@ -208,7 +208,7 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                     {/* Filters */}
                     <Card className="mb-6">
                         <CardHeader>
-                            <CardTitle>Filters</CardTitle>
+                            <CardTitle>{t('filters')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -227,10 +227,10 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="all">{t('opt_all_statuses')}</SelectItem>
-                                            <SelectItem value="pending">Pending</SelectItem>
-                                            <SelectItem value="approved">Approved</SelectItem>
-                                            <SelectItem value="rejected">Rejected</SelectItem>
-                                            <SelectItem value="applied">Applied</SelectItem>
+                                            <SelectItem value="pending">{t('pending')}</SelectItem>
+                                            <SelectItem value="approved">{t('approved')}</SelectItem>
+                                            <SelectItem value="rejected">{t('rejected')}</SelectItem>
+                                            <SelectItem value="applied">{t('applied')}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -256,11 +256,11 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="all">{t('opt_all_types')}</SelectItem>
-                                            <SelectItem value="percentage">Percentage</SelectItem>
+                                            <SelectItem value="percentage">{t('percentage')}</SelectItem>
                                             <SelectItem value="fixed_amount">{t('lbl_fixed_amount')}</SelectItem>
-                                            <SelectItem value="promotion">Promotion</SelectItem>
+                                            <SelectItem value="promotion">{t('promotion')}</SelectItem>
                                             <SelectItem value="annual_review">{t('opt_annual_review')}</SelectItem>
-                                            <SelectItem value="performance">Performance</SelectItem>
+                                            <SelectItem value="performance">{t('performance')}</SelectItem>
                                             <SelectItem value="market_adjustment">{t('opt_market_adjustment')}</SelectItem>
                                         </SelectContent>
                                     </Select>
@@ -268,10 +268,10 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                                 <div className="flex gap-2">
                                     <Button onClick={handleSearch} className="flex-1">
                                         <Search className="h-4 w-4 mr-2" />
-                                        Search
+                                        {t('search')}
                                     </Button>
                                     <Button variant="outline" onClick={clearFilters}>
-                                        Clear
+                                        {t('clear')}
                                     </Button>
                                 </div>
                             </div>
@@ -283,23 +283,23 @@ export default function Index({ increments, statistics, projectedCost, filters, 
                         <CardHeader>
                             <CardTitle>{t('salary_increments')}</CardTitle>
                             <CardDescription>
-                                Manage employee salary increment requests
+                                {t('manage_salary_increments')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Employee</TableHead>
-                                        <TableHead>Department</TableHead>
+                                        <TableHead>{t('employee')}</TableHead>
+                                        <TableHead>{t('department')}</TableHead>
                                         <TableHead>{t('current_salary')}</TableHead>
                                         <TableHead>{t('new_salary')}</TableHead>
-                                        <TableHead>Increase</TableHead>
-                                        <TableHead>Type</TableHead>
+                                        <TableHead>{t('increase')}</TableHead>
+                                        <TableHead>{t('type')}</TableHead>
                                         <TableHead>{t('lbl_effective_date')}</TableHead>
-                                        <TableHead>Status</TableHead>
+                                        <TableHead>{t('status')}</TableHead>
                                         <TableHead>{t('th_requested_by')}</TableHead>
-                                        <TableHead>Actions</TableHead>
+                                        <TableHead>{t('actions')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>

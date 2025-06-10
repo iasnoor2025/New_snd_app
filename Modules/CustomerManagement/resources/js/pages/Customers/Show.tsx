@@ -19,9 +19,9 @@ interface Props extends PageProps {
 }
 
 const ShowCustomer: React.FC<Props> = ({ customer }) => {
-  const getStatusBadge = (status: string) => {
   const { t } = useTranslation('customer');
 
+  const getStatusBadge = (status: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       active: 'default',
       inactive: 'secondary',
@@ -38,19 +38,19 @@ const ShowCustomer: React.FC<Props> = ({ customer }) => {
             <CardTitle>{t('ttl_customer_details')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mb-4"><strong>Name:</strong> {customer.name}</div>
-            <div className="mb-4"><strong>Contact Person:</strong> {customer.contact_person}</div>
-            <div className="mb-4"><strong>Email:</strong> {customer.email}</div>
-            <div className="mb-4"><strong>Phone:</strong> {customer.phone}</div>
-            <div className="mb-4"><strong>Address:</strong> {customer.address}</div>
-            <div className="mb-4"><strong>City:</strong> {customer.city}</div>
-            <div className="mb-4"><strong>State:</strong> {customer.state}</div>
-            <div className="mb-4"><strong>Zip:</strong> {customer.zip}</div>
-            <div className="mb-4"><strong>Country:</strong> {customer.country}</div>
-            <div className="mb-4"><strong>Tax ID:</strong> {customer.tax_id}</div>
-            <div className="mb-4"><strong>Payment Terms:</strong> {customer.payment_terms}</div>
-            <div className="mb-4"><strong>Status:</strong> {getStatusBadge(customer.status)}</div>
-            <div className="mb-4"><strong>Notes:</strong> {customer.notes}</div>
+            <div className="mb-4"><strong>{t('name')}:</strong> {customer.name}</div>
+            <div className="mb-4"><strong>{t('lbl_contact_person')}:</strong> {customer.contact_person}</div>
+            <div className="mb-4"><strong>{t('email')}:</strong> {customer.email}</div>
+            <div className="mb-4"><strong>{t('phone')}:</strong> {customer.phone}</div>
+            <div className="mb-4"><strong>{t('address')}:</strong> {customer.address}</div>
+            <div className="mb-4"><strong>{t('city')}:</strong> {customer.city}</div>
+            <div className="mb-4"><strong>{t('state')}:</strong> {customer.state}</div>
+            <div className="mb-4"><strong>{t('zip')}:</strong> {customer.zip}</div>
+            <div className="mb-4"><strong>{t('country')}:</strong> {customer.country}</div>
+            <div className="mb-4"><strong>{t('tax_id')}:</strong> {customer.tax_id}</div>
+            <div className="mb-4"><strong>{t('payment_terms')}:</strong> {customer.payment_terms}</div>
+            <div className="mb-4"><strong>{t('status')}:</strong> {getStatusBadge(customer.status)}</div>
+            <div className="mb-4"><strong>{t('notes')}:</strong> {customer.notes}</div>
             <div className="mb-4"><strong>User ID:</strong> {customer.user_id}</div>
             <div className="mb-4"><strong>Created At:</strong> {customer.created_at}</div>
             <div className="mb-4"><strong>Updated At:</strong> {customer.updated_at}</div>

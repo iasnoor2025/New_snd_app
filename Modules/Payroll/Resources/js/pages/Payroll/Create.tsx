@@ -22,7 +22,7 @@ interface Props extends PageProps {
 }
 
 export default function Create({ auth, employees }: Props) {
-  const { t } = useTranslation('payroll');
+  const { t } = useTranslation('payrolls');
 
     const { data, setData, post, processing, errors } = useForm({
         employee_id: '',
@@ -67,7 +67,7 @@ export default function Create({ auth, employees }: Props) {
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <Label htmlFor="employee_id">Employee</Label>
+                                        <Label htmlFor="employee_id">{t('lbl_employee')}</Label>
                                         <Select
                                             value={data.employee_id}
                                             onValueChange={handleEmployeeChange}
@@ -167,7 +167,7 @@ export default function Create({ auth, employees }: Props) {
                                     </div>
 
                                     <div className="col-span-2 space-y-2">
-                                        <Label htmlFor="notes">Notes</Label>
+                                        <Label htmlFor="notes">{t('lbl_notes')}</Label>
                                         <Input
                                             id="notes"
                                             type="text"
@@ -186,7 +186,7 @@ export default function Create({ auth, employees }: Props) {
                                         variant="outline"
                                         onClick={() => window.history.back()}
                                     >
-                                        Cancel
+                                        {t('btn_cancel')}
                                     </Button>
                                     <Button type="submit" disabled={processing}>
                                         {t('ttl_create_payroll')}

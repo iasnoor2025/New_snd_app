@@ -2,6 +2,7 @@ import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
@@ -29,6 +30,7 @@ type ProfileForm = {
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth, locale = 'en' } = usePage<SharedData>().props;
+    const { t } = useTranslation('profile');
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
@@ -45,15 +47,15 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Profile settings" />
+            <Head title={t('profile_settings')} />
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="Profile information" description="Update your name and email address" />
+                    <HeadingSmall title={t('profile_information')} description={t('update_name_email')} />
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="name">{t('name')}</Label>
 
                             <Input
                                 id="name"
@@ -62,14 +64,14 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 onChange={(e) => setData('name', e.target.value)}
                                 required
                                 autoComplete="name"
-                                placeholder="Full name"
+                                placeholder={t('full_name')}
                             />
 
                             <InputError className="mt-2" message={errors.name} />
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="email">Email address</Label>
+                            <Label htmlFor="email">{t('email_address')}</Label>
 
                             <Input
                                 id="email"
@@ -79,29 +81,29 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 onChange={(e) => setData('email', e.target.value)}
                                 required
                                 autoComplete="username"
-                                placeholder="Email address"
+                                placeholder={t('email_address')}
                             />
 
                             <InputError className="mt-2" message={errors.email} />
                         </div>
 
                         <div className="grid gap-2">
-                            <Label>Roles</Label>
+                            <Label>{t('roles')}</Label>
                             <div className="flex flex-wrap gap-2">
                                 {auth.user?.roles?.length ? (
                                     auth.user.roles.map((role) => (
                                         <Badge key={role.name} variant="secondary">
-                                            {role.name}
+                                            {t(`role_${role.name}`)}
                                         </Badge>
                                     ))
                                 ) : (
-                                    <span className="text-sm text-muted-foreground">No roles assigned</span>
+                                    <span className="text-sm text-muted-foreground">{t('no_roles_assigned')}</span>
                                 )}
                             </div>
                         </div>
 
                         <div className="grid gap-2">
-                            <Label>Language Preference</Label>
+                            <Label>{t('language_preference')}</Label>
                             <div className="flex items-center gap-2">
                                 <LanguageSwitcher
                                     variant="default"
@@ -110,7 +112,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                     className="w-fit"
                                 />
                                 <span className="text-sm text-muted-foreground">
-                                    Choose your preferred language for the interface
+                                    {t('choose_language_interface')}
                                 </span>
                             </div>
                         </div>
@@ -118,27 +120,27 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         {mustVerifyEmail && auth.user.email_verified_at === null && (
                             <div>
                                 <p className="text-muted-foreground -mt-4 text-sm">
-                                    Your email address is unverified.{' '}
+                                    {t('email_unverified')}{' '}
                                     <Link
                                         href={route('verification.send')}
                                         method="post"
                                         as="button"
                                         className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                     >
-                                        Click here to resend the verification email.
+                                        {t('resend_verification_email')}
                                     </Link>
                                 </p>
 
                                 {status === 'verification-link-sent' && (
                                     <div className="mt-2 text-sm font-medium text-green-600">
-                                        A new verification link has been sent to your email address.
+                                        {t('verification_link_sent')}
                                     </div>
                                 )}
                             </div>
                         )}
 
                         <div className="flex items-center gap-4">
-                            <Button disabled={processing}>Save</Button>
+                            <Button disabled={processing}>{t('save')}</Button>
 
                             <Transition
                                 show={recentlySuccessful}
@@ -147,7 +149,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 leave="transition ease-in-out"
                                 leaveTo="opacity-0"
                             >
-                                <p className="text-sm text-neutral-600">Saved</p>
+                                <p className="text-sm text-neutral-600">{t('saved')}</p>
                             </Transition>
                         </div>
                     </form>

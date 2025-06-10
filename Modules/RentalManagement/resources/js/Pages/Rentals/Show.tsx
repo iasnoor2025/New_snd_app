@@ -639,7 +639,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge className="bg-green-500 hover:bg-green-600 flex items-center gap-1">
                   <Activity className="h-3 w-3" />
-                  <span>Active</span>
+                  <span>{t('active')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -655,7 +655,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  <span>Pending</span>
+                  <span>{t('pending')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -671,7 +671,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="text-green-600 border-green-400 flex items-center gap-1">
                   <CheckCircle className="h-3 w-3" />
-                  <span>Completed</span>
+                  <span>{t('completed')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -687,7 +687,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge variant="destructive" className="flex items-center gap-1">
                   <X className="h-3 w-3" />
-                  <span>Cancelled</span>
+                  <span>{t('cancelled')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -703,7 +703,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge variant="destructive" className="animate-pulse flex items-center gap-1">
                   <AlertCircle className="h-3 w-3" />
-                  <span>Overdue</span>
+                  <span>{t('overdue')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -719,7 +719,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="text-blue-600 border-blue-400 flex items-center gap-1">
                   <FileText className="h-3 w-3" />
-                  <span>Quotation</span>
+                  <span>{t('quotation')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -735,7 +735,7 @@ export default function Show({
               <TooltipTrigger asChild>
                 <Badge variant="outline" className="text-orange-600 border-orange-400 flex items-center gap-1">
                   <Truck className="h-3 w-3" />
-                  <span>Mobilization</span>
+                  <span>{t('mobilization')}</span>
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
@@ -901,7 +901,7 @@ export default function Show({
     if (progress < 25) return "🟢";
     if (progress < 50) return "🟡";
     if (progress < 75) return "🟠";
-    return "�";
+    return "🟣";
   };
 
   // Get warning message if rental is nearing completion or overdue
@@ -1154,7 +1154,7 @@ export default function Show({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <div>
-                  <CardTitle>Rental #{rental?.rental_number}</CardTitle>
+                  <CardTitle>{t('rental_number')}: {rental?.rental_number}</CardTitle>
                   <CardDescription>{rental?.customer?.company_name}</CardDescription>
                 </div>
                 <div className="flex gap-2">

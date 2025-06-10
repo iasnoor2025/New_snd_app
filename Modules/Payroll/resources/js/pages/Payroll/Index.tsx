@@ -51,7 +51,7 @@ type Payroll = {
 };
 
 export default function Index({ auth, payrolls, employees, filters, hasRecords }: Props) {
-  const { t } = useTranslation('payroll');
+  const { t } = useTranslation('payrolls');
 
     const [showModal, setShowModal] = useState(false);
     const { data, setData, post, processing, errors } = useForm({

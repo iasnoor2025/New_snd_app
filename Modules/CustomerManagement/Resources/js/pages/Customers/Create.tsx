@@ -57,7 +57,7 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-1">Name</label>
+                  <label className="block mb-1">{t('name')}</label>
                   <Input value={data.name} onChange={e => setData('name', e.target.value)} />
                   {errors.name && <div className="text-red-500 text-xs">{errors.name}</div>}
                 </div>
@@ -67,12 +67,12 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                   {errors.contact_person && <div className="text-red-500 text-xs">{errors.contact_person}</div>}
                 </div>
                 <div>
-                  <label className="block mb-1">Email</label>
+                  <label className="block mb-1">{t('email')}</label>
                   <Input type="email" value={data.email} onChange={e => setData('email', e.target.value)} />
                   {errors.email && <div className="text-red-500 text-xs">{errors.email}</div>}
                 </div>
                 <div>
-                  <label className="block mb-1">Phone</label>
+                  <label className="block mb-1">{t('phone')}</label>
                   <Input value={data.phone} onChange={e => setData('phone', e.target.value)} />
                   {errors.phone && <div className="text-red-500 text-xs">{errors.phone}</div>}
                 </div>

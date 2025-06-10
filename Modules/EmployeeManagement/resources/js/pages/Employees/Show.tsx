@@ -354,7 +354,7 @@ export default function Show({
   totalRepaid: initialTotalRepaid = 0,
   pagination: initialPagination = {}
 }: Props) {
-  const { t } = useTranslation('employee');
+  const { t } = useTranslation('employees');
 
   // Add console log for debugging
   console.log('Employee data:', employee);

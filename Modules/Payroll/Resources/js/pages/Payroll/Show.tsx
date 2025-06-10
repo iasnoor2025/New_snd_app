@@ -41,7 +41,7 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, payroll }: Props) {
-  const { t } = useTranslation('payroll');
+  const { t } = useTranslation('payrolls');
 
     const getStatusBadge = (status: string) => {
         const statusClasses = {
