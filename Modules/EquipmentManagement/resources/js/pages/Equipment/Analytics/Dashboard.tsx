@@ -96,6 +96,21 @@ const EquipmentAnalyticsDashboard: React.FC<Props> = ({ analytics }) => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('30d');
   const [refreshing, setRefreshing] = useState(false);
 
+  // Handle undefined analytics prop
+  if (!analytics) {
+    return (
+      <AdminLayout>
+        <Head title="Equipment Analytics Dashboard" />
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="text-lg font-medium text-gray-900">Loading analytics...</div>
+            <div className="text-sm text-gray-500">Please wait while we fetch the data.</div>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   const handleRefresh = async () => {
     setRefreshing(true);
     // Simulate API call
