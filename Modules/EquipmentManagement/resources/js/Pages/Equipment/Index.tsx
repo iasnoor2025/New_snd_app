@@ -12,6 +12,7 @@ import { Search } from 'lucide-react';
 import CreateButton from '../../../../../../resources/js/components/shared/CreateButton';
 import CrudButtons from '../../../../../../resources/js/components/shared/CrudButtons';
 import { formatCurrency } from '../../../../../../resources/js/utils/format';
+import { useTranslation } from 'react-i18next';
 
 interface Equipment {
   id: number;
@@ -48,6 +49,7 @@ const breadcrumbs = [
 ];
 
 export default function Index({ equipment, categories = [], statuses = {}, filters = {} }: Props) {
+  const { t } = useTranslation('equipment');
   const [searchQuery, setSearchQuery] = useState(filters.search || '');
   const [selectedCategory, setSelectedCategory] = useState(filters.category || 'all');
   const [selectedStatus, setSelectedStatus] = useState(filters.status || 'all');
@@ -87,28 +89,93 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
   };
 
   const getStatusBadge = (status: string) => {
+    const label = forceString(t(status), status);
     switch (status.toLowerCase()) {
       case 'available':
-        return <Badge variant="default">Available</Badge>;
+        return <Badge variant="default">{label}</Badge>;
       case 'rented':
-        return <Badge variant="secondary">Rented</Badge>;
+        return <Badge variant="secondary">{label}</Badge>;
       case 'maintenance':
-        return <Badge variant="outline">Maintenance</Badge>;
+        return <Badge variant="outline">{label}</Badge>;
       case 'out_of_service':
-        return <Badge variant="destructive">Out of Service</Badge>;
+        return <Badge variant="destructive">{label}</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>;
+        return <Badge variant="outline">{label}</Badge>;
     }
   };
 
+  function renderCategory(category: any): string {
+    if (!category) return '—';
+    let translated = category;
+    if (typeof category === 'string') translated = t(category);
+    if (typeof category === 'object') {
+      if (category.name) translated = t(category.name);
+      else if (category.en) translated = t(category.en);
+      else {
+        const first = Object.values(category).find(v => typeof v === 'string');
+        if (first) translated = t(first);
+      }
+    }
+    if (typeof translated === 'object' && translated !== null) {
+      const firstString = Object.values(translated).find(v => typeof v === 'string');
+      if (firstString) return firstString;
+      return '—';
+    }
+    if (typeof translated === 'string') return translated;
+    return '—';
+  }
+
+  // Helper to render any value safely as a string
+  function renderValue(val: any): string {
+    if (!val) return '—';
+    let translated = val;
+    if (typeof val === 'string' || typeof val === 'number') translated = String(val);
+    if (typeof val === 'object') {
+      if (val.name) translated = t(val.name);
+      else if (val.en) translated = t(val.en);
+      else {
+        const first = Object.values(val).find(v => typeof v === 'string' || typeof v === 'number');
+        if (first) translated = String(first);
+      }
+    }
+    if (typeof translated === 'object' && translated !== null) {
+      const firstString = Object.values(translated).find(v => typeof v === 'string' || typeof v === 'number');
+      if (firstString) return String(firstString);
+      return '—';
+    }
+    if (typeof translated === 'string' || typeof translated === 'number') return String(translated);
+    return '—';
+  }
+
+  // Helper to force string output for any label or value
+  function forceString(val: any, fallback: string): string {
+    if (!val) return fallback;
+    let translated = val;
+    if (typeof val === 'string') translated = t(val);
+    if (typeof val === 'object') {
+      if (val.en && typeof val.en === 'string') translated = t(val.en);
+      else {
+        const first = Object.values(val).find(v => typeof v === 'string');
+        if (first) translated = t(first);
+      }
+    }
+    if (typeof translated === 'object' && translated !== null) {
+      const firstString = Object.values(translated).find(v => typeof v === 'string');
+      if (firstString) return firstString;
+      return fallback;
+    }
+    if (typeof translated === 'string') return translated;
+    return fallback;
+  }
+
   return (
-    <AdminLayout title="Equipment" breadcrumbs={breadcrumbs} requiredPermission="equipment.view">
-      <Head title="Equipment" />
+    <AdminLayout title={forceString(t('equipment'), 'equipment')} breadcrumbs={breadcrumbs} requiredPermission="equipment.view">
+      <Head title={forceString(t('equipment'), 'equipment')} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-2xl font-bold">Equipment</CardTitle>
+            <CardTitle className="text-2xl font-bold">{forceString(t('equipment'), 'equipment')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSearch} className="mb-6">
@@ -116,7 +183,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                 <div>
                   <Input
                     type="text"
-                    placeholder="Search by name, model, serial number or door number"
+                    placeholder={forceString(t('ph_search_equipment'), 'ph_search_equipment')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full"
@@ -125,13 +192,13 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                 <div>
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Filter by category" />
+                      <SelectValue placeholder={forceString(t('ph_filter_by_category'), 'ph_filter_by_category')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
+                      <SelectItem value="all">{forceString(t('opt_all_categories'), 'opt_all_categories')}</SelectItem>
                       {categories.map((category) => (
                         <SelectItem key={category} value={category}>
-                          {category}
+                          {forceString(t(category), category)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -140,13 +207,13 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                 <div>
                   <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Filter by status" />
+                      <SelectValue placeholder={forceString(t('ph_filter_by_status'), 'ph_filter_by_status')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="all">{forceString(t('opt_all_statuses'), 'opt_all_statuses')}</SelectItem>
                       {Object.entries(statuses).map(([value, label]) => (
                         <SelectItem key={value} value={value}>
-                          {label}
+                          {forceString(t(label), label)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -156,7 +223,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                   <div className="flex space-x-2">
                     <Button type="submit" disabled={isLoading}>
                       <Search className="mr-2 h-4 w-4" />
-                      Search
+                      {forceString(t('search'), 'search')}
                     </Button>
                     <Button
                       type="button"
@@ -164,12 +231,12 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                       onClick={resetFilters}
                       disabled={isLoading}
                     >
-                      Clear Filters
+                      {forceString(t('clear_filters'), 'clear_filters')}
                     </Button>
                   </div>
                   <CreateButton
                     resourceType="equipment"
-                    text="Add Equipment"
+                    text={forceString(t('add_equipment'), 'add_equipment')}
                   />
                 </div>
               </div>
@@ -179,39 +246,38 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Door Number</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Model</TableHead>
-                    <TableHead>Serial Number</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Daily Rate</TableHead>
-                    <TableHead className="w-[100px] text-right">Actions</TableHead>
+                    <TableHead>{forceString(t('door_number'), 'door_number')}</TableHead>
+                    <TableHead>{forceString(t('equipment_name'), 'equipment_name')}</TableHead>
+                    <TableHead>{forceString(t('model'), 'model')}</TableHead>
+                    <TableHead>{forceString(t('serial_number'), 'serial_number')}</TableHead>
+                    <TableHead>{forceString(t('category'), 'category')}</TableHead>
+                    <TableHead>{forceString(t('status'), 'status')}</TableHead>
+                    <TableHead>{forceString(t('daily_rate'), 'daily_rate')}</TableHead>
+                    <TableHead className="w-[100px] text-right">{forceString(t('actions'), 'actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {equipment.data.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={8} className="text-center">
-                        No equipment found
+                        {forceString(t('no_equipment_found'), 'no_equipment_found')}
                       </TableCell>
                     </TableRow>
                   ) : (
                     equipment.data.map((item) => (
                       <TableRow key={item.id}>
-                        <TableCell>{item.door_number || '—'}</TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.model}</TableCell>
-                        <TableCell>{item.serial_number}</TableCell>
-                        <TableCell>{item.category}</TableCell>
+                        <TableCell>{renderValue(item.door_number)}</TableCell>
+                        <TableCell>{renderValue(item.name)}</TableCell>
+                        <TableCell>{renderValue(item.model)}</TableCell>
+                        <TableCell>{renderValue(item.serial_number)}</TableCell>
+                        <TableCell>{renderCategory(item.category)}</TableCell>
                         <TableCell>{getStatusBadge(item.status)}</TableCell>
-                        <TableCell>{formatCurrency(item.daily_rate)}</TableCell>
+                        <TableCell>{renderValue(item.daily_rate)}</TableCell>
                         <TableCell className="flex justify-end">
                           <CrudButtons
                             resourceType="equipment"
                             resourceId={item.id}
-                            resourceName={item.name}
-                            className="flex justify-end"
+                            resourceName={forceString(item.name, 'equipment')}
                           />
                         </TableCell>
                       </TableRow>
@@ -225,7 +291,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
               <div className="mt-4 flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-500">
-                    Showing {equipment.from} to {equipment.to} of {equipment.total} items
+                    {forceString(t('showing'), 'showing')} {equipment.from} {forceString(t('to'), 'to')} {equipment.to} {forceString(t('of'), 'of')} {equipment.total} {forceString(t('items'), 'items')}
                   </p>
                 </div>
                 <div className="flex space-x-2">
@@ -235,7 +301,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                     onClick={() => applyFilters({ page: equipment.current_page - 1 })}
                     disabled={equipment.current_page === 1 || isLoading}
                   >
-                    Previous
+                    {forceString(t('previous'), 'previous')}
                   </Button>
                   <Button
                     variant="outline"
@@ -243,7 +309,7 @@ export default function Index({ equipment, categories = [], statuses = {}, filte
                     onClick={() => applyFilters({ page: equipment.current_page + 1 })}
                     disabled={equipment.current_page === equipment.last_page || isLoading}
                   >
-                    Next
+                    {forceString(t('next'), 'next')}
                   </Button>
                 </div>
               </div>

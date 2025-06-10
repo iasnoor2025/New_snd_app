@@ -55,6 +55,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../../reso
 import { Separator } from '../../../../../../resources/js/components/ui/separator';
 import { Badge } from '../../../../../../resources/js/components/ui/badge';
 import { useTranslation } from 'react-i18next';
+import { useEquipmentCategories } from '../../../../../../resources/js/hooks/useEquipmentCategories';
 
 interface Props extends PageProps {
   equipment: any;
@@ -94,6 +95,9 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
   const { processing, errors: serverErrors } = useForm();
   const { t } = useTranslation('equipment');
 
+  // Use the shared hook for categories
+  const { categories: availableCategories, refresh: refreshCategories } = useEquipmentCategories(categories);
+
   // Deduplicate locations based on name, city, and state
   const uniqueLocations = React.useMemo(() => {
     const seen = new Set();
@@ -130,7 +134,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
     last_maintenance_date: parseDateOrNull(equipment.last_maintenance_date),
     next_maintenance_date: parseDateOrNull(equipment.next_maintenance_date),
     location_id: equipment.location_id || 0,
-    category_id: equipment.category_id || 0,
+    category_id: equipment.category_id || (availableCategories.length > 0 ? availableCategories[0].id : 0),
     notes: equipment.notes || '',
   };
 
@@ -211,8 +215,21 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
     });
   };
 
+  // Helper to render a value as a string with translation (handles multilingual objects)
+  function renderString(val: any): string {
+    if (!val) return '—';
+    if (typeof val === 'string') return t(val);
+    if (typeof val === 'object') {
+      if (val.name) return t(val.name);
+      if (val.en) return t(val.en);
+      const first = Object.values(val).find(v => typeof v === 'string');
+      if (first) return t(first);
+    }
+    return '—';
+  }
+
   return (
-    <AdminLayout title={`Edit Equipment: ${equipment.name}`} breadcrumbs={breadcrumbs} requiredPermission="equipment.edit">
+    <AdminLayout breadcrumbs={breadcrumbs}>
       <Head title={`Edit Equipment: ${equipment.name}`} />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
@@ -294,7 +311,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="name"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Package className="h-4 w-4 text-primary" />
@@ -311,7 +328,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="model"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Tag className="h-4 w-4 text-primary" />
@@ -328,7 +345,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="serial_number"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Hash className="h-4 w-4 text-primary" />
@@ -345,7 +362,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="door_number"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Building2 className="h-4 w-4 text-primary" />
@@ -362,7 +379,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="category_id"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Tag className="h-4 w-4 text-primary" />
@@ -378,9 +395,9 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  {categories.map((category) => (
+                                  {availableCategories.map((category) => (
                                     <SelectItem key={category.id} value={category.id.toString()}>
-                                      {category.name}
+                                      {renderString(category.name)}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
@@ -393,7 +410,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="location_id"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4 text-primary" />
@@ -411,7 +428,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                                 <SelectContent>
                                   {uniqueLocations.map((location) => (
                                     <SelectItem key={location.id} value={location.id.toString()}>
-                                      {location.name}
+                                      {renderString(location.name)}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
@@ -424,7 +441,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="status"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <CheckCircle2 className="h-4 w-4 text-primary" />
@@ -460,7 +477,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                       <FormField
                         control={form.control}
                         name="description"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                           <FormItem>
                             <FormLabel className="flex items-center gap-2">
                               <FileText className="h-4 w-4 text-primary" />
@@ -486,7 +503,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="purchase_cost"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <DollarSign className="h-4 w-4 text-primary" />
@@ -510,7 +527,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="daily_rate"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-primary" />
@@ -539,7 +556,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="weekly_rate"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-primary" />
@@ -569,7 +586,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="monthly_rate"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-primary" />
@@ -605,7 +622,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="purchase_date"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <CalendarIcon className="h-4 w-4 text-primary" />
@@ -650,7 +667,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="last_maintenance_date"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <Wrench className="h-4 w-4 text-primary" />
@@ -695,7 +712,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                         <FormField
                           control={form.control}
                           name="next_maintenance_date"
-                          render={({ field }) => (
+                          render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <AlertCircle className="h-4 w-4 text-primary" />
@@ -738,7 +755,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                       <FormField
                         control={form.control}
                         name="notes"
-                        render={({ field }) => (
+                        render={({ field }: { field: any }) => (
                           <FormItem>
                             <FormLabel className="flex items-center gap-2">
                               <FileText className="h-4 w-4 text-primary" />

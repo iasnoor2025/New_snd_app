@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { PageProps } from '@/types';
 import AdminLayout from '@/layouts/app-layout';
@@ -49,6 +49,8 @@ import { CalendarIcon, ArrowLeft, Loader2, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { router } from '@inertiajs/react';
 import axios from 'axios';
+import { useEquipmentCategories } from '../../../../../../resources/js/hooks/useEquipmentCategories';
+import { useTranslation } from 'react-i18next';
 
 interface Props extends PageProps {
   categories: { id: number; name: string }[];
@@ -106,455 +108,209 @@ const CreateEquipmentForm = ({
   locations,
   setIsCreatingLocation
 }: CreateEquipmentFormProps) => {
-  // Keep the form component as it is, no changes needed except container styling
+  // Remove the <Form> wrapper to avoid nested forms
   return (
-    <Form>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {Object.keys(serverErrors).length > 0 && (
-          <Alert variant="destructive">
-            <AlertDescription>
-              Please correct the errors below and try again.
-            </AlertDescription>
-          </Alert>
-        )}
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      {Object.keys(serverErrors).length > 0 && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            Please correct the errors below and try again.
+          </AlertDescription>
+        </Alert>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Keep all existing form fields unchanged */}
-          {/* Name Field */}
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Model Field */}
-          <FormField
-            control={form.control}
-            name="model"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Model</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Serial Number Field */}
-          <FormField
-            control={form.control}
-            name="serial_number"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Serial Number</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Door Number Field */}
-          <FormField
-            control={form.control}
-            name="door_number"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Door Number</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Category Field */}
-          <FormField
-            control={form.control}
-            name="category_id"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <Select
-                      onValueChange={(value) => field.onChange(parseInt(value))}
-                      value={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {availableCategories.map((category) => (
-                          <SelectItem key={category.id} value={category.id.toString()}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setIsCreatingCategory(true)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Status Field */}
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="available">Available</SelectItem>
-                    <SelectItem value="rented">Rented</SelectItem>
-                    <SelectItem value="maintenance">Maintenance</SelectItem>
-                    <SelectItem value="out_of_service">Out of Service</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Location Field */}
-          <FormField
-            control={form.control}
-            name="location_id"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Location</FormLabel>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <Select
-                      onValueChange={(value) => field.onChange(parseInt(value))}
-                      value={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a location" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {locations.map((location) => (
-                          <SelectItem key={location.id} value={location.id.toString()}>
-                            {location.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setIsCreatingLocation(true)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Daily Rate Field */}
-          <FormField
-            control={form.control}
-            name="daily_rate"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Daily Rate (SAR)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    {...field}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value);
-                      field.onChange(value);
-                      // Auto-calculate weekly and monthly rates
-                      form.setValue('weekly_rate', parseFloat((value * 6).toFixed(2)));
-                      form.setValue('monthly_rate', parseFloat((value * 26).toFixed(2)));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Weekly Rate Field */}
-          <FormField
-            control={form.control}
-            name="weekly_rate"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Weekly Rate (SAR)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    {...field}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value);
-                      field.onChange(value);
-                      // Auto-calculate daily and monthly rates
-                      const dailyRate = parseFloat((value / 6).toFixed(2));
-                      form.setValue('daily_rate', dailyRate);
-                      form.setValue('monthly_rate', parseFloat((dailyRate * 26).toFixed(2)));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Monthly Rate Field */}
-          <FormField
-            control={form.control}
-            name="monthly_rate"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Monthly Rate (SAR)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    {...field}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value);
-                      field.onChange(value);
-                      // Auto-calculate daily and weekly rates
-                      const dailyRate = parseFloat((value / 26).toFixed(2));
-                      form.setValue('daily_rate', dailyRate);
-                      form.setValue('weekly_rate', parseFloat((dailyRate * 6).toFixed(2)));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Purchase Cost Field */}
-          <FormField
-            control={form.control}
-            name="purchase_cost"
-            render={({ field }: { field: any }) => (
-              <FormItem>
-                <FormLabel>Purchase Cost (SAR)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    {...field}
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Purchase Date Field */}
-          <FormField
-            control={form.control}
-            name="purchase_date"
-            render={({ field }: { field: any }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Purchase Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Last Maintenance Date Field */}
-          <FormField
-            control={form.control}
-            name="last_maintenance_date"
-            render={({ field }: { field: any }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Last Maintenance Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value || undefined}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Next Maintenance Date Field */}
-          <FormField
-            control={form.control}
-            name="next_maintenance_date"
-            render={({ field }: { field: any }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Next Maintenance Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value || undefined}
-                      onSelect={field.onChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Description Field (Full Width) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Keep all existing form fields unchanged */}
+        {/* Name Field */}
         <FormField
           control={form.control}
-          name="description"
+          name="name"
           render={({ field }: { field: any }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
-                <Textarea
-                  {...field}
-                  value={field.value || ''}
-                  className="min-h-[100px]"
-                />
+                <Input {...field} />
               </FormControl>
-              <div className="text-muted-foreground text-sm">
-                Some description here
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Model Field */}
+        <FormField
+          control={form.control}
+          name="model"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Model</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Serial Number Field */}
+        <FormField
+          control={form.control}
+          name="serial_number"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Serial Number</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Door Number Field */}
+        <FormField
+          control={form.control}
+          name="door_number"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Door Number</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Category Field */}
+        <FormField
+          control={form.control}
+          name="category_id"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    value={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {availableCategories.map((category) => (
+                        <SelectItem key={category.id} value={category.id.toString()}>
+                          {renderString(category.name)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setIsCreatingCategory(true)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
               </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Notes Field (Full Width) */}
+        {/* Status Field */}
         <FormField
           control={form.control}
-          name="notes"
+          name="status"
           render={({ field }: { field: any }) => (
             <FormItem>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>Status</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="rented">Rented</SelectItem>
+                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                  <SelectItem value="out_of_service">Out of Service</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Location Field */}
+        <FormField
+          control={form.control}
+          name="location_id"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Location</FormLabel>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    value={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {locations.map((location) => (
+                        <SelectItem key={location.id} value={location.id.toString()}>
+                          {renderString(location.name)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setIsCreatingLocation(true)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Daily Rate Field */}
+        <FormField
+          control={form.control}
+          name="daily_rate"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Daily Rate (SAR)</FormLabel>
               <FormControl>
-                <Textarea
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
                   {...field}
-                  value={field.value || ''}
-                  className="min-h-[100px]"
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    field.onChange(value);
+                    // Auto-calculate weekly and monthly rates
+                    form.setValue('weekly_rate', parseFloat((value * 6).toFixed(2)));
+                    form.setValue('monthly_rate', parseFloat((value * 26).toFixed(2)));
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -562,21 +318,265 @@ const CreateEquipmentForm = ({
           )}
         />
 
-        <div className="flex justify-end gap-2">
-          <Button
-            variant="outline"
-            onClick={() => window.location.href = window.route('equipment.index')}
-            type="button"
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Create Equipment
-          </Button>
-        </div>
-      </form>
-    </Form>
+        {/* Weekly Rate Field */}
+        <FormField
+          control={form.control}
+          name="weekly_rate"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Weekly Rate (SAR)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  {...field}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    field.onChange(value);
+                    // Auto-calculate daily and monthly rates
+                    const dailyRate = parseFloat((value / 6).toFixed(2));
+                    form.setValue('daily_rate', dailyRate);
+                    form.setValue('monthly_rate', parseFloat((dailyRate * 26).toFixed(2)));
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Monthly Rate Field */}
+        <FormField
+          control={form.control}
+          name="monthly_rate"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Monthly Rate (SAR)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  {...field}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    field.onChange(value);
+                    // Auto-calculate daily and weekly rates
+                    const dailyRate = parseFloat((value / 26).toFixed(2));
+                    form.setValue('daily_rate', dailyRate);
+                    form.setValue('weekly_rate', parseFloat((dailyRate * 6).toFixed(2)));
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Purchase Cost Field */}
+        <FormField
+          control={form.control}
+          name="purchase_cost"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Purchase Cost (SAR)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Purchase Date Field */}
+        <FormField
+          control={form.control}
+          name="purchase_date"
+          render={({ field }: { field: any }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Purchase Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Last Maintenance Date Field */}
+        <FormField
+          control={form.control}
+          name="last_maintenance_date"
+          render={({ field }: { field: any }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Last Maintenance Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Next Maintenance Date Field */}
+        <FormField
+          control={form.control}
+          name="next_maintenance_date"
+          render={({ field }: { field: any }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Next Maintenance Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      {/* Description Field (Full Width) */}
+      <FormField
+        control={form.control}
+        name="description"
+        render={({ field }: { field: any }) => (
+          <FormItem>
+            <FormLabel>Description</FormLabel>
+            <FormControl>
+              <Textarea
+                {...field}
+                value={field.value || ''}
+                className="min-h-[100px]"
+              />
+            </FormControl>
+            <div className="text-muted-foreground text-sm">
+              Some description here
+            </div>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {/* Notes Field (Full Width) */}
+      <FormField
+        control={form.control}
+        name="notes"
+        render={({ field }: { field: any }) => (
+          <FormItem>
+            <FormLabel>Notes</FormLabel>
+            <FormControl>
+              <Textarea
+                {...field}
+                value={field.value || ''}
+                className="min-h-[100px]"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="flex justify-end gap-2">
+        <Button
+          variant="outline"
+          onClick={() => window.location.href = window.route('equipment.index')}
+          type="button"
+        >
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Create Equipment
+        </Button>
+      </div>
+    </form>
   );
 };
 
@@ -584,23 +584,13 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
   const { processing, errors: serverErrors } = useForm();
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategory, setNewCategory] = useState("");
-  const [availableCategories, setAvailableCategories] = useState(categories);
   const [isCreatingLocation, setIsCreatingLocation] = useState(false);
   const [newLocation, setNewLocation] = useState("");
   const [availableLocations, setAvailableLocations] = useState(locations);
+  const { t } = useTranslation('equipment');
 
-  // Deduplicate locations based on name
-  const uniqueLocations = React.useMemo(() => {
-    const seen = new Set();
-    return availableLocations.filter(location => {
-      const key = location.name;
-      if (seen.has(key)) {
-        return false;
-      }
-      seen.add(key);
-      return true;
-    });
-  }, [availableLocations]);
+  // Use the shared hook for categories
+  const { categories: availableCategories, refresh: refreshCategories } = useEquipmentCategories(categories);
 
   // Set default values for the form
   const defaultValues: EquipmentFormValues = {
@@ -617,7 +607,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
     purchase_cost: 0,
     last_maintenance_date: null,
     next_maintenance_date: null,
-    location_id: uniqueLocations.length > 0 ? uniqueLocations[0].id : 0,
+    location_id: availableLocations.length > 0 ? availableLocations[0].id : 0,
     category_id: availableCategories.length > 0 ? availableCategories[0].id : 0,
     notes: '',
   };
@@ -640,18 +630,11 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
 
     router.post(window.route('equipment.store'), formattedValues, {
       onSuccess: () => {
-        toast({
-          title: "Success",
-          description: "Equipment created successfully"
-        });
+        toast.success("Equipment created successfully");
         window.location.href = window.route('equipment.index');
       },
       onError: (errors: Record<string, string>) => {
-        toast({
-          title: "Error",
-          description: "Failed to create equipment. Please check the form for errors.",
-          variant: "destructive"
-        });
+        toast.error("Failed to create equipment. Please check the form for errors.");
         console.error(errors);
       }
     });
@@ -660,21 +643,13 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
   // Handle creating a new category
   const handleCreateCategory = async () => {
     if (!newCategory.trim()) {
-      toast({
-        title: "Error",
-        description: "Category name cannot be empty",
-        variant: "destructive"
-      });
+      toast.error("Category name cannot be empty");
       return;
     }
 
     // Check if category already exists
     if (availableCategories.some(c => c.name === newCategory)) {
-      toast({
-        title: "Error",
-        description: "This category already exists",
-        variant: "destructive"
-      });
+      toast.error("This category already exists");
       return;
     }
 
@@ -682,49 +657,34 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
       // Create the category using Inertia.js
       const response = await axios.post('/categories', { name: newCategory });
 
-      // Handle successful creation
-      const newCategoryObj = {
-        id: response.data.id,
-        name: response.data.name || newCategory
-      };
+      // After creation, refresh categories from backend
+      await refreshCategories();
 
-      setAvailableCategories([...availableCategories, newCategoryObj]);
-      form.setValue('category_id', newCategoryObj.id);
+      // Set the new category as selected
+      const newCategoryObj = response.data && response.data.category ? response.data.category : null;
+      if (newCategoryObj) {
+        form.setValue('category_id', newCategoryObj.id);
+      }
       setNewCategory("");
       setIsCreatingCategory(false);
 
-      toast({
-        title: "Success",
-        description: "Category added successfully"
-      });
+      toast.success("Category added successfully");
     } catch (error: any) {
       console.error('Error creating category:', error);
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create category",
-        variant: "destructive"
-      });
+      toast.error(error.response?.data?.message || "Failed to create category");
     }
   };
 
   // Handle creating a new location
   const handleCreateLocation = async () => {
     if (!newLocation.trim()) {
-      toast({
-        title: "Error",
-        description: "Location name cannot be empty",
-        variant: "destructive"
-      });
+      toast.error("Location name cannot be empty");
       return;
     }
 
     // Check if location already exists
     if (availableLocations.some(l => l.name === newLocation)) {
-      toast({
-        title: "Error",
-        description: "This location already exists",
-        variant: "destructive"
-      });
+      toast.error("This location already exists");
       return;
     }
 
@@ -751,22 +711,28 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
       setNewLocation("");
       setIsCreatingLocation(false);
 
-      toast({
-        title: "Success",
-        description: "Location added successfully"
-      });
+      toast.success("Location added successfully");
     } catch (error: any) {
       console.error('Error creating location:', error);
-      toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create location",
-        variant: "destructive"
-      });
+      toast.error(error.response?.data?.message || "Failed to create location");
     }
   };
 
+  // Helper to render a value as a string with translation (handles multilingual objects)
+  function renderString(val: any): string {
+    if (!val) return '—';
+    if (typeof val === 'string') return t(val);
+    if (typeof val === 'object') {
+      if (val.name) return t(val.name);
+      if (val.en) return t(val.en);
+      const first = Object.values(val).find(v => typeof v === 'string');
+      if (first) return t(first);
+    }
+    return '—';
+  }
+
   return (
-    <AdminLayout breadcrumbs={breadcrumbs} requiredPermission="equipment.create">
+    <AdminLayout breadcrumbs={breadcrumbs}>
       <Head title="Create Equipment" />
 
       <div className="flex h-full flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -778,7 +744,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-full">
+            <ScrollArea style={{ height: '100%' }}>
               <ErrorBoundary>
                 <CreateEquipmentForm
                   form={form}
@@ -787,7 +753,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
                   onSubmit={onSubmit}
                   availableCategories={availableCategories}
                   setIsCreatingCategory={setIsCreatingCategory}
-                  locations={uniqueLocations}
+                  locations={availableLocations}
                   setIsCreatingLocation={setIsCreatingLocation}
                 />
               </ErrorBoundary>

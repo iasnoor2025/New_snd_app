@@ -18,12 +18,13 @@ use Modules\EquipmentManagement\Http\Controllers\MaintenanceRecordController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenancePartController;
 use Modules\EquipmentManagement\Http\Controllers\MaintenanceScheduleController;
 use Modules\Core\Http\Controllers\MediaLibraryController;
+use Modules\Core\Http\Controllers\CategoryController;
+use Modules\Core\Http\Controllers\LocationController;
 
 Route::middleware(['auth'])->group(function () {
     // Equipment index
     Route::get('/equipment', [EquipmentController::class, 'index'])
-        ->middleware('permission:equipment.view')
-        ->name('equipment.index');
+        ->middleware('permission:equipment.view');
     // Equipment routes
     Route::get('/equipment/availability', [EquipmentController::class, 'availability'])
         ->middleware('permission:equipment.view')
@@ -80,5 +81,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipment/maintenance/{maintenance}', [MaintenanceRecordController::class, 'show'])
         ->middleware('permission:maintenance.view')
         ->name('maintenance.show');
+    Route::post('/categories', [CategoryController::class, 'store'])
+        ->middleware('permission:equipment.create')
+        ->name('categories.store');
+    Route::post('/locations', [LocationController::class, 'store'])
+        ->middleware('permission:equipment.create')
+        ->name('locations.store');
 });
 

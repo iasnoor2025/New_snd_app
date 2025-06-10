@@ -1,7 +1,7 @@
 <?php
 namespace Modules\Core\Http\Controllers;
 
-use App\Models\Category;
+use Modules\Core\Domain\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,8 +32,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Category created successfully',
-            'id' => $category->id,
-            'name' => $category->name
+            'category' => $category
         ], 201);
     }
 

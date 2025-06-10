@@ -47,7 +47,7 @@ import { Label } from '../../../../../../resources/js/components/ui/label';
 import { cn } from '../../../../../../resources/js/lib/utils';
 import { toast } from 'sonner';
 import RiskManagement from './Risk/Management';
-import { t } from '../../../../../../resources/js/lib/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface Equipment {
   id: number;
@@ -153,6 +153,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
     documents: null
   });
   const [documentUploadKey, setDocumentUploadKey] = React.useState(0);
+  const { t } = useTranslation('equipment');
 
   // Define canManageDocuments based on user permissions
   const canManageDocuments = auth.permissions?.includes('equipment.edit') || auth.permissions?.includes('documents.upload');
@@ -161,7 +162,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
   React.useEffect(() => {
     const fetchMediaItems = async () => {
       try {
-        const response = await axios.get(`/api/media-library/Equipment/${equipment.id}`);
+        const response = await axios.get(`/api/v1/media-library/Equipment/${equipment.id}`);
         setMediaItems(response.data.data || []);
       } catch (error) {
         console.error('Error fetching media items:', error);
@@ -259,36 +260,38 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
   };
 
   const getStatusBadge = (status: string) => {
-    if (!status) return <Badge variant="outline">Unknown</Badge>;
+    const label = renderString(status); // Use renderString to ensure it's a string
+    if (!label || label === '—') return <Badge variant="outline">{t('unknown')}</Badge>;
 
-    switch (status.toLowerCase()) {
+    switch (label.toLowerCase()) {
       case 'available':
-        return <Badge variant="default">Available</Badge>;
+        return <Badge variant="default">{t('available')}</Badge>;
       case 'rented':
-        return <Badge variant="secondary">Rented</Badge>;
+        return <Badge variant="secondary">{t('rented')}</Badge>;
       case 'maintenance':
-        return <Badge variant="outline">Maintenance</Badge>;
+        return <Badge variant="outline">{t('maintenance')}</Badge>;
       case 'retired':
-        return <Badge variant="destructive">Retired</Badge>;
+        return <Badge variant="destructive">{t('retired')}</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>;
+        return <Badge variant="outline">{label}</Badge>;
     }
   };
 
   const getMaintenanceStatusBadge = (status: string) => {
-    if (!status) return <Badge variant="outline">Unknown</Badge>;
+    const label = renderString(status); // Use renderString to ensure it's a string
+    if (!label || label === '—') return <Badge variant="outline">{t('unknown')}</Badge>;
 
-    switch (status.toLowerCase()) {
+    switch (label.toLowerCase()) {
       case 'scheduled':
-        return <Badge variant="secondary">Scheduled</Badge>;
+        return <Badge variant="secondary">{t('scheduled')}</Badge>;
       case 'in_progress':
-        return <Badge variant="outline">In Progress</Badge>;
+        return <Badge variant="outline">{t('in_progress')}</Badge>;
       case 'completed':
-        return <Badge variant="default">Completed</Badge>;
+        return <Badge variant="default">{t('completed')}</Badge>;
       case 'cancelled':
-        return <Badge variant="destructive">Cancelled</Badge>;
+        return <Badge variant="destructive">{t('cancelled')}</Badge>;
       default:
-        return <Badge variant="outline">{status.replace('_', ' ')}</Badge>;
+        return <Badge variant="outline">{label}</Badge>;
     }
   };
 
@@ -445,6 +448,66 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
     );
   };
 
+  // Helper to render a value as a string with translation (handles multilingual objects)
+  function renderString(val: any): string {
+    if (!val) return '—';
+    let translated = val;
+    if (typeof val === 'string') translated = t(val);
+    if (typeof val === 'object') {
+      if (val.name) translated = t(val.name);
+      else if (val.en) translated = t(val.en);
+      else {
+        const first = Object.values(val).find(v => typeof v === 'string');
+        if (first) translated = t(first);
+      }
+    }
+    // If translated is an object (e.g., {en: ...}), extract the first string value
+    if (typeof translated === 'object' && translated !== null) {
+      const firstString = Object.values(translated).find(v => typeof v === 'string');
+      if (firstString) return firstString;
+      return '—';
+    }
+    if (typeof translated === 'string') return translated;
+    return '—';
+  }
+
+  // Helper to render any value safely as a string, including numbers and dates
+  function renderValue(val: any): string {
+    console.log('renderValue input:', val); // Add this line for debugging
+    if (!val) return '—';
+    let translated = val; // Initialize translated with the original value
+
+    if (typeof val === 'string') {
+      translated = t(val);
+    } else if (typeof val === 'number') {
+      return String(val); // Numbers are fine
+    } else if (val instanceof Date) {
+      return val.toLocaleDateString(); // Dates are fine
+    } else if (typeof val === 'object') {
+      if (val.name) translated = t(val.name);
+      else if (val.en) translated = t(val.en);
+      else {
+        const first = Object.values(val).find(v => typeof v === 'string' || typeof v === 'number');
+        if (first) translated = String(first);
+      }
+    }
+
+    // Crucial: If 'translated' itself is now an object (e.g., from t()), extract the string
+    if (typeof translated === 'object' && translated !== null) {
+      console.log('renderValue returning object:', translated); // Add this line for debugging
+      const firstString = Object.values(translated).find(v => typeof v === 'string' || typeof v === 'number');
+      if (firstString) return String(firstString);
+      return '—';
+    }
+
+    // Ensure final output is a string
+    if (typeof translated === 'string' || typeof translated === 'number') {
+      return String(translated);
+    }
+
+    return '—';
+  }
+
   return (
     <AdminLayout
       title="Equipment Details"
@@ -467,12 +530,12 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
               <Button variant="outline" asChild>
                 <Link href={window.route('equipment.index')}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  {t('back_to_equipment_list')}
+                  {renderValue(t('back_to_equipment_list'))}
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href={window.route('equipment.edit', { equipment: equipment.id })}>
-                  Edit
+                  {renderValue(t('edit'))}
                 </Link>
               </Button>
             </div>
@@ -480,32 +543,32 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
           <CardContent>
             <Tabs defaultValue="basic" className="w-full">
               <TabsList className="grid w-full grid-cols-7">
-                <TabsTrigger value="basic">Basic Info</TabsTrigger>
-                <TabsTrigger value="financial">Financial</TabsTrigger>
-                <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
-                <TabsTrigger value="metrics">Metrics</TabsTrigger>
-                <TabsTrigger value="risk">Risk Management</TabsTrigger>
-                <TabsTrigger value="projects">Projects/Rentals</TabsTrigger>
-                <TabsTrigger value="documents">Documents</TabsTrigger>
+                <TabsTrigger value="basic">{renderValue(t('basic_info'))}</TabsTrigger>
+                <TabsTrigger value="financial">{renderValue(t('financial'))}</TabsTrigger>
+                <TabsTrigger value="maintenance">{renderValue(t('maintenance'))}</TabsTrigger>
+                <TabsTrigger value="metrics">{renderValue(t('metrics'))}</TabsTrigger>
+                <TabsTrigger value="risk">{renderValue(t('risk_management'))}</TabsTrigger>
+                <TabsTrigger value="projects">{renderValue(t('projects_rentals'))}</TabsTrigger>
+                <TabsTrigger value="documents">{renderValue(t('documents'))}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="basic" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('equipment_name')}</Label>
-                    <p className="text-sm">{equipment.name || '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.name)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('model')}</Label>
-                    <p className="text-sm">{equipment.model || '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.model)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('serial_number')}</Label>
-                    <p className="text-sm">{equipment.serial_number || '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.serial_number)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('door_number')}</Label>
-                    <p className="text-sm">{equipment.door_number || '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.door_number)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('status')}</Label>
@@ -513,33 +576,33 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('category')}</Label>
-                    <p className="text-sm">{equipment.category?.name || equipment.category || '—'}</p>
+                    <p className="text-sm">{renderString(equipment.category)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('unit')}</Label>
-                    <p className="text-sm">{equipment.unit || '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.unit)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('location')}</Label>
-                    <p className="text-sm">{equipment.location?.name || equipment.location || '—'}</p>
+                    <p className="text-sm">{renderString(equipment.location)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('active_status')}</Label>
                     <Badge variant={equipment.is_active ? 'default' : 'secondary'}>
-                      {equipment.is_active ? 'Active' : 'Inactive'}
+                      {equipment.is_active ? renderString(t('active')) : renderString(t('inactive'))}
                     </Badge>
                   </div>
                 </div>
                 {equipment.description && (
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('description')}</Label>
-                    <p className="text-sm">{equipment.description}</p>
+                    <p className="text-sm">{renderValue(equipment.description)}</p>
                   </div>
                 )}
                 {equipment.notes && (
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('notes')}</Label>
-                    <p className="text-sm">{equipment.notes}</p>
+                    <p className="text-sm">{renderValue(equipment.notes)}</p>
                   </div>
                 )}
               </TabsContent>
@@ -568,7 +631,7 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('purchase_date')}</Label>
-                    <p className="text-sm">{equipment.purchase_date ? new Date(equipment.purchase_date).toLocaleDateString() : '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.purchase_date)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('lifetime_maintenance_cost')}</Label>
@@ -589,19 +652,19 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('last_maintenance')}</Label>
-                    <p className="text-sm">{equipment.last_maintenance_date ? new Date(equipment.last_maintenance_date).toLocaleDateString() : '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.last_maintenance_date)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('next_maintenance')}</Label>
-                    <p className="text-sm">{equipment.next_maintenance_date ? new Date(equipment.next_maintenance_date).toLocaleDateString() : '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.next_maintenance_date)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('next_performance_review')}</Label>
-                    <p className="text-sm">{equipment.next_performance_review ? new Date(equipment.next_performance_review).toLocaleDateString() : '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.next_performance_review)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('efficiency_rating')}</Label>
-                    <p className="text-sm">{equipment.efficiency_rating ? `${equipment.efficiency_rating}%` : '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.efficiency_rating) ? `${renderValue(equipment.efficiency_rating)}%` : '—'}</p>
                   </div>
                 </div>
               </TabsContent>
@@ -610,39 +673,39 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('current_operating_hours')}</Label>
-                    <p className="text-sm">{equipment.current_operating_hours || '0'} hrs</p>
+                    <p className="text-sm">{renderValue(equipment.current_operating_hours)} {t('hrs')}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('current_mileage')}</Label>
-                    <p className="text-sm">{equipment.current_mileage || '0'} miles</p>
+                    <p className="text-sm">{renderValue(equipment.current_mileage)} {t('miles')}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('current_cycle_count')}</Label>
-                    <p className="text-sm">{equipment.current_cycle_count || '0'}</p>
+                    <p className="text-sm">{renderValue(equipment.current_cycle_count)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('initial_operating_hours')}</Label>
-                    <p className="text-sm">{equipment.initial_operating_hours || '0'} hrs</p>
+                    <p className="text-sm">{renderValue(equipment.initial_operating_hours)} {t('hrs')}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('initial_mileage')}</Label>
-                    <p className="text-sm">{equipment.initial_mileage || '0'} miles</p>
+                    <p className="text-sm">{renderValue(equipment.initial_mileage)} {t('miles')}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('initial_cycle_count')}</Label>
-                    <p className="text-sm">{equipment.initial_cycle_count || '0'}</p>
+                    <p className="text-sm">{renderValue(equipment.initial_cycle_count)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('avg_daily_usage_hours')}</Label>
-                    <p className="text-sm">{equipment.avg_daily_usage_hours || '0'} hrs/day</p>
+                    <p className="text-sm">{renderValue(equipment.avg_daily_usage_hours)} {t('hrs_per_day')}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('avg_daily_usage_miles')}</Label>
-                    <p className="text-sm">{equipment.avg_daily_usage_miles || '0'} miles/day</p>
+                    <p className="text-sm">{renderValue(equipment.avg_daily_usage_miles)} {t('miles_per_day')}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('last_metric_update')}</Label>
-                    <p className="text-sm">{equipment.last_metric_update ? new Date(equipment.last_metric_update).toLocaleDateString() : '—'}</p>
+                    <p className="text-sm">{renderValue(equipment.last_metric_update)}</p>
                   </div>
                 </div>
               </TabsContent>
@@ -677,15 +740,14 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                                     <div className="flex items-center gap-3">
                                       <Truck className="h-4 w-4 text-blue-500" />
                                       <div>
-                                        <p className="font-medium text-sm">{rental.customer_name || 'Unknown Customer'}</p>
+                                        <p className="font-medium text-sm">{renderValue(rental.customer_name)}</p>
                                         <p className="text-xs text-muted-foreground">
-                                          {rental.start_date ? new Date(rental.start_date).toLocaleDateString() : 'No start date'} -
-                                          {rental.end_date ? new Date(rental.end_date).toLocaleDateString() : 'Ongoing'}
+                                          {renderValue(rental.start_date)} - {renderValue(rental.end_date)}
                                         </p>
                                       </div>
                                     </div>
                                     <Badge variant="outline">
-                                      {rental.status || 'Active'}
+                                      {renderValue(rental.status)}
                                     </Badge>
                                   </div>
                                 ))}
@@ -703,25 +765,33 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
                                     <div className="flex items-center gap-3">
                                       <Settings className="h-4 w-4 text-green-500" />
                                       <div>
-                                        <p className="font-medium text-sm">{project.project_name || 'Unknown Project'}</p>
+                                        <p className="font-medium text-sm">{renderValue(project.project_name)}</p>
                                         <p className="text-xs text-muted-foreground">
-                                          {t('assigned')}: {project.assigned_date ? new Date(project.assigned_date).toLocaleDateString() : 'Unknown'}
+                                          {t('assigned')}: {renderValue(project.assigned_date)}
                                         </p>
                                       </div>
                                     </div>
                                     <Badge variant="secondary">
-                                      {project.status || 'Active'}
+                                      {renderValue(project.status)}
                                     </Badge>
                                   </div>
                                 ))}
                               </div>
                             </div>
                           )}
+
+                          {/* No Projects/Rentals found */}
+                          {rentalItems.data.length === 0 && projectHistory.data.length === 0 && (
+                            <div className="text-center py-8 text-muted-foreground">
+                              <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                              <p>{t('no_projects_rentals_found_for_this_equipment')}</p>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          <Car className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>{t('no_current_projects_rentals_assigned')}</p>
+                          <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p>{t('no_projects_rentals_found_for_this_equipment')}</p>
                         </div>
                       )}
                     </CardContent>

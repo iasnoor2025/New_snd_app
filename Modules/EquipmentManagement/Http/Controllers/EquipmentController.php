@@ -95,8 +95,13 @@ class EquipmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        // If AJAX or expects JSON, return latest categories for dynamic reload
+        if ($request->ajax() || $request->wantsJson()) {
+            $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
+            return response()->json(['categories' => $categories]);
+        }
         // Get categories and locations with id and name
         $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
         $locations = Location::select('id', 'name')->get();
@@ -109,7 +114,7 @@ class EquipmentController extends Controller
             'out_of_service' => 'Out of Service'
         ];
 
-            return Inertia::render('Equipment/Create', [
+        return Inertia::render('Equipment/Create', [
             'categories' => $categories,
             'locations' => $locations,
             'statuses' => $statuses,

@@ -170,11 +170,5 @@ Route::prefix('hr/payroll')->name('payroll.')->middleware(['auth', 'verified'])-
         ->name('advance-payments.index');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/payrolls', [\Modules\Payroll\Http\Controllers\PayrollController::class, 'index'])
-        ->middleware('permission:payroll.view')
-        ->name('payroll.index');
-});
-
 
 

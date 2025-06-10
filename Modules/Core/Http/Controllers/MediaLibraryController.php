@@ -43,8 +43,8 @@ class MediaLibraryController extends Controller
             }
 
             // Get the model class
-            $modelClass = "App\Models\\" . $model;
-            if (!class_exists($modelClass)) {
+            $modelClass = $this->getModelClass($model);
+            if (!$modelClass) {
                 \Log::error('Invalid model class', ['modelClass' => $modelClass]);
                 return response()->json([
                     'message' => 'Invalid model type',
@@ -375,16 +375,39 @@ class MediaLibraryController extends Controller
      */
     private function getModelClass(string $model)
     {
-        // Map of supported model names to their class names
-        $models = [
-            'Rental' => \Modules\RentalManagement\Domain\Models\Rental::class,
-            'Customer' => \Modules\RentalManagement\Domain\Models\Customer::class,
-            'Equipment' => \Modules\EquipmentManagement\Domain\Models\Equipment::class,
-            'Employee' => \Modules\EmployeeManagement\Domain\Models\Employee::class,
-            'Quotation' => \Modules\RentalManagement\Domain\Models\Quotation::class,
-        ];
+        // Try to find the model in the App\Models namespace
+        $appModelClass = "App\\Models\\{$model}";
+        if (class_exists($appModelClass)) {
+            return $appModelClass;
+        }
 
-        return $models[$model] ?? null;
+        // Try to find the model in the Modules\*\Domain\Models namespace with 'Management' suffix
+        $moduleNameWithManagement = Str::studly($model) . 'Management';
+        $moduleModelClassWithManagement = "Modules\\{$moduleNameWithManagement}\\Domain\\Models\\{$model}";
+        if (class_exists($moduleModelClassWithManagement)) {
+            return $moduleModelClassWithManagement;
+        }
+
+        // Try to find the model in the Modules\*\Domain\Models namespace without 'Management' suffix
+        $moduleName = Str::studly($model);
+        $moduleModelClass = "Modules\\{$moduleName}\\Domain\\Models\\{$model}";
+        if (class_exists($moduleModelClass)) {
+            return $moduleModelClass;
+        }
+
+        // Fallback for models that might be directly under Modules\*\Models with 'Management' suffix
+        $fallbackModuleModelClassWithManagement = "Modules\\{$moduleNameWithManagement}\\Models\\{$model}";
+        if (class_exists($fallbackModuleModelClassWithManagement)) {
+            return $fallbackModuleModelClassWithManagement;
+        }
+
+        // Fallback for models that might be directly under Modules\*\Models without 'Management' suffix
+        $fallbackModuleModelClass = "Modules\\{$moduleName}\\Models\\{$model}";
+        if (class_exists($fallbackModuleModelClass)) {
+            return $fallbackModuleModelClass;
+        }
+
+        return null;
     }
 }
 
