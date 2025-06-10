@@ -99,6 +99,7 @@ const breadcrumbs = [
 ];
 
 export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { status: 'all', search: '' } }: { auth: any, leaveRequests: any, filters?: { status?: string, search?: string } }) {
+  const { t } = useTranslation('leave');
   const { hasPermission, isAdmin } = usePermission();
   const [processing, setProcessing] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState(filters.search || '');
@@ -258,16 +259,16 @@ export default function LeaveRequestsIndex({ auth, leaveRequests, filters = { st
                   <TableHeader>
                     <TableRow>
                       <TableHead>Employee</TableHead>
-                      <TableHead>{t('lbl_leave_type')}</TableHead>
-                      <TableHead>{t('lbl_start_date')}</TableHead>
-                      <TableHead>{t('end_date')}</TableHead>
+                      <TableHead>{t('th_leave_type')}</TableHead>
+                      <TableHead>{t('th_start_date')}</TableHead>
+                      <TableHead>{t('th_end_date')}</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {leaveRequestsData.length > 0 ? (
-                      leaveRequestsData.map((request) => (
+                      leaveRequestsData.map((request: LeaveRequest) => (
                         <TableRow key={request.id}>
                           <TableCell className="font-medium">
                             {request.employee ? `${request.employee.first_name} ${request.employee.last_name}` : 'N/A'}

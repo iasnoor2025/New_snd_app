@@ -219,7 +219,7 @@ export default function Index({ auth, employees, filters, departments, positions
                   <SelectItem value="all">{t('opt_all_departments')}</SelectItem>
                   {departments?.map((dept) => dept && (
                     <SelectItem key={dept.id} value={dept.id.toString()}>
-                      {dept.name}
+                      {typeof dept.name === 'string' ? dept.name : JSON.stringify(dept.name)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -235,7 +235,7 @@ export default function Index({ auth, employees, filters, departments, positions
                   <SelectItem value="all">{t('opt_all_positions')}</SelectItem>
                   {positions?.map((pos) => pos && (
                     <SelectItem key={pos.id} value={pos.id.toString()}>
-                      {pos.name}
+                      {typeof pos.name === 'string' ? pos.name : JSON.stringify(pos.name)}
                     </SelectItem>
                   ))}
                 </SelectContent>

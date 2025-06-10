@@ -296,5 +296,8 @@
   "group_by_department": "Group by Department",
   "group_by_leave_type": "Group by Leave Type",
   "group_by_status": "Group by Status",
-  "group_by_date": "Group by Date"
+  "group_by_date": "Group by Date",
+  "th_leave_type": "Leave Type",
+  "th_start_date": "Start Date",
+  "th_end_date": "End Date"
 }
