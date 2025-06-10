@@ -48,6 +48,7 @@ import { cn } from '../../../../../../resources/js/lib/utils';
 import { toast } from 'sonner';
 import RiskManagement from './Risk/Management';
 import { useTranslation } from 'react-i18next';
+import { usePermission } from '../../../../../../resources/js/hooks/usePermission';
 
 interface Equipment {
   id: number;
@@ -140,8 +141,9 @@ const breadcrumbs = [
   { title: 'Equipment Details', href: window.location.pathname },
 ];
 
-export default function Show({ equipment, maintenanceRecords = { data: [], total: 0 }, rentalItems = { data: [], total: 0 }, projectHistory = { data: [], total: 0 } }: Props) {
+export default function Show({ equipment, rentalItems = { data: [], total: 0 }, maintenanceRecords = { data: [], total: 0 }, projectHistory = { data: [], total: 0 } }: Props) {
   const { auth } = usePage<any>().props;
+  const { hasPermission } = usePermission();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [mediaItems, setMediaItems] = React.useState<Array<{ id: number; file_name: string; collection: string; original_url: string }>>([]);
   const [previewDocument, setPreviewDocument] = React.useState<{ id: number; file_name: string; collection: string; original_url: string } | null>(null);
@@ -162,7 +164,14 @@ export default function Show({ equipment, maintenanceRecords = { data: [], total
   React.useEffect(() => {
     const fetchMediaItems = async () => {
       try {
-        const response = await axios.get(`/api/v1/media-library/Equipment/${equipment.id}`);
+        // Check if user has permission to view media library
+        if (!hasPermission('equipment.view')) {
+          console.error('Permission denied: equipment.view permission required');
+          return;
+        }
+        
+        // Using window.route helper for consistent URL generation
+        const response = await axios.get(window.route('equipment.media-library', { equipment: equipment.id }));
         setMediaItems(response.data.data || []);
       } catch (error) {
         console.error('Error fetching media items:', error);

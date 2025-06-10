@@ -105,7 +105,7 @@ export default function Index({ auth, payrolls, employees, filters, hasRecords }
             breadcrumbs={[
                 { title: 'Payroll', href: route('payroll.index') },
             ]}
-            requiredPermission="payrolls.view"
+            requiredPermission="payroll.view"
         >
             <Head title={t('payroll_management')} />
 

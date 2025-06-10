@@ -42,6 +42,9 @@ Route::prefix('hr/payroll')->name('payroll.')->middleware(['auth', 'verified'])-
     Route::post('/generate-monthly', [PayrollController::class, 'generateMonthlyPayroll'])
         ->middleware('permission:payroll.create')
         ->name('generate-monthly');
+    Route::post('/generate', [PayrollController::class, 'store'])
+        ->middleware('permission:payroll.create')
+        ->name('generate');
     Route::prefix('runs')->name('runs.')->group(function () {
         Route::get('/{payrollRun}', [PayrollController::class, 'showPayrollRun'])
             ->middleware('permission:payroll.view')
