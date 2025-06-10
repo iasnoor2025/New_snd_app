@@ -1,6 +1,6 @@
-import '../css/app.css';
 import './bootstrap';
 import './i18n';
+import '../css/app.css';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -33,7 +33,7 @@ const DirectionProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [i18n.language]);
 
-  return <>{children}</>;
+  return <>{children}</>; 
 };
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
