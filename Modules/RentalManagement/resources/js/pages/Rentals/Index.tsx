@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { Head, Link, router } from "@inertiajs/react";
-// import { PageProps } from '@/types'; // Uncomment and adjust if needed
+import { PageProps } from '@/types'; // Uncommented and adjusted
 import AdminLayout from '@/layouts/AdminLayout';
 import { format } from "date-fns";
-// import { usePermission } from '@/Modules/RentalManagement/Resources/js/hooks/usePermission'; // Not found, comment or replace if needed
+import { usePermission } from '@/hooks/usePermission'; // Uncommented and adjusted path
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { toast } from "sonner";
 import axios from "axios";
@@ -100,10 +100,10 @@ const breadcrumbs  = [
 export default function Index({ auth, rentals, filters = {} }: Props) {
   const { t } = useTranslation('rental');
 
-  // const { hasPermission } = usePermission();
-  const canCreateRentals = true; // Assuming canCreateRentals is always true
-  const canEditRentals = true; // Assuming canEditRentals is always true
-  const canDeleteRentals = true; // Assuming canDeleteRentals is always true
+  const { hasPermission } = usePermission();
+  const canCreateRentals = hasPermission('rentals.create');
+  const canEditRentals = hasPermission('rentals.edit');
+  const canDeleteRentals = hasPermission('rentals.delete');
 
   // Debug rental data structure
   useEffect(() => {
