@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
         // Run the PermissionSeeder first
         $this->call(PermissionSeeder::class);
 
-        // Run the AdminUserSeeder to create admin role and user
-        $this->call(AdminUserSeeder::class);
-
         // Run the RoleSeeder to create roles
         $this->call(RoleSeeder::class);
+
+        // Run the AdminUserSeeder to create admin role and user
+        $this->call(AdminUserSeeder::class);
 
         // Seed all modules
         $this->call(\Modules\Settings\Database\Seeders\SettingsDatabaseSeeder::class);

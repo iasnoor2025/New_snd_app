@@ -13,13 +13,13 @@ class DepartmentSeeder extends Seeder
             'name' => 'General',
         ], [
             'description' => 'General department',
-            'status' => 'active',
+            'active' => true,
         ]);
         Department::updateOrCreate([
             'name' => 'Operations',
         ], [
             'description' => 'Operations department',
-            'status' => 'active',
+            'active' => true,
         ]);
     }
 }
