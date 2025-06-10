@@ -4,11 +4,11 @@ namespace Modules\RentalManagement\Services;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\RentalManagement\App\DTOs\RentalDTO;
+use Modules\RentalManagement\DTOs\RentalDTO;
 use Modules\RentalManagement\Repositories\Interfaces\RentalRepositoryInterface;
-use Modules\RentalManagement\App\Events\RentalCreated;
-use Modules\RentalManagement\App\Events\RentalUpdated;
-use Modules\RentalManagement\App\Events\RentalDeleted;
+use Modules\RentalManagement\Events\RentalCreated;
+use Modules\RentalManagement\Events\RentalUpdated;
+use Modules\RentalManagement\Events\RentalDeleted;
 
 class RentalService
 {
@@ -64,6 +64,21 @@ class RentalService
 
     /**
      * Create new rental
+     *
+     * @param array $data
+     * @return Model;
+     */
+    public function create(array $data): Model
+    {
+        $rental = $this->repository->create($data);
+
+        event(new RentalCreated($rental));
+
+        return $rental;
+    }
+
+    /**
+     * Create new rental with DTO
      *
      * @param RentalDTO $dto
      * @return Model;

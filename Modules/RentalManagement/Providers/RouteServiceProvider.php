@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    protected string $modulenamespace = 'Modules\RentalManagement\app\Http\Controllers';
+    protected string $modulenamespace = 'Modules\RentalManagement\Http\Controllers';
 
     /**
      * Called before routes are registered.

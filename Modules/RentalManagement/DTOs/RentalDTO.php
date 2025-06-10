@@ -30,7 +30,7 @@ class RentalDTO
      */
     public static function fromArray(array $data): self
     {
-        return new self(;
+        return new self(
             customer_id: $data['customer_id'],
             start_date: $data['start_date'],
             end_date: $data['end_date'],
