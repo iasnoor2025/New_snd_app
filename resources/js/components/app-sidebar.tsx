@@ -58,7 +58,7 @@ const moduleMap: Record<string, { icon: any; route: string; permission: string; 
     TimesheetManagement: { icon: Clock, route: '/timesheets', permission: 'timesheets.view' },
     Payroll: { icon: DollarSign, route: '/payrolls', permission: 'payroll.view' },
     ProjectManagement: { icon: Briefcase, route: '/projects', permission: 'projects.view' },
-    RentalManagement: { icon: Calendar, route: 'rentals.index', permission: 'rentals.view' },
+    RentalManagement: { icon: Calendar, route: '/rentals', permission: 'rentals.view' },
     EquipmentManagement: { icon: Truck, route: '/equipment', permission: 'equipment.view' },
     Settings: { icon: Settings, route: '/settings', permission: 'settings.view' },
     Notifications: { icon: Bell, route: '/notifications', permission: 'notifications.view' },
