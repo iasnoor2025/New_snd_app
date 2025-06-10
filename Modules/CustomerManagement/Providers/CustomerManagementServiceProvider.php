@@ -4,6 +4,9 @@ namespace Modules\CustomerManagement\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
+use Modules\CustomerManagement\Domain\Models\Customer;
+use Modules\CustomerManagement\Policies\CustomerPolicy;
 
 class CustomerManagementServiceProvider extends ServiceProvider
 {
@@ -30,6 +33,9 @@ class CustomerManagementServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
         $this->loadRoutesFrom(module_path($this->moduleName, 'Routes/web.php'));
+
+        // Register policies
+        $this->registerPolicies();
 
         // Register observers
         $this->registerObservers();
@@ -98,6 +104,16 @@ class CustomerManagementServiceProvider extends ServiceProvider
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
+    }
+
+    /**
+     * Register model policies.
+     *
+     * @return void;
+     */
+    protected function registerPolicies()
+    {
+        Gate::policy(Customer::class, CustomerPolicy::class);
     }
 
     /**

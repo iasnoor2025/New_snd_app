@@ -38,6 +38,30 @@
 }
 ```
 
+#### Authentication & Authorization Implementation
+```php
+// Custom AuthController with comprehensive auth flow
+class AuthController extends Controller {
+    // Registration, login, logout, profile management
+    // Role assignment during registration
+    // API endpoints for user data and permissions
+}
+
+// UserPolicy with role-based authorization
+class UserPolicy {
+    // 6 role types: admin, manager, employee, HR, accountant, technician
+    // Module-specific permission methods
+    // Granular access control for all business functions
+}
+
+// AuthServiceProvider with authorization gates
+class AuthServiceProvider extends ServiceProvider {
+    // Module-specific gates (manage-roles, view-admin-dashboard, etc.)
+    // Gate::before hook for admin super-user access
+    // Policy registration for User model
+}
+```
+
 ### Frontend Technologies
 
 #### Core Framework
