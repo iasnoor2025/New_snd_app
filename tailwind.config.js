@@ -8,6 +8,21 @@ export default {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+      },
+    },
+  },
+  safelist: [
+    'bg-blue-100',
+    'text-red-500',
+    'rtl',
+    'dark',
+    { pattern: /^(bg|text)-(blue|red|green|yellow|purple|pink|indigo|gray)-(100|200|300|400|500|600|700|800|900)$/ },
+  ],
+  theme: {
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

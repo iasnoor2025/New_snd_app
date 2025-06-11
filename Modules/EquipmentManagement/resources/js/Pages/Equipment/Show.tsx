@@ -65,6 +65,24 @@ interface MaintenanceRecord {
   status: string;
 }
 
+export interface MaintenanceFilters {
+  search?: string;
+  equipment_id?: number;
+  maintenance_type?: string;
+  date_from?: string;
+  date_to?: string;
+  performed_by?: string;
+}
+
+export interface RentalFilters {
+  search?: string;
+  equipment_id?: number;
+  customer_name?: string;
+  start_date?: string;
+  end_date?: string;
+  status?: string;
+}
+
 interface RentalItem {
   id: number;
   equipment_id: number;
@@ -76,7 +94,7 @@ interface RentalItem {
   total_cost?: number;
 }
 
-interface ProjectEquipment {
+export interface ProjectEquipment {
   id: number;
   equipment_id: number;
   project_name?: string;
@@ -96,7 +114,10 @@ interface Props {
     data: RentalItem[];
     total: number;
   };
+  maintenanceFilters: MaintenanceFilters;
+  rentalFilters: RentalFilters;
   projectHistory: {
+    filters: RentalFilters;
     data: ProjectEquipment[];
     total: number;
   };
@@ -156,8 +177,15 @@ export default function Show({ equipment, rentalItems = { data: [], total: 0 }, 
         const safeItem = { ...item };
 
         // Ensure rental exists and has a customer
-        if (!safeItem.rental) {
-          safeItem.rental = {
+        if (!safeItem.customer_name) {
+          safeItem.customer_name = 'Unknown';
+          safeItem.start_date = '';
+          safeItem.end_date = '';
+          safeItem.status = 'pending' as const;
+          safeItem.total_cost = 0;
+          safeItem.created_at = '';
+          safeItem.updated_at = '';
+          safeItem.customer = {
             id: 0,
             customer_id: 0,
             rental_number: '',
@@ -187,9 +215,16 @@ export default function Show({ equipment, rentalItems = { data: [], total: 0 }, 
               updated_at: ''
             }
           };
-        } else if (!safeItem.rental.customer) {
+        } else if (!safeItem.customer_name) {
           // If rental exists but customer doesn't, add a fake customer
-          safeItem.rental.customer = {
+          safeItem.customer_name = 'Unknown';
+          safeItem.start_date = '';
+          safeItem.end_date = '';
+          safeItem.status = 'pending' as const;
+          safeItem.total_cost = 0;
+          safeItem.created_at = '';
+          safeItem.updated_at = '';
+          safeItem.customer = {
             id: 0,
             company_name: 'Unknown',
             contact_person: '',

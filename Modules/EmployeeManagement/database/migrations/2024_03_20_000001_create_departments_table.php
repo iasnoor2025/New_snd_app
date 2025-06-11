@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->nullable();
             $table->text('description')->nullable();
-            $table->string('status')->default('active');
+            $table->string('active')->default('active');
             $table->timestamps();
             $table->softDeletes();
         });

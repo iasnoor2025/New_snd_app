@@ -25,7 +25,7 @@ class AdminUserSeeder extends Seeder
         );
 
         // Assign admin role to the user
-        if (!$admin->hasRole('admin')) {
+        if (!$admin->hasRole('admin', 'web')) {
             $admin->assignRole('admin');
         }
 
@@ -39,7 +39,7 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        if (!$manager->hasRole('manager')) {
+        if (!$manager->hasRole('manager', 'web')) {
             $manager->assignRole('manager');
         }
 
@@ -53,7 +53,7 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        if (!$employee->hasRole('employee')) {
+        if (!$employee->hasRole('employee', 'web')) {
             $employee->assignRole('employee');
         }
 
@@ -67,7 +67,7 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        if (!$hr->hasRole('hr')) {
+        if (!$hr->hasRole('hr', 'web')) {
             $hr->assignRole('hr');
         }
 
@@ -81,7 +81,7 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        if (!$accountant->hasRole('accountant')) {
+        if (!$accountant->hasRole('accountant', 'web')) {
             $accountant->assignRole('accountant');
         }
     }

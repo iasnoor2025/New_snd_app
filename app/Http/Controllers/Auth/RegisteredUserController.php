@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
         // If this is the first user, make them an admin
         if (User::count() === 1) {
             // Create admin role if it doesn't exist
-            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
             $user->assignRole($adminRole);
         }
 

@@ -11,14 +11,15 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // Create roles
-        $admin = Role::firstOrCreate(['name' => 'admin']);
-        $manager = Role::firstOrCreate(['name' => 'manager']);
-        $employee = Role::firstOrCreate(['name' => 'employee']);
-        $customer = Role::firstOrCreate(['name' => 'customer']);
-        $technician = Role::firstOrCreate(['name' => 'technician']);
-        $accountant = Role::firstOrCreate(['name' => 'accountant']);
-        $hr = Role::firstOrCreate(['name' => 'hr']);
-        $supervisor = Role::firstOrCreate(['name' => 'supervisor']);
+        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
+        $employee = Role::firstOrCreate(['name' => 'employee', 'guard_name' => 'web']);
+        $customer = Role::firstOrCreate(['name' => 'customer', 'guard_name' => 'web']);
+        $technician = Role::firstOrCreate(['name' => 'technician', 'guard_name' => 'web']);
+        $accountant = Role::firstOrCreate(['name' => 'accountant', 'guard_name' => 'web']);
+        $hr = Role::firstOrCreate(['name' => 'hr', 'guard_name' => 'web']);
+        $supervisor = Role::firstOrCreate(['name' => 'supervisor', 'guard_name' => 'web']);
+        $user = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
 
         // Admin gets all permissions
         $admin->syncPermissions(Permission::all());
@@ -96,5 +97,11 @@ class RoleSeeder extends Seeder
             'tasks.view', 'tasks.create', 'tasks.edit',
         ];
         $supervisor->syncPermissions($supervisorPermissions);
+
+        // User permissions (default role for new registrations)
+        $userPermissions = [
+            'dashboard.view',
+        ];
+        $user->syncPermissions($userPermissions);
     }
 }

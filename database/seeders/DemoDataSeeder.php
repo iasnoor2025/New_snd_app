@@ -42,13 +42,13 @@ class DemoDataSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
         // Create roles
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $managerRole = Role::firstOrCreate(['name' => 'manager']);
-        $employeeRole = Role::firstOrCreate(['name' => 'employee']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $managerRole = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
+        $employeeRole = Role::firstOrCreate(['name' => 'employee', 'guard_name' => 'web']);
 
         // Assign permissions to roles
         $adminRole->givePermissionTo(Permission::all());
@@ -67,7 +67,7 @@ class DemoDataSeeder extends Seeder
     {
         // Admin user
         $admin = User::firstOrCreate(
-            ['email' => 'admin@sndrentals.com'],
+            ['email' => 'admin@ias.com'],
             [
                 'name' => 'System Administrator',
                 'password' => Hash::make('password'),

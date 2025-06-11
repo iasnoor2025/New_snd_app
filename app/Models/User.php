@@ -14,6 +14,7 @@ use Spatie\MediaLibrary\HasMedia;
 
 class User extends CoreUser implements HasMedia
 {
+    protected $guard_name = 'web';
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasAvatar;
 
