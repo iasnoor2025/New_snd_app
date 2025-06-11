@@ -22,6 +22,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -46,35 +47,44 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { CalendarIcon, ArrowLeft, Loader2, Plus } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 import { format } from 'date-fns';
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useEquipmentCategories } from '../../../../../../resources/js/hooks/useEquipmentCategories';
 import { useTranslation } from 'react-i18next';
+import { EquipmentFormData } from '../../types';
 
 interface Props extends PageProps {
   categories: { id: number; name: string }[];
   locations: { id: number; name: string }[];
+  employees?: { id: number; name: string }[];
 }
 
 // Create a schema for equipment validation
 const equipmentSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
+  description: z.string().optional(),
+  category_id: z.number().min(1, { message: 'Category is required' }),
+  manufacturer: z.string().optional(),
   model: z.string().min(1, { message: 'Model is required' }),
   serial_number: z.string().min(1, { message: 'Serial number is required' }),
-  door_number: z.string().min(1, { message: 'Door number is required' }),
-  description: z.string().optional(),
+  purchase_date: z.date().optional(),
+  purchase_price: z.coerce.number().min(0).optional(),
+  warranty_expiry_date: z.date().optional(),
   status: z.string().min(1, { message: 'Status is required' }),
-  daily_rate: z.coerce.number().min(0),
-  weekly_rate: z.coerce.number().min(0),
-  monthly_rate: z.coerce.number().min(0),
-  purchase_date: z.date(),
-  purchase_cost: z.coerce.number().min(0),
-  last_maintenance_date: z.date().nullable().optional(),
-  next_maintenance_date: z.date().nullable().optional(),
   location_id: z.number().min(1, { message: 'Location is required' }),
-  category_id: z.number().min(1, { message: 'Category is required' }),
+  assigned_to: z.number().optional(),
+  last_maintenance_date: z.date().optional(),
+  next_maintenance_date: z.date().optional(),
   notes: z.string().optional(),
+  unit: z.string().optional(),
+  default_unit_cost: z.coerce.number().min(0).optional(),
+  is_active: z.boolean().default(true),
+  daily_rate: z.coerce.number().min(0).optional(),
+  weekly_rate: z.coerce.number().min(0).optional(),
+  monthly_rate: z.coerce.number().min(0).optional(),
+  door_number: z.string().min(1, { message: 'Door number is required' }),
 });
 
 type EquipmentFormValues = z.infer<typeof equipmentSchema>;
@@ -96,18 +106,10 @@ interface CreateEquipmentFormProps {
   setIsCreatingCategory: (value: boolean) => void;
   locations: { id: number; name: string }[];
   setIsCreatingLocation: (value: boolean) => void;
+  employees?: { id: number; name: string }[];
 }
 
-const CreateEquipmentForm = ({
-  form,
-  serverErrors,
-  isSubmitting,
-  onSubmit,
-  availableCategories,
-  setIsCreatingCategory,
-  locations,
-  setIsCreatingLocation
-}: CreateEquipmentFormProps) => {
+const CreateEquipmentForm = ({ form, serverErrors, isSubmitting, onSubmit, availableCategories, setIsCreatingCategory, locations, setIsCreatingLocation, employees }: CreateEquipmentFormProps) => {
   // Remove the <Form> wrapper to avoid nested forms
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -143,6 +145,21 @@ const CreateEquipmentForm = ({
           render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Model</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Manufacturer Field */}
+        <FormField
+          control={form.control}
+          name="manufacturer"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Manufacturer</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -374,13 +391,13 @@ const CreateEquipmentForm = ({
           )}
         />
 
-        {/* Purchase Cost Field */}
+        {/* Purchase Price Field */}
         <FormField
           control={form.control}
-          name="purchase_cost"
+          name="purchase_price"
           render={({ field }: { field: any }) => (
             <FormItem>
-              <FormLabel>Purchase Cost (SAR)</FormLabel>
+              <FormLabel>Purchase Price (SAR)</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -429,6 +446,46 @@ const CreateEquipmentForm = ({
                     disabled={(date) =>
                       date > new Date() || date < new Date("1900-01-01")
                     }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Warranty Expiry Date Field */}
+        <FormField
+          control={form.control}
+          name="warranty_expiry_date"
+          render={({ field }: { field: any }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Warranty Expiry Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
                     initialFocus
                   />
                 </PopoverContent>
@@ -544,24 +601,112 @@ const CreateEquipmentForm = ({
         )}
       />
 
-      {/* Notes Field (Full Width) */}
-      <FormField
-        control={form.control}
-        name="notes"
-        render={({ field }: { field: any }) => (
-          <FormItem>
-            <FormLabel>Notes</FormLabel>
-            <FormControl>
-              <Textarea
-                {...field}
-                value={field.value || ''}
-                className="min-h-[100px]"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      {/* Unit and Default Unit Cost Fields */}
+        <FormField
+          control={form.control}
+          name="unit"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Unit</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  value={field.value || ''}
+                  placeholder="e.g., hours, days, pieces"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="default_unit_cost"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Default Unit Cost (SAR)</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Assigned To Field */}
+        <FormField
+          control={form.control}
+          name="assigned_to"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Assigned To</FormLabel>
+              <Select onValueChange={(value) => field.onChange(parseInt(value))} value={field.value?.toString()}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select employee" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="0">Unassigned</SelectItem>
+                  {(employees || []).map((employee) => (
+                    <SelectItem key={employee.id} value={employee.id.toString()}>
+                      {employee.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Is Active Field */}
+        <FormField
+          control={form.control}
+          name="is_active"
+          render={({ field }: { field: any }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">Active Equipment</FormLabel>
+                <FormDescription>
+                  Equipment is available for rental and operations
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {/* Notes Field (Full Width) */}
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  value={field.value || ''}
+                  className="min-h-[100px]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
       <div className="flex justify-end gap-2">
         <Button
@@ -580,7 +725,7 @@ const CreateEquipmentForm = ({
   );
 };
 
-export default function Create({ auth, categories = [], locations = [] }: Props) {
+export default function Create({ auth, categories = [], locations = [], employees = [] }: Props) {
   const { processing, errors: serverErrors } = useForm();
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategory, setNewCategory] = useState("");
@@ -596,6 +741,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
   const defaultValues: EquipmentFormValues = {
     name: '',
     model: '',
+    manufacturer: '',
     serial_number: '',
     door_number: '',
     description: '',
@@ -604,11 +750,16 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
     weekly_rate: 0,
     monthly_rate: 0,
     purchase_date: new Date(),
-    purchase_cost: 0,
+    purchase_price: 0,
+    warranty_expiry_date: null,
     last_maintenance_date: null,
     next_maintenance_date: null,
     location_id: availableLocations.length > 0 ? availableLocations[0].id : 0,
     category_id: availableCategories.length > 0 ? availableCategories[0].id : 0,
+    assigned_to: undefined,
+    unit: '',
+    default_unit_cost: 0,
+    is_active: true,
     notes: '',
   };
 
@@ -624,6 +775,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
     const formattedValues = {
       ...values,
       purchase_date: format(values.purchase_date, 'yyyy-MM-dd'),
+      warranty_expiry_date: values.warranty_expiry_date ? format(values.warranty_expiry_date, 'yyyy-MM-dd') : null,
       last_maintenance_date: values.last_maintenance_date ? format(values.last_maintenance_date, 'yyyy-MM-dd') : null,
       next_maintenance_date: values.next_maintenance_date ? format(values.next_maintenance_date, 'yyyy-MM-dd') : null,
     };
@@ -755,6 +907,7 @@ export default function Create({ auth, categories = [], locations = [] }: Props)
                   setIsCreatingCategory={setIsCreatingCategory}
                   locations={availableLocations}
                   setIsCreatingLocation={setIsCreatingLocation}
+                  employees={employees}
                 />
               </ErrorBoundary>
             </ScrollArea>

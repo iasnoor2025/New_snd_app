@@ -13,12 +13,12 @@ class Position extends Model
     protected $fillable = [
         'name',
         'description',
-        'is_active',
+        'active',
         'department_id',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'active' => 'boolean',
     ];
 
     /**

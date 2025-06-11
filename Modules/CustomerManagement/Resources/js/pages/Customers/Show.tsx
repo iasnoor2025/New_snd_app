@@ -42,12 +42,17 @@ const ShowCustomer: React.FC<Props> = ({ customer }) => {
             <div className="mb-4"><strong>{t('lbl_contact_person')}:</strong> {customer.contact_person}</div>
             <div className="mb-4"><strong>{t('email')}:</strong> {customer.email}</div>
             <div className="mb-4"><strong>{t('phone')}:</strong> {customer.phone}</div>
-            <div className="mb-4"><strong>{t('address')}:</strong> {customer.address}</div>
-            <div className="mb-4"><strong>{t('city')}:</strong> {customer.city}</div>
-            <div className="mb-4"><strong>{t('state')}:</strong> {customer.state}</div>
-            <div className="mb-4"><strong>{t('zip')}:</strong> {customer.zip}</div>
-            <div className="mb-4"><strong>{t('country')}:</strong> {customer.country}</div>
+            <div className="mb-4"><strong>Address:</strong> {customer.address}</div>
+            <div className="mb-4"><strong>City:</strong> {customer.city}</div>
+            <div className="mb-4"><strong>State:</strong> {customer.state}</div>
+            <div className="mb-4"><strong>Postal Code:</strong> {customer.postal_code}</div>
+            <div className="mb-4"><strong>Zip:</strong> {customer.zip}</div>
+            <div className="mb-4"><strong>Country:</strong> {customer.country}</div>
+            <div className="mb-4"><strong>Website:</strong> {customer.website && <a href={customer.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{customer.website}</a>}</div>
             <div className="mb-4"><strong>{t('tax_id')}:</strong> {customer.tax_id}</div>
+            <div className="mb-4"><strong>Tax Number:</strong> {customer.tax_number}</div>
+            <div className="mb-4"><strong>Credit Limit:</strong> {customer.credit_limit ? `$${customer.credit_limit.toLocaleString()}` : 'N/A'}</div>
+            <div className="mb-4"><strong>Is Active:</strong> {customer.is_active ? 'Yes' : 'No'}</div>
             <div className="mb-4"><strong>{t('payment_terms')}:</strong> {customer.payment_terms}</div>
             <div className="mb-4"><strong>{t('status')}:</strong> {getStatusBadge(customer.status)}</div>
             <div className="mb-4"><strong>{t('notes')}:</strong> {customer.notes}</div>

@@ -56,31 +56,38 @@ import { Separator } from '../../../../../../resources/js/components/ui/separato
 import { Badge } from '../../../../../../resources/js/components/ui/badge';
 import { useTranslation } from 'react-i18next';
 import { useEquipmentCategories } from '../../../../../../resources/js/hooks/useEquipmentCategories';
+import { Equipment, EquipmentFormData } from '../../types';
 
 interface Props extends PageProps {
-  equipment: any;
+  equipment: Equipment;
   categories: { id: number; name: string }[];
   locations: { id: number; name: string }[];
 }
 
 // Create a schema for equipment validation
 const equipmentSchema = z.object({
-  name: z.string().min(1, { message: 'Name is required' }),
+  name: z.string().min(1, { message: 'Equipment name is required' }),
+  description: z.string().optional(),
+  category_id: z.number().min(1, { message: 'Category is required' }),
+  manufacturer: z.string().optional(),
   model: z.string().min(1, { message: 'Model is required' }),
   serial_number: z.string().min(1, { message: 'Serial number is required' }),
-  door_number: z.string().min(1, { message: 'Door number is required' }),
-  description: z.string().optional(),
-  status: z.string().min(1, { message: 'Status is required' }),
-  daily_rate: z.coerce.number().min(0),
-  weekly_rate: z.coerce.number().min(0),
-  monthly_rate: z.coerce.number().min(0),
-  purchase_date: z.date(),
-  purchase_cost: z.coerce.number().min(0),
-  last_maintenance_date: z.date().nullable().optional(),
-  next_maintenance_date: z.date().nullable().optional(),
+  purchase_date: z.date().optional(),
+  purchase_price: z.coerce.number().min(0).optional(),
+  warranty_expiry_date: z.date().optional(),
+  status: z.enum(['available', 'rented', 'maintenance', 'out_of_service']),
   location_id: z.number().min(1, { message: 'Location is required' }),
-  category_id: z.number().min(1, { message: 'Category is required' }),
+  assigned_to: z.number().optional(),
+  last_maintenance_date: z.date().optional(),
+  next_maintenance_date: z.date().optional(),
   notes: z.string().optional(),
+  unit: z.string().min(1, { message: 'Unit is required' }),
+  default_unit_cost: z.coerce.number().min(0),
+  is_active: z.boolean(),
+  daily_rate: z.coerce.number().min(0),
+  weekly_rate: z.coerce.number().min(0).optional(),
+  monthly_rate: z.coerce.number().min(0).optional(),
+  door_number: z.string().min(1, { message: 'Door number is required' }),
 });
 
 type EquipmentFormValues = z.infer<typeof equipmentSchema>;
@@ -121,7 +128,8 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
   // Define default values for the form based on existing equipment
   const defaultValues: EquipmentFormValues = {
     name: equipment.name,
-    model: equipment.model,
+    model: equipment.model_number,
+    manufacturer: equipment.manufacturer || '',
     serial_number: equipment.serial_number,
     door_number: equipment.door_number || '',
     description: equipment.description || '',
@@ -130,12 +138,16 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
     weekly_rate: equipment.weekly_rate || 0,
     monthly_rate: equipment.monthly_rate || 0,
     purchase_date: parseDateOrNull(equipment.purchase_date || null) || new Date(),
-    purchase_cost: equipment.purchase_cost || 0,
+    purchase_price: equipment.purchase_price || 0,
+    warranty_expiry_date: parseDateOrNull(equipment.warranty_expiry_date),
     last_maintenance_date: parseDateOrNull(equipment.last_maintenance_date),
     next_maintenance_date: parseDateOrNull(equipment.next_maintenance_date),
     location_id: equipment.location_id || 0,
     category_id: equipment.category_id || (availableCategories.length > 0 ? availableCategories[0].id : 0),
     notes: equipment.notes || '',
+    unit: equipment.unit || '',
+    default_unit_cost: equipment.default_unit_cost || 0,
+    is_active: equipment.is_active !== undefined ? equipment.is_active : true,
   };
 
   // Initialize the form with React Hook Form
@@ -150,6 +162,7 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
     const formattedValues = {
       ...values,
       purchase_date: format(values.purchase_date, 'yyyy-MM-dd'),
+      warranty_expiry_date: values.warranty_expiry_date ? format(values.warranty_expiry_date, 'yyyy-MM-dd') : null,
       last_maintenance_date: values.last_maintenance_date ? format(values.last_maintenance_date, 'yyyy-MM-dd') : null,
       next_maintenance_date: values.next_maintenance_date ? format(values.next_maintenance_date, 'yyyy-MM-dd') : null,
     };
@@ -344,6 +357,23 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
 
                         <FormField
                           control={form.control}
+                          name="manufacturer"
+                          render={({ field }: { field: any }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <Building2 className="h-4 w-4 text-primary" />
+                                Manufacturer
+                              </FormLabel>
+                              <FormControl>
+                                <Input {...field} className="bg-background/50" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
                           name="serial_number"
                           render={({ field }: { field: any }) => (
                             <FormItem>
@@ -502,12 +532,12 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                       <div className="grid gap-4 md:grid-cols-2">
                         <FormField
                           control={form.control}
-                          name="purchase_cost"
+                          name="purchase_price"
                           render={({ field }: { field: any }) => (
                             <FormItem>
                               <FormLabel className="flex items-center gap-2">
                                 <DollarSign className="h-4 w-4 text-primary" />
-                                Purchase Cost
+                                Purchase Price
                               </FormLabel>
                               <FormControl>
                                 <Input
@@ -655,6 +685,48 @@ export default function Edit({ auth, equipment, categories = [], locations = [] 
                                     disabled={(date) =>
                                       date > new Date() || date < new Date("1900-01-01")
                                     }
+                                    initialFocus
+                                  />
+                                </PopoverContent>
+                              </Popover>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="warranty_expiry_date"
+                          render={({ field }: { field: any }) => (
+                            <FormItem>
+                              <FormLabel className="flex items-center gap-2">
+                                <CalendarIcon className="h-4 w-4 text-primary" />
+                                Warranty Expiry Date
+                              </FormLabel>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <FormControl>
+                                    <Button
+                                      variant="outline"
+                                      className={cn(
+                                        "w-full pl-3 text-left font-normal bg-background/50",
+                                        !field.value && "text-muted-foreground"
+                                      )}
+                                    >
+                                      {field.value ? (
+                                        format(field.value, "PPP")
+                                      ) : (
+                                        <span>Pick a date</span>
+                                      )}
+                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                  </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value || undefined}
+                                    onSelect={field.onChange}
                                     initialFocus
                                   />
                                 </PopoverContent>

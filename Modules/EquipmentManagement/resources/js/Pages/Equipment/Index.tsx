@@ -13,28 +13,7 @@ import CreateButton from '../../../../../../resources/js/components/shared/Creat
 import CrudButtons from '../../../../../../resources/js/components/shared/CrudButtons';
 import { formatCurrency } from '../../../../../../resources/js/utils/format';
 import { useTranslation } from 'react-i18next';
-
-interface Equipment {
-  id: number;
-  name: string;
-  model: string;
-  serial_number: string;
-  door_number?: string;
-  category?: string;
-  status: string;
-  daily_rate: number;
-  [key: string]: any;
-}
-
-interface PaginatedData<T> {
-  data: T[];
-  current_page: number;
-  per_page: number;
-  last_page: number;
-  total: number;
-  from: number;
-  to: number;
-}
+import { Equipment, PaginatedData } from '../../types';
 
 interface Props extends PageProps {
   equipment: PaginatedData<Equipment>;

@@ -105,6 +105,17 @@ class EquipmentController extends Controller
         // Get categories and locations with id and name
         $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
         $locations = Location::select('id', 'name')->get();
+        
+        // Get employees for assignment dropdown
+        $employees = \Modules\EmployeeManagement\Domain\Models\Employee::select('id', 'first_name', 'last_name')
+            ->whereNull('deleted_at')
+            ->get()
+            ->map(function ($employee) {
+                return [
+                    'id' => $employee->id,
+                    'name' => trim($employee->first_name . ' ' . $employee->last_name)
+                ];
+            });
 
         // Available statuses with proper formatting
         $statuses = [
@@ -117,6 +128,7 @@ class EquipmentController extends Controller
         return Inertia::render('Equipment/Create', [
             'categories' => $categories,
             'locations' => $locations,
+            'employees' => $employees,
             'statuses' => $statuses,
         ]);
     }

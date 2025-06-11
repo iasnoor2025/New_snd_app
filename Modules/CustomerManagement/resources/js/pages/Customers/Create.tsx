@@ -25,10 +25,15 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
     address: '',
     city: '',
     state: '',
+    postal_code: '',
     zip: '',
     country: '',
+    website: '',
     tax_id: '',
+    tax_number: '',
     payment_terms: '',
+    credit_limit: '',
+    is_active: true,
     status: 'active',
     notes: '',
     user_id: '',
@@ -93,6 +98,11 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                   {errors.state && <div className="text-red-500 text-xs">{errors.state}</div>}
                 </div>
                 <div>
+                  <label className="block mb-1">Postal Code</label>
+                  <Input value={data.postal_code} onChange={e => setData('postal_code', e.target.value)} />
+                  {errors.postal_code && <div className="text-red-500 text-xs">{errors.postal_code}</div>}
+                </div>
+                <div>
                   <label className="block mb-1">Zip</label>
                   <Input value={data.zip} onChange={e => setData('zip', e.target.value)} />
                   {errors.zip && <div className="text-red-500 text-xs">{errors.zip}</div>}
@@ -103,14 +113,29 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                   {errors.country && <div className="text-red-500 text-xs">{errors.country}</div>}
                 </div>
                 <div>
+                  <label className="block mb-1">Website</label>
+                  <Input type="url" value={data.website} onChange={e => setData('website', e.target.value)} />
+                  {errors.website && <div className="text-red-500 text-xs">{errors.website}</div>}
+                </div>
+                <div>
                   <label className="block mb-1">{t('lbl_tax_id')}</label>
                   <Input value={data.tax_id} onChange={e => setData('tax_id', e.target.value)} />
                   {errors.tax_id && <div className="text-red-500 text-xs">{errors.tax_id}</div>}
                 </div>
                 <div>
+                  <label className="block mb-1">Tax Number</label>
+                  <Input value={data.tax_number} onChange={e => setData('tax_number', e.target.value)} />
+                  {errors.tax_number && <div className="text-red-500 text-xs">{errors.tax_number}</div>}
+                </div>
+                <div>
                   <label className="block mb-1">{t('lbl_payment_terms')}</label>
                   <Input value={data.payment_terms} onChange={e => setData('payment_terms', e.target.value)} />
                   {errors.payment_terms && <div className="text-red-500 text-xs">{errors.payment_terms}</div>}
+                </div>
+                <div>
+                  <label className="block mb-1">Credit Limit</label>
+                  <Input type="number" step="0.01" value={data.credit_limit} onChange={e => setData('credit_limit', e.target.value)} />
+                  {errors.credit_limit && <div className="text-red-500 text-xs">{errors.credit_limit}</div>}
                 </div>
                 <div>
                   <label className="block mb-1">Status</label>
@@ -119,6 +144,17 @@ const CreateCustomer: React.FC<PageProps> = (props) => {
                     <option value="inactive">Inactive</option>
                   </select>
                   {errors.status && <div className="text-red-500 text-xs">{errors.status}</div>}
+                </div>
+                <div>
+                  <label className="flex items-center gap-2">
+                    <input 
+                      type="checkbox" 
+                      checked={data.is_active} 
+                      onChange={e => setData('is_active', e.target.checked)} 
+                    />
+                    Is Active
+                  </label>
+                  {errors.is_active && <div className="text-red-500 text-xs">{errors.is_active}</div>}
                 </div>
                 <div className="md:col-span-2">
                   <label className="block mb-1">Notes</label>

@@ -20,6 +20,7 @@ interface Props extends PageProps {
 }
 
 const EditCustomer: React.FC<Props> = ({ customer }) => {
+  const { t } = useTranslation('customer');
   const { data, setData, put, processing, errors } = useForm({
     name: customer.name || '',
     contact_person: customer.contact_person || '',
@@ -28,10 +29,15 @@ const EditCustomer: React.FC<Props> = ({ customer }) => {
     address: customer.address || '',
     city: customer.city || '',
     state: customer.state || '',
+    postal_code: customer.postal_code || '',
     zip: customer.zip || '',
     country: customer.country || '',
+    website: customer.website || '',
     tax_id: customer.tax_id || '',
+    tax_number: customer.tax_number || '',
     payment_terms: customer.payment_terms || '',
+    credit_limit: customer.credit_limit || '',
+    is_active: customer.is_active ?? true,
     status: customer.status || 'active',
     notes: customer.notes || '',
     user_id: customer.user_id || '',
@@ -96,6 +102,11 @@ const EditCustomer: React.FC<Props> = ({ customer }) => {
                   {errors.state && <div className="text-red-500 text-xs">{errors.state}</div>}
                 </div>
                 <div>
+                  <label className="block mb-1">Postal Code</label>
+                  <Input value={data.postal_code} onChange={e => setData('postal_code', e.target.value)} />
+                  {errors.postal_code && <div className="text-red-500 text-xs">{errors.postal_code}</div>}
+                </div>
+                <div>
                   <label className="block mb-1">Zip</label>
                   <Input value={data.zip} onChange={e => setData('zip', e.target.value)} />
                   {errors.zip && <div className="text-red-500 text-xs">{errors.zip}</div>}
@@ -106,14 +117,29 @@ const EditCustomer: React.FC<Props> = ({ customer }) => {
                   {errors.country && <div className="text-red-500 text-xs">{errors.country}</div>}
                 </div>
                 <div>
+                  <label className="block mb-1">Website</label>
+                  <Input type="url" value={data.website} onChange={e => setData('website', e.target.value)} />
+                  {errors.website && <div className="text-red-500 text-xs">{errors.website}</div>}
+                </div>
+                <div>
                   <label className="block mb-1">{t('lbl_tax_id')}</label>
                   <Input value={data.tax_id} onChange={e => setData('tax_id', e.target.value)} />
                   {errors.tax_id && <div className="text-red-500 text-xs">{errors.tax_id}</div>}
                 </div>
                 <div>
+                  <label className="block mb-1">Tax Number</label>
+                  <Input value={data.tax_number} onChange={e => setData('tax_number', e.target.value)} />
+                  {errors.tax_number && <div className="text-red-500 text-xs">{errors.tax_number}</div>}
+                </div>
+                <div>
                   <label className="block mb-1">{t('lbl_payment_terms')}</label>
                   <Input value={data.payment_terms} onChange={e => setData('payment_terms', e.target.value)} />
                   {errors.payment_terms && <div className="text-red-500 text-xs">{errors.payment_terms}</div>}
+                </div>
+                <div>
+                  <label className="block mb-1">Credit Limit</label>
+                  <Input type="number" step="0.01" value={data.credit_limit} onChange={e => setData('credit_limit', e.target.value)} />
+                  {errors.credit_limit && <div className="text-red-500 text-xs">{errors.credit_limit}</div>}
                 </div>
                 <div>
                   <label className="block mb-1">Status</label>
@@ -122,6 +148,17 @@ const EditCustomer: React.FC<Props> = ({ customer }) => {
                     <option value="inactive">Inactive</option>
                   </select>
                   {errors.status && <div className="text-red-500 text-xs">{errors.status}</div>}
+                </div>
+                <div>
+                  <label className="flex items-center gap-2">
+                    <input 
+                      type="checkbox" 
+                      checked={data.is_active} 
+                      onChange={e => setData('is_active', e.target.checked)} 
+                    />
+                    Is Active
+                  </label>
+                  {errors.is_active && <div className="text-red-500 text-xs">{errors.is_active}</div>}
                 </div>
                 <div className="md:col-span-2">
                   <label className="block mb-1">Notes</label>

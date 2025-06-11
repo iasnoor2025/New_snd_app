@@ -29,6 +29,9 @@ class StoreEquipmentRequest extends FormRequest
             'last_maintenance_date' => 'nullable|date',
             'next_maintenance_date' => 'nullable|date',
             'notes' => 'nullable|string',
+            'unit' => 'nullable|string|max:50',
+            'default_unit_cost' => 'nullable|numeric|min:0',
+            'is_active' => 'boolean',
         ];
     }
 

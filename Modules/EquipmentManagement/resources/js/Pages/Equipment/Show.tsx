@@ -49,35 +49,7 @@ import { toast } from 'sonner';
 import RiskManagement from './Risk/Management';
 import { useTranslation } from 'react-i18next';
 import { usePermission } from '../../../../../../resources/js/hooks/usePermission';
-
-interface Equipment {
-  id: number;
-  name: string;
-  model: string;
-  serial_number: string;
-  door_number: string;
-  status: string;
-  category: any;
-  unit: string;
-  location: any;
-  is_active: boolean;
-  description?: string;
-  notes?: string;
-  daily_rate?: number;
-  weekly_rate?: number;
-  monthly_rate?: number;
-  default_unit_cost?: number;
-  purchase_cost?: number;
-  purchase_date?: string;
-  lifetime_maintenance_cost?: number;
-  avg_operating_cost_per_hour?: number;
-  avg_operating_cost_per_mile?: number;
-  last_maintenance_date?: string;
-  next_maintenance_date?: string;
-  next_performance_review?: string;
-  efficiency_rating?: number;
-  current_operating_hours?: number;
-  current_mileage?: number;
+import { Equipment } from '../../types';
   current_cycle_count?: number;
   initial_operating_hours?: number;
   initial_mileage?: number;
@@ -568,8 +540,12 @@ export default function Show({ equipment, rentalItems = { data: [], total: 0 }, 
                     <p className="text-sm">{renderValue(equipment.name)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">{t('model')}</Label>
-                    <p className="text-sm">{renderValue(equipment.model)}</p>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('model_number')}</Label>
+                    <p className="text-sm">{renderValue(equipment.model_number)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">{t('manufacturer')}</Label>
+                    <p className="text-sm">{renderValue(equipment.manufacturer)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('serial_number')}</Label>
@@ -635,12 +611,16 @@ export default function Show({ equipment, rentalItems = { data: [], total: 0 }, 
                     <p className="text-sm">{formatCurrency(equipment.default_unit_cost || 0)}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-muted-foreground">{t('purchase_cost')}</Label>
-                    <p className="text-sm">{formatCurrency(equipment.purchase_cost || 0)}</p>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('purchase_price')}</Label>
+                <p className="text-sm">{formatCurrency(equipment.purchase_price || 0)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('purchase_date')}</Label>
                     <p className="text-sm">{renderValue(equipment.purchase_date)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-muted-foreground">{t('warranty_expiry_date')}</Label>
+                    <p className="text-sm">{renderValue(equipment.warranty_expiry_date)}</p>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-muted-foreground">{t('lifetime_maintenance_cost')}</Label>
