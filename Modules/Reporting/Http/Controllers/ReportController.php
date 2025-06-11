@@ -80,6 +80,7 @@ class ReportController extends Controller
             'charts' => [
                 'monthlyRevenue' => $monthlyRevenue
             ],
+            'filters' => $request->only(['date_from', 'date_to'])
         ]);
     }
 

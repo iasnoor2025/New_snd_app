@@ -44,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share('resolvedPaths', [
             'Employees' => base_path('Modules/EmployeeManagement/resources/js/pages/Employees'),
             'Customers' => base_path('Modules/CustomerManagement/resources/js/pages/Customers'),
+            'Rentals' => base_path('Modules/RentalManagement/resources/js/pages/Rentals'),
         ]);
     }
 }

@@ -4,13 +4,6 @@ export default {
     "./resources/**/*.{js,jsx,ts,tsx,blade.php}",
     "./Modules/**/*.{js,jsx,ts,tsx,blade.php}",
   ],
-  theme: {
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-      },
-    },
-  },
   safelist: [
     'bg-blue-100',
     'text-red-500',
@@ -66,4 +59,19 @@ export default {
   plugins: [
     require("tailwindcss-rtl"),
   ],
+  
+  // Add purge property
+  purge: {
+    content: [
+      './resources/**/*.{js,jsx,ts,tsx,blade.php}',
+      './Modules/**/*.{js,jsx,ts,tsx,blade.php}',
+    ],
+    safelist: [
+      'bg-blue-100',
+      'text-red-500',
+      'rtl',
+      'dark',
+      { pattern: /^(bg|text)-(blue|red|green|yellow|purple|pink|indigo|gray)-(100|200|300|400|500|600|700|800|900)$/ },
+    ],
+  },
 }

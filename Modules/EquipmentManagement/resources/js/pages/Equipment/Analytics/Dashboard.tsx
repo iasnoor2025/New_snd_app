@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Head } from '@inertiajs/react';
-import AdminLayout from '../../../../../../../resources/js/layouts/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../../../../../resources/js/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../../../resources/js/components/ui/tabs';
-import { Badge } from '../../../../../../../resources/js/components/ui/badge';
-import { Button } from '../../../../../../../resources/js/components/ui/button';
+import AdminLayout from '@/layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   LineChart,
   Line,
@@ -40,7 +40,7 @@ import {
   Filter,
   RefreshCw
 } from 'lucide-react';
-import { formatCurrency } from '../../../../../../../resources/js/utils/format';
+import { formatCurrency } from '@/utils/format';
 
 interface EquipmentAnalytics {
   totalEquipment: number;

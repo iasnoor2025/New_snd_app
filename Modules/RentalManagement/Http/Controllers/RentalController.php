@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Modules\RentalManagement\Domain\Models\Rental;
 use Modules\RentalManagement\Services\RentalService;
-use Modules\Core\Domain\Models\Location;
 
 class RentalController extends Controller
 {
@@ -24,16 +23,8 @@ class RentalController extends Controller
     public function index()
     {
         $rentals = $this->rentalService->getAllRentals();
-        // Ensure rentals is always an array with a data key
-        $rentalsArray = [
-            'data' => $rentals ? $rentals->toArray() : [],
-            'current_page' => 1,
-            'last_page' => 1,
-            'per_page' => count($rentals ?? []),
-            'total' => count($rentals ?? []),
-        ];
         return Inertia::render('Rentals/Index', [
-            'rentals' => $rentalsArray
+            'rentals' => $rentals
         ]);
     }
 
@@ -42,10 +33,7 @@ class RentalController extends Controller
      */
     public function create()
     {
-        $locations = Location::all();
-        return Inertia::render('Rentals/Create', [
-            'locations' => $locations
-        ]);
+        return Inertia::render('Rental/Create');
     }
 
     /**
@@ -72,9 +60,24 @@ class RentalController extends Controller
      */
     public function show($id)
     {
-        $rental = $this->rentalService->findById((int) $id);
+        $rental = $this->rentalService->findById((int)$id);
+
+        if (!$rental) {
+            return redirect()->route('rentals.index')->with('error', 'Rental not found.');
+        }
+
         return Inertia::render('Rentals/Show', [
-            'rental' => $rental
+            'rental' => $rental,
+            'equipment' => $rental->equipment,
+            'payments' => $rental->payments,
+            'timesheets' => $rental->timesheets,
+            'customer' => $rental->customer,
+            'user' => $rental->user,
+            'rental_status' => $rental->status,
+            'rental_status_label' => $rental->getStatusLabel(),
+            'rental_status_color' => $rental->getStatusColor(),
+            'rental_status_color_label' => $rental->getStatusColorLabel(),
+            'rental_status_class' => $rental->getStatusClass(),
         ]);
     }
 
@@ -83,11 +86,9 @@ class RentalController extends Controller
      */
     public function edit($id)
     {
-        $rental = $this->rentalService->findById((int) $id);
-        $locations = Location::all();
+        $rental = $this->rentalService->findById($id);
         return Inertia::render('Rentals/Edit', [
-            'rental' => $rental,
-            'locations' => $locations
+            'rental' => $rental
         ]);
     }
 

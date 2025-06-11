@@ -41,10 +41,6 @@ Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
         'permission:rentals.view',
     ]);
 
-    Route::get('rentals', [RentalController::class, 'index'])
-        ->name('rentals.index')
-        ->middleware('permission:rentals.view');
-
     // Extension routes
     // Route::resource('extensions', RentalExtensionController::class);
     Route::post('extensions/{extension}/approve', [RentalExtensionController::class, 'approve'])->name('extensions.approve');

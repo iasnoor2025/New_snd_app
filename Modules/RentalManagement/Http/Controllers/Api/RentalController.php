@@ -17,7 +17,7 @@ class RentalController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $query = Rental::with(['customer', 'items', 'equipment']);
+            $query = Rental::with(['customer', 'rentalItems', 'equipment']);
 
             // Apply filters if provided
             if ($request->has('status')) {
@@ -77,11 +77,11 @@ class RentalController extends Controller
             // Create rental items if provided
             if (isset($validated['items'])) {
                 foreach ($validated['items'] as $item) {
-                    $rental->items()->create($item);
+                    $rental->rentalItems()->create($item);
                 }
             }
 
-            $rental->load(['customer', 'items', 'equipment']);
+            $rental->load(['customer', 'rentalItems', 'equipment']);
 
             return response()->json([
                 'success' => true,
@@ -103,7 +103,7 @@ class RentalController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $rental = Rental::with(['customer', 'items', 'equipment', 'extensions', 'history'])
+            $rental = Rental::with(['customer', 'rentalItems', 'equipment', 'extensions', 'history'])
                 ->findOrFail($id);
 
             return response()->json([
@@ -139,7 +139,7 @@ class RentalController extends Controller
             ]);
 
             $rental->update($validated);
-            $rental->load(['customer', 'items', 'equipment']);
+            $rental->load(['customer', 'rentalItems', 'equipment']);
 
             return response()->json([
                 'success' => true,

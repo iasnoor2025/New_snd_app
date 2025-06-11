@@ -170,6 +170,21 @@ use LogsActivity, AutoLoadsRelations;
     }
 
     /**
+     * Get the equipment associated with the rental through rental items.
+     */
+    public function equipment(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            \Modules\EquipmentManagement\Domain\Models\Equipment::class,
+            RentalItem::class,
+            'rental_id', // Foreign key on RentalItem
+            'id', // Foreign key on Equipment
+            'id', // Local key on Rental
+            'equipment_id' // Local key on RentalItem
+        );
+    }
+
+    /**
      * Get the user who created the rental.
      */
     public function creator(): BelongsTo

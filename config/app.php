@@ -160,6 +160,7 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AvatarServiceProvider::class,
         App\Providers\PermissionMiddlewareServiceProvider::class,
+        Laravel\Horizon\HorizonServiceProvider::class,
         Modules\Payroll\Providers\PayrollServiceProvider::class,
         Modules\RentalManagement\Providers\RentalManagementServiceProvider::class,
     ],

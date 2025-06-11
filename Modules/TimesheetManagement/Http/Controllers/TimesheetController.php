@@ -80,7 +80,7 @@ class TimesheetController extends Controller
         $rentals = [];
 
         if ($includeRentals) {
-            $rentals = Rental::with('equipment')
+            $rentals = Rental::with('rentalItems.equipment')
                 ->when($selectedRentalId, function ($query) use ($selectedRentalId) {
                     // Ensure ID is numeric
                     if (!is_numeric($selectedRentalId)) {
@@ -91,10 +91,14 @@ class TimesheetController extends Controller
                 })
                 ->get()
                 ->map(function ($rental) {
+                    $equipmentName = null;
+                    if ($rental->rentalItems->isNotEmpty() && $rental->rentalItems->first()->equipment) {
+                        $equipmentName = $rental->rentalItems->first()->equipment->name;
+                    }
                     return [
                         'id' => $rental->id,
                         'equipment' => [
-                            'name' => $rental->equipment->name
+                            'name' => $equipmentName
                         ],
                         'rental_number' => $rental->rental_number,
                     ];
