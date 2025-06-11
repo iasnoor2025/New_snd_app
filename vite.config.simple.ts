@@ -1,4 +1,3 @@
-import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
@@ -12,7 +11,6 @@ export default defineConfig({
             refresh: true,
         }),
         react(),
-        tailwindcss(),
         // Add a custom plugin to serve modules_statuses.json
         {
             name: 'serve-modules-status',

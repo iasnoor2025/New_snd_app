@@ -38,7 +38,19 @@ export default [
         },
     },
     {
-        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
+        ignores: [
+            'bootstrap/**',
+            'public/**',
+            'storage/**',
+            'vendor/**',
+            'node_modules/**',
+            'Modules/**/node_modules/**',
+            'Modules/**/dist/**',
+            'Modules/**/build/**',
+            'vite.config.*.ts',
+            'vite-module-loader.js',
+            'tailwind.config.js',
+        ]
     },
     prettier, // Turn off all rules that might conflict with Prettier
 ];

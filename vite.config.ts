@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import moduleLoader, { collectModuleAssetsPaths } from './vite-module-loader.js';
 
+
 export default defineConfig(async () => {
     // Collect module paths
     const modulesPaths = [];

@@ -1,4 +1,3 @@
-import tailwindcss from '@tailwindcss/vite';
 import reactSwc from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
@@ -11,8 +10,7 @@ export default defineConfig({
             ssr: 'resources/js/ssr.tsx',
             refresh: true,
         }),
-        reactSwc(),
-        tailwindcss(),
+        reactSwc()
         // Add a custom plugin to serve modules_statuses.json
         {
             name: 'serve-modules-status',

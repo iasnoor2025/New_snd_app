@@ -19,8 +19,12 @@ const FormLabel = ({ children, className }: { children?: React.ReactNode; classN
 
 const FormControl = ({ children }: { children?: React.ReactNode }) => <>{children ?? <></>}</>;
 
+const FormDescription = ({ children }: { children?: React.ReactNode }) => (
+  <div className="text-muted-foreground text-xs">{children ?? <></>}</div>
+);
+
 const FormMessage = ({ children }: { children?: React.ReactNode }) => (
   <div className="text-destructive text-xs mt-1">{children ?? <></>}</div>
 );
 
-export { Form, FormField, FormItem, FormLabel, FormControl, FormMessage };
+export { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage };

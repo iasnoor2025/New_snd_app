@@ -12,7 +12,7 @@ interface AppLayoutProps {
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ title, breadcrumbs, children }) => (
-  <div className="min-h-screen bg-background text-foreground">
+  <div className="min-h-screen bg-red-500 text-foreground">
     <header className="p-4 border-b">
       {title && <h1 className="text-2xl font-bold">{title}</h1>}
       {breadcrumbs && (

@@ -50,14 +50,9 @@ import RiskManagement from './Risk/Management';
 import { useTranslation } from 'react-i18next';
 import { usePermission } from '../../../../../../resources/js/hooks/usePermission';
 import { Equipment } from '../../types';
-  current_cycle_count?: number;
-  initial_operating_hours?: number;
-  initial_mileage?: number;
-  initial_cycle_count?: number;
-  avg_daily_usage_hours?: number;
-  avg_daily_usage_miles?: number;
-  last_metric_update?: string;
-}
+import { DialogHeader, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@radix-ui/react-dialog';
+import { number, string } from 'zod';
 
 interface MaintenanceRecord {
   id: number;
@@ -141,7 +136,7 @@ export default function Show({ equipment, rentalItems = { data: [], total: 0 }, 
           console.error('Permission denied: equipment.view permission required');
           return;
         }
-        
+
         // Using window.route helper for consistent URL generation
         const response = await axios.get(window.route('equipment.media-library', { equipment: equipment.id }));
         setMediaItems(response.data.data || []);
