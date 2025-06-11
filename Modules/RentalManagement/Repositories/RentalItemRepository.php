@@ -28,7 +28,7 @@ class RentalItemRepository extends BaseRepository
      */
     public function getWithRelations(int $rentalId)
     {
-        return $this->model;
+        return $this->model
             ->with(['equipment', 'operator'])
             ->where('rental_id', $rentalId)
             ->get();

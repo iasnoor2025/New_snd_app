@@ -14,7 +14,7 @@ use App\Actions\Rental\StartMobilizationAction;
 use App\Actions\Rental\CompleteMobilizationAction;
 use App\Actions\Rental\CreateInvoiceAction;
 use App\Actions\Rental\RequestExtensionAction;
-use App\Actions\Rental\RentalStatusUpdateAction;
+use Modules\RentalManagement\Actions\RentalStatusUpdateAction;
 use App\Actions\Rental\CheckOverdueStatusAction;
 use App\Http\Requests\Rental\RequestExtensionRequest;
 

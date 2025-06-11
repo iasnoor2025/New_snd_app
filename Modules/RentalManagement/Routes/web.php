@@ -37,7 +37,7 @@ Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
         ->name('api.customers');
 
     // Rental routes
-    Route::resource('rentals', RentalController::class)->except(['index'])->middleware([
+    Route::resource('rentals', RentalController::class)->middleware([
         'permission:rentals.view',
     ]);
 
@@ -196,7 +196,7 @@ Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
         ->middleware('permission:rentals.view');
 
     // Workflow action routes - using RentalWorkflowController
-    /*
+
     Route::post('rentals/{rental}/generate-quotation', [RentalWorkflowController::class, 'generateQuotation']);
     Route::get('rentals/{rental}/direct-generate-quotation', [RentalWorkflowController::class, 'directGenerateQuotation']);
     Route::post('rentals/{rental}/approve-quotation', [RentalWorkflowController::class, 'approveQuotation']);
@@ -209,7 +209,8 @@ Route::name('rentals.')->middleware(['web', 'auth'])->group(function () {
     Route::post('rentals/{rental}/mark-closed', [RentalWorkflowController::class, 'markClosed']);
     Route::post('rentals/{rental}/check-overdue', [RentalWorkflowController::class, 'checkOverdue']);
     Route::post('rentals/{rental}/request-extension', [RentalWorkflowController::class, 'requestExtension']);
-    */
+    Route::post('rentals/{rental}/approve-extension', [RentalWorkflowController::class, 'approveExtension']);
+    Route::post('rentals/{rental}/reject-extension', [RentalWorkflowController::class, 'rejectExtension']);
 
 });
 

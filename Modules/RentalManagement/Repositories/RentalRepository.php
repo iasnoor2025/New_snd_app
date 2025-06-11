@@ -4,21 +4,14 @@ namespace Modules\RentalManagement\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\RentalManagement\Domain\Models\Rental;
 use Modules\RentalManagement\Repositories\Interfaces\RentalRepositoryInterface;
 
 class RentalRepository implements RentalRepositoryInterface
 {
-    /**
-     * @var Model
-     */
-    protected Model $model;
+    protected Rental $model;
 
-    /**
-     * RentalRepository constructor.
-     *
-     * @param Model $model
-     */
-    public function __construct(Model $model)
+    public function __construct(Rental $model)
     {
         $this->model = $model;
     }
@@ -58,18 +51,18 @@ class RentalRepository implements RentalRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(array $data): Model
+    public function create(array $payload): Model
     {
-        return $this->model->create($data);
+        return $this->model->create($payload);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function update(int $id, array $data): Model
+    public function update(int $id, array $payload): Model
     {
-        $model = $this->findOrFail($id);
-        $model->update($data);
+        $model = $this->model->findOrFail($id);
+        $model->update($payload);
         return $model;
     }
 

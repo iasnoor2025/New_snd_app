@@ -5,7 +5,7 @@ namespace Modules\RentalManagement\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Modules\RentalManagement\Domain\Rental;
+use Modules\RentalManagement\Domain\Models\Rental;
 use Illuminate\Http\Response;
 use Exception;
 

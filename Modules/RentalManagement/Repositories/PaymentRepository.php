@@ -5,7 +5,9 @@ namespace Modules\RentalManagement\Repositories;
 use Modules\Core\Repositories\BaseRepository;
 use Modules\RentalManagement\Domain\Models\Payment;
 
-class PaymentRepository extends BaseRepository
+use Modules\RentalManagement\Repositories\Interfaces\PaymentRepositoryInterface;
+
+class PaymentRepository extends BaseRepository implements PaymentRepositoryInterface
 {
     /**
      * Create a new repository instance.

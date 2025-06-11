@@ -161,6 +161,7 @@ return [
         App\Providers\AvatarServiceProvider::class,
         App\Providers\PermissionMiddlewareServiceProvider::class,
         Modules\Payroll\Providers\PayrollServiceProvider::class,
+        Modules\RentalManagement\Providers\RentalManagementServiceProvider::class,
     ],
 
 ];

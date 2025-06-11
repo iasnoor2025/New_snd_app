@@ -43,7 +43,16 @@ class RentalManagementServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Temporarily comment out service provider registrations due to naming conflicts
+        $this->app->bind(\Modules\RentalManagement\Repositories\Interfaces\PaymentRepositoryInterface::class,
+            \Modules\RentalManagement\Repositories\PaymentRepository::class
+        );
+
+        $this->app->bind(\Modules\RentalManagement\Repositories\Interfaces\RentalRepositoryInterface::class,
+            function ($app) {
+                return new \Modules\RentalManagement\Repositories\RentalRepository(new \Modules\RentalManagement\Domain\Models\Rental());
+            }
+        );
+
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
     }
