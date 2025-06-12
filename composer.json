@@ -11,10 +11,10 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
-        "inertiajs/inertia-laravel": "^2.0",
+        "inertiajs/inertia-laravel": "*",
         "laravel/framework": "^12.0",
-        "laravel/sanctum": "^4.1",
         "laravel/horizon": "^5.20",
+        "laravel/sanctum": "*",
         "laravel/telescope": "^5.9",
         "laravel/tinker": "^2.10.1",
         "laravolt/avatar": "^6.2",
@@ -22,10 +22,10 @@
         "minishlink/web-push": "^9.0",
         "nwidart/laravel-modules": "^12.0",
         "spatie/laravel-activitylog": "^4.10",
-        "spatie/laravel-medialibrary": "^11.13",
-        "spatie/laravel-permission": "^6.18",
+        "spatie/laravel-medialibrary": "*",
+        "spatie/laravel-permission": "*",
         "spatie/laravel-translatable": "^6.11",
-        "tightenco/ziggy": "^2.4"
+        "tightenco/ziggy": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

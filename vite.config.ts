@@ -1,102 +1,29 @@
-import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
-import { resolve } from 'node:path';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import moduleLoader, { collectModuleAssetsPaths } from './vite-module-loader.js';
+import path from 'path';
 
-
-export default defineConfig(async () => {
-    // Collect module paths
-    const modulesPaths = [];
-    await collectModuleAssetsPaths(modulesPaths, 'Modules');
-
-    return {
+export default defineConfig({
+    css: {
+        postcss: './postcss.config.js',
+    },
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.tsx', ...modulesPaths],
-            ssr: 'resources/js/ssr.tsx',
+            input: ['resources/js/app.tsx'],
             refresh: true,
+
         }),
         react(),
-        moduleLoader(),
-        // Add a custom plugin to serve modules_statuses.json
-        {
-            name: 'serve-modules-status',
-            configureServer(server) {
-                server.middlewares.use((req, res, next) => {
-                    // Handle direct requests to modules_statuses.json
-                    if (req.url === '/modules_statuses.json') {
-                        res.setHeader('Content-Type', 'application/json');
-                        res.end(JSON.stringify({
-                            "EmployeeManagement": true,
-                            "ProjectManagement": true,
-                            "TimesheetManagement": true,
-                            "Settings": true,
-                            "Reporting": true,
-                            "RentalManagement": true,
-                            "Payroll": true,
-                            "Notifications": true,
-                            "MobileBridge": true,
-                            "Localization": true,
-                            "LeaveManagement": true,
-                            "EquipmentManagement": true,
-                            "CustomerManagement": true,
-                            "Core": true,
-                            "AuditCompliance": true,
-                            "API": true
-                        }));
-                        return;
-                    }
-                    next();
-                });
-            }
-        }
     ],
-    esbuild: {
-        jsx: 'automatic',
-    },
     resolve: {
         alias: {
-            'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
-            '@': resolve(__dirname, 'resources/js'),
-            'Modules': resolve(__dirname, 'Modules'),
+            '~': path.resolve(__dirname, './'),
+            'Modules': path.resolve(__dirname, './Modules'),
         },
     },
-    optimizeDeps: {
-        include: ['zod', '@hookform/resolvers/zod']
-    },
-    build: {
-        commonjsOptions: {
-            include: [/node_modules/],
-            transformMixedEsModules: true
-        },
-        // Ensure CSS is properly extracted and processed
-        cssCodeSplit: true,
-        cssMinify: true,
-        rollupOptions: {
-            output: {
-                assetFileNames: (assetInfo) => {
-                    let extType = assetInfo.name.split('.').at(1);
-                    if (/css/i.test(extType)) {
-                        return `assets/css/[name]-[hash][extname]`;
-                    }
-                    return `assets/[name]-[hash][extname]`;
-                }
-            }
-        }
-    },
-    ssr: {
-        noExternal: ['zod', '@hookform/resolvers/zod']
-    },
-
     server: {
-        host: 'localhost',
+        host: '127.0.0.1',
         port: 5173,
-        strictPort: false,
-        hmr: {
-            host: 'localhost',
-            protocol: 'ws'
-        },
-    }
-    };
+    },
 });
+
