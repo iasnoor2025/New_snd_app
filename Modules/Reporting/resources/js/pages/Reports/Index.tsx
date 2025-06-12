@@ -492,93 +492,68 @@ const ReportsIndex: React.FC<ReportsIndexProps> = ({ stats, recentActivity, char
   );
 };
 
-export default ReportsIndex as React.FC<{ recentActivity: any }>;   
-
-const ReportsIndex = ({ recentActivity }: { recentActivity: any }) => {
+// Define the component type
+const RecentActivityTables: React.FC<{ recentActivity: any }> = ({ recentActivity }) => {
   return (
-    <><>
-          <TableBody>
-              {recentActivity.rentals.data.length > 0 ? (
-                  <>
-                      {recentActivity.rentals.data.map((rental: { id: React.Key | null | undefined; client_name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; equipment_name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; start_date: string | number | Date; end_date: string | number | Date; total_price: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; created_at: string | number | Date; }) => (
-                          <TableRow key={rental.id}>
-                              <TableCell>{rental.client_name}</TableCell>
-                              <TableCell>{rental.equipment_name}</TableCell>
-                              <TableCell>{rental.start_date && !isNaN(new Date(rental.start_date).getTime()) ? new Date(rental.start_date).toLocaleDateString() : '-'}</TableCell>
-                              <TableCell>{rental.end_date && !isNaN(new Date(rental.end_date).getTime()) ? new Date(rental.end_date).toLocaleDateString() : '-'}</TableCell>
-                              <TableCell>{rental.total_price}</TableCell>
-                              <TableCell>{rental.created_at && !isNaN(new Date(rental.created_at).getTime()) ? new Date(rental.created_at).toLocaleDateString() : '-'}</TableCell>
-                          </TableRow>
-                      ))}
-                  </>
-              ) : (
-                  <TableRow>
-                      <TableCell colSpan={6} className="text-center">No recent rentals.</TableCell>
-                  </TableRow>
-              )}
-          </TableBody>
+    <>
+      <TableBody>
+        {recentActivity.rentals.data.length > 0 ? (
+          <>
+            {recentActivity.rentals.data.map((rental: any) => (
+              <TableRow key={rental.id}>
+                <TableCell>{rental.client_name}</TableCell>
+                <TableCell>{rental.equipment_name}</TableCell>
+                <TableCell>{rental.start_date && !isNaN(new Date(rental.start_date).getTime()) ? new Date(rental.start_date).toLocaleDateString() : '-'}</TableCell>
+                <TableCell>{rental.end_date && !isNaN(new Date(rental.end_date).getTime()) ? new Date(rental.end_date).toLocaleDateString() : '-'}</TableCell>
+                <TableCell>{rental.total_price}</TableCell>
+                <TableCell>{rental.created_at && !isNaN(new Date(rental.created_at).getTime()) ? new Date(rental.created_at).toLocaleDateString() : '-'}</TableCell>
+              </TableRow>
+            ))}
+          </>
+        ) : (
+          <TableRow>
+            <TableCell colSpan={6} className="text-center">No recent rentals.</TableCell>
+          </TableRow>
+        )}
+      </TableBody>
 
-          <TableBody>
-              {recentActivity.invoices.data.length > 0 ? (
-                  recentActivity.invoices.data.map((invoice: { id: React.Key | null | undefined; client_name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; invoice_number: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; amount: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; status: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; created_at: string | number | Date; }) => (
-                      <TableRow key={invoice.id}>
-                          <TableCell>{invoice.client_name}</TableCell>
-                          <TableCell>{invoice.invoice_number}</TableCell>
-                          <TableCell>{invoice.amount}</TableCell>
-                          <TableCell>{invoice.status}</TableCell>
-                          <TableCell>{invoice.created_at && !isNaN(new Date(invoice.created_at).getTime()) ? new Date(invoice.created_at).toLocaleDateString() : '-'}</TableCell>
-                      </TableRow>
-                  ))
-              ) : (
-                  <TableRow>
-                      <TableCell colSpan={4} className="text-center">No recent invoices.</TableCell>
-                  </TableRow>
-              )}
-          </TableBody>
+      <TableBody>
+        {recentActivity.invoices.data.length > 0 ? (
+          recentActivity.invoices.data.map((invoice: any) => (
+            <TableRow key={invoice.id}>
+              <TableCell>{invoice.client_name}</TableCell>
+              <TableCell>{invoice.invoice_number}</TableCell>
+              <TableCell>{invoice.amount}</TableCell>
+              <TableCell>{invoice.status}</TableCell>
+              <TableCell>{invoice.created_at && !isNaN(new Date(invoice.created_at).getTime()) ? new Date(invoice.created_at).toLocaleDateString() : '-'}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={4} className="text-center">No recent invoices.</TableCell>
+          </TableRow>
+        )}
+      </TableBody>
 
-          <TableBody>
-              {recentActivity.payments.data.length > 0 ? (
-                  recentActivity.payments.data.map((payment: { id: React.Key | null | undefined; client_name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; amount: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; method: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; created_at: string | number | Date; }) => (
-                      <TableRow key={payment.id}>
-                          <TableCell>{payment.client_name}</TableCell>
-                          <TableCell>{payment.amount}</TableCell>
-                          <TableCell>{payment.method}</TableCell>
-                          <TableCell>{payment.created_at && !isNaN(new Date(payment.created_at).getTime()) ? new Date(payment.created_at).toLocaleDateString() : '-'}</TableCell>
-                      </TableRow>
-                  ))
-              ) : (
-                  <TableRow>
-                      <TableCell colSpan={4} className="text-center">No recent payments.</TableCell>
-                  </TableRow>
-              )}
-          </TableBody>
-      </><TableBody>
-              {recentActivity.rentals.data.length > 0 ? (
-                  <>
-                      {recentActivity.rentals.data.map((rental: { id: React.Key | null | undefined; client_name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; equipment_name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; start_date: string | number | Date; end_date: string | number | Date; total_price: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; created_at: string | number | Date; }) => (
-                          <TableRow key={rental.id}>
-                              <TableCell>{rental.client_name}</TableCell>
-                              <TableCell>{rental.equipment_name}</TableCell>
-                              <TableCell>{rental.start_date && !isNaN(new Date(rental.start_date).getTime()) ? new Date(rental.start_date).toLocaleDateString() : '-'}</TableCell>
-                              <TableCell>{rental.end_date && !isNaN(new Date(rental.end_date).getTime()) ? new Date(rental.end_date).toLocaleDateString() : '-'}</TableCell>
-                              <TableCell>{rental.total_price}</TableCell>
-                              <TableCell>{rental.created_at && !isNaN(new Date(rental.created_at).getTime()) ? new Date(rental.created_at).toLocaleDateString() : '-'}</TableCell>
-                          </TableRow>
-                      ))}
-                      ) : (
-                      <TableRow>
-                          <TableCell colSpan={6} className="text-center">No recent rentals.</TableCell>
-                      </TableRow>
-                      )}
-                  </>
-              ) : (
-                  <TableRow>
-                      <TableCell colSpan={6} className="text-center">No recent rentals.</TableCell>
-                  </TableRow>
-              )}
-          </TableBody>
-      </>
+      <TableBody>
+        {recentActivity.payments.data.length > 0 ? (
+          recentActivity.payments.data.map((payment: any) => (
+            <TableRow key={payment.id}>
+              <TableCell>{payment.client_name}</TableCell>
+              <TableCell>{payment.amount}</TableCell>
+              <TableCell>{payment.method}</TableCell>
+              <TableCell>{payment.created_at && !isNaN(new Date(payment.created_at).getTime()) ? new Date(payment.created_at).toLocaleDateString() : '-'}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={4} className="text-center">No recent payments.</TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </>
   );
 };
 
-export default ReportsIndex as React.FC<{ recentActivity: any }>;
+// Export the component
+export default ReportsIndex;

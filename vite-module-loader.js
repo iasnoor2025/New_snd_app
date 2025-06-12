@@ -15,19 +15,28 @@ async function collectModuleAssetsPaths(paths, modulesPath) {
     // Read module directories
     const moduleDirectories = await fs.readdir(modulesPath);
 
+    // Track processed paths to avoid duplicates
+    const processedPaths = new Set();
+
     for (const moduleDir of moduleDirectories) {
       if (moduleDir === '.DS_Store') continue;
       if (moduleStatuses[moduleDir] !== true) continue;
 
-      // Look for both 'pages' and 'Pages' directories
-      for (const pagesDirName of ['pages', 'Pages']) {
-        const pagesDir = path.join(modulesPath, moduleDir, 'resources', 'js', pagesDirName);
-        try {
-          const files = await getAllFilesRecursive(pagesDir, ['.tsx', '.jsx']);
-          paths.push(...files);
-        } catch (e) {
-          // Directory may not exist, skip
+      // Only look for 'pages' directory (lowercase) to avoid duplicates
+      const pagesDir = path.join(modulesPath, moduleDir, 'resources', 'js', 'pages');
+      try {
+        const files = await getAllFilesRecursive(pagesDir, ['.tsx', '.jsx']);
+        
+        // Only add files that haven't been processed yet
+        for (const file of files) {
+          const normalizedPath = file.toLowerCase();
+          if (!processedPaths.has(normalizedPath)) {
+            processedPaths.add(normalizedPath);
+            paths.push(file);
+          }
         }
+      } catch (e) {
+        // Directory may not exist, skip
       }
 
       // Also support module-specific vite.config.js (optional)
@@ -36,7 +45,14 @@ async function collectModuleAssetsPaths(paths, modulesPath) {
         await fs.access(viteConfigPath);
         const moduleConfig = await import(pathToFileURL(viteConfigPath).href);
         if (moduleConfig.paths && Array.isArray(moduleConfig.paths)) {
-          paths.push(...moduleConfig.paths);
+          // Check for duplicates in module config paths too
+          for (const configPath of moduleConfig.paths) {
+            const normalizedConfigPath = configPath.toLowerCase();
+            if (!processedPaths.has(normalizedConfigPath)) {
+              processedPaths.add(normalizedConfigPath);
+              paths.push(configPath);
+            }
+          }
         }
       } catch (e) {
         // No vite.config.js, skip

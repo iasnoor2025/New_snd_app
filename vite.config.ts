@@ -69,6 +69,20 @@ export default defineConfig(async () => {
         commonjsOptions: {
             include: [/node_modules/],
             transformMixedEsModules: true
+        },
+        // Ensure CSS is properly extracted and processed
+        cssCodeSplit: true,
+        cssMinify: true,
+        rollupOptions: {
+            output: {
+                assetFileNames: (assetInfo) => {
+                    let extType = assetInfo.name.split('.').at(1);
+                    if (/css/i.test(extType)) {
+                        return `assets/css/[name]-[hash][extname]`;
+                    }
+                    return `assets/[name]-[hash][extname]`;
+                }
+            }
         }
     },
     ssr: {
