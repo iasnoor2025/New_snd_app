@@ -25,5 +25,11 @@
   "confirm_password": "تأكيد كلمة المرور",
   "save_password": "حفظ كلمة المرور",
   "appearance_settings": "إعدادات المظهر",
-  "appearance_description": "تحديث إعدادات مظهر حسابك"
+  "appearance_description": "تحديث إعدادات مظهر حسابك",
+  "warning": "تحذير",
+  "delete_warning": "يرجى التقدم بحذر، لا يمكن التراجع عن هذا الإجراء.",
+  "confirm_delete_account": "هل أنت متأكد أنك تريد حذف حسابك؟",
+  "delete_account_confirmation": "بمجرد حذف حسابك، سيتم حذف جميع موارده وبياناته بشكل دائم. يرجى إدخال كلمة المرور الخاصة بك لتأكيد رغبتك في حذف حسابك بشكل دائم.",
+  "password": "كلمة المرور",
+  "cancel": "إلغاء"
 }

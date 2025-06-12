@@ -117,22 +117,22 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             </div>
                         </div>
 
-                        {mustVerifyEmail && auth.user.email_verified_at === null && (
+                        {mustVerifyEmail && data.email !== auth.user.email && (
                             <div>
-                                <p className="text-muted-foreground -mt-4 text-sm">
-                                    {t('email_unverified')}{' '}
+                                <p className="text-sm mt-2 text-muted-foreground">
+                                    {t('email_unverified')}
                                     <Link
                                         href={route('verification.send')}
                                         method="post"
                                         as="button"
-                                        className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                        className="underline text-sm text-primary hover:text-primary/80 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     >
                                         {t('resend_verification_email')}
                                     </Link>
                                 </p>
 
                                 {status === 'verification-link-sent' && (
-                                    <div className="mt-2 text-sm font-medium text-green-600">
+                                    <div className="mt-2 font-medium text-sm text-green-600">
                                         {t('verification_link_sent')}
                                     </div>
                                 )}
@@ -149,13 +149,15 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 leave="transition ease-in-out"
                                 leaveTo="opacity-0"
                             >
-                                <p className="text-sm text-neutral-600">{t('saved')}</p>
+                                <p className="text-sm text-muted-foreground">{t('saved')}</p>
                             </Transition>
                         </div>
                     </form>
-                </div>
 
-                <DeleteUser />
+                    <div className="mt-10 pt-10 border-t">
+                        <DeleteUser />
+                    </div>
+                </div>
             </SettingsLayout>
         </AppLayout>
     );

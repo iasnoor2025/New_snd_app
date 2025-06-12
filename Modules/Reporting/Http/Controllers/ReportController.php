@@ -52,8 +52,9 @@ class ReportController extends Controller
 
         // Get revenue data for chart
         $monthlyRevenue = Payment::selectRaw('EXTRACT(MONTH FROM payment_date) as month, EXTRACT(YEAR FROM payment_date) as year, SUM(amount) as total')
+            ->whereNotNull('payment_date')
             ->whereRaw('EXTRACT(YEAR FROM payment_date) = ?', [date('Y')])
-            ->groupBy('year', 'month')
+            ->groupByRaw('EXTRACT(YEAR FROM payment_date), EXTRACT(MONTH FROM payment_date)')
             ->orderBy('year')
             ->orderBy('month')
             ->get()
