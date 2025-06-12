@@ -17,8 +17,7 @@ use Modules\RentalManagement\Http\Controllers\RentalAnalyticsController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     // Rental routes (fine-grained permissions)
-    Route::get('rentals', [RentalController::class, 'index'])
-        ->middleware('permission:rentals.view');
+
     Route::post('rentals', [RentalController::class, 'store'])
         ->middleware('permission:rentals.create');
     Route::get('rentals/{rental}', [RentalController::class, 'show'])

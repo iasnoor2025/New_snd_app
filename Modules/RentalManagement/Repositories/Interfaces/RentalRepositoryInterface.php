@@ -23,6 +23,15 @@ interface RentalRepositoryInterface
     public function paginate(int $perPage = 15): LengthAwarePaginator;
 
     /**
+     * Get paginated rentals with filters
+     *
+     * @param int $perPage
+     * @param array $filters
+     * @return LengthAwarePaginator;
+     */
+    public function paginateWithFilters(int $perPage = 15, array $filters = []): LengthAwarePaginator;
+
+    /**
      * Find rental by ID
      *
      * @param int $id

@@ -20,10 +20,14 @@ class RentalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $rentals = $this->rentalService->getAllRentals();
+        $filters = $request->only(['search', 'status', 'start_date', 'end_date', 'page', 'per_page']);
+        $perPage = $filters['per_page'] ?? 10;
+        $rentals = $this->rentalService->getPaginatedRentals($perPage, $filters);
+
         return Inertia::render('Rentals/Index', [
+            'filters' => $filters,
             'rentals' => $rentals
         ]);
     }

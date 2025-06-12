@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified'])->prefix('timesheets')->group(function ()
 // Direct routes for rentals
 Route::middleware(['auth', 'verified'])->prefix('rentals')->group(function () {
     Route::get('/', function () {
-        return redirect()->route('rentals.index');
+        return Inertia::render('Rentals/Index');
     });
 });
 

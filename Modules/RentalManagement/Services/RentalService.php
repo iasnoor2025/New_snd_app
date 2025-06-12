@@ -35,9 +35,9 @@ class RentalService
      * @param int $perPage
      * @return LengthAwarePaginator;
      */
-    public function getPaginatedRentals(int $perPage = 15): LengthAwarePaginator
+    public function getPaginatedRentals(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
-        return $this->repository->paginate($perPage);
+        return $this->repository->paginateWithFilters($perPage, $filters);
     }
 
     /**

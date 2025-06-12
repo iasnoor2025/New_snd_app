@@ -107,7 +107,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
 
   // Debug rental data structure
   useEffect(() => {
-    if (rentals.data.length > 0) {
+    if (rentals?.data?.length > 0) {
       console.log('First rental data structure:', rentals.data[0]);
     }
   }, [rentals]);
@@ -120,12 +120,12 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
   const [endDateFilter, setEndDateFilter] = useState(filters.end_date || "");
 
   // Debug route helper - use first rental ID from data if available
-  const sampleRentalId = rentals.data.length > 0 ? rentals.data[0].id : 1;
+  const sampleRentalId = rentals?.data?.length > 0 ? rentals.data[0].id : 1;
 
   const handleDelete = (rentalOrId: Rental | number) => {
     // If a number was passed, find the rental in the data
     if (typeof rentalOrId === 'number') {
-      const rental = rentals.data.find(r => r.id === rentalOrId);
+      const rental = rentals?.data?.find(r => r.id === rentalOrId);
       if (rental) {
         setRentalToDelete(rental);
       } else {
@@ -156,42 +156,35 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    applyFilters();
+    applyFilters(1); // Always go to the first page on a new search
   };
 
-  const applyFilters = () => {
+  const applyFilters = (page: number = 1) => {
     router.get(
       route("rentals.index"),
       {
         search: searchTerm || undefined,
         status: statusFilter === "all" ? undefined : statusFilter,
         start_date: startDateFilter || undefined,
-        end_date: endDateFilter || undefined
+        end_date: endDateFilter || undefined,
+        page: page,
       },
-      { preserveState: true }
+      { preserveState: true, preserveScroll: true }
     );
   };
 
   const handleStatusChange = (value: string) => {
     setStatusFilter(value);
-    // Apply filters immediately when status changes
-    router.get(
-      route("rentals.index"),
-      {
-        search: searchTerm || undefined,
-        status: value === "all" ? undefined : value,
-        start_date: startDateFilter || undefined,
-        end_date: endDateFilter || undefined
-      },
-      { preserveState: true }
-    );
+    applyFilters(1); // Apply filters and go to first page
   };
 
   const handleDateChange = (field: 'start' | 'end', value: string) => {
     if (field === 'start') {
       setStartDateFilter(value);
+      applyFilters(1); // Apply filters and go to first page
     } else {
       setEndDateFilter(value);
+      applyFilters(1); // Apply filters and go to first page
     }
   };
 
@@ -218,14 +211,33 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
     );
   };
 
-  const clearFilters = () => {
+  const resetFilters = () => {
     setSearchTerm("");
     setStatusFilter("all");
     setStartDateFilter("");
     setEndDateFilter("");
+    applyFilters(1); // Reset filters and go to the first page
+  };
 
-    // Clear all filters by navigating to index without params
-    router.get(route("rentals.index"), {}, { preserveState: true });
+  const handlePageChange = (page: number) => {
+    applyFilters(page);
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= rentals.last_page; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant={rentals.current_page === i ? "default" : "outline"}
+          size="sm"
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+    return pages;
   };
 
   const getClientInitials = (name?: string) => {
@@ -557,6 +569,10 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                     <Search className="h-4 w-4 mr-2" />
                     Apply
                   </Button>
+                  <Button type="button" variant="outline" onClick={resetFilters}>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Reset
+                  </Button>
                 </div>
               </form>
 
@@ -654,11 +670,15 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                         </Button>
                       </Badge>
                     )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={resetFilters}
+                      className="h-auto px-2 py-1 text-xs"
+                    >
+                      Clear All
+                    </Button>
                   </div>
-                  <Button variant="outline" size="sm" onClick={clearFilters} className="whitespace-nowrap">
-                    <X className="h-4 w-4 mr-1" />
-                    Clear All Filters
-                  </Button>
                 </div>
               )}
             </div>
@@ -677,14 +697,14 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {rentals.data.length === 0 ? (
+                  {rentals?.data?.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="text-center">
                         No rentals found
                       </TableCell>
                     </TableRow>
                   ) : (
-                    rentals.data.map((rental) => {
+                    rentals?.data?.map((rental) => {
                       const status = calculateStatus(rental);
 
                       return (
@@ -763,58 +783,39 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
               </Table>
             </div>
 
-            {rentals.last_page > 1 && (
+            {rentals?.last_page > 1 && (
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-sm text-muted-foreground">
-                  Showing {rentals.current_page * rentals.per_page - rentals.per_page + 1} to {Math.min(rentals.current_page * rentals.per_page, rentals.total)} of {rentals.total} results
+                  Showing {rentals?.current_page * rentals?.per_page - rentals?.per_page + 1} to {Math.min(rentals?.current_page * rentals?.per_page, rentals?.total)} of {rentals?.total} results
                 </div>
                 <div className="flex gap-2">
-                  {Array.from({ length: rentals.last_page }, (_, i) => i + 1).map((page) => (
-                    <Button
-                      key={page}
-                      variant={page === rentals.current_page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => router.get(
-                        route("rentals.index"),
-                        {
-                          page,
-                          search: searchTerm || undefined,
-                          status: statusFilter === "all" ? undefined : statusFilter,
-                          start_date: startDateFilter || undefined,
-                          end_date: endDateFilter || undefined
-                        },
-                        { preserveState: true }
-                      )}
-                    >
-                      {page}
-                    </Button>
-                  ))}
+                  {renderPagination()}
                 </div>
               </div>
             )}
           </CardContent>
         </Card>
-      </div>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('ttl_confirm_deletion_1')}</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this rental? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={confirmDelete}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. This will permanently delete the rental contract
+                and remove its data from our servers.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={confirmDelete}>
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </AdminLayout>
   );
 }

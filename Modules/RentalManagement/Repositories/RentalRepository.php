@@ -29,7 +29,37 @@ class RentalRepository implements RentalRepositoryInterface
      */
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {
-        return $this->model->paginate($perPage);
+        return $this->model->newQuery()->paginate($perPage);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginateWithFilters(int $perPage = 15, array $filters = []): LengthAwarePaginator
+    {
+        $query = $this->model->newQuery();
+
+        if (isset($filters['search']) && $filters['search'] !== null) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('customer_name', 'like', '%' . $search . '%')
+                  ->orWhere('status', 'like', '%' . $search . '%');
+            });
+        }
+
+        if (isset($filters['status']) && $filters['status'] !== null && $filters['status'] !== 'all') {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['start_date']) && $filters['start_date'] !== null) {
+            $query->whereDate('start_date', '>=', $filters['start_date']);
+        }
+
+        if (isset($filters['end_date']) && $filters['end_date'] !== null) {
+            $query->whereDate('end_date', '<=', $filters['end_date']);
+        }
+
+        return $query->paginate($perPage, ['*'], 'page', $filters['page'] ?? 1);
     }
 
     /**
