@@ -92,6 +92,7 @@ const projectPages: Record<string, string> = {
 const rentalPages: Record<string, string> = {
   'Rentals/Index': './Modules/RentalManagement/resources/js/pages/Rentals/Index.tsx',
   'Rentals/Create': './Modules/RentalManagement/resources/js/pages/Rentals/Create.tsx',
+  'Rental/Create': './Modules/RentalManagement/resources/js/pages/Rentals/Create.tsx', // Alias for singular 'Rental'
   'Rentals/Edit': './Modules/RentalManagement/resources/js/pages/Rentals/Edit.tsx',
   'Rentals/Show': './Modules/RentalManagement/resources/js/pages/Rentals/Show.tsx',
   'Rentals/Print': './Modules/RentalManagement/resources/js/pages/Rentals/Print.tsx',

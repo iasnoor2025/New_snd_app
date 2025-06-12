@@ -454,7 +454,7 @@ export default function Index({ auth, rentals, filters = {} }: Props) {
               <CreateButton
                 resourceType="rentals"
                 buttonText="Create Rental"
-                href="/rentals/rentals/create"
+                href="/rentals/create"
               />
             </div>
           </CardHeader>

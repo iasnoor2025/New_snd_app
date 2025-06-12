@@ -97,11 +97,7 @@ class EquipmentController extends Controller
      */
     public function create(Request $request)
     {
-        // If AJAX or expects JSON, return latest categories for dynamic reload
-        if ($request->ajax() || $request->wantsJson()) {
-            $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
-            return response()->json(['categories' => $categories]);
-        }
+
         // Get categories and locations with id and name
         $categories = Category::where('category_type', 'equipment')->select('id', 'name')->get();
         $locations = Location::select('id', 'name')->get();
